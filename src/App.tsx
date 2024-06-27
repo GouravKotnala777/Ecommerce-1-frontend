@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Home from './pages/Home.Page'
 import Header from './components/Header'
 import { useEffect, useState } from 'react'
+import Sidebar from './components/Sidebar'
 
 function App() {
   const [isHeaderHidden, setIsHeaderHidden] = useState<boolean>(false);
@@ -27,6 +28,7 @@ function App() {
     <>
       <BrowserRouter>
         <Header hideHeader={isHeaderHidden} />
+        <Sidebar />
         <Routes>
           <Route path="/" element={<Home />} />
         </Routes>
