@@ -109,11 +109,12 @@
             }
         }
         .right_part_mobile{
-            width: 8%;
+            width: 30px;
             justify-content: space-between;
             display: flex;
+            margin-right:10px;
             img{
-
+                width: 100%;
             }
         }
     }
