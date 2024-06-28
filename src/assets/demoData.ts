@@ -26,7 +26,12 @@ export interface ProductTypes {
     stock: number;
     images: string[];
     rating: number;
-    reviews:string[];
+    reviews:{
+        _id:string;
+        name:string;
+        rating:number;
+        comment:string;
+    }[];
     sku: string;
     discount: number;
     brand: string;
@@ -76,13 +81,28 @@ export const productData:ProductTypes[] = [
     {
         _id:"45678986543456789",
         name:"Product1",
-        description:"this is product1",
+        description:"this is product1 it is best product ever in this site",
         price: 1999,
         category: "electronics",
         stock: 10,
         images: ["demo img"],
         rating: 9,
-        reviews:["jhkjfalasfjlkdsf"],
+        reviews:[{
+            _id:"qwertyuioplkjhgf",
+            name:"gourav",
+            rating:3,
+            comment:"this is it k;dsj.fklsjdf dfjlksdfk dsfhdgkdg c[bkqmdnf 00d fkmwe idifjidfk"
+        },{
+            _id:"qwertyuioplkjhgg",
+            name:"naruto",
+            rating:5,
+            comment:"I am naruto uzumaki"
+        },{
+            _id:"qwertyuioplkjhgh",
+            name:"sasuke",
+            rating:1,
+            comment:"It has to be better, sadkms qdjii aisskqmwioh sdintb erwje flksdfsdpifkanwe ossdjslkasd ksdj dsjdsd jas dasjdsdja kk,s"
+        }],
         sku:"string",
         discount: 0,
         brand: "oppo",
@@ -103,7 +123,12 @@ export const productData:ProductTypes[] = [
         stock: 10,
         images: ["demo img"],
         rating: 9,
-        reviews:["jhkjfalasfjlkdsf"],
+        reviews:[{
+            _id:"qwertyuioplkjhgf",
+            name:"gourav",
+            rating:3,
+            comment:"this is it"
+        }],
         sku:"string",
         discount: 0,
         brand: "zara",
@@ -124,7 +149,12 @@ export const productData:ProductTypes[] = [
         stock: 10,
         images: ["demo img"],
         rating: 9,
-        reviews:["jhkjfalasfjlkdsf"],
+        reviews:[{
+            _id:"qwertyuioplkjhgf",
+            name:"gourav",
+            rating:3,
+            comment:"this is it"
+        }],
         sku:"string",
         discount: 0,
         brand: "samsung",
@@ -145,7 +175,12 @@ export const productData:ProductTypes[] = [
         stock: 10,
         images: ["demo img"],
         rating: 9,
-        reviews:["jhkjfalasfjlkdsf"],
+        reviews:[{
+            _id:"qwertyuioplkjhgf",
+            name:"gourav",
+            rating:3,
+            comment:"this is it"
+        }],
         sku:"string",
         discount: 0,
         brand: "oppo",
@@ -166,7 +201,12 @@ export const productData:ProductTypes[] = [
         stock: 10,
         images: ["demo img"],
         rating: 9,
-        reviews:["jhkjfalasfjlkdsf"],
+        reviews:[{
+            _id:"qwertyuioplkjhgf",
+            name:"gourav",
+            rating:3,
+            comment:"this is it"
+        }],
         sku:"string",
         discount: 0,
         brand: "lava",
@@ -187,7 +227,12 @@ export const productData:ProductTypes[] = [
         stock: 10,
         images: ["demo img"],
         rating: 9,
-        reviews:["jhkjfalasfjlkdsf"],
+        reviews:[{
+            _id:"qwertyuioplkjhgf",
+            name:"gourav",
+            rating:3,
+            comment:"this is it"
+        }],
         sku:"string",
         discount: 0,
         brand: "nike",
@@ -208,7 +253,12 @@ export const productData:ProductTypes[] = [
         stock: 10,
         images: ["demo img"],
         rating: 9,
-        reviews:["jhkjfalasfjlkdsf"],
+        reviews:[{
+            _id:"qwertyuioplkjhgf",
+            name:"gourav",
+            rating:3,
+            comment:"this is it"
+        }],
         sku:"string",
         discount: 0,
         brand: "armani",
@@ -229,7 +279,12 @@ export const productData:ProductTypes[] = [
         stock: 10,
         images: ["demo img"],
         rating: 9,
-        reviews:["jhkjfalasfjlkdsf"],
+        reviews:[{
+            _id:"qwertyuioplkjhgf",
+            name:"gourav",
+            rating:3,
+            comment:"this is it"
+        }],
         sku:"string",
         discount: 0,
         brand: "nokia",
