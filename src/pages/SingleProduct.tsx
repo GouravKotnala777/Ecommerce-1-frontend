@@ -15,7 +15,7 @@ const SingleProduct = () => {
             <div className="reviews_cont">
                 {
                     singleProduct.reviews.map((review) => (
-                        <div className="review_cont">
+                        <div className="review_cont" key={review._id}>
                             <div className="left_part">
                                 <img src={photo} alt={photo} />
                             </div>
