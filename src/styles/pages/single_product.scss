@@ -27,7 +27,7 @@
                 padding: 10px;
                 .BiHeart{
                     //border: 2px solid rgb(0, 255, 47);
-                    
+                    font-size: 1.2rem;
                 }
                 span{
                     //border: 2px solid rgb(47, 0, 255);
@@ -70,6 +70,7 @@
                         border: none;
                         color: white;
                         cursor: pointer;
+                        font-size: 0.8rem;
                     }
                     .add_btn{
                         //border: 2px solid red;
@@ -92,11 +93,153 @@
                         padding: 6px 10px;
                         border-radius: 4px;
                         cursor: pointer;
+                        font-size: 0.8rem;
                     }
                     .review_btn{
                         border: 1px solid rgb(255, 69, 100);
                         color: rgb(255, 69, 100);
                         background: white;
+                    }
+                }
+            }
+        }
+    }
+    .reviews_cont{
+        //border: 2px solid red;
+        .review_cont{
+            //border: 2px solid violet;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            .left_part{
+                //border: 2px solid indigo;
+                img{
+                    //border:2px solid greenyellow;
+                    width: 40px;
+                    background: green;
+                    padding: 10px;
+                    border-radius: 50%;
+                }
+            }
+            .middle_part{
+                //border: 2px solid blue;
+                text-align: center;
+                min-width: 50px;
+                overflow-wrap: break-word;
+                .email{
+                    //border: 2px solid green;
+                    font-size: 0.9rem;
+                    color: rgb(255, 59, 92);
+                }
+                .rating{
+                    //border: 2px solid yellow;
+                    font-size: 0.8rem;
+                }
+            }
+            .right_part{
+                //border: 2px solid orange;
+                //max-width: 300px;
+                width: 300px;
+                .comment_heading{
+                    //border: 2px solid red;
+                    font-size: 0.9rem;
+                    color: white;
+                    background: linear-gradient(90deg, rgb(255, 34, 71), rgb(255, 156, 102));
+                    border-radius: 4px 4px 0 0;                    
+                    padding: 5px;
+                    font-weight: 500;
+                }
+                .comment_value{
+                    //border: 2px solid blue;
+                    font-size: 0.8rem;                    
+                    color: #646464;
+                    padding: 5px;
+                    text-align: justify;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (width <= 570px) {
+    .single_product_bg{
+        margin-top: 4.5rem;
+        .product_cont{
+            .left_part{
+                width: 12rem;
+                img{
+                }            
+            }
+            .right_part{
+                .whishlist_cont{
+                    .BiHeart{
+                    }
+                    span{
+                        font-size: 0.6rem;
+                    }
+                    
+                }
+                .info_cont{
+                    .heading_values{
+                        span{
+                        }
+                        .info_heading{
+                            font-size: 0.8rem;
+                        }
+                        .info_value{
+                            font-size: 0.7rem;
+                        }
+                    }
+                }
+                .btns_cont{
+                    .upper_btns{
+                        button{
+                            font-size: 0.7rem;
+                        }
+                        .add_btn{
+                        }
+                        select{
+                            //border: 2px solid blue;
+                            
+                        }
+                        .buy_btn{
+                        }
+                    }
+                    .lower_btns{
+                        button{
+                            font-size: 0.7rem;
+                        }
+                        .review_btn{
+                        }
+                    }
+                }
+            }
+        }
+        .reviews_cont{
+            .review_cont{
+                .left_part{
+                    img{
+                    }
+                }
+                .middle_part{
+                    .email{
+                        font-size: 0.8rem;
+                    }
+                    .rating{
+                        font-size: 0.7rem;
+                    }
+                }
+                .right_part{
+                    .comment_heading{
+                        font-size: 0.8rem;
+                    }
+                    .comment_value{
+                        font-size: 0.7rem;
                     }
                 }
             }
