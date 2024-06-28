@@ -1,8 +1,11 @@
 import { BiHeart } from "react-icons/bi";
 import "../styles/pages/single_product.scss";
 import photo from "/vite.svg";
+import { useState } from "react";
+import { ProductTypes, productData } from "../assets/demoData";
 
 const SingleProduct = () => {
+    const [singleProduct, setSingleProduct] = useState<ProductTypes>(productData[0]);
 
     return(
         <div className="single_product_bg">
@@ -17,19 +20,19 @@ const SingleProduct = () => {
                     </div>
                     <div className="info_cont">
                         <div className="heading_values">
-                            <span className="info_heading">Category</span><span className="info_value">category</span>
+                            <span className="info_heading">Category</span><span className="info_value">{singleProduct.category}</span>
                         </div>
                         <div className="heading_values">
-                            <span className="info_heading">Name</span><span className="info_value">name</span>
+                            <span className="info_heading">Name</span><span className="info_value">{singleProduct.name}</span>
                         </div>
                         <div className="heading_values">
-                            <span className="info_heading">Price</span><span className="info_value">price</span>
+                            <span className="info_heading">Price</span><span className="info_value">{singleProduct.price}</span>
                         </div>
                         <div className="heading_values">
-                            <span className="info_heading">Rating</span><span className="info_value">rating</span>
+                            <span className="info_heading">Rating</span><span className="info_value">{singleProduct.rating}</span>
                         </div>
                         <div className="heading_values">
-                            <span className="info_heading">Description</span><span className="info_value">Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum ducimus, iusto voluptatum consequuntur porro necessitatibus molestiae maiores illo vitae aliquid quos soluta odit temporibus ipsa, ab labore accusamus enim similique.</span>
+                            <span className="info_heading">Description</span><span className="info_value">{singleProduct.description}</span>
                         </div>
                     </div>
                     <div className="btns_cont">
