@@ -1,5 +1,6 @@
 import "../styles/components/single_product_template.scss";
 import { BiHeart } from "react-icons/bi";
+import RatingSystem from "./RatingSystem";
 
 
 interface SingleProductTemplatePropTypes{
@@ -36,7 +37,7 @@ const SingleProductTemplate = ({category, name, price, rating, description, phot
                             <span className="info_heading">Price</span><span className="info_value">{price}</span>
                         </div>
                         <div className="heading_values">
-                            <span className="info_heading">Rating</span><span className="info_value">{rating}</span>
+                            <span className="info_heading">Rating</span><span className="info_value"><RatingSystem rating={rating} /></span>
                         </div>
                         <div className="heading_values">
                             <span className="info_heading">Description</span><span className="info_value">{description}</span>
