@@ -3,6 +3,7 @@ import "../styles/components/products.scss";
 import photo from "/public/vite.svg";
 import { useState } from "react";
 import { ProductTypes, productData } from "../assets/demoData";
+import RatingSystem from "./RatingSystem";
 
 
 const Products = () => {
@@ -21,7 +22,7 @@ const Products = () => {
                     <div className="middle_part">
                         <div className="info name">{product.name}</div>
                         <div className="info price">{product.price}</div>
-                        <div className="info rating">{product.rating}</div>
+                        <div className="info rating"><RatingSystem rating={product.rating} /></div>
                     </div>
                     <div className="lower_part">
                         <button className="add_btn">Add</button>
