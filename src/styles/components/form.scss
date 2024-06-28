@@ -1,0 +1,46 @@
+
+
+.form_cont{
+    //border: 2px solid violet;
+    display: flex;
+    flex-direction: column;
+    margin: 10px auto;
+    max-width: 400px;
+    .heading_cont{
+        //border: 2px solid indigo;
+        font-weight: bold;
+        font-size: 1.1rem;
+        text-align: center;
+    }
+    .fields_cont{
+        //border: 2px solid orange;
+        display: flex;
+        flex-direction: column;
+        input{
+            //border: 2px solid blue;
+            font-size: 1rem;
+            margin: 10px 5px;
+            padding: 10px;
+            border-radius: 8px;
+            outline: none;
+            border: 2px solid white;
+            transition: 0.2s;
+            cursor: pointer;
+            &:focus{
+                border: 2px solid rgb(62, 152, 255);
+                box-shadow: 0.2px 0.2px 5px rgba(62, 152, 255, 0.5);
+            }
+        }
+        button{
+            //border: 2px solid green;
+            font-size: 1rem;
+            background: rgb(94, 169, 255);
+            color: white;    
+            margin: 10px 5px;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+        }
+    }
+}
