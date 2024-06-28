@@ -1,0 +1,170 @@
+
+
+
+.single_product_template_bg{
+    //border: 2px solid red;
+    margin-top: 4.5rem;
+    .product_cont{
+        //border: 2px solid violet;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        .left_part{
+            //border: 2px solid indigo;
+            width: 16rem;
+            margin: 10px auto;
+            img{
+                width: 100%;
+            }            
+        }
+        .right_part{
+            //border: 2px solid blue;
+            width: 16rem;
+            margin: 10px auto;
+            .whishlist_cont{
+                //border: 2px solid red;
+                display: flex;
+                justify-content: right;
+                align-items: center;
+                padding: 10px;
+                .BiHeart{
+                    //border: 2px solid rgb(0, 255, 47);
+                    font-size: 1.2rem;
+                }
+                span{
+                    //border: 2px solid rgb(47, 0, 255);
+                    font-size: 0.6rem;
+                    color: rgb(255, 69, 100);
+                }
+                
+            }
+            .info_cont{
+                //border: 2px solid green;
+                .heading_values{
+                    //border: 2px solid yellow;
+                    //display: grid;
+                    //grid-template-columns: 90px auto;
+
+                    display: flex;
+                    justify-content: space-between;
+                    gap: 30px;
+                    margin: 10px;
+                    span{
+                        //border: 2px solid orange;
+                    }
+                    .info_heading{
+                        //border: 2px solid rgb(255, 0, 0);
+                        font-size: 0.8rem;
+                        color: #515151;
+                        font-weight: bold;
+                    }
+                    .info_value{
+                        font-size: 0.8rem;
+                        place-self: center;
+                        text-align: justify;
+                    }
+                }
+            }
+            .btns_cont{
+                //border: 2px solid blue;
+                .upper_btns{
+                    display: flex;
+                    justify-content: space-between;
+                    margin: 20px 10px;
+                    button{
+                        padding: 6px 10px;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        font-size: 0.8rem;
+                    }
+                    .add_btn{
+                        //border: 2px solid red;
+                    }
+                    select{
+                        //border: 2px solid blue;
+                        
+                    }
+                    .buy_btn{
+                        //border: 2px solid green;
+                        background: linear-gradient(90deg, rgb(255, 156, 102), rgb(255, 34, 71));
+                        border: none;
+                        color: white;
+                    }
+                }
+                .lower_btns{
+                    display: flex;
+                    justify-content: right;
+                    margin: 10px;
+                    button{
+                        padding: 6px 10px;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        font-size: 0.8rem;
+                    }
+                    .review_btn{
+                        border: 1px solid rgb(255, 69, 100);
+                        color: rgb(255, 69, 100);
+                        background: white;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (width <= 570px) {
+    .single_product_template_bg{
+        margin-top: 4.5rem;
+        .product_cont{
+            .left_part{
+                width: 12rem;
+                img{
+                }            
+            }
+            .right_part{
+                .whishlist_cont{
+                    .BiHeart{
+                    }
+                    span{
+                        font-size: 0.6rem;
+                    }
+                    
+                }
+                .info_cont{
+                    .heading_values{
+                        span{
+                        }
+                        .info_heading{
+                            font-size: 0.8rem;
+                        }
+                        .info_value{
+                            font-size: 0.7rem;
+                        }
+                    }
+                }
+                .btns_cont{
+                    .upper_btns{
+                        button{
+                            font-size: 0.7rem;
+                        }
+                        .add_btn{
+                        }
+                        select{
+                            //border: 2px solid blue;
+                            
+                        }
+                        .buy_btn{
+                        }
+                    }
+                    .lower_btns{
+                        button{
+                            font-size: 0.7rem;
+                        }
+                        .review_btn{
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
