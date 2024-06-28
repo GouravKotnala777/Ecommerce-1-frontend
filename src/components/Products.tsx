@@ -1,24 +1,31 @@
+import { Link } from "react-router-dom";
 import "../styles/components/products.scss";
 import photo from "/public/vite.svg";
+import { useState } from "react";
+import { ProductTypes, productData } from "../assets/demoData";
+
 
 const Products = () => {
     //import.meta.env.VITE_SERVER_URL
+    const [products, setProducts] = useState<ProductTypes[]>(productData);
 
     return(
         <div className="products_bg">
-            {[1,2,3,4,5,6,7,8,9].map((q) => (
-                <div className="product_cont" key={q}>
+            {products.map((product) => (
+                <div className="product_cont" key={product._id}>
                     <div className="upper_part">
-                        <img src={photo} alt={photo} />
+                        <Link className="link" to={`/${product._id}`}>
+                            <img src={photo} alt={photo} />
+                        </Link>
                     </div>
                     <div className="middle_part">
-                        <div className="info name">Name</div>
-                        <div className="info price">price</div>
-                        <div className="info rating">rating</div>
+                        <div className="info name">{product.name}</div>
+                        <div className="info price">{product.price}</div>
+                        <div className="info rating">{product.rating}</div>
                     </div>
                     <div className="lower_part">
-                        <button>Add</button>
-                        <button>Buy</button>
+                        <button className="add_btn">Add</button>
+                        <button className="buy_btn">Buy</button>
                     </div>
                 </div>
             ))}
