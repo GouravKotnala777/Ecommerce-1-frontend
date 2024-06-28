@@ -9,6 +9,8 @@ import { useSelector } from 'react-redux'
 import { MiscReducerTypes } from './redux/reducers/miscReducers'
 import SingleProduct from './pages/SingleProduct'
 import Cart from './pages/Cart.Page'
+import Login from './pages/Login.Page'
+import Register from './pages/Register.Page'
 
 function App() {
   const {isHamActive} = useSelector((state:{miscReducer:MiscReducerTypes}) => state.miscReducer);
@@ -47,6 +49,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/:productID" element={<SingleProduct />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/cart" element={<Cart />} />
         </Routes>
       </BrowserRouter>
