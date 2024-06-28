@@ -1,13 +1,14 @@
 
 .sidebar_bg{
     border: 2px solid red;
-    display: flex;
-    width: 100%;
+    display: none;
+    width: 99%;
     height: 104vh;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0,0,0,0.7);
     position: absolute;
     top: 0%;
     left: 0%;
+    transition: 0.3s;
     .left_part{
         border: 2px solid violet;
         width: 60%;
@@ -15,11 +16,33 @@
         background: white;
         .scrollable_part{
             border: 2px solid indigo;
+            .navlink{
+                text-decoration: none;
+                color: black;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                color: #515151;
+                margin: 30px auto;
+            }
         }
     }
     .right_part{
         border: 2px solid blue;
         //background: transparent;
         width: 40%;
+        .CgClose{
+            color: white;
+            margin: 10% 30%;
+            box-shadow: 1px 1px 20px 10px rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.56);
+            font-size: 20px;
+        }
+    }
+}
+
+@media screen and (width <= 570px) {
+    .sidebar_bg{
+        display: flex;
     }
 }
