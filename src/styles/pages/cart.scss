@@ -1,0 +1,62 @@
+
+.cart_bg{
+    //border: 2px solid red;
+    margin-top: 4.5rem;
+}
+
+@media screen and (width <= 570px) {
+    .cart_bg{
+        margin-top: 4.5rem;
+        .product_cont{
+            .left_part{
+                width: 12rem;
+                img{
+                }            
+            }
+            .right_part{
+                .whishlist_cont{
+                    .BiHeart{
+                    }
+                    span{
+                        font-size: 0.6rem;
+                    }
+                    
+                }
+                .info_cont{
+                    .heading_values{
+                        span{
+                        }
+                        .info_heading{
+                            font-size: 0.8rem;
+                        }
+                        .info_value{
+                            font-size: 0.7rem;
+                        }
+                    }
+                }
+                .btns_cont{
+                    .upper_btns{
+                        button{
+                            font-size: 0.7rem;
+                        }
+                        .add_btn{
+                        }
+                        select{
+                            //border: 2px solid blue;
+                            
+                        }
+                        .buy_btn{
+                        }
+                    }
+                    .lower_btns{
+                        button{
+                            font-size: 0.7rem;
+                        }
+                        .review_btn{
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
