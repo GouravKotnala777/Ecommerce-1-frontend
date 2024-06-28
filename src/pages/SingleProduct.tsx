@@ -52,6 +52,26 @@ const SingleProduct = () => {
                     </div>
                 </div>
             </div>
+            
+            <div className="reviews_cont">
+                {
+                    singleProduct.reviews.map((review) => (
+                        <div className="review_cont">
+                            <div className="left_part">
+                                <img src={photo} alt={photo} />
+                            </div>
+                            <div className="middle_part">
+                                <div className="email">{review.name}</div>
+                                <div className="rating">{review.rating}</div>
+                            </div>
+                            <div className="right_part">
+                                <div className="comment_heading">Comment:</div>
+                                <div className="comment_value">{review.comment}</div>
+                            </div>
+                        </div>
+                    ))
+                }
+            </div>
         </div>
     )
 };
