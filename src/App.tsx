@@ -11,6 +11,7 @@ import SingleProduct from './pages/SingleProduct'
 import Cart from './pages/Cart.Page'
 import Login from './pages/Login.Page'
 import Register from './pages/Register.Page'
+import Logout from './pages/Logout'
 
 function App() {
   const {isHamActive} = useSelector((state:{miscReducer:MiscReducerTypes}) => state.miscReducer);
@@ -51,6 +52,7 @@ function App() {
           <Route path="/:productID" element={<SingleProduct />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/logout" element={<Logout />} />
           <Route path="/cart" element={<Cart />} />
         </Routes>
       </BrowserRouter>
