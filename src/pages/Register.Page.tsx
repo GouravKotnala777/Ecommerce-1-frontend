@@ -1,5 +1,6 @@
 import { ChangeEvent, useState } from "react";
 import Form from "../components/Form";
+import { useRegisterMutation } from "../redux/api/api";
 
 const formFields = [
     {type:"text", name:"name", placeHolder:"Name"},
@@ -11,13 +12,48 @@ const formFields = [
 
 const Register = () => {
     const [formData, setFormData] = useState<{name?:string; email?:string; mobile?:string; password?:string; c_password?:string;}>();
-
+    const [register] = useRegisterMutation();
 
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement>) => {
         setFormData({...formData, [e.target.name]:e.target.value});
     };
-    const onClickHandler = () => {
+    const onClickHandler = async() => {
         console.log(formData);
+        
+        try {
+            const res = register(formData);
+
+            console.log("----- Register.Page.tsx onClickHandler");
+            console.log(res);
+            console.log("----- Register.Page.tsx onClickHandler");
+        } catch (error) {
+            console.log("----- Register.Page.tsx onClickHandler");
+            console.log(error);
+            console.log("----- Register.Page.tsx onClickHandler");
+        }
+
+        //try {
+        //    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/user/new`, {
+        //        method:"POST",
+        //        headers:{
+        //            "Content-Type":"application/json"
+        //        },
+        //        credentials:"include",
+        //        body:JSON.stringify(formData)
+        //    });
+    
+        //    const data = await res.json();
+            
+        //    console.log("----- Register.Page.tsx onClickHandler");
+        //    console.log(data);
+        //    console.log("----- Register.Page.tsx onClickHandler");
+        //} catch (error) {
+        //    console.log("----- Register.Page.tsx onClickHandler");
+        //    console.log(error);
+        //    console.log("----- Register.Page.tsx onClickHandler");
+        //}
+
+        
     };
 
     return(
