@@ -2,9 +2,12 @@
 
 .form_cont{
     //border: 2px solid violet;
+    box-shadow: 0.1px 0.1px 5px rgb(255, 75, 105);
+    border-radius: 8px;
+    padding: 10px 0;
     display: flex;
     flex-direction: column;
-    margin: 10px auto;
+    margin: 100px auto;
     max-width: 400px;
     .heading_cont{
         //border: 2px solid indigo;
