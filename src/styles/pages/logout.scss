@@ -1,0 +1,54 @@
+
+
+.logout_bg{
+    width: 400px;
+    border: 1px solid white;
+    box-shadow: 0.1px 0.1px 5px rgb(255, 75, 105);
+    margin: 150px auto;
+    border-radius: 8px;
+    background: white;
+    .heading{
+        //border: 1px solid violet;
+        font-size: 1.1rem;
+        text-align: center;
+        font-weight: bold;
+        margin: 20px;
+        border-radius: 8px;
+        color: rgb(255, 75, 105);
+    }
+    .confirmation{
+        //border: 2px solid indigo;
+        display: flex;
+        align-items: center;
+        margin: 20px;
+        input{
+            //border: 2px solid red;
+            width: 1rem;
+            height: 1rem;
+            
+        }
+        span{
+            font-size: 0.8rem;
+            color: rgb(255, 75, 105);
+            font-weight: bold;
+        }
+    }
+    .logout_btn{
+        //border: 2px solid blue;
+        margin: 20px;
+        button{
+            //border: 2px solid green;
+            width: 100%;
+            font-size: 1rem;
+            background: rgb(94, 169, 255);
+            color: white;    
+            //margin: 10px 5px;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            
+
+        }
+    }
+}
