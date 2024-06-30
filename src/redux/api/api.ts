@@ -15,9 +15,27 @@ const api = createApi({
                 credentials:"include",
                 body:data
             })
+        }),
+        login:builder.mutation({
+            query:(data) => ({
+                url:"/api/v1/user/login",
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                credentials:"include",
+                body:data
+            })
+        }),
+        myProfile:builder.query({
+            query:() => ({
+                url:"/api/v1/user/me",
+                method:"GET",
+                credentials:"include"
+            })
         })
     })
 })
 
 export default api;
-export const {useRegisterMutation} = api;
+export const {useRegisterMutation, useLoginMutation, useMyProfileQuery} = api;
