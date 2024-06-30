@@ -23,6 +23,7 @@ const Header = ({hideHeader}:{hideHeader:boolean}) => {
                     <NavLink className="navlinks" to="/">Home</NavLink>
                     <NavLink className="navlinks" to="/register">Register</NavLink>
                     <NavLink className="navlinks" to="/login">Login</NavLink>
+                    <NavLink className="navlinks" to="/product/new">Add Product</NavLink>
                     <NavLink className="navlinks" to="/cart">Cart</NavLink>
                     <NavLink className="navlinks" to="/logout">Logout</NavLink>
                 </div>
