@@ -1,5 +1,6 @@
 import { ChangeEvent, useState } from "react";
 import Form from "../components/Form";
+import { useAddProductMutation } from "../redux/api/api";
 
 
 interface AddProductFormType {
@@ -7,12 +8,12 @@ interface AddProductFormType {
     brand?:string;
     name?:string;
     description?:string;
-    price?:number;
-    stock?:number;
-    height?:number;
-    width?:number;
-    depth?:number;
-    weight?:number;
+    price?:string;
+    stock?:string;
+    height?:string;
+    width?:string;
+    depth?:string;
+    weight?:string;
     tags?:string;
     images?:string;
 }
@@ -32,14 +33,51 @@ const formFields = [
 ];
 
 const AddProduct = () => {
-    const [formData, setFormData] = useState<AddProductFormType>();
-
+    const [fieldData, setFieldData] = useState<AddProductFormType>();
+    const [photo, setPhoto] = useState<File|undefined>();
+    const [addProduct] = useAddProductMutation();
 
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
-        setFormData({...formData, [e.target.name]:e.target.value});
+        if (e.target.type === "file") {
+            if ((e as ChangeEvent<HTMLInputElement>).target.files && (e as ChangeEvent<HTMLInputElement>)?.target?.files!.length > 0) {
+                setPhoto((e as ChangeEvent<HTMLInputElement>)?.target?.files![0])
+            }
+        }
+        else{
+            setFieldData({...fieldData, [e.target.name]:e.target.value});
+        }
     };
-    const onClickHandler = () => {
-        console.log(formData);        
+    const onClickHandler = async() => {
+        
+        const formData = new FormData();
+        
+        formData.append("category", fieldData?.category as string);
+        formData.append("brand", fieldData?.brand as string);
+        formData.append("name", fieldData?.name as string);
+        formData.append("price", fieldData?.price as string);
+        formData.append("stock", fieldData?.stock as string);
+        formData.append("height", fieldData?.height as string);
+        formData.append("width", fieldData?.width as string);
+        formData.append("depth", fieldData?.depth as string);
+        formData.append("weight", fieldData?.weight as string);
+        formData.append("tags", fieldData?.tags as string);
+        formData.append("images", photo as File);
+        formData.append("description", fieldData?.description as string);
+        
+        try {
+            
+            const res = await addProduct(formData)
+
+            console.log("------- AddProduct.tsx onClickHandler");
+            console.log(res);
+            console.log("------- AddProduct.tsx onClickHandler");
+        } catch (error) {
+            console.log("------- AddProduct.tsx onClickHandler");
+            console.log(error);
+            console.log("------- AddProduct.tsx onClickHandler");
+            
+            
+        }
     };
 
     return(
