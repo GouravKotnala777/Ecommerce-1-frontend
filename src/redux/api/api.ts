@@ -50,9 +50,16 @@ const api = createApi({
                 method:"GET",
                 credentials:"include"
             })
+        }),
+        getSingleProduct:builder.query({
+            query:(productID) => ({
+                url:`/api/v1/product/${productID}`,
+                method:"GET",
+                credentials:"include"
+            })
         })
     })
 })
 
 export default api;
-export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useAddProductMutation, useGetAllProductsQuery} = api;
+export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery} = api;
