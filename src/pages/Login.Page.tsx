@@ -1,5 +1,6 @@
 import { ChangeEvent, useState } from "react";
 import Form from "../components/Form";
+import { useLoginMutation } from "../redux/api/api";
 
 const formFields = [
     {type:"text", name:"email", placeHolder:"Email"},
@@ -8,13 +9,27 @@ const formFields = [
 
 const Login = () => {
     const [formData, setFormData] = useState<{email?:string; password?:string;}>();
+    const [login] = useLoginMutation();
 
 
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement>) => {
         setFormData({...formData, [e.target.name]:e.target.value});
     };
-    const onClickHandler = () => {
+    const onClickHandler = async() => {
         console.log(formData);
+
+        try {
+            const res = await login(formData);
+            
+            console.log("----- Login.Page.tsx onClickHandler");
+            console.log(res);
+            console.log("----- Login.Page.tsx onClickHandler");
+        } catch (error) {
+            console.log("----- Login.Page.tsx onClickHandler");
+            console.log(error);
+            console.log("----- Login.Page.tsx onClickHandler");
+        }
+
     };
 
     return(
