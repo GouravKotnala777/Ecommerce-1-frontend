@@ -1,0 +1,20 @@
+
+
+.skeleton_bg{
+    //border: 2px solid red;
+    background: rgb(184, 184, 184);
+    border-radius: 2px;
+    animation: skeleton_animation 1s linear infinite;
+}
+
+@keyframes skeleton_animation {
+    0%{
+        opacity: 0.5;
+    }
+    50%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0.5;
+    }
+}
