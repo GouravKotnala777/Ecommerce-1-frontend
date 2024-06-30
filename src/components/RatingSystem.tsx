@@ -2,9 +2,9 @@ import { ReactElement } from "react";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 
 
-const RatingSystem = ({rating}:{rating:number}) => {
+const RatingSystem = ({rating}:{rating?:number}) => {
     const totalStars = 5;
-    const filledStars = Math.min(Math.max(rating, 0), totalStars);
+    const filledStars = Math.min(Math.max(rating?rating:0, 0), totalStars);
     const stars:ReactElement[] = [];
     
 
