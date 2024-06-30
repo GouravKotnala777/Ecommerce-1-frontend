@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-
 const api = createApi({
     reducerPath:"api",
     baseQuery:fetchBaseQuery({
@@ -44,9 +43,16 @@ const api = createApi({
                 credentials:"include",
                 body:data
             })
+        }),
+        getAllProducts:builder.query({
+            query:() => ({
+                url:"/api/v1/product/all",
+                method:"GET",
+                credentials:"include"
+            })
         })
     })
 })
 
 export default api;
-export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useAddProductMutation} = api;
+export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useAddProductMutation, useGetAllProductsQuery} = api;
