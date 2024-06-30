@@ -12,17 +12,8 @@ const Products = () => {
     const [products, setProducts] = useState<ProductTypes[]>(productData);
     const {data, error} = useGetAllProductsQuery("");
 
-    console.log(data);
-    console.log(error);
-
     useEffect(() => {
-        console.log("::::::::::::::::");
-        setProducts(data.message)
-        console.log(data);
-        console.log(error);
-        console.log("::::::::::::::::");
-        
-
+        setProducts(data.message);
     }, []);
 
     return(
