@@ -1,14 +1,29 @@
 import { Link } from "react-router-dom";
 import "../styles/components/products.scss";
 import photo from "/public/vite.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ProductTypes, productData } from "../assets/demoData";
 import RatingSystem from "./RatingSystem";
+import { useGetAllProductsQuery } from "../redux/api/api";
 
 
 const Products = () => {
     //import.meta.env.VITE_SERVER_URL
     const [products, setProducts] = useState<ProductTypes[]>(productData);
+    const {data, error} = useGetAllProductsQuery("");
+
+    console.log(data);
+    console.log(error);
+
+    useEffect(() => {
+        console.log("::::::::::::::::");
+        setProducts(data.message)
+        console.log(data);
+        console.log(error);
+        console.log("::::::::::::::::");
+        
+
+    }, []);
 
     return(
         <div className="products_bg">
