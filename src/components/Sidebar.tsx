@@ -16,6 +16,7 @@ const Sidebar = () => {
                 <div className="scrollable_part">
                     <NavLink className="navlink" to="/">Home</NavLink>
                     <NavLink className="navlink" to="/">Products</NavLink>
+                    <NavLink className="navlink" to="/product/new">Add Product</NavLink>
                     <NavLink className="navlink" to="/regster">Register</NavLink>
                     <NavLink className="navlink" to="/login">Login</NavLink>
                     <NavLink className="navlink" to="/cart">Cart</NavLink>

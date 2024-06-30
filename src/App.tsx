@@ -12,6 +12,7 @@ import Cart from './pages/Cart.Page'
 import Login from './pages/Login.Page'
 import Register from './pages/Register.Page'
 import Logout from './pages/Logout'
+import AddProduct from './pages/AddProduct'
 
 function App() {
   const {isHamActive} = useSelector((state:{miscReducer:MiscReducerTypes}) => state.miscReducer);
@@ -49,11 +50,12 @@ function App() {
         <Sidebar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/:productID" element={<SingleProduct />} />
+          <Route path="/product/new" element={<AddProduct />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/:productID" element={<SingleProduct />} />
         </Routes>
       </BrowserRouter>
       
