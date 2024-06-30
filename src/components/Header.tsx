@@ -21,11 +21,11 @@ const Header = ({hideHeader}:{hideHeader:boolean}) => {
             <nav className="right_part">
                 <div className="nav_section">
                     <NavLink className="navlinks" to="/">Home</NavLink>
-                    <NavLink className="navlinks" to="/register">Register</NavLink>
-                    <NavLink className="navlinks" to="/login">Login</NavLink>
+                    <NavLink className="navlinks" to="/user/register">Register</NavLink>
+                    <NavLink className="navlinks" to="/user/login">Login</NavLink>
                     <NavLink className="navlinks" to="/product/new">Add Product</NavLink>
-                    <NavLink className="navlinks" to="/cart">Cart</NavLink>
-                    <NavLink className="navlinks" to="/logout">Logout</NavLink>
+                    <NavLink className="navlinks" to="/user/cart">Cart</NavLink>
+                    <NavLink className="navlinks" to="/user/logout">Logout</NavLink>
                 </div>
             </nav>
 

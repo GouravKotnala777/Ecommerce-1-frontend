@@ -17,10 +17,10 @@ const Sidebar = () => {
                     <NavLink className="navlink" to="/">Home</NavLink>
                     <NavLink className="navlink" to="/">Products</NavLink>
                     <NavLink className="navlink" to="/product/new">Add Product</NavLink>
-                    <NavLink className="navlink" to="/regster">Register</NavLink>
-                    <NavLink className="navlink" to="/login">Login</NavLink>
-                    <NavLink className="navlink" to="/cart">Cart</NavLink>
-                    <NavLink className="navlink" to="/logout">Logout</NavLink>
+                    <NavLink className="navlink" to="/user/regster">Register</NavLink>
+                    <NavLink className="navlink" to="/user/login">Login</NavLink>
+                    <NavLink className="navlink" to="/user/cart">Cart</NavLink>
+                    <NavLink className="navlink" to="/user/logout">Logout</NavLink>
                 </div>
             </div>
             <div className="right_part" onClick={() => dispatch(setIsHamActive(false))}>
