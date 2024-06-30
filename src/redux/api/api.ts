@@ -33,9 +33,20 @@ const api = createApi({
                 method:"GET",
                 credentials:"include"
             })
+        }),
+        addProduct:builder.mutation({
+            query:(data) => ({
+                url:"/api/v1/product/new",
+                method:"POST",
+                //headers:{
+                //    "Content-Type":"multipart/form-data"
+                //},
+                credentials:"include",
+                body:data
+            })
         })
     })
 })
 
 export default api;
-export const {useRegisterMutation, useLoginMutation, useMyProfileQuery} = api;
+export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useAddProductMutation} = api;
