@@ -50,7 +50,7 @@ const SingleProduct = () => {
                         [1,2,3].map((q) => (
                             <div className="review_cont" key={q}>
                                 <div className="left_part">
-                                    <img src={unknownUser} alt={unknownUser} style={{background:"smokewhite"}} />
+                                    <img src={unknownUser} alt={unknownUser} style={{background:"pink"}} />
                                 </div>
                                 <div className="middle_part">
                                     <div className="email"><Skeleton height="20px" margin="5px auto" /></div>
