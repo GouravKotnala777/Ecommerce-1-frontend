@@ -16,11 +16,7 @@ interface SingleProductTemplatePropTypes{
 
 const SingleProductTemplate = ({category, name, price, rating, description, photo, parent}:SingleProductTemplatePropTypes) => {
 
-    console.log("UUUUUUUUUUU");
-    console.log({category, name, price, rating, description});
-    console.log("UUUUUUUUUUU");
     
-    //const aa = true;
     return(
         <div className="single_product_template_bg">
             {
@@ -36,19 +32,19 @@ const SingleProductTemplate = ({category, name, price, rating, description, phot
                             </div>
                             <div className="info_cont">
                                 <div className="heading_values">
-                                    <span className="info_heading" style={{width:"60%"}}>Category</span><Skeleton />
+                                    <span className="info_heading" style={{width:"60%"}}>Category</span><Skeleton height="20px" />
                                 </div>
                                 <div className="heading_values">
-                                    <span className="info_heading" style={{width:"60%"}}>Name</span><Skeleton />
+                                    <span className="info_heading" style={{width:"60%"}}>Name</span><Skeleton height="20px" />
                                 </div>
                                 <div className="heading_values">
-                                    <span className="info_heading" style={{width:"60%"}}>Price</span><Skeleton />
+                                    <span className="info_heading" style={{width:"60%"}}>Price</span><Skeleton height="20px" />
                                 </div>
                                 <div className="heading_values">
-                                    <span className="info_heading" style={{width:"60%"}}>Rating</span><Skeleton />
+                                    <span className="info_heading" style={{width:"60%"}}>Rating</span><Skeleton height="20px" />
                                 </div>
                                 <div className="heading_values">
-                                    <span className="info_heading" style={{width:"60%"}}>Description</span><Skeleton />
+                                    <span className="info_heading" style={{width:"60%"}}>Description</span><Skeleton height="20px" />
                                 </div>
                             </div>
                             <div className="btns_cont">
