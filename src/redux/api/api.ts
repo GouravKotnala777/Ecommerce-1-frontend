@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+
 const api = createApi({
     reducerPath:"api",
     baseQuery:fetchBaseQuery({
@@ -57,9 +58,20 @@ const api = createApi({
                 method:"GET",
                 credentials:"include"
             })
+        }),
+        addToCart:builder.mutation({
+            query:(data:{productID:string; quantity:number;}) => ({
+                url:"/api/v1/cart/add",
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                credentials:"include",
+                body:data
+            })
         })
     })
 })
 
 export default api;
-export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery} = api;
+export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useAddToCartMutation} = api;

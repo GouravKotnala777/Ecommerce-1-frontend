@@ -4,13 +4,14 @@ import photo from "/public/vite.svg";
 import { useEffect, useState } from "react";
 import { ProductTypes } from "../assets/demoData";
 import RatingSystem from "./RatingSystem";
-import { useGetAllProductsQuery } from "../redux/api/api";
+import { useAddToCartMutation, useGetAllProductsQuery } from "../redux/api/api";
 
 
 const Products = () => {
     //import.meta.env.VITE_SERVER_URL
     const [products, setProducts] = useState<ProductTypes[]>([]);
     const {data, isLoading, isSuccess} = useGetAllProductsQuery("");
+    const [addToCart] = useAddToCartMutation();
 
     useEffect(() => {
         if (isSuccess) {
@@ -40,7 +41,7 @@ const Products = () => {
                                 <div className="info rating"><RatingSystem rating={product.rating} /></div>
                             </div>
                             <div className="lower_part">
-                                <button className="add_btn">Add</button>
+                                <button className="add_btn" onClick={() => {addToCart({productID:product._id, quantity:1})}}>Add</button>
                                 <button className="buy_btn">Buy</button>
                             </div>
                         </div>
