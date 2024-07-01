@@ -14,7 +14,7 @@ const Register = () => {
     const [formData, setFormData] = useState<{name?:string; email?:string; mobile?:string; password?:string; c_password?:string;}>();
     const [register] = useRegisterMutation();
 
-    const onChangeHandler = (e:ChangeEvent<HTMLInputElement>) => {
+    const onChangeHandler = (e:ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
         setFormData({...formData, [e.target.name]:e.target.value});
     };
     const onClickHandler = async() => {
@@ -58,7 +58,7 @@ const Register = () => {
 
     return(
         <div className="register_bg">
-            <Form heading="Register" formFields={formFields} onChangeHandler={onChangeHandler} onClickHandler={onClickHandler}  />
+            <Form heading="Register" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler}  />
         </div>
     )
 };
