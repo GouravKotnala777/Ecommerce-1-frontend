@@ -69,9 +69,19 @@ const api = createApi({
                 credentials:"include",
                 body:data
             })
+        }),
+        fetchMyCart:builder.query({
+            query:() => ({
+                url:"/api/v1/cart",
+                method:"GET",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                credentials:"include"
+            })
         })
     })
 })
 
 export default api;
-export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useAddToCartMutation} = api;
+export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useAddToCartMutation, useFetchMyCartQuery} = api;
