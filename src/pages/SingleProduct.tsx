@@ -7,12 +7,53 @@ import RatingSystem from "../components/RatingSystem";
 import { useGetSingleProductQuery } from "../redux/api/api";
 import Skeleton from "../components/Skeleton";
 import { useParams } from "react-router-dom";
+import Form from "../components/Form";
+import { ChangeEvent, MouseEvent, useState } from "react";
+import DialogWrapper from "../components/DialogWrapper";
+import { useDispatch, useSelector } from "react-redux";
+import { MiscReducerTypes, setIsReviewDialogActive } from "../redux/reducers/miscReducers";
+
+
+const formFields = [
+    {type:"text", name:"rating", placeHolder:"Rating"},
+    {type:"text", name:"comment", placeHolder:"Comment"},
+];
+
 
 const SingleProduct = () => {
     const {productID} = useParams();
+    const [formFieldData,setFormFieldData] = useState<{rating?:number; comment?:string;}>();
     const {data}:{data?:{success:boolean; message:ProductTypes;}; isLoading?:boolean; isSuccess:boolean;} = useGetSingleProductQuery(productID);
+    const dispatch = useDispatch();
+    const {isReviewDialogActive} = useSelector((state:{miscReducer:MiscReducerTypes}) => state.miscReducer);
+
+    const onChangeHandler = (e:ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
+        setFormFieldData({...formFieldData, [e.target.name]:e.target.value});
+    };
+    const onClickHandler = () => {
+        try {
+
+            console.log("------- SingleProduct.tsx onClickHandler");
+            console.log(formFieldData);
+            console.log("------- SingleProduct.tsx onClickHandler");
+            
+        } catch (error) {
+            console.log("------- SingleProduct.tsx onClickHandler");
+            console.log(error);
+            console.log("------- SingleProduct.tsx onClickHandler");
+        }
+    };
+    const reviewToggleHandler = (e:MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation();
+        dispatch(setIsReviewDialogActive(false));
+    }
+
+
     return(
-        <div className="single_product_bg">
+        <div className="single_product_bg" onClick={(e) => reviewToggleHandler(e)}>
+
+            <DialogWrapper toggler={isReviewDialogActive} Element={<Form heading="Give Review" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler} />} />
+
             <SingleProductTemplate productID={productID} category={data?.message?.category} name={data?.message?.name} price={data?.message?.price} rating={data?.message?.rating} description={data?.message?.description} photo={photo} parent="singleProduct" />
 
             <div className="reviews_cont">
