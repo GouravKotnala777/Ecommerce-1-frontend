@@ -70,6 +70,17 @@ const api = createApi({
                 body:data
             })
         }),
+        removeFromCart:builder.mutation({
+            query:(data:{productID:string; quantity:number;}) => ({
+                url:"/api/v1/cart/remove",
+                method:"DELETE",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                credentials:"include",
+                body:data
+            })
+        }),
         fetchMyCart:builder.query({
             query:() => ({
                 url:"/api/v1/cart",
@@ -84,4 +95,4 @@ const api = createApi({
 })
 
 export default api;
-export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useAddToCartMutation, useFetchMyCartQuery} = api;
+export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useAddToCartMutation, useFetchMyCartQuery, useRemoveFromCartMutation} = api;
