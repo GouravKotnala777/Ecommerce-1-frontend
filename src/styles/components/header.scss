@@ -32,9 +32,10 @@
             width: 100%;
             display: flex;
             justify-content: right;
+            align-items: center;
             gap:10%;
             margin: 0 1%;
-            font-size: 16px;
+            font-size: 0.9rem;
             .navlinks{
                 text-decoration: none;
                 color: white;
@@ -66,7 +67,7 @@
             justify-content: right;
             gap:10%;
             margin: 0 1%;
-            font-size: 16px;
+            font-size: 0.7rem;
             .navlinks{
                 text-decoration: none;
                 color: white;
