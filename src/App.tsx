@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
  import './App.css'
 import Home from './pages/Home.Page'
 import Header from './components/Header'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import Sidebar from './components/Sidebar'
 import { useSelector } from 'react-redux'
 import { MiscReducerTypes } from './redux/reducers/miscReducers'
@@ -14,23 +14,11 @@ import Register from './pages/Register.Page'
 import Logout from './pages/Logout'
 import AddProduct from './pages/AddProduct'
 
-function App() {
+
+
+const App = () => {
   const {isHamActive} = useSelector((state:{miscReducer:MiscReducerTypes}) => state.miscReducer);
-  const [isHeaderHidden, setIsHeaderHidden] = useState<boolean>(false);
-  const [previousScrollPos, setPreviousScrollPos] = useState<number>(0);
 
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollPos = window.pageYOffset;
-      setPreviousScrollPos(currentScrollPos);
-      setIsHeaderHidden(currentScrollPos >= previousScrollPos);      
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [previousScrollPos]);
 
   useEffect(() => {
     if (isHamActive) {
@@ -46,7 +34,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Header hideHeader={isHeaderHidden} />
+        <Header />
         <Sidebar />
         <Routes>
           <Route path="/" element={<Home />} />
