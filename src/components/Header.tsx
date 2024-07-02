@@ -4,13 +4,26 @@ import { NavLink } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { setIsHamActive } from "../redux/reducers/miscReducers";
 import { useDispatch } from "react-redux";
+import { useEffect, useRef, useState } from "react";
 
 
-const Header = ({hideHeader}:{hideHeader:boolean}) => {
-    //const ssss = useSelector((state:{miscReducer:MiscReducerTypes}) => state.miscReducer);
+const Header = () => {
     const dispatch = useDispatch();
-    //import.meta.env.VITE_SERVER_URL
+    const [hideHeader, setHideHeader] = useState<boolean>(false);
+    const previousScrollPos = useRef<number>(0);
+    
+    console.log("&&&&&&&&&&&&&&&&&&&&");
+    console.log("TTTTTTTTTTTTTTTTTTTT");
 
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollPos = window.pageYOffset;
+            setHideHeader(currentScrollPos >= previousScrollPos.current);      
+            previousScrollPos.current = currentScrollPos
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+      }, []);
     
 
     return(
