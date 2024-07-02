@@ -3,7 +3,9 @@ import { BiHeart } from "react-icons/bi";
 import RatingSystem from "./RatingSystem";
 import Skeleton from "./Skeleton";
 import { useRemoveFromCartMutation } from "../redux/api/api";
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setIsReviewDialogActive } from "../redux/reducers/miscReducers";
 
 
 interface SingleProductTemplatePropTypes{
@@ -20,8 +22,14 @@ interface SingleProductTemplatePropTypes{
 const SingleProductTemplate = ({productID, category, name, price, rating, description, photo, parent}:SingleProductTemplatePropTypes) => {
     const [removeFromCart] = useRemoveFromCartMutation();
     const [quantity, setQuantity] = useState<number>(1);
+    const dispatch = useDispatch();
 
 
+
+    const reviewToggleHandler = (e:MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
+        dispatch(setIsReviewDialogActive(true));
+    }
     
     return(
         <div className="single_product_template_bg">
@@ -118,7 +126,7 @@ const SingleProductTemplate = ({productID, category, name, price, rating, descri
                                 {
                                     parent === "singleProduct" &&
                                         <div className="lower_btns">
-                                            <button className="review_btn">Review</button>
+                                            <button className="review_btn" onClick={(e) => reviewToggleHandler(e)}>Review</button>
                                         </div>
                                 }
                             </div>
