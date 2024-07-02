@@ -2,9 +2,12 @@ import "../styles/components/single_product_template.scss";
 import { BiHeart } from "react-icons/bi";
 import RatingSystem from "./RatingSystem";
 import Skeleton from "./Skeleton";
+import { useRemoveFromCartMutation } from "../redux/api/api";
+import { useState } from "react";
 
 
 interface SingleProductTemplatePropTypes{
+    productID?:string;
     category?:string;
     name?:string;
     price?:number;
@@ -14,7 +17,10 @@ interface SingleProductTemplatePropTypes{
     parent:string;
 }
 
-const SingleProductTemplate = ({category, name, price, rating, description, photo, parent}:SingleProductTemplatePropTypes) => {
+const SingleProductTemplate = ({productID, category, name, price, rating, description, photo, parent}:SingleProductTemplatePropTypes) => {
+    const [removeFromCart] = useRemoveFromCartMutation();
+    const [quantity, setQuantity] = useState<number>(1);
+
 
     
     return(
@@ -99,9 +105,9 @@ const SingleProductTemplate = ({category, name, price, rating, description, phot
                             <div className="btns_cont">
                                 <div className="upper_btns">
                                     
-                                    <button className="add_btn" style={{background:parent === "singleProduct" ? "linear-gradient(90deg, rgb(255, 34, 71), rgb(255, 156, 102))":"white", border:parent === "singleProduct"?"none":"1px solid rgb(255, 34, 71)", color:parent==="singleProduct"?"white":"rgb(255, 34, 71)"}}>{parent === "singleProduct" ? "Add" : "Remove"}</button>
+                                    <button className="add_btn" style={{background:parent === "singleProduct" ? "linear-gradient(90deg, rgb(255, 34, 71), rgb(255, 156, 102))":"white", border:parent === "singleProduct"?"none":"1px solid rgb(255, 34, 71)", color:parent==="singleProduct"?"white":"rgb(255, 34, 71)"}} onClick={() => parent === "singleProduct"?null:removeFromCart({productID:productID!, quantity})}>{parent === "singleProduct" ? "Add" : "Remove"}</button>
                                     
-                                    <select>
+                                    <select onChange={(e) => setQuantity(Number(e.target.value))}>
                                         <option>1</option>
                                         <option>2</option>
                                         <option>3</option>
