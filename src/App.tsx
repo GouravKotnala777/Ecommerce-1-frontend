@@ -44,6 +44,12 @@ const App = () => {
           <Route path="/user/logout" element={<Logout />} />
           <Route path="/user/cart" element={<Cart />} />
           <Route path="/product/:productID" element={<SingleProduct />} />
+          <Route path="/product/new" element={<AddProduct />} />
+          <Route path="/user/register" element={<Register />} />
+          <Route path="/user/login" element={<Login />} />
+          <Route path="/user/logout" element={<Logout />} />
+          <Route path="/user/cart" element={<Cart />} />
+          <Route path="/product/:productID" element={<SingleProduct />} />
         </Routes>
       </BrowserRouter>
       

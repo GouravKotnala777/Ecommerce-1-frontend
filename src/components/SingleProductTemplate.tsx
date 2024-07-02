@@ -19,6 +19,7 @@ interface SingleProductTemplatePropTypes{
     parent:string;
 }
 
+
 const SingleProductTemplate = ({productID, category, name, price, rating, description, photo, parent}:SingleProductTemplatePropTypes) => {
     const [removeFromCart] = useRemoveFromCartMutation();
     const [quantity, setQuantity] = useState<number>(1);
@@ -30,7 +31,6 @@ const SingleProductTemplate = ({productID, category, name, price, rating, descri
         e.stopPropagation();
         dispatch(setIsReviewDialogActive(true));
     }
-    
     return(
         <div className="single_product_template_bg">
             {
@@ -112,10 +112,10 @@ const SingleProductTemplate = ({productID, category, name, price, rating, descri
                             </div>
                             <div className="btns_cont">
                                 <div className="upper_btns">
-                                    
                                     <button className="add_btn" style={{background:parent === "singleProduct" ? "linear-gradient(90deg, rgb(255, 34, 71), rgb(255, 156, 102))":"white", border:parent === "singleProduct"?"none":"1px solid rgb(255, 34, 71)", color:parent==="singleProduct"?"white":"rgb(255, 34, 71)"}} onClick={() => parent === "singleProduct"?null:removeFromCart({productID:productID!, quantity})}>{parent === "singleProduct" ? "Add" : "Remove"}</button>
                                     
                                     <select onChange={(e) => setQuantity(Number(e.target.value))}>
+
                                         <option>1</option>
                                         <option>2</option>
                                         <option>3</option>
