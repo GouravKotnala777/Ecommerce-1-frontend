@@ -2,10 +2,12 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export interface MiscReducerTypes{
     isHamActive:boolean;
+    isReviewDialogActive:boolean;
 }
 
 const initialState:MiscReducerTypes = {
-    isHamActive:false
+    isHamActive:false,
+    isReviewDialogActive:false
 }
 
 const miscReducer = createSlice({
@@ -13,13 +15,13 @@ const miscReducer = createSlice({
     name:"miscReducer",
     reducers:{
         setIsHamActive:(state, action:PayloadAction<boolean>) => {
-            console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            console.log(action.payload);
-            
             state.isHamActive = action.payload;
+        },
+        setIsReviewDialogActive:(state, action:PayloadAction<boolean>) => {
+            state.isReviewDialogActive = action.payload;
         }
     }
 });
 
 export default miscReducer;
-export const {setIsHamActive} = miscReducer.actions;
+export const {setIsHamActive, setIsReviewDialogActive} = miscReducer.actions;
