@@ -1,37 +1,24 @@
 import "../styles/pages/single_product.scss";
 import photo from "/vite.svg";
 import unknownUser from "/unknownUser.png"
-import { useEffect, useState } from "react";
 import { ProductTypes } from "../assets/demoData";
 import SingleProductTemplate from "../components/SingleProductTemplate";
 import RatingSystem from "../components/RatingSystem";
 import { useGetSingleProductQuery } from "../redux/api/api";
-import { useParams } from "react-router-dom";
 import Skeleton from "../components/Skeleton";
+import { useParams } from "react-router-dom";
 
 const SingleProduct = () => {
     const {productID} = useParams();
-    const {data, isSuccess}:{data?:{success:boolean; message:ProductTypes;}; isLoading?:boolean; isSuccess:boolean;} = useGetSingleProductQuery(productID);
-    const [singleProduct, setSingleProduct] = useState<ProductTypes|undefined>();
-
-
-    //console.log(productID);
-    //console.log(singleProduct);
-    
-    useEffect(() => {
-        if (isSuccess) {
-            setSingleProduct(data?.message);
-        }
-    }, [isSuccess]);
-
+    const {data}:{data?:{success:boolean; message:ProductTypes;}; isLoading?:boolean; isSuccess:boolean;} = useGetSingleProductQuery(productID);
     return(
         <div className="single_product_bg">
-            <SingleProductTemplate category={singleProduct?.category} name={singleProduct?.name} price={singleProduct?.price} rating={singleProduct?.rating} description={singleProduct?.description} photo={photo} parent="singleProduct" />
+            <SingleProductTemplate productID={productID} category={data?.message?.category} name={data?.message?.name} price={data?.message?.price} rating={data?.message?.rating} description={data?.message?.description} photo={photo} parent="singleProduct" />
 
             <div className="reviews_cont">
                 {
-                    singleProduct ?
-                        singleProduct.reviews.map((review) => (
+                    data?.message ?
+                        data?.message?.reviews.map((review) => (
                             <div className="review_cont" key={review._id}>
                                 <div className="left_part">
                                     <img src={photo} alt={photo} />
