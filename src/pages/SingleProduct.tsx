@@ -65,16 +65,22 @@ const SingleProduct = () => {
                     data?.message ?
                         data?.message?.reviews.map((review) => (
                             <div className="review_cont" key={review._id}>
-                                <div className="left_part">
-                                    <img src={photo} alt={photo} />
+                                <div className="upper_part">
+                                    <span className="date_heading">{review.updatedAt === review.createdAt ? "createdAt" : "updatedAt"} : </span>
+                                    <span className="date_value">{review.updatedAt === review.createdAt ? review.createdAt.split("T")[0].split("-").reverse().join("-") : review.updatedAt.split("T")[0].split("-").reverse().join("-")}</span>
                                 </div>
-                                <div className="middle_part">
-                                    <div className="email">{review.userID.email}</div>
-                                    <div className="rating"><RatingSystem rating={review.rating} /></div>
-                                </div>
-                                <div className="right_part">
-                                    <div className="comment_heading">Comment:</div>
-                                    <div className="comment_value">{review.comment}</div>
+                                <div className="lower_part">
+                                    <div className="left_part">
+                                        <img src={photo} alt={photo} />
+                                    </div>
+                                    <div className="middle_part">
+                                        <div className="email">{review.userID.email}</div>
+                                        <div className="rating"><RatingSystem rating={review.rating} /></div>
+                                    </div>
+                                    <div className="right_part">
+                                        <div className="comment_heading">Comment:</div>
+                                        <div className="comment_value">{review.comment}</div>
+                                    </div>
                                 </div>
                             </div>
                         ))
