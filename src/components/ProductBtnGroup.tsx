@@ -19,7 +19,7 @@ const ProductBtnGroup = ({parent, productID}:ProductBtnGroupPropTypes) => {
 
     const reviewToggleHandler = (e:MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
-        dispatch(setIsReviewDialogActive(false));
+        dispatch(setIsReviewDialogActive(true));
     }
 
     return(
