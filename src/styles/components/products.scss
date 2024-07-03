@@ -49,19 +49,6 @@
             //border: 2px solid orange;
             display: flex;
             justify-content: space-between;
-            padding: 10px;
-            button{
-                padding: 6px 10px;
-                border: none;
-                color: white;
-                border-radius: 4px;
-            }
-            .add_btn{
-                background: linear-gradient(90deg, rgb(255, 69, 100), rgb(255, 198, 207));
-            }
-            .buy_btn{
-                background: linear-gradient(90deg, rgb(255, 198, 207), rgb(255, 69, 100));
-            }
         }
     }
 }
