@@ -57,8 +57,8 @@ export interface ProductTypesPopulated {
         },
         rating:number;
         comment:string;
-        updatedAt:Date;
-        createdAt:Date;
+        updatedAt:string;
+        createdAt:string;
     }[];
     sku: string;
     discount: number;
