@@ -23,6 +23,15 @@
                 .date_value{
                     color: #79797981;
                 }
+                .MdDeleteForever{
+                    color: rgb(255, 34, 71);
+                    font-size: 1.1rem;
+                    margin: 0 5px;
+                    cursor: pointer;
+                    &:hover{
+                        color: rgba(255, 34, 71, 0.574);
+                    }
+                }
             }
             .lower_part{
                 //border: 2px solid red;
