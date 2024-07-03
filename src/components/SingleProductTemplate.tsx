@@ -2,10 +2,7 @@ import "../styles/components/single_product_template.scss";
 import { BiHeart } from "react-icons/bi";
 import RatingSystem from "./RatingSystem";
 import Skeleton from "./Skeleton";
-import { useRemoveFromCartMutation } from "../redux/api/api";
-import { MouseEvent, useState } from "react";
-import { useDispatch } from "react-redux";
-import { setIsReviewDialogActive } from "../redux/reducers/miscReducers";
+import ProductBtnGroup from "./ProductBtnGroup";
 
 
 interface SingleProductTemplatePropTypes{
@@ -21,16 +18,7 @@ interface SingleProductTemplatePropTypes{
 
 
 const SingleProductTemplate = ({productID, category, name, price, rating, description, photo, parent}:SingleProductTemplatePropTypes) => {
-    const [removeFromCart] = useRemoveFromCartMutation();
-    const [quantity, setQuantity] = useState<number>(1);
-    const dispatch = useDispatch();
 
-
-
-    const reviewToggleHandler = (e:MouseEvent<HTMLButtonElement>) => {
-        e.stopPropagation();
-        dispatch(setIsReviewDialogActive(true));
-    }
     return(
         <div className="single_product_template_bg">
             {
@@ -110,7 +98,8 @@ const SingleProductTemplate = ({productID, category, name, price, rating, descri
                                     <span className="info_heading">Description</span><span className="info_value">{description}</span>
                                 </div>
                             </div>
-                            <div className="btns_cont">
+                            <ProductBtnGroup productID={productID as string} parent={parent} />
+                            {/*<div className="btns_cont">
                                 <div className="upper_btns">
                                     <button className="add_btn" style={{background:parent === "singleProduct" ? "linear-gradient(90deg, rgb(255, 34, 71), rgb(255, 156, 102))":"white", border:parent === "singleProduct"?"none":"1px solid rgb(255, 34, 71)", color:parent==="singleProduct"?"white":"rgb(255, 34, 71)"}} onClick={() => parent === "singleProduct"?null:removeFromCart({productID:productID!, quantity})}>{parent === "singleProduct" ? "Add" : "Remove"}</button>
                                     
@@ -129,7 +118,7 @@ const SingleProductTemplate = ({productID, category, name, price, rating, descri
                                             <button className="review_btn" onClick={(e) => reviewToggleHandler(e)}>Review</button>
                                         </div>
                                 }
-                            </div>
+                            </div>*/}
                         </div>
                     </div>
             }
