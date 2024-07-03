@@ -39,12 +39,6 @@ const Header = () => {
                     <NavLink className="navlinks" to="/product/new">Add Product</NavLink>
                     <NavLink className="navlinks" to="/user/cart">Cart</NavLink>
                     <NavLink className="navlinks" to="/user/logout">Logout</NavLink>
-                    <NavLink className="navlinks" to="/">Home</NavLink>
-                    <NavLink className="navlinks" to="/user/register">Register</NavLink>
-                    <NavLink className="navlinks" to="/user/login">Login</NavLink>
-                    <NavLink className="navlinks" to="/product/new">Add Product</NavLink>
-                    <NavLink className="navlinks" to="/user/cart">Cart</NavLink>
-                    <NavLink className="navlinks" to="/user/logout">Logout</NavLink>
                 </div>
             </nav>
 
