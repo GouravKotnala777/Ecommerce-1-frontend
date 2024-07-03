@@ -98,9 +98,16 @@ const api = createApi({
                 credentials:"include",
                 body:{rating, comment}
             })
+        }),
+        deleteReview:builder.mutation({
+            query:({productID}:{productID:string;}) => ({
+                url:`/api/v1/review/${productID}/remove`,
+                method:"DELETE",
+                credentials:"include"
+            })
         })
     })
 })
 
 export default api;
-export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useAddToCartMutation, useFetchMyCartQuery, useRemoveFromCartMutation, useCreateReviewMutation} = api;
+export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useAddToCartMutation, useFetchMyCartQuery, useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation} = api;
