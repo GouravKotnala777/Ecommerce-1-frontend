@@ -90,9 +90,17 @@ const api = createApi({
                 },
                 credentials:"include"
             })
+        }),
+        createReview:builder.mutation({
+            query:({productID, rating, comment}:{productID:string; rating:number; comment:string;}) => ({
+                url:`/api/v1/review/${productID}/create`,
+                method:"POST",
+                credentials:"include",
+                body:{rating, comment}
+            })
         })
     })
 })
 
 export default api;
-export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useAddToCartMutation, useFetchMyCartQuery, useRemoveFromCartMutation} = api;
+export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useAddToCartMutation, useFetchMyCartQuery, useRemoveFromCartMutation, useCreateReviewMutation} = api;

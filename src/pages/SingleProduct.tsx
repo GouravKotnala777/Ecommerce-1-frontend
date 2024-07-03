@@ -1,10 +1,10 @@
 import "../styles/pages/single_product.scss";
 import photo from "/vite.svg";
 import unknownUser from "/unknownUser.png"
-import { ProductTypes } from "../assets/demoData";
+import { ProductTypesPopulated } from "../assets/demoData";
 import SingleProductTemplate from "../components/SingleProductTemplate";
 import RatingSystem from "../components/RatingSystem";
-import { useGetSingleProductQuery } from "../redux/api/api";
+import { useCreateReviewMutation, useGetSingleProductQuery } from "../redux/api/api";
 import Skeleton from "../components/Skeleton";
 import { useParams } from "react-router-dom";
 import Form from "../components/Form";
@@ -22,19 +22,22 @@ const formFields = [
 
 const SingleProduct = () => {
     const {productID} = useParams();
-    const [formFieldData,setFormFieldData] = useState<{rating?:number; comment?:string;}>();
-    const {data}:{data?:{success:boolean; message:ProductTypes;}; isLoading?:boolean; isSuccess:boolean;} = useGetSingleProductQuery(productID);
+    const [formFieldData,setFormFieldData] = useState<{productID:string; rating:number; comment:string;}>({productID:"", rating:0, comment:""});
+    const {data}:{data?:{success:boolean; message:ProductTypesPopulated;}; isLoading?:boolean; isSuccess:boolean;} = useGetSingleProductQuery(productID);
     const dispatch = useDispatch();
     const {isReviewDialogActive} = useSelector((state:{miscReducer:MiscReducerTypes}) => state.miscReducer);
+    const [createReview] = useCreateReviewMutation();
 
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
         setFormFieldData({...formFieldData, [e.target.name]:e.target.value});
     };
-    const onClickHandler = () => {
+    const onClickHandler = async() => {
         try {
+            const res = await createReview({productID:productID as string, rating:Number(formFieldData.rating), comment:formFieldData.comment});
 
             console.log("------- SingleProduct.tsx onClickHandler");
-            console.log(formFieldData);
+            console.log({productID:productID as string, rating:Number(formFieldData.rating), comment:formFieldData.comment});
+            console.log(res);
             console.log("------- SingleProduct.tsx onClickHandler");
             
         } catch (error) {
@@ -56,6 +59,7 @@ const SingleProduct = () => {
 
             <SingleProductTemplate productID={productID} category={data?.message?.category} name={data?.message?.name} price={data?.message?.price} rating={data?.message?.rating} description={data?.message?.description} photo={photo} parent="singleProduct" />
 
+            {/*<pre>{JSON.stringify(data?.message, null, `\t`)}</pre>*/}
             <div className="reviews_cont">
                 {
                     data?.message ?
@@ -65,7 +69,7 @@ const SingleProduct = () => {
                                     <img src={photo} alt={photo} />
                                 </div>
                                 <div className="middle_part">
-                                    <div className="email">{review.name}</div>
+                                    <div className="email">{review.userID.email}</div>
                                     <div className="rating"><RatingSystem rating={review.rating} /></div>
                                 </div>
                                 <div className="right_part">
