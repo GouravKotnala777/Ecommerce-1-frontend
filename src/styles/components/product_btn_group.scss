@@ -1,0 +1,72 @@
+
+
+.btns_cont{
+    //border: 2px solid blue;
+    width: 100%;
+    .upper_btns{
+        display: flex;
+        justify-content: space-between;
+        margin: 20px 10px;
+        button{
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .add_btn{
+            //border: 2px solid red;
+        }
+        select{
+            //border: 2px solid blue;
+            
+        }
+        .buy_btn{
+            //border: 2px solid green;
+            background: linear-gradient(90deg, rgb(255, 156, 102), rgb(255, 34, 71));
+            border: none;
+            color: white;
+        }
+    }
+    .lower_btns{
+        display: flex;
+        justify-content: right;
+        margin: 10px;
+        button{
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .review_btn{
+            border: 1px solid rgb(255, 69, 100);
+            color: rgb(255, 69, 100);
+            background: white;
+        }
+    }
+}
+
+
+@media screen and (width <= 570px) {   
+    .btns_cont{
+        .upper_btns{
+            button{
+                font-size: 0.7rem;
+            }
+            .add_btn{
+            }
+            select{
+                //border: 2px solid blue;
+                
+            }
+            .buy_btn{
+            }
+        }
+        .lower_btns{
+            button{
+                font-size: 0.7rem;
+            }
+            .review_btn{
+            }
+        }
+    }
+}
