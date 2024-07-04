@@ -1,12 +1,15 @@
 import "../styles/components/single_product_template.scss";
-import { BiHeart } from "react-icons/bi";
+import { BiHeart, BiSolidHeart } from "react-icons/bi";
 import RatingSystem from "./RatingSystem";
 import Skeleton from "./Skeleton";
 import ProductBtnGroup from "./ProductBtnGroup";
+import { useAddRemoveFromWishlistMutation } from "../redux/api/api";
+import { useEffect } from "react";
 
 
 interface SingleProductTemplatePropTypes{
     productID?:string;
+    userWishlist?:string[];
     category?:string;
     name?:string;
     price?:number;
@@ -17,7 +20,12 @@ interface SingleProductTemplatePropTypes{
 }
 
 
-const SingleProductTemplate = ({productID, category, name, price, rating, description, photo, parent}:SingleProductTemplatePropTypes) => {
+const SingleProductTemplate = ({productID, userWishlist, category, name, price, rating, description, photo, parent}:SingleProductTemplatePropTypes) => {
+    const [addRemoveFromWishlist] = useAddRemoveFromWishlistMutation();
+
+    useEffect(() => {
+        console.log(userWishlist);
+    }, [userWishlist]);
 
     return(
         <div className="single_product_template_bg">
@@ -78,8 +86,18 @@ const SingleProductTemplate = ({productID, category, name, price, rating, descri
                         </div>
                         <div className="right_part">
                             <div className="whishlist_cont">
-                                <BiHeart className="BiHeart" color="rgb(255, 69, 100)" />
-                                <span>Add to wishlist</span>
+                                {
+                                    userWishlist?.includes(productID as string) ?
+                                    <BiSolidHeart className="BiHeart" color="rgb(255, 69, 100)" onClick={() => addRemoveFromWishlist({productID:productID as string})} />
+                                    :
+                                    <BiHeart className="BiHeart" color="rgb(255, 69, 100)" onClick={() => addRemoveFromWishlist({productID:productID as string})} />
+                                }
+                                {
+                                    userWishlist?.includes(productID as string) ?
+                                        <span>Remove from wishlist</span>
+                                        :
+                                        <span>Add to wishlist</span>
+                                }
                             </div>
                             <div className="info_cont">
                                 <div className="heading_values">

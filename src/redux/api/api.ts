@@ -105,9 +105,16 @@ const api = createApi({
                 method:"DELETE",
                 credentials:"include"
             })
+        }),
+        addRemoveFromWishlist:builder.mutation({
+            query:({productID}:{productID:string;}) => ({
+                url:`api/v1/user/${productID}/wishlist`,
+                method:"PUT",
+                credentials:"include"
+            })
         })
     })
 })
 
 export default api;
-export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useAddToCartMutation, useFetchMyCartQuery, useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation} = api;
+export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useAddToCartMutation, useFetchMyCartQuery, useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation, useAddRemoveFromWishlistMutation} = api;

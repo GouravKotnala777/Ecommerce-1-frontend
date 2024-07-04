@@ -61,7 +61,7 @@ const SingleProduct = () => {
             <DialogWrapper toggler={isReviewDialogActive} Element={<Form heading="Give Review" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler} />} />
 
 
-            <SingleProductTemplate productID={productID} category={data?.message?.category} name={data?.message?.name} price={data?.message?.price} rating={data?.message?.rating} description={data?.message?.description} photo={photo} parent="singleProduct" />
+            <SingleProductTemplate productID={productID} userWishlist={loginedUser?.message.wishlist} category={data?.message?.category} name={data?.message?.name} price={data?.message?.price} rating={data?.message?.rating} description={data?.message?.description} photo={photo} parent="singleProduct" />
 
             {/*<pre>{JSON.stringify(loginedUser.message._id, null, `\t`)}</pre>*/}
             <div className="reviews_cont">
