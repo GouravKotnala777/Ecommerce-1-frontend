@@ -13,17 +13,23 @@
         border-radius: 18px;
         overflow: hidden;
         box-shadow: 4px 8px 16px rgba(0,0,0,0.1);
-        margin-top: 20px;
+        margin-top: 30px;
         background: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         .upper_part{
             //border: 2px solid indigo;
             .link{
                 //border: 2px solid indigo;
                 display: block;
+                width:98%;
+                height:150px;
                 img{
                     //border: 2px solid blue;
-                    width: 95%;
-                    margin: 2.2%;
+                    width: 98%;
+                    height: 100%;
+                    //margin: 2.2%;
                 }
             }
         }
@@ -47,8 +53,6 @@
         }
         .lower_part{
             //border: 2px solid orange;
-            display: flex;
-            justify-content: space-between;
         }
     }
 }
@@ -56,7 +60,8 @@
 @media screen and (width <= 570px) {
     .products_bg{
         .product_cont{
-            width: 9rem;
+            width: 11rem;
+            padding: 0 10px;
             .middle_part{
                 //border: 2px solid green;
                 .info{
@@ -76,22 +81,7 @@
                 }
             }
             .lower_part{
-                //border: 2px solid orange;
-                display: flex;
-                justify-content: space-between;
-                padding: 10px;
-                button{
-                    padding: 6px 10px;
-                    border: none;
-                    color: white;
-                    border-radius: 4px;
-                }
-                .add_btn{
-                    background: linear-gradient(90deg, rgb(255, 69, 100), rgb(255, 198, 207));
-                }
-                .buy_btn{
-                    background: linear-gradient(90deg, rgb(255, 198, 207), rgb(255, 69, 100));
-                }
+                
             }
         }
     }
