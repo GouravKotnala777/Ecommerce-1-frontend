@@ -67,11 +67,11 @@ const SingleProduct = () => {
             <div className="reviews_cont">
                 {
                     data?.message &&
-                    data?.message?.reviews.map((review) => review.userID._id === loginedUser.message._id && (
+                    data?.message?.reviews.map((review) => review.userID?._id === loginedUser?.message._id && (
                         <div className="review_cont" key={review._id}>
                             <div className="upper_part">
                                 <span className="date_heading">{review.updatedAt === review.createdAt ? "createdAt" : "updatedAt"} : </span>
-                                <span className="date_value">{review.updatedAt === review.createdAt ? review.createdAt.split("T")[0].split("-").reverse().join("-") : review.updatedAt.split("T")[0].split("-").reverse().join("-")}</span>
+                                <span className="date_value">{review.updatedAt === review.createdAt ? review.createdAt.split("T")[0].split("-").reverse().join("-") : review?.updatedAt.split("T")[0].split("-").reverse().join("-")}</span>
                                 <MdDeleteForever className="MdDeleteForever" onClick={() => deleteReview({productID:productID as string})} />
                             </div>
                             <div className="lower_part">
@@ -92,40 +92,56 @@ const SingleProduct = () => {
                 }
                 {
                     data?.message ?
-                        data?.message?.reviews.map((review) => (
-                            <div className="review_cont" key={review._id}>
-                                <div className="upper_part">
-                                    <span className="date_heading">{review.updatedAt === review.createdAt ? "createdAt" : "updatedAt"} : </span>
-                                    <span className="date_value">{review.updatedAt === review.createdAt ? review.createdAt.split("T")[0].split("-").reverse().join("-") : review.updatedAt.split("T")[0].split("-").reverse().join("-")}</span>
+                        data?.message?.reviews.length !== 0 ?
+                            data?.message?.reviews.map((review) => (
+                                <div className="review_cont" key={review._id}>
+                                    <div className="upper_part">
+                                        <span className="date_heading">{review.updatedAt === review.createdAt ? "createdAt" : "updatedAt"} : </span>
+                                        <span className="date_value">{review.updatedAt === review.createdAt ? review.createdAt?.split("T")[0].split("-").reverse().join("-") : review.updatedAt?.split("T")[0].split("-").reverse().join("-")}</span>
+                                    </div>
+                                    <div className="lower_part">
+                                        <div className="left_part">
+                                            <img src={photo} alt={photo} />
+                                        </div>
+                                        <div className="middle_part">
+                                            <div className="email">{review.userID?.email}</div>
+                                            <div className="rating"><RatingSystem rating={review?.rating} /></div>
+                                        </div>
+                                        <div className="right_part">
+                                            <div className="comment_heading">Comment:</div>
+                                            <div className="comment_value">{review.comment}</div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="lower_part">
-                                    <div className="left_part">
-                                        <img src={photo} alt={photo} />
-                                    </div>
-                                    <div className="middle_part">
-                                        <div className="email">{review.userID.email}</div>
-                                        <div className="rating"><RatingSystem rating={review.rating} /></div>
-                                    </div>
-                                    <div className="right_part">
-                                        <div className="comment_heading">Comment:</div>
-                                        <div className="comment_value">{review.comment}</div>
+                            ))
+                            :
+                            <div className="review_cont">
+                                    <div className="lower_part">
+                                        <div className="middle_part">
+                                            <div className="email" style={{fontWeight:"bold"}}>No Reviews Yet!</div>
+                                            <div className="rating">for this product</div>
+                                        </div>
+                                        {/*<div className="right_part">
+                                            <div className="comment_heading">Comment:</div>
+                                            <div className="comment_value">give your review</div>
+                                        </div>*/}
                                     </div>
                                 </div>
-                            </div>
-                        ))
                         :
                         [1,2,3].map((q) => (
                             <div className="review_cont" key={q}>
-                                <div className="left_part">
-                                    <img src={unknownUser} alt={unknownUser} style={{background:"pink"}} />
-                                </div>
-                                <div className="middle_part">
-                                    <div className="email"><Skeleton height="20px" margin="5px auto" /></div>
-                                    <div className="rating"><Skeleton height="20px" margin="5px auto" /></div>
-                                </div>
-                                <div className="right_part">
-                                    <div className="comment_heading">Comment:</div>
-                                    <Skeleton width="100%" height="20px" margin="5px auto" />
+                                <div className="lower_part">
+                                    <div className="left_part">
+                                        <img src="hjkjhhj" alt={unknownUser} style={{width:"40px", height:"40px", background:"pink"}} />
+                                    </div>
+                                    <div className="middle_part">
+                                        <div className="email"><Skeleton height="20px" margin="5px auto" /></div>
+                                        <div className="rating"><Skeleton height="20px" margin="5px auto" /></div>
+                                    </div>
+                                    <div className="right_part">
+                                        <div className="comment_heading">Comment:</div>
+                                        <Skeleton width="100%" height="20px" margin="5px auto" />
+                                    </div>
                                 </div>
                             </div>
                         ))
