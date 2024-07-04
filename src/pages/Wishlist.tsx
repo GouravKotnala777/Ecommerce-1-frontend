@@ -5,7 +5,7 @@ import photo from "../assets/react.svg";
 
 
 const Wishlist = () => {
-    const {data}:{data:{success:boolean; message:ProductTypes[]}} = useMyWhishlistQuery("");
+    const {data}:{data?:{success:boolean; message:ProductTypes[]}} = useMyWhishlistQuery("");
 
 
     return(
