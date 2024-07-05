@@ -14,6 +14,8 @@ import Register from './pages/Register.Page'
 import Logout from './pages/Logout'
 import AddProduct from './pages/AddProduct'
 import Wishlist from './pages/Wishlist'
+import Dashboard from './pages/Dashboard'
+import OutStock from './pages/admin/OutStock'
 
 
 
@@ -46,6 +48,7 @@ const App = () => {
           <Route path="/user/cart" element={<Cart />} />
           <Route path="/product/:productID" element={<SingleProduct />} />
           <Route path="/user/wishlist" element={<Wishlist />} />
+          <Route path="/admin/dashboard" element={<Dashboard />} />
         </Routes>
       </BrowserRouter>
       
