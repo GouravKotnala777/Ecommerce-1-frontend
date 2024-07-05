@@ -49,6 +49,7 @@ const App = () => {
           <Route path="/product/:productID" element={<SingleProduct />} />
           <Route path="/user/wishlist" element={<Wishlist />} />
           <Route path="/admin/dashboard" element={<Dashboard />} />
+          <Route path="/admin/outstock" element={<OutStock />} />
         </Routes>
       </BrowserRouter>
       
