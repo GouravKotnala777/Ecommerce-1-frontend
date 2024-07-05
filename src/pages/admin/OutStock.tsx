@@ -1,7 +1,7 @@
 import "../../styles/admin/outstock.scss";
 import { ProductTypes } from "../../assets/demoData";
 //import SingleProductTemplate from "../../components/SingleProductTemplate";
-import { useOutStockProductsQuery } from "../../redux/api/api";
+import { useOutStockProductsQuery, useUpdateProductMutation } from "../../redux/api/api";
 import photo from "/vite.svg";
 import { RiStockLine } from "react-icons/ri";
 import { ChangeEvent, useState } from "react";
@@ -9,23 +9,40 @@ import { ChangeEvent, useState } from "react";
 const OutStock = () => {
     const outStockData:{data?:{success:boolean; message:ProductTypes[]}} = useOutStockProductsQuery("");
     const [productList, setProductList] = useState<{[key:string]:number;}>();
+    const [updateProduct] = useUpdateProductMutation();
     //const [quantity, setQuantity] = useState<number>(0);
 
     const stockRefillChangeHandler = (e:ChangeEvent<HTMLInputElement>, productID:string) => {
         setProductList({...productList, [productID]:Number(e.target.value)})
     };
-    const stockRefillClickHandler = () => {
+    const stockRefillClickHandler = async(productID:string) => {
         try {
-            console.log(productList);
+            if (productList && productList[productID]) {
+                console.log({productID, stock:productList[productID]});
+                if (productList[productID] >= 1) {
+                    const res = await updateProduct({productID, stock:productList[productID]});
+                    console.log("::::::::::::::::::");
+                    console.log(res);
+                    console.log("::::::::::::::::::");
+                }
+                else{
+                    console.log("Invalid stock value");
+                }
+            }
+            else{
+                console.log("productList me productID nahi hai");
+            }
+
         } catch (error) {
+            console.log("::::::::::::::::::");
             console.log(error);            
+            console.log("::::::::::::::::::");
         }
     };
 
     return(
         <div className="table_bg">
             <div className="table">
-                <pre>{JSON.stringify(productList)}</pre>
                 <div className="thead">
                     <div className="th">Img</div>
                     <div className="th">ID</div>
@@ -45,7 +62,7 @@ const OutStock = () => {
                             <div className="td">{product.rating}</div>
                             <div className="td">{product.price}</div>
                             <div className="td"><input type="number" name="quantity" placeholder={product.stock.toString()} onChange={(e) => stockRefillChangeHandler(e, product._id)} /></div>
-                            <div className="td" onClick={stockRefillClickHandler}><RiStockLine /></div>
+                            <div className="td" onClick={() => stockRefillClickHandler(product._id)}><RiStockLine /></div>
                         </div>
                     ))
                 }

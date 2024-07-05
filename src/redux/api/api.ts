@@ -115,16 +115,54 @@ const api = createApi({
         }),
         addRemoveFromWishlist:builder.mutation({
             query:({productID}:{productID:string;}) => ({
-                url:`api/v1/user/${productID}/wishlist`,
+                url:`/api/v1/user/${productID}/wishlist`,
                 method:"PUT",
                 credentials:"include"
             })
         }),
         outStockProducts:builder.query({
             query:() => ({
-                url:"api/v1/product/outstock",
+                url:"/api/v1/product/outstock",
                 method:"GET",
                 credentials:"include"
+            })
+        }),
+        updateProduct:builder.mutation({
+            query:({productID,
+                name,
+                description,
+                price,
+                category,
+                stock,
+                images,
+                rating,
+                sku,
+                discount,
+                brand,
+                height,
+                width,
+                depth,
+                weight,
+                tags}:{productID?:string;
+                    name?:string;
+                    description?:string;
+                    price?:number;
+                    category?:string;
+                    stock?:number;
+                    images?:string;
+                    rating?:number;
+                    sku?:string;
+                    discount?:number;
+                    brand?:string;
+                    height?:number;
+                    width?:number;
+                    depth?:number;
+                    weight?:number;
+                    tags?:string}) => ({
+                url:`/api/v1/product/${productID}`,
+                method:"PUT",
+                credentials:"include",
+                body:{name, description, price, category, stock, images, rating, sku, discount, brand, height, width, depth, weight, tags}
             })
         })
     })
@@ -132,4 +170,4 @@ const api = createApi({
 
 export default api;
 export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useAddToCartMutation, useFetchMyCartQuery, useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation, useMyWhishlistQuery, useAddRemoveFromWishlistMutation,
-    useOutStockProductsQuery} = api;
+    useOutStockProductsQuery, useUpdateProductMutation} = api;
