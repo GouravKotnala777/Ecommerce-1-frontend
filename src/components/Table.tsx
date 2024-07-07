@@ -2,9 +2,8 @@ import "../styles/components/table.scss";
 import { RiStockLine } from "react-icons/ri";
 import photo from "/vite.svg";
 import { ChangeEvent, Dispatch } from "react";
-//import { useUpdateProductMutation } from "../redux/api/api";
 
-//type MutationHookGeneric = ReturnType<typeof useUpdateProductMutation>[0];
+
 type MutationHookGeneric<T extends (arg:object) => any> = ReturnType<T>[0];
 
 interface TablePropTypes<T1, T2 extends (arg:object) => any>{
@@ -70,23 +69,15 @@ const Table = <T1 extends {_id:string; [key:string]:string;}, T2 extends (arg:ob
                     data&&data?.map((product) => (
                         <div className="tr" key={product._id}>
                             <div className="td photo_cell"><img src={photo} alt={photo} /></div>
-                            {/*<div className="td">{product._id.split("").splice(14,10)}</div>*/}
                             <div className="td id_cell">{product._id.split("").splice(14,10)}</div>
                             {
                                 thead.map((item) => (
-                                    //item.th === "ID" ?
-                                        //<div className="td">{product._id.split("").splice(14,10)}</div>
-                                        //:
-                                        item.isEditable ? 
-                                        <div className="td" key={item.th}><input type="text" name={item.th} placeholder={product[item.th.toLowerCase()] as string} onChange={(e) => onChangeHandler(e, product._id)} /></div>
-                                        :
-                                        <div className="td" key={item.th}>{product[item.th.toLowerCase()]}</div>
+                                    item.isEditable ? 
+                                    <div className="td" key={item.th}><input type="text" name={item.th} placeholder={product[item.th.toLowerCase()] as string} onChange={(e) => onChangeHandler(e, product._id)} /></div>
+                                    :
+                                    <div className="td" key={item.th}>{product[item.th.toLowerCase()]}</div>
                                 ))
                             }
-                            {/*<div className="td">{product[thead[1].toLowerCase()]}</div>
-                            <div className="td">{product[thead[2].toLowerCase()]}</div>
-                            <div className="td">{product[thead[3].toLowerCase()]}</div>*/}
-                            {/*<div className="td"><input type="number" name="quantity" placeholder={product.stock.toString()} onChange={(e) => onChangeHandler(e, product._id)} /></div>*/}
                             <div className="td update_btn" onClick={() => onClickHandler(product._id)}><RiStockLine /></div>
                         </div>
                     ))
