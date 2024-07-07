@@ -5,7 +5,8 @@ const Dashboard = () => {
     return(
         <div className="dashboard_bg">
             <h1>Dashboard</h1>
-            <Link to="/admin/outstock">Outstock Products</Link>
+            <Link to="/admin/outstock">Outstock Products</Link><hr></hr>
+            <Link to="/admin/product/update">Update Products Detailes</Link><hr></hr>
             <button>Fetch</button>
         </div>
     )

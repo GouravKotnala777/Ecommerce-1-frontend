@@ -16,6 +16,7 @@ import AddProduct from './pages/AddProduct'
 import Wishlist from './pages/Wishlist'
 import Dashboard from './pages/Dashboard'
 import OutStock from './pages/admin/OutStock'
+import UpdateProduct from './pages/admin/UpdateProduct'
 
 
 
@@ -50,6 +51,7 @@ const App = () => {
           <Route path="/user/wishlist" element={<Wishlist />} />
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/outstock" element={<OutStock />} />
+          <Route path="/admin/product/update" element={<UpdateProduct />} />
         </Routes>
       </BrowserRouter>
       
