@@ -1,5 +1,23 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+export interface UpdateProductBodyType {
+    productID?:string;
+    name?:string;
+    description?:string;
+    price?:number;
+    category?:string;
+    stock?:number;
+    images?:string;
+    rating?:number;
+    sku?:string;
+    discount?:number;
+    brand?:string;
+    height?:number;
+    width?:number;
+    depth?:number;
+    weight?:number;
+    tags?:string
+}
 
 const api = createApi({
     reducerPath:"api",
@@ -143,22 +161,7 @@ const api = createApi({
                 width,
                 depth,
                 weight,
-                tags}:{productID?:string;
-                    name?:string;
-                    description?:string;
-                    price?:number;
-                    category?:string;
-                    stock?:number;
-                    images?:string;
-                    rating?:number;
-                    sku?:string;
-                    discount?:number;
-                    brand?:string;
-                    height?:number;
-                    width?:number;
-                    depth?:number;
-                    weight?:number;
-                    tags?:string}) => ({
+                tags}:UpdateProductBodyType) => ({
                 url:`/api/v1/product/${productID}`,
                 method:"PUT",
                 credentials:"include",
