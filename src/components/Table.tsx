@@ -9,10 +9,22 @@ type MutationHookGeneric<T extends (arg:object) => any> = ReturnType<T>[0];
 interface TablePropTypes<T1, T2 extends (arg:object) => any>{
     thead:{th:string; isEditable:boolean;}[];
     data:T1[]|undefined;
-    list:{[key:string]:number;}|undefined,
+    list:{
+        [key: string]: {
+            name: string;
+            rating: number;
+            price: number;
+            stock: number;
+        };
+    };
     setList:Dispatch<React.SetStateAction<{
-        [key: string]: number;
-    } | undefined>>,
+        [key: string]: {
+            name: string;
+            rating: number;
+            price: number;
+            stock: number;
+        };
+    }>>,
     reduxQueryHook:MutationHookGeneric<T2>;
 }
 
@@ -21,22 +33,40 @@ interface TablePropTypes<T1, T2 extends (arg:object) => any>{
 const Table = <T1 extends {_id:string; [key:string]:string;}, T2 extends (arg:object) => any>({thead, data, list, setList, reduxQueryHook}:TablePropTypes<T1, T2>) => {
 
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement>, productID:string) => {
-        setList({...list, [productID]:Number(e.target.value)})
+        setList({...list, [productID]:{...list[productID], [e.target.name.toLowerCase()]:e.target.value}})
     };
 
     const onClickHandler = async(productID:string) => {
         try {            
             if (list && list[productID]) {
-                console.log({productID, stock:list[productID]});
-                if (list[productID] >= 1) {
-                    const res = await reduxQueryHook({productID, stock:list[productID]});
-                    console.log("::::::::::::::::::");
-                    console.log(res);
-                    console.log("::::::::::::::::::");
-                }
-                else{
-                    console.log("Invalid stock value");
-                }
+                console.log({[productID]:list[productID]});
+                console.log(list);
+                console.log(list[productID].name);
+                console.log(list[productID].price);
+                console.log(list[productID].rating);
+                console.log(list[productID].stock);
+                
+                    if (list[productID].name || list[productID].price || list[productID].rating || list[productID].stock) {
+                        const res = await reduxQueryHook({productID, name:list[productID].name, price:list[productID].price, rating:list[productID].rating, stock:list[productID].stock});
+                        console.log("::::::::::::::::::");
+                        console.log(res);
+                        console.log("::::::::::::::::::");
+                    }
+                    else{
+                        console.log("Invalid input value");
+                    }
+                
+                //else if (typeof list[productID] === "string"){
+                //    if (list[productID]) {
+                //        const res = await reduxQueryHook({productID, stock:list[productID]});
+                //        console.log("::::::::::::::::::");
+                //        console.log(res);
+                //        console.log("::::::::::::::::::");
+                //    }
+                //    else{
+                //        console.log("Invalid input value");
+                //    }
+                //}
             }
             else{
                 console.log("list me productID nahi hai");
