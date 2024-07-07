@@ -1,0 +1,98 @@
+
+
+.table_bg{
+    //border: 2px solid green;
+    //width: 571px;
+    overflow-x: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+        display: none;
+      }
+    .table{
+        //border: 2px solid red;
+        width: 571px;
+        margin: 10px auto;
+        
+        .thead{
+            //border: 2px solid violet;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            background: linear-gradient(90deg, rgba(255, 156, 102, 0.5), rgba(255, 75, 105, 0.5));
+            color: #515151;
+            font-weight: bold;
+            border-radius: 8px;
+            padding: 0 10px;
+            .th{
+                //border: 2px solid indigo;
+                text-align: center;
+                padding: 10px;
+                width: 78px;
+                &:last-child{
+                    width: 20px;
+                }
+            }
+            .photo_cell{
+                //border: 2px solid green;
+                width: 40px;
+            }
+            .id_cell{
+                //border: 2px solid green;
+                width: 80px;
+            }
+        }
+        .tbody{
+            //border: 2px solid blue;
+            font-size: 0.8rem;
+            .tr{
+                //border: 2px solid green;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                box-shadow: 1px 1px 10px 1px rgba(255, 75, 105, 0.3);
+                margin: 10px 0;
+                border-radius: 8px;
+                padding: 0 10px;
+                &:hover{
+                    background: linear-gradient(90deg, rgba(255, 156, 102, 0.1), rgba(255, 75, 105, 0.2));
+                }
+                .td{
+                    //border: 2px solid yellow;
+                    text-align: center;
+                    padding: 10px;
+                    width: 78px;
+                    overflow-x: scroll;
+
+                    input{
+                        width: 35px;
+                    }
+                    scrollbar-width: none;
+                    -ms-overflow-style: none;
+                }
+                .td::-webkit-scrollbar {
+                    display: none;
+                  }
+                .photo_cell{
+                    //border: 2px solid green;
+                    width: 40px;
+                }
+                .id_cell{
+                    //border: 2px solid green;
+                    width: 80px;
+                }
+                .update_btn{
+                    border: 1px solid rgba(255, 75, 105, 0.5);
+                    width: 20px;
+                    border-radius: 8px;
+                    background: rgba(255, 75, 105, 0.1);
+                    cursor: pointer;
+                    &:hover{
+                        background: rgba(255, 75, 105, 0.5);
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+}
