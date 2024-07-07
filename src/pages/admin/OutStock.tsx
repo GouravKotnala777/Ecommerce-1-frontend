@@ -13,11 +13,20 @@ const productTableHeadings = [
 
 const OutStock = () => {
     const outStockData:{data?:{success:boolean; message:(ProductTypes&{_id:string; [key:string]:string})[]}} = useOutStockProductsQuery("");
-    const [list, setList] = useState<{[key:string]:number;}>();
+    const [list, setList] = useState<{ [key: string]:{
+        name: string;
+        rating: number;
+        price: number;
+        stock: number;
+    };
+}>({});
     const [updateProduct] = useUpdateProductMutation();
 
     return(
-        <Table<(ProductTypes & {_id: string; [key: string]: string;}), ReturnType<typeof useUpdateProductMutation>[0]> thead={productTableHeadings} data={outStockData.data?.message} list={list} setList={setList} reduxQueryHook={updateProduct} />
+        <>
+            <p style={{margin:"0 auto", textAlign:"center"}}>Restock Products</p>
+            <Table<(ProductTypes & {_id: string; [key: string]: string;}), ReturnType<typeof useUpdateProductMutation>[0]> thead={productTableHeadings} data={outStockData.data?.message} list={list} setList={setList} reduxQueryHook={updateProduct} />
+        </>
     )
 };
 
