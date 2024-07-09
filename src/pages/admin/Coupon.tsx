@@ -17,7 +17,7 @@ interface CouponFormFielsTypes{
 }
 
 const formFields = [
-    {type:"text", name:"discountType", placeHolder:"Discount Type"},
+    {type:"select", name:"discountType", placeHolder:"Discount Type", options:["percentage", "fixed"]},
     {type:"text", name:"amount", placeHolder:"Amount"},
     {type:"text", name:"minPerchaseAmount", placeHolder:"Min Perchase Amount"},
     {type:"text", name:"startedDate", placeHolder:"Started Date"},
@@ -42,6 +42,8 @@ const Coupons = () => {
     };
 
     const onClickHandler = async() => {
+        console.log(formFieldsData);
+        
         try {
             const res = await createCoupon(formFieldsData as CreateCouponBodyType);
 
