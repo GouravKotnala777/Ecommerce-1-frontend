@@ -3,8 +3,8 @@ import "../styles/components/form.scss";
 
 interface FormPropTypes{
     heading:string;
-    formFields:{type:string; name:string; placeHolder:string;}[];
-    onChangeHandler:(e:ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => void;
+    formFields:{type:string; name:string; placeHolder:string; options?:string[]}[];
+    onChangeHandler:(e:ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => void;
     onClickHandler:() => void;
 }
 
@@ -21,7 +21,17 @@ const Form = ({heading, formFields, onChangeHandler, onClickHandler}:FormPropTyp
                         field.type === "textArea" ?
                         <textarea key={index} rows={5} name={field.name} placeholder={field.placeHolder+"..."} onChange={(e) => onChangeHandler(e)} />
                         :
-                        <input key={index} type={field.type} name={field.name} placeholder={field.placeHolder} onChange={(e) => onChangeHandler(e)} />
+                        field.type === "select" ?
+                            <select key={index} name={field.name} onChange={(e) => onChangeHandler(e)}>
+                                <option unselectable="on" value="none">--select--</option>
+                                {
+                                    field.options?.map((option, optionInd) => (
+                                        <option key={optionInd}>{option}</option>
+                                    ))
+                                }
+                            </select>
+                            :
+                            <input key={index} type={field.type} name={field.name} placeholder={field.placeHolder} onChange={(e) => onChangeHandler(e)} />
                     ))
                 }
                 <button onClick={onClickHandler}>{heading}</button>

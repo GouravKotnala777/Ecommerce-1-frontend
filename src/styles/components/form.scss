@@ -35,6 +35,21 @@
                 box-shadow: 0.2px 0.2px 5px rgba(62, 152, 255, 0.5);
             }
         }
+        select{
+            //border: 2px solid blue;
+            font-size: 1rem;
+            margin: 10px 5px;
+            padding: 10px;
+            border-radius: 8px;
+            outline: none;
+            border: 2px solid white;
+            transition: 0.2s;
+            cursor: pointer;
+            &:focus{
+                border: 2px solid rgb(62, 152, 255);
+                box-shadow: 0.2px 0.2px 5px rgba(62, 152, 255, 0.5);
+            }
+        }
         textarea{
             //border: 2px solid blue;
             font-size: 1rem;
