@@ -7,6 +7,7 @@ const Dashboard = () => {
             <h1>Dashboard</h1>
             <Link to="/admin/outstock">Outstock Products</Link><hr></hr>
             <Link to="/admin/product/update">Update Products Detailes</Link><hr></hr>
+            <Link to="/admin/coupon">Create Coupon</Link><hr></hr>
             <button>Fetch</button>
         </div>
     )
