@@ -20,17 +20,12 @@ const formFields = [
     {type:"select", name:"discountType", placeHolder:"Discount Type", options:["percentage", "fixed"]},
     {type:"text", name:"amount", placeHolder:"Amount"},
     {type:"text", name:"minPerchaseAmount", placeHolder:"Min Perchase Amount"},
-    {type:"text", name:"startedDate", placeHolder:"Started Date"},
+    {type:"date", name:"startedDate", placeHolder:"Started Date"},
     {type:"date", name:"endDate", placeHolder:"End Date"},
     {type:"text", name:"usageLimit", placeHolder:"Usage Limit"},
     {type:"text", name:"usedCount", placeHolder:"Used Count"}
 ];
-//const thead = [
-//    {th:"Code", isEditable:false},
-//    {th:"Amount", isEditable:false},
-//    {th:"StartedDate", isEditable:false},
-//    {th:"EndDate", isEditable:false}
-//];
+
 const Coupons = () => {
     const couponData:{data?:{message:[{_id:string; code:string; amount:number; discountType:string; minPerchaseAmount:number; usedCount:number; usageLimit:number; endDate:Date;}]}} = useGetAllCouponsQuery("");
     const [createCoupon] = useCreateCouponsMutation();
