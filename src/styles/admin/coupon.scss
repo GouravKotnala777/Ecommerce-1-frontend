@@ -1,0 +1,87 @@
+
+
+.coupon_bg{
+    //border: 2px solid red;
+    display: flex;
+    .left_part{
+        //border: 2px solid violet;
+        width: 40%;
+        .coupon_table_scroller{
+            //border: 2px solid green;
+            height: 100vh;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            box-shadow: inset 1px 1px 5px 2px rgba(255, 75, 105, 0.2);
+            .coupon{
+                //border: 1px solid red;
+                font-size: 0.6rem;
+                display: grid;
+                grid-template-columns: 30% 70%;
+                place-items:center;
+                margin: 10px 0;
+                box-shadow: 1px 1px 10px 1px rgba(255, 75, 105, 0.3);
+                background: rgba(255, 75, 105, 0.1);
+                //background: linear-gradient(90deg, rgba(255, 156, 102, 0.1), rgba(255, 75, 105, 0.2));
+                &:hover{
+                }
+                //background: white;
+                .left_part{
+                    //border: 2px solid violet;
+                    width: 92%;
+                    height: 85%;
+                    align-content: center;
+                    border-radius: 0 8px 8px 0;
+                    padding: 4%;
+                    background: white;
+                    //border-right: 1px dotted black;
+                    .used_coun{
+                        border: 2px solid rgba(255, 75, 105, 0.2);
+                        width: 30px;
+                        height: 30px;
+                        margin: 0 auto;
+                        align-content: center;
+                        text-align: center;
+                        border-radius: 50%;
+                    }
+                    .t_and_c{
+                        //border: 2px solid blue;
+                        font-size: 0.6rem;
+                    }
+                }
+                .right_part{
+                    //border: 2px solid green;
+                    width: 92%;
+                    border-radius: 8px 0 0 8px;
+                    padding: 4%;
+                    border-left: 2px dotted rgb(255, 247, 248);
+                    background: white;
+                    .id{
+                        text-align: center;
+                        font-weight: bold;
+                    }
+                    .amount{
+                        //border: 2px solid yellow;
+                        text-align: center;
+                        
+                    }
+                    .description{
+                        //border: 2px solid orange;
+                        
+                    }
+                    .end_date{
+                        //border: 2px solid red;
+                        color: #919191;
+                        font-size: 0.5rem;
+    
+                    }
+                }
+            }            
+        }
+        
+    }
+    .right_part{
+        //border: 2px solid blue;
+        width: 60%;
+        
+    }
+}
