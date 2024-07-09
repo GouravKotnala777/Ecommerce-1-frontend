@@ -18,6 +18,15 @@ export interface UpdateProductBodyType {
     weight?:number;
     tags?:string
 }
+export interface CreateCouponBodyType {
+    discountType:string;
+    amount:number;
+    minPerchaseAmount:number;
+    startedDate:string;
+    endDate:string;
+    usageLimit:number;
+    usedCount:number;
+}
 
 const api = createApi({
     reducerPath:"api",
@@ -167,10 +176,27 @@ const api = createApi({
                 credentials:"include",
                 body:{name, description, price, category, stock, images, rating, sku, discount, brand, height, width, depth, weight, tags}
             })
-        })
+        }),
+        getAllCoupons:builder.query({
+            query:() => ({
+                url:"/api/v1/coupon/all",
+                method:"GET",
+                credentials:"include"
+            })
+        }),
+        createCoupons:builder.mutation({
+            query:(data:CreateCouponBodyType) => ({
+                url:"/api/v1/coupon/new",
+                method:"POST",
+                credentials:"include",
+                body:data
+            })
+        }),
     })
 })
 
 export default api;
-export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useAddToCartMutation, useFetchMyCartQuery, useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation, useMyWhishlistQuery, useAddRemoveFromWishlistMutation,
-    useOutStockProductsQuery, useUpdateProductMutation} = api;
+export const {useRegisterMutation, useLoginMutation, useMyProfileQuery,
+    useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery,
+    useAddToCartMutation, useFetchMyCartQuery,  useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation, useMyWhishlistQuery, useAddRemoveFromWishlistMutation,
+    useOutStockProductsQuery, useUpdateProductMutation, useCreateCouponsMutation, useGetAllCouponsQuery} = api;
