@@ -80,6 +80,16 @@ export interface CartTypes {
     }[];
     totalPrice: number;
 }
+export interface CouponTypes {
+    code:string;
+    discountType:string;
+    amount:number;
+    minPerchaseAmount:number;
+    startedDate:Date;
+    endDate:Date;
+    usageLimit:number;
+    usedCount:number;
+}
 
 
 
