@@ -4,11 +4,12 @@ export interface UserTypes{
     email: string;
     password: string;
     address: {
+        house:string;
         street: string;
         city: string;
         state: string;
         zip: string;
-    };
+    }[];
     mobile: string;
     role: string;
     orderHistory: string[];
