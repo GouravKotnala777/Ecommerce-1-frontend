@@ -3,20 +3,30 @@ import { MouseEvent, useState } from "react";
 import { useAddToCartMutation, useRemoveFromCartMutation } from "../redux/api/api";
 import { useDispatch } from "react-redux";
 import { setIsReviewDialogActive } from "../redux/reducers/miscReducers";
+import { useNavigate } from "react-router-dom";
 
 
 interface ProductBtnGroupPropTypes{
     parent:string;
     productID:string;
+    amount:number;
 }
 
-const ProductBtnGroup = ({parent, productID}:ProductBtnGroupPropTypes) => {
+const ProductBtnGroup = ({parent, productID, amount}:ProductBtnGroupPropTypes) => {
     const [addToCart] = useAddToCartMutation();
     const [removeFromCart] = useRemoveFromCartMutation();
     const [quantity, setQuantity] = useState<number>(1);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
 
+    const buyHandler = async({amount}:{amount:number}) => {
+        try {
+            navigate("/user/address", {state:{amount:amount, quantity:quantity}});
+        } catch (error) {
+            console.log(error);            
+        }
+    };
     const reviewToggleHandler = (e:MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
         dispatch(setIsReviewDialogActive(true));
@@ -33,7 +43,7 @@ const ProductBtnGroup = ({parent, productID}:ProductBtnGroupPropTypes) => {
                     <option>3</option>
                     <option>4</option>
                 </select>
-                <button className="buy_btn">Buy</button>
+                <button className="buy_btn" onClick={() => buyHandler({amount})}>Buy</button>
             </div>
             {
                 parent === "singleProduct" &&
