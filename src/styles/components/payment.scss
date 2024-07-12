@@ -1,0 +1,30 @@
+
+
+form{
+    border: 2px solid hotpink;
+    max-width: 470px;
+    margin: 20px auto;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0.1px 0.1px 5px rgb(255, 75, 105);
+    
+    .card_element{
+        //border: 2px solid blue;
+        padding: 10px;
+        background: white;
+        border: 1px solid rgba(255, 75, 105, 0.3);
+        border-radius: 4px;
+    }
+    button{
+        //border: 2px solid red;
+        width: 100%;
+        font-size: 0.9rem;
+        padding: 10px;
+        font-weight: bold;
+        color: white;
+        background: rgb(94, 169, 255);
+        border: none;
+        margin-top: 30px;
+        border-radius: 4px;
+    }
+}

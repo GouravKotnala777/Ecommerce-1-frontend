@@ -1,0 +1,98 @@
+import "../styles/pages/address.scss";
+import { ChangeEvent, useState } from "react";
+import Form from "../components/Form";
+import { useCreatePaymentMutation, useUpdateMeMutation } from "../redux/api/api";
+import { loggedInUserInitialState } from "../redux/reducers/loggedInUserReducer";
+import { useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+
+export interface AddressBodyTypes {
+    house?:string;
+    street?: string;
+    city?: string;
+    state?: string;
+    zip?: string;
+}
+
+const formFields = [
+    {type:"text", name:"house", placeHolder:"House No."},
+    {type:"text", name:"street", placeHolder:"Street"},
+    {type:"text", name:"city", placeHolder:"City"},
+    {type:"text", name:"state", placeHolder:"State"},
+    {type:"text", name:"zip", placeHolder:"Zip Code"},
+];
+
+const Address = () => {
+    const [address, setAddress] = useState<AddressBodyTypes>();
+    const [updateMe] = useUpdateMeMutation();
+    const [createPayment] = useCreatePaymentMutation();
+    const {user} = useSelector((state:{loggedInUserReducer:loggedInUserInitialState}) => state.loggedInUserReducer);
+    const location:{amount:number; quantity:number;} = useLocation().state;
+    const navigate = useNavigate();
+
+    const onChangeHandler = (e:ChangeEvent<HTMLInputElement>) => {
+        setAddress({...address, [e.target.name]:e.target.value});
+    };
+
+    const onClickHandler = async() => {
+        try {
+            const res = await updateMe({...address});
+            const paymentIntendRes = await createPayment({amount:location.amount});
+
+
+            
+            console.log("----- Address.Page.tsx onClickHandler");
+            console.log(address);
+            console.log(res);
+            console.log("----- Address.Page.tsx onClickHandler");
+
+            if (paymentIntendRes.data.message) {
+                navigate("/product/pay", {state:{clientSecret:paymentIntendRes.data.message, userDetailes:{name:user?.name, email:user?.email, phone:user?.mobile}, address:address,  amount:location.amount, quantity:location.quantity}});
+            }
+            if (paymentIntendRes.error) {
+                console.log("error aa gaya");
+            }
+            
+        } catch (error) {
+            console.log("----- Address.Page.tsx onClickHandler");
+            console.log(error);
+            console.log("----- Address.Page.tsx onClickHandler");
+        }
+    };
+    
+    const setAddressFromTemplate = async(tmplateData:AddressBodyTypes) => {
+        const paymentIntendRes = await createPayment({amount:location.amount});
+
+        if (paymentIntendRes.data.message) {
+            navigate("/product/pay", {state:{clientSecret:paymentIntendRes.data.message, userDetailes:{name:user?.name, email:user?.email, phone:user?.mobile}, address:tmplateData, amount:location.amount, quantity:location.quantity}});
+        }
+        if (paymentIntendRes.error) {
+            console.log("error aa gaya");
+        }
+    };
+    
+    return(
+        <div>
+            {JSON.stringify(address)}
+            <Form heading="Address" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e as ChangeEvent<HTMLInputElement>)} onClickHandler={onClickHandler} />
+            {/*<h4>Select from previous address</h4>*/}
+            <div className="addresses_cont">
+                {
+                    user?.address.map((address, index) => (
+                        <>
+                            <div className="address_cont" key={index} onClick={() => setAddressFromTemplate(address)}>
+                                <div className="heading">House No.</div><div className="value">{address.house}</div>
+                                <div className="heading">Street</div><div className="value">{address.street}</div>
+                                <div className="heading">City</div><div className="value">{address.city}</div>
+                                <div className="heading">State</div><div className="value">{address.state}</div>
+                                <div className="heading">Zip</div><div className="value">{address.zip}</div>
+                            </div>
+                        </>
+                    ))
+                }
+            </div>
+        </div>
+    )
+};
+
+export default Address;
