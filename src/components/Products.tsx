@@ -42,9 +42,7 @@ const Products = () => {
                                 <div className="info rating"><RatingSystem rating={product.rating} /></div>
                             </div>
                             <div className="lower_part">
-                                <ProductBtnGroup productID={product._id} parent="home" />
-                                {/*<button className="add_btn" onClick={() => {addToCart({productID:product._id, quantity:1})}}>Add</button>
-                                <button className="buy_btn">Buy</button>*/}
+                                <ProductBtnGroup parent="home" productID={product._id} amount={product.price} />
                             </div>
                         </div>
                     ))
