@@ -27,6 +27,17 @@ export interface CreateCouponBodyType {
     usageLimit:number;
     usedCount:number;
 }
+export interface UpdateMeBodyType {
+    name?:string;
+    email?:string;
+    password?:string;
+    mobile?:string;
+    house?:string;
+    street?:string;
+    city?:string;
+    state?:string;
+    zip?:string;
+}
 
 const api = createApi({
     reducerPath:"api",
@@ -59,6 +70,14 @@ const api = createApi({
                 url:"/api/v1/user/me",
                 method:"GET",
                 credentials:"include"
+            })
+        }),
+        updateMe:builder.mutation({
+            query:({name, email, password, mobile, house, street, city, state, zip}:UpdateMeBodyType) => ({
+                url:"/api/v1/user/update",
+                method:"PUT",
+                credentials:"include",
+                body:{name, email, password, mobile, house, street, city, state, zip}
             })
         }),
         addProduct:builder.mutation({
@@ -192,11 +211,21 @@ const api = createApi({
                 body:data
             })
         }),
+        createPayment:builder.mutation({
+            query:({amount}:{amount:number;}) => ({
+                url:"/api/v1/payment/new",
+                method:"POST",
+                credentials:"include",
+                body:{amount}
+            })
+        })
     })
 })
 
 export default api;
-export const {useRegisterMutation, useLoginMutation, useMyProfileQuery,
+export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useUpdateMeMutation,
     useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery,
     useAddToCartMutation, useFetchMyCartQuery,  useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation, useMyWhishlistQuery, useAddRemoveFromWishlistMutation,
-    useOutStockProductsQuery, useUpdateProductMutation, useCreateCouponsMutation, useGetAllCouponsQuery} = api;
+    useOutStockProductsQuery, useUpdateProductMutation, useCreateCouponsMutation, useGetAllCouponsQuery,
+    useCreatePaymentMutation
+} = api;
