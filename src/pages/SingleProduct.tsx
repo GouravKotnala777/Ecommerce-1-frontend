@@ -31,7 +31,7 @@ const SingleProduct = () => {
     const [createReview] = useCreateReviewMutation();
     const [deleteReview] = useDeleteReviewMutation();
 
-    const onChangeHandler = (e:ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
+    const onChangeHandler = (e:ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
         setFormFieldData({...formFieldData, [e.target.name]:e.target.value});
     };
     const onClickHandler = async() => {
