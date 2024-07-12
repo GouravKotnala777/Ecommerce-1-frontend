@@ -80,6 +80,14 @@ const api = createApi({
                 body:{name, email, password, mobile, house, street, city, state, zip}
             })
         }),
+        removeAddress:builder.mutation({
+            query:({house, street, city, state, zip}:UpdateMeBodyType) => ({
+                url:"/api/v1/user/update",
+                method:"DELETE",
+                credentials:"include",
+                body:{house, street, city, state, zip}
+            })
+        }),
         addProduct:builder.mutation({
             query:(data) => ({
                 url:"/api/v1/product/new",
@@ -223,7 +231,7 @@ const api = createApi({
 })
 
 export default api;
-export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useUpdateMeMutation,
+export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useUpdateMeMutation, useRemoveAddressMutation,
     useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery,
     useAddToCartMutation, useFetchMyCartQuery,  useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation, useMyWhishlistQuery, useAddRemoveFromWishlistMutation,
     useOutStockProductsQuery, useUpdateProductMutation, useCreateCouponsMutation, useGetAllCouponsQuery,
