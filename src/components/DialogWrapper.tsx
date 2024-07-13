@@ -1,17 +1,15 @@
-import { MouseEvent, ReactElement, useEffect, useRef } from "react";
+import { ReactElement, useEffect, useRef } from "react";
 
 
 const DialogWrapper = ({toggler, Element}:{toggler:boolean; Element:ReactElement}) => {
-    const parentDivRef = useRef<HTMLDialogElement>(null);
-
-    const stopPropagationOnDialog = (e:MouseEvent<HTMLDivElement>) => {
-        e.stopPropagation();
-    };
+    const parentDivRef = useRef<HTMLDialogElement|null>(null);
 
     useEffect(() => {
         const aaa = () => {
-            const scrollPositionY = window.pageYOffset;            
-            (parentDivRef.current as HTMLDialogElement).style.top = `${-60+scrollPositionY}px`;
+            const scrollPositionY = window.pageYOffset;
+            if (parentDivRef.current) {
+                (parentDivRef.current as HTMLDialogElement).style.top = `${-60+scrollPositionY}px`;
+            }
         };
 
         window.addEventListener("scroll", aaa);
@@ -43,7 +41,7 @@ const DialogWrapper = ({toggler, Element}:{toggler:boolean; Element:ReactElement
                 borderRadius:"8px",
                 position:"relative",
                 marginTop:"0px",
-                background:"transparent",        
+                background:"transparent" 
             }
         }>
             <div className="dialog_bg" style={
@@ -56,9 +54,10 @@ const DialogWrapper = ({toggler, Element}:{toggler:boolean; Element:ReactElement
                     left:"50%",
                     position:"absolute",
                     translate:"-50% -50%",
-                    padding:"0 10px"
+                    padding:"0 10px",
+                    border:"2px solid blue"
                 }
-            } onClick={(e) => stopPropagationOnDialog(e)}>
+            }>
                 {Element}
             </div>
         </dialog>
