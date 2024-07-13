@@ -11,7 +11,7 @@ interface FormPropTypes{
 const Form = ({heading, formFields, onChangeHandler, onClickHandler}:FormPropTypes) => {
 
     return(
-        <div className="form_cont">
+        <div className="form_cont" onClick={(e) => {e.stopPropagation()}}>
             <div className="heading_cont">
                 {heading}
             </div>
