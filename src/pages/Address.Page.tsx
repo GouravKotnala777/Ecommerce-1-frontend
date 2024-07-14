@@ -39,7 +39,7 @@ const Address = () => {
     const onClickHandler = async() => {
         try {
             const res = await updateMe({...address});
-            const paymentIntendRes = await createPayment({amount:location.amount});
+            const paymentIntendRes = await createPayment({amount:location.amount, quantity:location.quantity});
 
 
             
@@ -63,7 +63,7 @@ const Address = () => {
     };
     
     const setAddressFromTemplate = async(tmplateData:AddressBodyTypes) => {
-        const paymentIntendRes = await createPayment({amount:location.amount});
+        const paymentIntendRes = await createPayment({amount:location.amount, quantity:location.quantity});
 
         if (paymentIntendRes.data.message) {
             navigate("/product/pay", {state:{clientSecret:paymentIntendRes.data.message, userDetailes:{name:user?.name, email:user?.email, phone:user?.mobile}, address:tmplateData, amount:location.amount, quantity:location.quantity}});

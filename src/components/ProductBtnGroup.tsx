@@ -35,7 +35,7 @@ const ProductBtnGroup = ({parent, productID, amount}:ProductBtnGroupPropTypes) =
     return(
         <div className="btns_cont">
             <div className="upper_btns">
-                <button className="add_btn" style={{background:parent === "cart" ? "white":"linear-gradient(90deg, rgb(255, 34, 71), rgb(255, 156, 102))", border:parent === "cart"?"1px solid rgb(255, 34, 71)":"none", color:parent==="cart"?"rgb(255, 34, 71)":"white"}} onClick={() => parent === "cart"?removeFromCart({productID:productID!, quantity}):addToCart({productID:productID!, quantity})}>{parent === "cart" ? "Remove" : "Add"}</button>
+                <button className="add_btn" style={{background:parent === "cart" ? "white":"linear-gradient(90deg, rgb(255, 34, 71), rgb(255, 156, 102))", border:parent === "cart"?"1px solid rgb(255, 34, 71)":"none", color:parent==="cart"?"rgb(255, 34, 71)":"white"}} onClick={() => parent === "cart"?removeFromCart({productID:productID!, price:amount, quantity}):addToCart({productID:productID!, price:amount, quantity})}>{parent === "cart" ? "Remove" : "Add"}</button>
                 
                 <select onChange={(e) => setQuantity(Number(e.target.value))}>
                     <option>1</option>
