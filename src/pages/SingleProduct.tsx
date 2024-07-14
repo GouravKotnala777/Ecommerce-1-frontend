@@ -132,7 +132,7 @@ const SingleProduct = () => {
                             <div className="review_cont" key={q}>
                                 <div className="lower_part">
                                     <div className="left_part">
-                                        <img src="hjkjhhj" alt={unknownUser} style={{width:"40px", height:"40px", background:"pink"}} />
+                                        <img src={unknownUser} alt={unknownUser} style={{background:"pink"}} />
                                     </div>
                                     <div className="middle_part">
                                         <div className="email"><Skeleton height="20px" margin="5px auto" /></div>
