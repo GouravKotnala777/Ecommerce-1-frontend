@@ -114,7 +114,7 @@ const api = createApi({
             })
         }),
         addToCart:builder.mutation({
-            query:(data:{productID:string; quantity:number;}) => ({
+            query:(data:{productID:string; price:number; quantity:number;}) => ({
                 url:"/api/v1/cart/add",
                 method:"POST",
                 headers:{
@@ -125,7 +125,7 @@ const api = createApi({
             })
         }),
         removeFromCart:builder.mutation({
-            query:(data:{productID:string; quantity:number;}) => ({
+            query:(data:{productID:string; price:number; quantity:number;}) => ({
                 url:"/api/v1/cart/remove",
                 method:"DELETE",
                 headers:{
@@ -219,12 +219,20 @@ const api = createApi({
                 body:data
             })
         }),
+        getSingleCoupon:builder.mutation({
+            query:({code, totalAmount}:{code:string; totalAmount:number;}) => ({
+                url:"/api/v1/coupon/apply",
+                method:"POST",
+                credentials:"include",
+                body:{code, totalAmount}
+            })
+        }),
         createPayment:builder.mutation({
-            query:({amount}:{amount:number;}) => ({
+            query:({amount, quantity}:{amount:number; quantity:number;}) => ({
                 url:"/api/v1/payment/new",
                 method:"POST",
                 credentials:"include",
-                body:{amount}
+                body:{amount, quantity}
             })
         })
     })
@@ -234,6 +242,7 @@ export default api;
 export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useUpdateMeMutation, useRemoveAddressMutation,
     useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery,
     useAddToCartMutation, useFetchMyCartQuery,  useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation, useMyWhishlistQuery, useAddRemoveFromWishlistMutation,
-    useOutStockProductsQuery, useUpdateProductMutation, useCreateCouponsMutation, useGetAllCouponsQuery,
+    useOutStockProductsQuery, useUpdateProductMutation,
+    useCreateCouponsMutation, useGetAllCouponsQuery, useGetSingleCouponMutation,
     useCreatePaymentMutation
 } = api;
