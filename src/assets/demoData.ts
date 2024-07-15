@@ -82,6 +82,7 @@ export interface CartTypes {
     totalPrice: number;
 }
 export interface CouponTypes {
+    _id:string;
     code:string;
     discountType:string;
     amount:number;
