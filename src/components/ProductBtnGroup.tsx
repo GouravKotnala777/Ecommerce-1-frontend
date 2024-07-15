@@ -10,9 +10,11 @@ interface ProductBtnGroupPropTypes{
     parent:string;
     productID:string;
     amount:number;
+    totalPrice:number;
+    coupon:string;
 }
 
-const ProductBtnGroup = ({parent, productID, amount}:ProductBtnGroupPropTypes) => {
+const ProductBtnGroup = ({parent, productID, amount, totalPrice, coupon}:ProductBtnGroupPropTypes) => {
     const [addToCart] = useAddToCartMutation();
     const [removeFromCart] = useRemoveFromCartMutation();
     const [quantity, setQuantity] = useState<number>(1);
@@ -22,7 +24,16 @@ const ProductBtnGroup = ({parent, productID, amount}:ProductBtnGroupPropTypes) =
 
     const buyHandler = async({amount}:{amount:number}) => {
         try {
-            navigate("/user/address", {state:{amount:amount, quantity:quantity}});
+            console.log({orderItems2:[{productID, quantity}]});
+            
+            navigate("/user/address", {state:{
+                amount:amount,
+                quantity:quantity,
+                orderItems:[{productID, quantity}],
+                totalPrice:totalPrice,
+                coupon,
+                shippingType:"regular"
+            }});
         } catch (error) {
             console.log(error);            
         }

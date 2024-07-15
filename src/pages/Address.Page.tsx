@@ -29,7 +29,7 @@ const Address = () => {
     const [removeAddress] = useRemoveAddressMutation();
     const [createPayment] = useCreatePaymentMutation();
     const {user} = useSelector((state:{loggedInUserReducer:loggedInUserInitialState}) => state.loggedInUserReducer);
-    const location:{amount:number; quantity:number;} = useLocation().state;
+    const location:{amount:number; quantity:number; orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; shippingType:string;} = useLocation().state;
     const navigate = useNavigate();
 
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement>) => {
@@ -45,11 +45,22 @@ const Address = () => {
             
             console.log("----- Address.Page.tsx onClickHandler");
             console.log(address);
+            console.log({orderItems:location.orderItems});
             console.log(res);
             console.log("----- Address.Page.tsx onClickHandler");
 
             if (paymentIntendRes.data.message) {
-                navigate("/product/pay", {state:{clientSecret:paymentIntendRes.data.message, userDetailes:{name:user?.name, email:user?.email, phone:user?.mobile}, address:address,  amount:location.amount, quantity:location.quantity}});
+                navigate("/product/pay", {state:{
+                    clientSecret:paymentIntendRes.data.message,
+                    userDetailes:{name:user?.name, email:user?.email, phone:user?.mobile},
+                    address:address,
+                    amount:location.amount,
+                    quantity:location.quantity,
+                    orderItems:location.orderItems,
+                    totalPrice:location.totalPrice,
+                    coupon:location.coupon,
+                    shippingType:location.shippingType
+                }});
             }
             if (paymentIntendRes.error) {
                 console.log("error aa gaya");
@@ -62,11 +73,26 @@ const Address = () => {
         }
     };
     
-    const setAddressFromTemplate = async(tmplateData:AddressBodyTypes) => {
+    const setAddressFromTemplate = async(templateData:AddressBodyTypes) => {
         const paymentIntendRes = await createPayment({amount:location.amount, quantity:location.quantity});
 
+
+        console.log({paymentIntendRes});
+        console.log({amount:location.amount, quantity:location.quantity});
+        
+
         if (paymentIntendRes.data.message) {
-            navigate("/product/pay", {state:{clientSecret:paymentIntendRes.data.message, userDetailes:{name:user?.name, email:user?.email, phone:user?.mobile}, address:tmplateData, amount:location.amount, quantity:location.quantity}});
+            navigate("/product/pay", {state:{
+                clientSecret:paymentIntendRes.data.message,
+                userDetailes:{name:user?.name, email:user?.email, phone:user?.mobile},
+                address:templateData,
+                amount:location.amount,
+                quantity:location.quantity,
+                orderItems:location.orderItems,
+                totalPrice:location.totalPrice,
+                coupon:location.coupon,
+                shippingType:location.shippingType
+            }});
         }
         if (paymentIntendRes.error) {
             console.log("error aa gaya");
@@ -90,26 +116,31 @@ const Address = () => {
     
     return(
         <div className="address_bg">
-            {JSON.stringify(address)}
+            {/*{JSON.stringify(address)}*/}
+            <pre>{JSON.stringify({
+                amount:location.amount,
+                quantity:location.quantity,
+                totalPrice:location.totalPrice,
+                coupon:location.coupon,
+                shippingType:location.shippingType
+            }, null, `\t`)}</pre>
             <Form heading="Address" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e as ChangeEvent<HTMLInputElement>)} onClickHandler={onClickHandler} />
             <h4>Select from previous address</h4>
             <div className="addresses_cont">
                 {
                     user?.address.map((address, index) => (
-                        <>
-                            <div className="address_cont" key={index} onClick={() => setAddressFromTemplate(address)}>
-                                <div className="remove_btn_cont">
-                                    <CgClose className="CgClose" onClick={() => removeAddressTemplate(address)} />
-                                </div>
-                                <div className="detaile_cont">
-                                    <div className="heading">House No.</div><div className="value">{address.house}</div>
-                                    <div className="heading">Street</div><div className="value">{address.street}</div>
-                                    <div className="heading">City</div><div className="value">{address.city}</div>
-                                    <div className="heading">State</div><div className="value">{address.state}</div>
-                                    <div className="heading">Zip</div><div className="value">{address.zip}</div>
-                                </div>
+                        <div className="address_cont" key={index} onClick={() => setAddressFromTemplate(address)}>
+                            <div className="remove_btn_cont">
+                                <CgClose className="CgClose" onClick={() => removeAddressTemplate(address)} />
                             </div>
-                        </>
+                            <div className="detaile_cont">
+                                <div className="heading">House No.</div><div className="value">{address.house}</div>
+                                <div className="heading">Street</div><div className="value">{address.street}</div>
+                                <div className="heading">City</div><div className="value">{address.city}</div>
+                                <div className="heading">State</div><div className="value">{address.state}</div>
+                                <div className="heading">Zip</div><div className="value">{address.zip}</div>
+                            </div>
+                        </div>
                     ))
                 }
             </div>

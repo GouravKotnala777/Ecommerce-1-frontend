@@ -4,54 +4,78 @@ import { loadStripe, StripeCardElement } from "@stripe/stripe-js";
 import { FormEvent, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { AddressBodyTypes } from "./Address.Page";
+import { useNewOrderMutation } from "../redux/api/api";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 
 
-const CheckoutForm = ({clientSecret, userDetailes, address}:{clientSecret:string; userDetailes:{name:string; email:string; phone:string;}; address:AddressBodyTypes}) => {
+const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPrice, coupon, shippingType}:{clientSecret:string; userDetailes:{name:string; email:string; phone:string;}; address:AddressBodyTypes; orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; shippingType:string;}) => {
     const stripe = useStripe();
     const elements = useElements();
     const [error, setError] = useState<string>();
     const [paymentSuccess, setPaymentSuccess] = useState(false);
+    const [newOrder] = useNewOrderMutation();
 
     const handleSubmit = async(e:FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if (!stripe || !elements) {
-            return null;
-        }
-
-        const cardElement = elements.getElement(CardElement);
-
-        const {paymentIntent, error} = await stripe.confirmCardPayment(
-            clientSecret,
-            {
-                payment_method:{
-                    card:cardElement as StripeCardElement,
-                    billing_details:{
-                        name:userDetailes.name,
-                        email:userDetailes.email,
-                        phone:userDetailes.phone,
-                        address:{
-                            line1:address.house,
-                            line2:address.street,
-                            city:address.city,
-                            state:address.state,
-                            country:address.state,
-                            postal_code:address.zip
+        try {
+            if (!stripe || !elements) {
+                return null;
+            }
+    
+            const cardElement = elements.getElement(CardElement);
+    
+            const {paymentIntent, error} = await stripe.confirmCardPayment(
+                clientSecret,
+                {
+                    payment_method:{
+                        card:cardElement as StripeCardElement,
+                        billing_details:{
+                            name:userDetailes.name,
+                            email:userDetailes.email,
+                            phone:userDetailes.phone,
+                            address:{
+                                line1:address.house,
+                                line2:address.street,
+                                city:address.city,
+                                state:address.state,
+                                country:address.state,
+                                postal_code:address.zip
+                            }
                         }
                     }
                 }
+            );
+    
+            if (error) {
+                setError(error.message);
             }
-        );
+            else if(paymentIntent.status === "succeeded"){
+                setPaymentSuccess(true);
 
-        if (error) {
-            setError(error.message);
+                console.log({paymentIntent});
+                
+                const newOrderRes = await newOrder({
+                    orderItems,
+                    totalPrice,
+                    coupon,
+                    transactionId:paymentIntent.id,
+                    shippingType, status:paymentIntent.status,
+                    message:"demo message"});
+
+                console.log("---- Payment.tsx");
+                console.log(newOrderRes);
+                console.log("---- Payment.tsx");
+                
+            }
+        } catch (error) {
+            console.log("---- error from Payment.tsx");
+            console.log(error);
+            console.log("---- error from Payment.tsx");
         }
-        else if(paymentIntent.status === "succeeded"){
-            setPaymentSuccess(true);
-        }
+
     };
 
     return(
@@ -60,21 +84,36 @@ const CheckoutForm = ({clientSecret, userDetailes, address}:{clientSecret:string
             <button type="submit" disabled={!stripe}>Pay</button>
             {error && <div>{error}</div>}
             {paymentSuccess && <div>Payment Successfull</div>}
-
         </form>
     )
 };
 
 
 const StripePayment = () => {
-    const location:{clientSecret:string; userDetailes:{name:string; email:string; phone:string;}; address:AddressBodyTypes}|undefined = useLocation().state;
+    const location:{
+        clientSecret:string;
+        userDetailes:{name:string; email:string; phone:string;};
+        address:AddressBodyTypes;
+        orderItems:{productID:string; quantity:number;}[];
+        totalPrice:number; shippingType:string;
+        coupon:string;
+    }|undefined = useLocation().state;
 
     console.log({clientSecret:location?.clientSecret});
+    console.log({orderItems1:location?.orderItems});
+    
     
 
     return(
         <Elements stripe={stripePromise}>
-            <CheckoutForm clientSecret={location?.clientSecret as string} userDetailes={location?.userDetailes as {name:string; email:string; phone:string;}} address={location?.address as AddressBodyTypes} />
+            <CheckoutForm 
+                clientSecret={location?.clientSecret as string}
+                userDetailes={location?.userDetailes as {name:string; email:string; phone:string;}}
+                address={location?.address as AddressBodyTypes}
+                orderItems={location?.orderItems as {productID:string; quantity:number;}[]}
+                totalPrice={location?.totalPrice as number}
+                coupon={location?.coupon as string}
+                shippingType={location?.shippingType as string} />
         </Elements>
     )
 };

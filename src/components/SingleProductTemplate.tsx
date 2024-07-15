@@ -116,7 +116,12 @@ const SingleProductTemplate = ({productID, userWishlist, category, name, price, 
                                     <span className="info_heading">Description</span><span className="info_value">{description}</span>
                                 </div>
                             </div>
-                            <ProductBtnGroup parent={parent} productID={productID as string} amount={price as number} />
+                            <ProductBtnGroup
+                                parent={parent}
+                                productID={productID as string}
+                                amount={price as number}
+                                totalPrice={price as number}
+                                 />
                         </div>
                     </div>
             }
