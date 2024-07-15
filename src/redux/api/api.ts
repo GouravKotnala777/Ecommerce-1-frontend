@@ -234,6 +234,14 @@ const api = createApi({
                 credentials:"include",
                 body:{amount, quantity}
             })
+        }),
+        newOrder:builder.mutation({
+            query:({orderItems, totalPrice, coupon, transactionId, status, shippingType, message}:{orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; transactionId:string; status:string; shippingType:string; message:string;}) => ({
+                url:"/api/v1/order/new",
+                method:"POST",
+                credentials:"include",
+                body:{orderItems, totalPrice, coupon, transactionId, status, shippingType, message}
+            })
         })
     })
 })
@@ -244,5 +252,6 @@ export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useUpdat
     useAddToCartMutation, useFetchMyCartQuery,  useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation, useMyWhishlistQuery, useAddRemoveFromWishlistMutation,
     useOutStockProductsQuery, useUpdateProductMutation,
     useCreateCouponsMutation, useGetAllCouponsQuery, useGetSingleCouponMutation,
-    useCreatePaymentMutation
+    useCreatePaymentMutation,
+    useNewOrderMutation
 } = api;
