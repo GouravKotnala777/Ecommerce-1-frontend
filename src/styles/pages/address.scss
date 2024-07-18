@@ -1,7 +1,81 @@
 
 
 h4{
-    margin:-80px auto 0 auto;
+    //margin:-80px auto 0 auto;
+    margin:0 auto;
+}
+.shipping_type_cont{
+    //border: 2px solid red;
+    font-size: 0.7rem;
+    border: 1px solid rgba(255, 75, 105, 1);
+    border-radius: 8px;
+    margin-top: 20px;
+    .upper_cont{
+        //border: 2px solid violet;
+        margin: 20px;
+        display: flex;
+        justify-content: space-between;
+        .heading{
+            //border: 2px solid indigo;
+            font-weight: bold;
+        }
+        .value{
+            //border: 2px solid indianred;
+            
+        }
+    }
+    .middle_cont{
+        //border: 2px solid blue;
+        margin: 20px;
+        .heading{
+            //border: 2px solid red;
+            font-weight: bold;
+            color: rgba(255, 75, 105, 1);
+        }
+        .radios_cont{
+            //border: 2px solid pink;
+            
+            label{
+                //border: 2px solid green;
+                display: flex;
+                justify-content: space-between;
+                margin: 20px 0;
+                padding: 5px 10px;
+                font-size: 0.7rem;
+                border-radius: 8px;
+                box-shadow: 0.1px 0.1px 5px rgba(255, 75, 105, 0.5);
+                border: 1px solid rgba(255, 75, 105, 1);
+
+                &:focus-within{
+                    background: rgba(255, 75, 105, 0.2);
+                }
+
+                input{
+                    //border: 2px solid indigo;
+                    
+                }
+                p{
+                    //border: 2px solid blue;
+                }
+            }
+        }
+        
+    }
+    .lower_cont{
+        //border: 2px solid green;
+        margin: 20px;
+        font-size: 0.7rem;
+        display: flex;
+        justify-content: space-between;
+        .heading{
+            //border: 2px solid yellow;
+            font-weight: bold;
+        }
+        .value{
+            //border: 2px solid orange;
+        }
+    }
+    
 }
 .address_bg{
     //border:2px solid red;

@@ -44,8 +44,7 @@ const Cart = () => {
                 quantity:1,
                 orderItems:cartData.data?.message.products,
                 totalPrice:amount,
-                coupon:singleCoupon?._id,
-                shippingType:"regular"
+                coupon:singleCoupon?._id
             }});
         } catch (error) {
             console.log(error);
@@ -122,7 +121,7 @@ const Cart = () => {
             {/*<pre>{JSON.stringify(totalAmount, null, `\t`)}</pre>*/}
             {
                 cartData.data?.message?.products.map((product) => (
-                    <SingleProductTemplate key={product.productID._id} productID={product.productID._id} category={product.productID.category} name={product.productID.name} price={product.productID.price} rating={product.productID.rating} description={product.productID.description} photo={photo} parent="cart" />
+                    <SingleProductTemplate key={product.productID._id} productID={product.productID._id} category={product.productID.category} name={product.productID.name} price={product.productID.price} quantity={product.quantity} rating={product.productID.rating} description={product.productID.description} photo={photo} parent="cart" />
                 ))
             }
         </div>

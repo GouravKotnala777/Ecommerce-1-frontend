@@ -11,10 +11,9 @@ interface ProductBtnGroupPropTypes{
     productID:string;
     amount:number;
     totalPrice:number;
-    coupon:string;
 }
 
-const ProductBtnGroup = ({parent, productID, amount, totalPrice, coupon}:ProductBtnGroupPropTypes) => {
+const ProductBtnGroup = ({parent, productID, amount, totalPrice}:ProductBtnGroupPropTypes) => {
     const [addToCart] = useAddToCartMutation();
     const [removeFromCart] = useRemoveFromCartMutation();
     const [quantity, setQuantity] = useState<number>(1);
@@ -22,7 +21,7 @@ const ProductBtnGroup = ({parent, productID, amount, totalPrice, coupon}:Product
     const navigate = useNavigate();
 
 
-    const buyHandler = async({amount}:{amount:number}) => {
+    const buyHandler = async() => {
         try {
             console.log({orderItems2:[{productID, quantity}]});
             
@@ -30,9 +29,7 @@ const ProductBtnGroup = ({parent, productID, amount, totalPrice, coupon}:Product
                 amount:amount,
                 quantity:quantity,
                 orderItems:[{productID, quantity}],
-                totalPrice:totalPrice,
-                coupon,
-                shippingType:"regular"
+                totalPrice:amount
             }});
         } catch (error) {
             console.log(error);            
@@ -44,6 +41,15 @@ const ProductBtnGroup = ({parent, productID, amount, totalPrice, coupon}:Product
     }
 
     return(
+        <>
+            {/*{JSON.stringify({
+                amount:amount,
+                quantity:quantity,
+                orderItems:[{productID, quantity}],
+                totalPrice:totalPrice,
+                coupon,
+                shippingType:"regular"
+            }, null, `\t`)}*/}
         <div className="btns_cont">
             <div className="upper_btns">
                 <button className="add_btn" style={{background:parent === "cart" ? "white":"linear-gradient(90deg, rgb(255, 34, 71), rgb(255, 156, 102))", border:parent === "cart"?"1px solid rgb(255, 34, 71)":"none", color:parent==="cart"?"rgb(255, 34, 71)":"white"}} onClick={() => parent === "cart"?removeFromCart({productID:productID!, price:amount, quantity}):addToCart({productID:productID!, price:amount, quantity})}>{parent === "cart" ? "Remove" : "Add"}</button>
@@ -53,8 +59,13 @@ const ProductBtnGroup = ({parent, productID, amount, totalPrice, coupon}:Product
                     <option>2</option>
                     <option>3</option>
                     <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
                 </select>
-                <button className="buy_btn" onClick={() => buyHandler({amount})}>Buy</button>
+                <button className="buy_btn" onClick={() => buyHandler()}>Buy</button>
             </div>
             {
                 parent === "singleProduct" &&
@@ -63,6 +74,7 @@ const ProductBtnGroup = ({parent, productID, amount, totalPrice, coupon}:Product
                     </div>
             }
         </div>
+        </>
     )
 };
 

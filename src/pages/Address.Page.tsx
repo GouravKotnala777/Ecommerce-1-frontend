@@ -25,6 +25,7 @@ const formFields = [
 
 const Address = () => {
     const [address, setAddress] = useState<AddressBodyTypes>();
+    const [shippingType, setShippingType] = useState<string>("regular");
     const [updateMe] = useUpdateMeMutation();
     const [removeAddress] = useRemoveAddressMutation();
     const [createPayment] = useCreatePaymentMutation();
@@ -39,7 +40,16 @@ const Address = () => {
     const onClickHandler = async() => {
         try {
             const res = await updateMe({...address});
-            const paymentIntendRes = await createPayment({amount:location.amount, quantity:location.quantity});
+            const paymentIntendRes = await createPayment({
+                amount:shippingType === "express"?
+                            location.amount + 500
+                            :
+                            shippingType === "standared"?
+                                location.amount + 300
+                                :
+                                location.amount as number,
+                quantity:location.quantity
+            });
 
 
             
@@ -59,7 +69,7 @@ const Address = () => {
                     orderItems:location.orderItems,
                     totalPrice:location.totalPrice,
                     coupon:location.coupon,
-                    shippingType:location.shippingType
+                    shippingType:shippingType
                 }});
             }
             if (paymentIntendRes.error) {
@@ -74,11 +84,20 @@ const Address = () => {
     };
     
     const setAddressFromTemplate = async(templateData:AddressBodyTypes) => {
-        const paymentIntendRes = await createPayment({amount:location.amount, quantity:location.quantity});
+        const paymentIntendRes = await createPayment({
+            amount:shippingType === "express"?
+                            location.amount + 500
+                            :
+                            shippingType === "standared"?
+                                location.amount + 300
+                                :
+                                location.amount as number,
+            quantity:location.quantity
+        });
 
 
-        console.log({paymentIntendRes});
-        console.log({amount:location.amount, quantity:location.quantity});
+        //console.log({paymentIntendRes});
+        //console.log({amount:location.amount, quantity:location.quantity});
         
 
         if (paymentIntendRes.data.message) {
@@ -91,7 +110,7 @@ const Address = () => {
                 orderItems:location.orderItems,
                 totalPrice:location.totalPrice,
                 coupon:location.coupon,
-                shippingType:location.shippingType
+                shippingType:shippingType
             }});
         }
         if (paymentIntendRes.error) {
@@ -124,7 +143,60 @@ const Address = () => {
                 coupon:location.coupon,
                 shippingType:location.shippingType
             }, null, `\t`)}</pre>
+            <div className="shipping_type_cont">
+                <div className="upper_cont">
+                    <div className="heading">subtotal:</div>
+                    <div className="value">₹{location.totalPrice*location.quantity}/-</div>
+                </div>
+                <div className="middle_cont">
+                    <div className="heading">Shipping Type:</div>
+                    <div className="radios_cont">
+                        <label>
+                            <input type="radio" name="shippingType" value="express" onChange={(e) => setShippingType(e.target.value)} />
+                            <p>Express Shipping (1-3 days) : ₹500/-</p>
+                        </label>
+                        <label>
+                            <input type="radio" name="shippingType" value="standared" onChange={(e) => setShippingType(e.target.value)} />
+                            <p>Standered Shipping (3-5 days) : ₹300/-</p>
+                        </label>
+                        <label>
+                            <input type="radio" name="shippingType" defaultChecked value="regular" onChange={(e) => setShippingType(e.target.value)} />
+                            <p>Regular Shipping (6-7 days) : ₹0/-</p>
+                        </label>
+                    </div>
+                </div>
+                <div className="lower_cont">
+                    <div className="heading">total:</div>
+                    <div className="value">₹{location.totalPrice*location.quantity} - {shippingType.toUpperCase()}({
+                            shippingType === "express"?
+                                "₹500"
+                                :
+                                shippingType === "standared"?
+                                    "₹300"
+                                    :
+                                    "₹0"
+
+                        }) =  
+                        {
+                            shippingType === "express"?
+                                ` ₹${location.totalPrice + 500}/-`
+                                :
+                                shippingType === "standared"?
+                                    ` ₹${location.totalPrice + 300}/-`
+                                    :
+                                    ` ₹${location.totalPrice}/-`
+
+                        }
+                    </div>
+                </div>
+            </div>
+
+
             <Form heading="Address" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e as ChangeEvent<HTMLInputElement>)} onClickHandler={onClickHandler} />
+            
+
+
+
             <h4>Select from previous address</h4>
             <div className="addresses_cont">
                 {

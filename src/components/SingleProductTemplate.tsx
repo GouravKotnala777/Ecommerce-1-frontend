@@ -5,6 +5,7 @@ import Skeleton from "./Skeleton";
 import ProductBtnGroup from "./ProductBtnGroup";
 import { useAddRemoveFromWishlistMutation } from "../redux/api/api";
 import { useEffect } from "react";
+import { NavLink } from "react-router-dom";
 
 
 interface SingleProductTemplatePropTypes{
@@ -13,6 +14,7 @@ interface SingleProductTemplatePropTypes{
     category?:string;
     name?:string;
     price?:number;
+    quantity?:number;
     rating?:number;
     description?:string;
     photo:string;
@@ -20,7 +22,7 @@ interface SingleProductTemplatePropTypes{
 }
 
 
-const SingleProductTemplate = ({productID, userWishlist, category, name, price, rating, description, photo, parent}:SingleProductTemplatePropTypes) => {
+const SingleProductTemplate = ({productID, userWishlist, category, name, price, quantity, rating, description, photo, parent}:SingleProductTemplatePropTypes) => {
     const [addRemoveFromWishlist] = useAddRemoveFromWishlistMutation();
 
     useEffect(() => {
@@ -82,7 +84,9 @@ const SingleProductTemplate = ({productID, userWishlist, category, name, price, 
                     :
                     <div className="product_cont">
                         <div className="left_part">
-                            <img src={photo} alt={photo} />
+                            <NavLink to={`/product/${productID}`} className="navlink">
+                                <img src={photo} alt={photo} />
+                            </NavLink>
                         </div>
                         <div className="right_part">
                             <div className="whishlist_cont">
@@ -112,9 +116,16 @@ const SingleProductTemplate = ({productID, userWishlist, category, name, price, 
                                 <div className="heading_values">
                                     <span className="info_heading">Rating</span><span className="info_value"><RatingSystem rating={rating} /></span>
                                 </div>
-                                <div className="heading_values">
-                                    <span className="info_heading">Description</span><span className="info_value">{description}</span>
-                                </div>
+                                {
+                                    parent === "cart"?
+                                        <div className="heading_values">
+                                            <span className="info_heading">Quantity</span><span className="info_value">{quantity} pic.</span>
+                                        </div>
+                                        :
+                                        <div className="heading_values">
+                                            <span className="info_heading">Description</span><span className="info_value">{description}</span>
+                                        </div>
+                                }
                             </div>
                             <ProductBtnGroup
                                 parent={parent}

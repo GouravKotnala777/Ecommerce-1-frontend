@@ -13,9 +13,13 @@
             //border: 2px solid indigo;
             width: 16rem;
             margin: 10px auto;
-            img{
-                width: 100%;
-            }            
+            .navlink{
+                //border: 2px solid red;
+                display: block;
+                img{
+                    width: 100%;
+                }            
+            }
         }
         .right_part{
             //border: 2px solid blue;

@@ -80,6 +80,12 @@ const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPri
 
     return(
         <form onSubmit={(e) => handleSubmit(e)}>
+            <pre>{JSON.stringify({
+                orderItems,
+                totalPrice,
+                coupon,
+                shippingType
+            }, null, `\t`)}</pre>
             <CardElement className="card_element" />
             <button type="submit" disabled={!stripe}>Pay</button>
             {error && <div>{error}</div>}
@@ -95,7 +101,8 @@ const StripePayment = () => {
         userDetailes:{name:string; email:string; phone:string;};
         address:AddressBodyTypes;
         orderItems:{productID:string; quantity:number;}[];
-        totalPrice:number; shippingType:string;
+        totalPrice:number;
+        shippingType:string;
         coupon:string;
     }|undefined = useLocation().state;
 
@@ -111,7 +118,22 @@ const StripePayment = () => {
                 userDetailes={location?.userDetailes as {name:string; email:string; phone:string;}}
                 address={location?.address as AddressBodyTypes}
                 orderItems={location?.orderItems as {productID:string; quantity:number;}[]}
-                totalPrice={location?.totalPrice as number}
+                totalPrice=
+                    {
+                        location?.shippingType === "express"?
+                            location.totalPrice + 500
+                            :
+                            location?.shippingType === "standared"?
+                                location.totalPrice + 300
+                                :
+                                location?.totalPrice as number
+
+                    }
+                    //location?.totalPrice as number
+                
+                //totalPrice={
+                //    location?.totalPrice as number
+                //}
                 coupon={location?.coupon as string}
                 shippingType={location?.shippingType as string} />
         </Elements>
