@@ -10,7 +10,7 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 
 
-const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPrice, coupon, shippingType}:{clientSecret:string; userDetailes:{name:string; email:string; phone:string;}; address:AddressBodyTypes; orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; shippingType:string;}) => {
+const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPrice, coupon, shippingType, parent}:{clientSecret:string; userDetailes:{name:string; email:string; phone:string;}; address:AddressBodyTypes; orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; shippingType:string; parent?:string;}) => {
     const stripe = useStripe();
     const elements = useElements();
     const [error, setError] = useState<string>();
@@ -63,7 +63,9 @@ const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPri
                     coupon,
                     transactionId:paymentIntent.id,
                     shippingType, status:paymentIntent.status,
-                    message:"demo message"});
+                    message:"demo message",
+                    parent:parent as string
+                });
 
                 console.log("---- Payment.tsx");
                 console.log(newOrderRes);
@@ -104,6 +106,7 @@ const StripePayment = () => {
         totalPrice:number;
         shippingType:string;
         coupon:string;
+        parent?:string;
     }|undefined = useLocation().state;
 
     console.log({clientSecret:location?.clientSecret});
@@ -129,13 +132,9 @@ const StripePayment = () => {
                                 location?.totalPrice as number
 
                     }
-                    //location?.totalPrice as number
-                
-                //totalPrice={
-                //    location?.totalPrice as number
-                //}
                 coupon={location?.coupon as string}
-                shippingType={location?.shippingType as string} />
+                shippingType={location?.shippingType as string}
+                parent={location?.parent as string} />
         </Elements>
     )
 };

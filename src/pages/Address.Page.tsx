@@ -30,7 +30,7 @@ const Address = () => {
     const [removeAddress] = useRemoveAddressMutation();
     const [createPayment] = useCreatePaymentMutation();
     const {user} = useSelector((state:{loggedInUserReducer:loggedInUserInitialState}) => state.loggedInUserReducer);
-    const location:{amount:number; quantity:number; orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; shippingType:string;} = useLocation().state;
+    const location:{amount:number; quantity:number; orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; shippingType:string; parent:string;} = useLocation().state;
     const navigate = useNavigate();
 
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement>) => {
@@ -69,7 +69,8 @@ const Address = () => {
                     orderItems:location.orderItems,
                     totalPrice:location.totalPrice,
                     coupon:location.coupon,
-                    shippingType:shippingType
+                    shippingType:shippingType,
+                    parent:location.parent
                 }});
             }
             if (paymentIntendRes.error) {
@@ -110,7 +111,8 @@ const Address = () => {
                 orderItems:location.orderItems,
                 totalPrice:location.totalPrice,
                 coupon:location.coupon,
-                shippingType:shippingType
+                shippingType:shippingType,
+                parent:location.parent
             }});
         }
         if (paymentIntendRes.error) {

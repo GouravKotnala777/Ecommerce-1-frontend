@@ -236,11 +236,11 @@ const api = createApi({
             })
         }),
         newOrder:builder.mutation({
-            query:({orderItems, totalPrice, coupon, transactionId, status, shippingType, message}:{orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; transactionId:string; status:string; shippingType:string; message:string;}) => ({
+            query:({orderItems, totalPrice, coupon, transactionId, status, shippingType, message, parent}:{orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; transactionId:string; status:string; shippingType:string; message:string; parent:string;}) => ({
                 url:"/api/v1/order/new",
                 method:"POST",
                 credentials:"include",
-                body:{orderItems, totalPrice, coupon, transactionId, status, shippingType, message}
+                body:{orderItems, totalPrice, coupon, transactionId, status, shippingType, message, parent}
             })
         })
     })

@@ -44,7 +44,8 @@ const Cart = () => {
                 quantity:1,
                 orderItems:cartData.data?.message.products,
                 totalPrice:amount,
-                coupon:singleCoupon?._id
+                coupon:singleCoupon?._id,
+                parent:"cart"
             }});
         } catch (error) {
             console.log(error);
