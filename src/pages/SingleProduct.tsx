@@ -13,6 +13,7 @@ import DialogWrapper from "../components/DialogWrapper";
 import { useDispatch, useSelector } from "react-redux";
 import { MiscReducerTypes, setIsReviewDialogActive } from "../redux/reducers/miscReducers";
 import { MdDeleteForever } from "react-icons/md";
+import ProductSlider from "../components/ProductSlider";
 
 
 const formFields = [
@@ -30,6 +31,7 @@ const SingleProduct = () => {
     const {isReviewDialogActive} = useSelector((state:{miscReducer:MiscReducerTypes}) => state.miscReducer);
     const [createReview] = useCreateReviewMutation();
     const [deleteReview] = useDeleteReviewMutation();
+    //const getSameProducts:{data?:{success:boolean; message:ProductTypesPopulated[];}} = useGetProductsOfSameQuery({query:"brand", value:"labrada"});
 
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
         setFormFieldData({...formFieldData, [e.target.name]:e.target.value});
@@ -62,6 +64,14 @@ const SingleProduct = () => {
 
 
             <SingleProductTemplate productID={productID} userWishlist={loginedUser?.message.wishlist} category={data?.message?.category} name={data?.message?.name} price={data?.message?.price} rating={data?.message?.rating} description={data?.message?.description} photo={photo} parent="singleProduct" />
+            {
+                data?.message &&
+                    <>
+                        <ProductSlider query="category" value={data?.message.category as string} />
+                        <ProductSlider query="brand" value={data?.message.brand as string} />
+                        <ProductSlider query="rating" value={5} />
+                    </>
+            }
 
             {/*<pre>{JSON.stringify(loginedUser.message._id, null, `\t`)}</pre>*/}
             <div className="reviews_cont">

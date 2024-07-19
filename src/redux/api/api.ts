@@ -113,6 +113,13 @@ const api = createApi({
                 credentials:"include"
             })
         }),
+        getProductsOfSame:builder.query({
+            query:({query, value}) => ({
+                url:`/api/v1/product/same/${query}/${value}`,
+                method:"GET",
+                credentials:"include"
+            })
+        }),
         addToCart:builder.mutation({
             query:(data:{productID:string; price:number; quantity:number;}) => ({
                 url:"/api/v1/cart/add",
@@ -248,7 +255,7 @@ const api = createApi({
 
 export default api;
 export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useUpdateMeMutation, useRemoveAddressMutation,
-    useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery,
+    useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useGetProductsOfSameQuery,
     useAddToCartMutation, useFetchMyCartQuery,  useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation, useMyWhishlistQuery, useAddRemoveFromWishlistMutation,
     useOutStockProductsQuery, useUpdateProductMutation,
     useCreateCouponsMutation, useGetAllCouponsQuery, useGetSingleCouponMutation,
