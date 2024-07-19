@@ -82,14 +82,14 @@ const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPri
 
     return(
         <form onSubmit={(e) => handleSubmit(e)}>
-            <pre>{JSON.stringify({
+            {/*<pre>{JSON.stringify({
                 orderItems,
                 totalPrice,
                 coupon,
                 shippingType
-            }, null, `\t`)}</pre>
+            }, null, `\t`)}</pre>*/}
             <CardElement className="card_element" />
-            <button type="submit" disabled={!stripe}>Pay</button>
+            <button type="submit" disabled={!stripe}>{totalPrice}₹ Pay</button>
             {error && <div>{error}</div>}
             {paymentSuccess && <div>Payment Successfull</div>}
         </form>

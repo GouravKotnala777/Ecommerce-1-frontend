@@ -42,7 +42,11 @@ const Cart = () => {
             navigate("/user/address", {state:{
                 amount:amount,
                 quantity:1,
-                orderItems:cartData.data?.message.products,
+                orderItems:cartData.data?.message.products.map((item) => ({
+                        productID:item.productID._id,
+                        quantity:item.quantity
+                    }))
+                ,
                 totalPrice:amount,
                 coupon:singleCoupon?._id,
                 parent:"cart"

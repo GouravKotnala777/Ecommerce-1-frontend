@@ -138,13 +138,15 @@ const Address = () => {
     return(
         <div className="address_bg">
             {/*{JSON.stringify(address)}*/}
-            <pre>{JSON.stringify({
+            {/*<pre>{JSON.stringify({
                 amount:location.amount,
                 quantity:location.quantity,
+                orderItems:location.orderItems,
                 totalPrice:location.totalPrice,
                 coupon:location.coupon,
-                shippingType:location.shippingType
-            }, null, `\t`)}</pre>
+                shippingType:location.shippingType,
+                parent:location.parent
+            }, null, `\t`)}</pre>*/}
             <div className="shipping_type_cont">
                 <div className="upper_cont">
                     <div className="heading">subtotal:</div>
