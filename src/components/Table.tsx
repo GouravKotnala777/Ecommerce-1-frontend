@@ -15,6 +15,12 @@ interface TablePropTypes<T1, T2 extends (arg:object) => any>{
             rating: number;
             price: number;
             stock: number;
+            total_servings: number;
+            diet_type: string;
+            flavour: string;
+            age_range: string;
+            about: string[];
+            ingredient: string;
         };
     };
     setList:Dispatch<React.SetStateAction<{
@@ -23,6 +29,12 @@ interface TablePropTypes<T1, T2 extends (arg:object) => any>{
             rating: number;
             price: number;
             stock: number;
+            total_servings: number;
+            diet_type: string;
+            flavour: string;
+            age_range: string;
+            about: string[];
+            ingredient: string;
         };
     }>>,
     reduxQueryHook:MutationHookGeneric<T2>;
@@ -41,20 +53,16 @@ const Table = <T1 extends {_id:string; [key:string]:string;}, T2 extends (arg:ob
             if (list && list[productID]) {
                 console.log({[productID]:list[productID]});
                 console.log(list);
-                console.log(list[productID].name);
-                console.log(list[productID].price);
-                console.log(list[productID].rating);
-                console.log(list[productID].stock);
                 
-                    if (list[productID].name || list[productID].price || list[productID].rating || list[productID].stock) {
-                        const res = await reduxQueryHook({productID, name:list[productID].name, price:list[productID].price, rating:list[productID].rating, stock:list[productID].stock});
+                    //if (list[productID].name || list[productID].price || list[productID].rating || list[productID].stock) {
+                        const res = await reduxQueryHook({productID, name:list[productID].name, price:list[productID].price, rating:list[productID].rating, stock:list[productID].stock, total_servings:list[productID].total_servings, diet_type:list[productID].diet_type, flavour:list[productID].flavour, age_range:list[productID].age_range, about:list[productID].about, ingredient:list[productID].ingredient});
                         console.log("::::::::::::::::::");
                         console.log(res);
                         console.log("::::::::::::::::::");
-                    }
-                    else{
-                        console.log("Invalid input value");
-                    }
+                    //}
+                    //else{
+                    //    console.log("Invalid input value");
+                    //}
                 
                 //else if (typeof list[productID] === "string"){
                 //    if (list[productID]) {
@@ -83,7 +91,7 @@ const Table = <T1 extends {_id:string; [key:string]:string;}, T2 extends (arg:ob
     return(
         <div className="table_bg">
             <div className="table">
-                <pre>{JSON.stringify(list, null, `\t`)}</pre>
+                {/*<pre>{JSON.stringify(list, null, `\t`)}</pre>*/}
                 <div className="thead">
                     <div className="th photo_cell">Img</div>
                     <div className="th id_cell">ID</div>

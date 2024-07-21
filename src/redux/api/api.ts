@@ -7,6 +7,9 @@ export interface UpdateProductBodyType {
     price?:number;
     category?:string;
     stock?:number;
+
+    total_servings:number; diet_type:string; flavour:string; age_range:string; about:string[]; ingredient:string;
+
     images?:string;
     rating?:number;
     sku?:string;
@@ -188,6 +191,13 @@ const api = createApi({
                 credentials:"include"
             })
         }),
+        incompleteProducts:builder.query({
+            query:() => ({
+                url:"/api/v1/product/incomplete",
+                method:"GET",
+                credentials:"include"
+            })
+        }),
         updateProduct:builder.mutation({
             query:({productID,
                 name,
@@ -195,6 +205,9 @@ const api = createApi({
                 price,
                 category,
                 stock,
+
+                total_servings, diet_type, flavour, age_range, about, ingredient,
+
                 images,
                 rating,
                 sku,
@@ -208,7 +221,9 @@ const api = createApi({
                 url:`/api/v1/product/${productID}`,
                 method:"PUT",
                 credentials:"include",
-                body:{name, description, price, category, stock, images, rating, sku, discount, brand, height, width, depth, weight, tags}
+                body:{name, description, price, category, stock,
+                    total_servings, diet_type, flavour, age_range, about, ingredient,                    
+                    images, rating, sku, discount, brand, height, width, depth, weight, tags}
             })
         }),
         getAllCoupons:builder.query({
@@ -257,7 +272,7 @@ export default api;
 export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useUpdateMeMutation, useRemoveAddressMutation,
     useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useGetProductsOfSameQuery,
     useAddToCartMutation, useFetchMyCartQuery,  useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation, useMyWhishlistQuery, useAddRemoveFromWishlistMutation,
-    useOutStockProductsQuery, useUpdateProductMutation,
+    useOutStockProductsQuery, useIncompleteProductsQuery, useUpdateProductMutation,
     useCreateCouponsMutation, useGetAllCouponsQuery, useGetSingleCouponMutation,
     useCreatePaymentMutation,
     useNewOrderMutation

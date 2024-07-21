@@ -1,9 +1,16 @@
 import { ChangeEvent } from "react";
 import "../styles/components/form.scss";
 
+export interface FormFieldTypes{
+    type:string;
+    name:string;
+    placeHolder:string;
+    options?:string[];
+}
+
 interface FormPropTypes{
     heading:string;
-    formFields:{type:string; name:string; placeHolder:string; options?:string[]}[];
+    formFields:FormFieldTypes[];
     onChangeHandler:(e:ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => void;
     onClickHandler:() => void;
 }
@@ -23,10 +30,10 @@ const Form = ({heading, formFields, onChangeHandler, onClickHandler}:FormPropTyp
                         :
                         field.type === "select" ?
                             <select key={index} name={field.name} onChange={(e) => onChangeHandler(e)}>
-                                <option unselectable="on" value="none">--select--</option>
+                                <option unselectable="on" value="none">--{field.placeHolder}--</option>
                                 {
                                     field.options?.map((option, optionInd) => (
-                                        <option key={optionInd}>{option}</option>
+                                        <option key={optionInd} value={option.toLowerCase()} style={{background:option === "" ? "#f1f1f1":"unset"}} disabled={option === ""}>{option}</option>
                                     ))
                                 }
                             </select>

@@ -24,6 +24,7 @@ const OutStock = () => {
 
     return(
         <>
+            {/*<pre>{JSON.stringify(outStockData.data?.message, null, `\t`)}</pre>*/}
             <p style={{margin:"0 auto", textAlign:"center"}}>Restock Products</p>
             <Table<(ProductTypes & {_id: string; [key: string]: string;}), ReturnType<typeof useUpdateProductMutation>[0]> thead={productTableHeadings} data={outStockData.data?.message} list={list} setList={setList} reduxQueryHook={updateProduct} />
         </>

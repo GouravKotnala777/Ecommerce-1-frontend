@@ -24,6 +24,7 @@ import Address from './pages/Address.Page'
 import { useMyProfileQuery } from './redux/api/api'
 import { UserTypes } from './assets/demoData'
 import { setLoggedInUser } from './redux/reducers/loggedInUserReducer'
+import IncompleteProducts from './pages/admin/IncompleteProducts'
 
 
 
@@ -67,6 +68,7 @@ const App = () => {
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/outstock" element={<OutStock />} />
           <Route path="/admin/product/update" element={<UpdateProduct />} />
+          <Route path="/admin/product/incomplete" element={<IncompleteProducts />} />
           <Route path="/admin/coupon" element={<Coupons />} />
         </Routes>
       </BrowserRouter>
