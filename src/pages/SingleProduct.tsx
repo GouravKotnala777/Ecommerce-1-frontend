@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { MiscReducerTypes, setIsReviewDialogActive } from "../redux/reducers/miscReducers";
 import { MdDeleteForever } from "react-icons/md";
 import ProductSlider from "../components/ProductSlider";
+import GroupedProducts from "../components/GoupedProducts";
 
 
 const formFields = [
@@ -25,7 +26,7 @@ const formFields = [
 const SingleProduct = () => {
     const {productID} = useParams();
     const [formFieldData,setFormFieldData] = useState<{productID:string; rating:number; comment:string;}>({productID:"", rating:0, comment:""});
-    const {data}:{data?:{success:boolean; message:ProductTypesPopulated;}; isLoading?:boolean; isSuccess:boolean;} = useGetSingleProductQuery(productID);
+    const singleProduct:{data?:{success:boolean; message:ProductTypesPopulated;}; isLoading?:boolean; isSuccess:boolean;} = useGetSingleProductQuery(productID);
     const loginedUser:{success:boolean; message:UserTypes} = useMyProfileQuery("").data;
     const dispatch = useDispatch();
     const {isReviewDialogActive} = useSelector((state:{miscReducer:MiscReducerTypes}) => state.miscReducer);
@@ -63,12 +64,21 @@ const SingleProduct = () => {
             <DialogWrapper toggler={isReviewDialogActive} Element={<Form heading="Give Review" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler} />} />
 
 
-            <SingleProductTemplate productID={productID} userWishlist={loginedUser?.message.wishlist} category={data?.message?.category} name={data?.message?.name} price={data?.message?.price} rating={data?.message?.rating} description={data?.message?.description} photo={photo} parent="singleProduct" />
+            <SingleProductTemplate productID={productID} userWishlist={loginedUser?.message.wishlist} category={singleProduct.data?.message?.category} name={singleProduct.data?.message?.name} price={singleProduct.data?.message?.price} rating={singleProduct.data?.message?.rating} description={singleProduct.data?.message?.description} photo={photo} parent="singleProduct" />
+
+            
+            
+            <p>About</p>
+            <ul>
+                {singleProduct.data?.message.about.map((item, liIndex) => (
+                    <li key={liIndex}>{item}</li>
+                ))}
+            </ul>
             {
-                data?.message &&
+                singleProduct.data?.message &&
                     <>
-                        <ProductSlider query="category" value={data?.message.category as string} />
-                        <ProductSlider query="brand" value={data?.message.brand as string} />
+                        <ProductSlider query="category" value={singleProduct.data?.message.category as string} />
+                        <ProductSlider query="brand" value={singleProduct.data?.message.brand as string} />
                         <ProductSlider query="rating" value={5} />
                     </>
             }
@@ -76,8 +86,8 @@ const SingleProduct = () => {
             {/*<pre>{JSON.stringify(loginedUser.message._id, null, `\t`)}</pre>*/}
             <div className="reviews_cont">
                 {
-                    data?.message &&
-                    data?.message?.reviews.map((review) => review.userID?._id === loginedUser?.message._id && (
+                    singleProduct.data?.message &&
+                    singleProduct.data?.message?.reviews.map((review) => review.userID?._id === loginedUser?.message._id && (
                         <div className="review_cont" key={review._id}>
                             <div className="upper_part">
                                 <span className="date_heading">{review.updatedAt === review.createdAt ? "createdAt" : "updatedAt"} : </span>
@@ -101,9 +111,9 @@ const SingleProduct = () => {
                     ))
                 }
                 {
-                    data?.message ?
-                        data?.message?.reviews.length !== 0 ?
-                            data?.message?.reviews.map((review) => (
+                    singleProduct.data?.message ?
+                        singleProduct.data?.message?.reviews.length !== 0 ?
+                            singleProduct.data?.message?.reviews.map((review) => (
                                 <div className="review_cont" key={review._id}>
                                     <div className="upper_part">
                                         <span className="date_heading">{review.updatedAt === review.createdAt ? "createdAt" : "updatedAt"} : </span>

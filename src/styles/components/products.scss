@@ -6,7 +6,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
-    //gap: 10%;
+    gap: 10px;
     .product_cont{
         //border: 2px solid rgb(255, 103, 255);
         width: 12rem;
@@ -18,6 +18,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        //gap: 10px;
         .upper_part{
             //border: 2px solid indigo;
             .link{

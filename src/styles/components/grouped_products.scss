@@ -1,0 +1,33 @@
+
+
+.grouped_products_cont{
+    //border: 2px solid red;
+    width: 90px;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+    box-shadow: 1px 1px 10px 1px rgba(255, 75, 105, 0.3);
+    text-decoration: none;
+    //border:1px solid rgba(255, 75, 105, 1);
+    .upper_part{
+        //border: 2px solid violet;
+        text-align: center;
+        width: 86px;
+        height: 86px;
+        img{
+            //border: 2px solid indianred;
+            width: 96%;
+            height: 96%;
+        }
+    }
+    .lower_part{
+        //border: 2px solid blue;
+        text-align: center;
+        .grouped_products_name{
+            //border: 2px solid green;
+            color: #515151;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+    }
+}

@@ -198,6 +198,13 @@ const api = createApi({
                 credentials:"include"
             })
         }),
+        findAllFields:builder.query({
+            query:({groupedBy}:{groupedBy:string;}) => ({
+                url:`/api/v1/product/groupedBy/${groupedBy}`,
+                method:"GET",
+                credentials:"include"
+            })
+        }),
         updateProduct:builder.mutation({
             query:({productID,
                 name,
@@ -270,7 +277,7 @@ const api = createApi({
 
 export default api;
 export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useUpdateMeMutation, useRemoveAddressMutation,
-    useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useGetProductsOfSameQuery,
+    useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useGetProductsOfSameQuery, useFindAllFieldsQuery,
     useAddToCartMutation, useFetchMyCartQuery,  useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation, useMyWhishlistQuery, useAddRemoveFromWishlistMutation,
     useOutStockProductsQuery, useIncompleteProductsQuery, useUpdateProductMutation,
     useCreateCouponsMutation, useGetAllCouponsQuery, useGetSingleCouponMutation,

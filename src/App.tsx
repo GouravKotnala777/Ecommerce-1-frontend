@@ -25,6 +25,7 @@ import { useMyProfileQuery } from './redux/api/api'
 import { UserTypes } from './assets/demoData'
 import { setLoggedInUser } from './redux/reducers/loggedInUserReducer'
 import IncompleteProducts from './pages/admin/IncompleteProducts'
+import ProductsOfSame from './pages/ProductsOfSame'
 
 
 
@@ -65,6 +66,7 @@ const App = () => {
           <Route path="/product/:productID" element={<SingleProduct />} />
           <Route path="/user/wishlist" element={<Wishlist />} />
           <Route path="/user/address" element={<Address />} />
+          <Route path="/group/:query/:value" element={<ProductsOfSame />} />
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/outstock" element={<OutStock />} />
           <Route path="/admin/product/update" element={<UpdateProduct />} />

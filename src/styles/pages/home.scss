@@ -1,7 +1,29 @@
 
 
 .home_bg{
-    border: 2px solid blue;
+    //border: 2px solid blue;
     margin-top: 60px;
     transition: 0.3s;
+    .grouped_products_conts{
+        //border: 2px solid green;
+        margin-top: 20px;
+        .heading{
+            //border: 2px solid orange;
+            font-size: 0.9rem;
+            padding: 4px 10px;
+            font-weight: bold;
+            color: white;
+            //box-shadow: 1px 1px 10px 1px rgba(255, 75, 105, 0.3);            
+            background: linear-gradient(270deg, rgb(255, 156, 102), rgb(255, 75, 105));
+            border-radius: 4px;
+        }
+        .products{
+            //border: 2px solid red;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            //border:1px solid rgba(255, 75, 105, 0.3);
+            //box-shadow: 1px 1px 10px 1px rgba(255, 75, 105, 0.3);
+        }
+    }
 }

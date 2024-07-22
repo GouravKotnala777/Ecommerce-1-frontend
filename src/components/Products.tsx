@@ -1,29 +1,28 @@
 import { Link } from "react-router-dom";
 import "../styles/components/products.scss";
 import photo from "/public/vite.svg";
-import { useEffect, useState } from "react";
+//import { useEffect, useState } from "react";
 import { ProductTypes } from "../assets/demoData";
 import RatingSystem from "./RatingSystem";
-import { useGetAllProductsQuery } from "../redux/api/api";
+//import { useGetAllProductsQuery } from "../redux/api/api";
 import ProductBtnGroup from "./ProductBtnGroup";
 
 
-const Products = () => {
-    //import.meta.env.VITE_SERVER_URL
-    const [products, setProducts] = useState<ProductTypes[]>([]);
-    const {data, isLoading, isSuccess} = useGetAllProductsQuery("");
+const Products = ({products}:{products:ProductTypes[]|undefined}) => {
+    //const [products, setProducts] = useState<ProductTypes[]>([]);
+    //const {data, isLoading, isSuccess} = useGetAllProductsQuery("");
 
 
-    useEffect(() => {
-        if (isSuccess) {
-            setProducts(data.message);
-        }
-    }, [isSuccess]);
+    //useEffect(() => {
+    //    if (isSuccess) {
+    //        setProducts(data.message);
+    //    }
+    //}, [isSuccess]);
 
     return(
         <div className="products_bg">
             {
-                isLoading ? 
+                !products ? 
                 (
                     <h1>Loading...</h1>
                 )

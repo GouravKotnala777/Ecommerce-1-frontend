@@ -25,6 +25,20 @@ export interface ProductTypes {
     price: number;
     category: string;
     stock: number;
+
+
+    sub_category:string;
+    sub_category_type?:string;
+    item_form:string;
+
+    total_servings:number;
+    diet_type:string;
+    flavour:string;
+    age_range:string;
+    about:string[];
+    ingredient:string;
+
+
     images: string[];
     rating: number;
     reviews:string[];
@@ -46,6 +60,20 @@ export interface ProductTypesPopulated {
     price: number;
     category: string;
     stock: number;
+
+
+    sub_category:string;
+    sub_category_type?:string;
+    item_form:string;
+
+    total_servings:number;
+    diet_type:string;
+    flavour:string;
+    age_range:string;
+    about:string[];
+    ingredient:string;
+
+
     images: string[];
     rating: number;
     reviews:{
