@@ -14,7 +14,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { MiscReducerTypes, setIsReviewDialogActive } from "../redux/reducers/miscReducers";
 import { MdDeleteForever } from "react-icons/md";
 import ProductSlider from "../components/ProductSlider";
-import GroupedProducts from "../components/GoupedProducts";
 
 
 const formFields = [
@@ -37,15 +36,16 @@ const SingleProduct = () => {
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
         setFormFieldData({...formFieldData, [e.target.name]:e.target.value});
     };
-    const onClickHandler = async() => {
+    const postReviewHandler = async() => {
         try {
             const res = await createReview({productID:productID as string, rating:Number(formFieldData.rating), comment:formFieldData.comment});
 
             console.log("------- SingleProduct.tsx onClickHandler");
             console.log({productID:productID as string, rating:Number(formFieldData.rating), comment:formFieldData.comment});
             console.log(res);
+
             console.log("------- SingleProduct.tsx onClickHandler");
-            
+            dispatch(setIsReviewDialogActive(false));
         } catch (error) {
             console.log("------- SingleProduct.tsx onClickHandler");
             console.log(error);
@@ -61,7 +61,7 @@ const SingleProduct = () => {
     return(
         <div className="single_product_bg" onClick={(e) => reviewToggleHandler(e)}>
 
-            <DialogWrapper toggler={isReviewDialogActive} Element={<Form heading="Give Review" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler} />} />
+            <DialogWrapper toggler={isReviewDialogActive} Element={<Form heading="Give Review" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={postReviewHandler} />} />
 
 
             <SingleProductTemplate productID={productID} userWishlist={loginedUser?.message.wishlist} category={singleProduct.data?.message?.category} name={singleProduct.data?.message?.name} price={singleProduct.data?.message?.price} rating={singleProduct.data?.message?.rating} description={singleProduct.data?.message?.description} photo={photo} parent="singleProduct" />

@@ -37,11 +37,12 @@ const DialogWrapper = ({toggler, Element}:{toggler:boolean; Element:ReactElement
             {
                 height:"30rem",
                 width:"90%",
-                border:"2px solid red",
                 borderRadius:"8px",
                 position:"relative",
                 marginTop:"0px",
-                background:"transparent" 
+                background:"rgba(0, 0, 0, 0.3)",
+                border:"none",
+                boxShadow:"0px 0px 100px 30px rgba(0,0,0,0.4)"
             }
         }>
             <div className="dialog_bg" style={
@@ -49,13 +50,11 @@ const DialogWrapper = ({toggler, Element}:{toggler:boolean; Element:ReactElement
                     height:"49%",
                     width:"90%",
                     borderRadius:"8px",
-                    background:"white",
                     top:"40%",
                     left:"50%",
                     position:"absolute",
                     translate:"-50% -50%",
                     padding:"0 10px",
-                    border:"2px solid blue"
                 }
             }>
                 {Element}
