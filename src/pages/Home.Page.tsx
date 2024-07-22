@@ -33,6 +33,16 @@ const Home = () => {
                     }
                 </div>
             </div>
+            <div className="grouped_products_conts">
+                <div className="heading">High Rated</div>
+                <div className="products">
+                    {
+                        [3, 4, 5].map((rating, index) => (
+                            <GroupedProducts key={index} query="rating" value={rating}  />
+                        ))
+                    }
+                </div>
+            </div>
         </div>
     )
 };

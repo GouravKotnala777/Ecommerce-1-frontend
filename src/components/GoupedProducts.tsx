@@ -3,7 +3,7 @@ import "../styles/components/grouped_products.scss";
 import photo from "/vite.svg";
 
 
-const GroupedProducts = ({query, value}:{query:string; value:string}) => {
+const GroupedProducts = ({query, value}:{query:string; value:string|number}) => {
 
 
     return(
@@ -13,7 +13,11 @@ const GroupedProducts = ({query, value}:{query:string; value:string}) => {
             </div>
             <div className="lower_part">
                 <div className="grouped_products_name">
-                    {value}
+                    {query === "rating" ?
+                        `${value} stars`
+                        :
+                        value
+                    }
                 </div>
             </div>
         </Link>
