@@ -3,8 +3,8 @@ import Products from "../components/Products";
 import GroupedProducts from "../components/GoupedProducts";
 import { useFindAllFieldsQuery, useGetAllProductsQuery } from "../redux/api/api";
 import { ProductTypes } from "../assets/demoData";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 
 const Home = () => {
@@ -18,14 +18,40 @@ const Home = () => {
     const searchClickHandler = () => {
         navigate(`/product/search/${searchQry}`)
     };
+
+    const onFocusSearchInp = () => {
+        console.log("focus");
+        const body = document.body;
+        const searchInp = document.getElementById("search_inp");
+        const searchBtn = document.getElementById("search_btn");
+        (searchInp as HTMLElement).style.zIndex = "11";
+        (searchBtn as HTMLElement).style.zIndex = "11";
+        
+        if (body) {
+            (body as HTMLElement).classList.add("add_overlay");
+            (body as HTMLElement).classList.add("freeze");
+        }
+    };
+    const onBlurSearchInp = () => {
+        console.log("blur");
+        const body = document.body;
+        const searchInp = document.getElementById("search_inp");
+        const searchBtn = document.getElementById("search_btn");
+        (searchInp as HTMLElement).style.zIndex = "0";
+        (searchBtn as HTMLElement).style.zIndex = "0";
+        if (body) {
+            (body as HTMLElement).classList.remove("add_overlay");
+            (body as HTMLElement).classList.remove("freeze");
+        }
+    };
     return(
         <div className="home_bg">
             {/*<h1>Home</h1>
             <p>{searchQry}</p>*/}
             <div className="home_sub_accessbar">
                 <div className="search_inp_cont">
-                    <input type="text" name="search_inp" className="search_inp" placeholder="Search..." onChange={(e) => setSearchQry(e.target.value)} />
-                    <button onClick={searchClickHandler}>Search</button>
+                    <input type="text" id="search_inp" name="search_inp" onFocus={onFocusSearchInp} onBlur={onBlurSearchInp} className="search_inp" placeholder="Search..." onChange={(e) => setSearchQry(e.target.value)} />
+                    <button id="search_btn" onClick={searchClickHandler}>Go</button>
                 </div>
             </div>
             <Products products={allProducts.data?.message} />
