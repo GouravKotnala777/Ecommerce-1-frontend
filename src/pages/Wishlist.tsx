@@ -1,7 +1,6 @@
 import { ProductTypes } from "../assets/demoData";
 import SingleProductTemplate from "../components/SingleProductTemplate";
 import { useMyWhishlistQuery } from "../redux/api/api";
-import photo from "../assets/react.svg";
 
 
 const Wishlist = () => {

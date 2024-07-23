@@ -1,5 +1,4 @@
 import "../styles/pages/cart.scss";
-import photo from "/vite.svg";
 import { CouponTypes, ProductTypes } from "../assets/demoData";
 import SingleProductTemplate from "../components/SingleProductTemplate";
 import { useFetchMyCartQuery, useGetSingleCouponMutation } from "../redux/api/api";
