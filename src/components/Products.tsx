@@ -32,7 +32,7 @@ const Products = ({products}:{products:ProductTypes[]|undefined}) => {
                         <div className="product_cont" key={product._id}>
                             <div className="upper_part">
                                 <Link className="link" to={`/product/${product._id}`}>
-                                    <img src={photo} alt={photo} />
+                                    <img src={product.images[0]} alt={photo} />
                                 </Link>
                             </div>
                             <div className="middle_part">

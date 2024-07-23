@@ -126,7 +126,7 @@ const Cart = () => {
             {/*<pre>{JSON.stringify(totalAmount, null, `\t`)}</pre>*/}
             {
                 cartData.data?.message?.products.map((product) => (
-                    <SingleProductTemplate key={product.productID._id} productID={product.productID._id} category={product.productID.category} name={product.productID.name} price={product.productID.price} quantity={product.quantity} rating={product.productID.rating} description={product.productID.description} photo={photo} parent="cart" />
+                    <SingleProductTemplate key={product.productID._id} productID={product.productID._id} category={product.productID.category} name={product.productID.name} price={product.productID.price} quantity={product.quantity} rating={product.productID.rating} description={product.productID.description} photo={product.productID.images[0]} parent="cart" />
                 ))
             }
         </div>

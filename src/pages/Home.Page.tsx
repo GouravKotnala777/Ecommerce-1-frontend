@@ -13,36 +13,46 @@ const Home = () => {
         <div className="home_bg">
             <h1>Home</h1>
             <Products products={allProducts.data?.message} />
-            <div className="grouped_products_conts">
-                <div className="heading">All Categories</div>
-                <div className="products">
-                    {
-                        arrayOfCategories.data?.message.map((category, index) => (
-                            <GroupedProducts key={index} query="category" value={category}  />
-                        ))
-                    }
-                </div>
-            </div>
-            <div className="grouped_products_conts">
-                <div className="heading">All Brands</div>
-                <div className="products">
-                    {
-                        arrayOfBrands.data?.message.map((brand, index) => (
-                            <GroupedProducts key={index} query="brand" value={brand}  />
-                        ))
-                    }
-                </div>
-            </div>
-            <div className="grouped_products_conts">
-                <div className="heading">High Rated</div>
-                <div className="products">
-                    {
-                        [3, 4, 5].map((rating, index) => (
-                            <GroupedProducts key={index} query="rating" value={rating}  />
-                        ))
-                    }
-                </div>
-            </div>
+
+            {
+                arrayOfCategories.data?.message &&
+                    <div className="grouped_products_conts">
+                        <div className="heading">All Categories</div>
+                        <div className="products">
+                            {
+                                arrayOfCategories.data?.message.map((category, index) => (
+                                    <GroupedProducts key={index} query="category" value={category}  />
+                                ))
+                            }
+                        </div>
+                    </div>
+            }
+            {
+                arrayOfBrands.data?.message &&
+                    <div className="grouped_products_conts">
+                        <div className="heading">All Brands</div>
+                        <div className="products">
+                            {
+                                arrayOfBrands.data?.message.map((brand, index) => (
+                                    <GroupedProducts key={index} query="brand" value={brand}  />
+                                ))
+                            }
+                        </div>
+                    </div>
+            }
+            {
+                arrayOfBrands.data?.message &&
+                    <div className="grouped_products_conts">
+                        <div className="heading">High Rated</div>
+                        <div className="products">
+                            {
+                                [3, 4, 5].map((rating, index) => (
+                                    <GroupedProducts key={index} query="rating" value={rating}  />
+                                ))
+                            }
+                        </div>
+                    </div>
+            }
         </div>
     )
 };

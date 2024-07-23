@@ -64,7 +64,7 @@ const SingleProduct = () => {
             <DialogWrapper toggler={isReviewDialogActive} Element={<Form heading="Give Review" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={postReviewHandler} />} />
 
 
-            <SingleProductTemplate productID={productID} userWishlist={loginedUser?.message.wishlist} category={singleProduct.data?.message?.category} name={singleProduct.data?.message?.name} price={singleProduct.data?.message?.price} rating={singleProduct.data?.message?.rating} description={singleProduct.data?.message?.description} photo={photo} parent="singleProduct" />
+            <SingleProductTemplate productID={productID} userWishlist={loginedUser?.message.wishlist} category={singleProduct.data?.message?.category} name={singleProduct.data?.message?.name} price={singleProduct.data?.message?.price} rating={singleProduct.data?.message?.rating} description={singleProduct.data?.message?.description} photo={singleProduct.data?.message.images[0] as string} parent="singleProduct" />
 
             
             
