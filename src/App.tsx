@@ -26,6 +26,7 @@ import { UserTypes } from './assets/demoData'
 import { setLoggedInUser } from './redux/reducers/loggedInUserReducer'
 import IncompleteProducts from './pages/admin/IncompleteProducts'
 import ProductsOfSame from './pages/ProductsOfSame'
+import SearchedProducts from './pages/SearchedProducts'
 
 
 
@@ -63,6 +64,7 @@ const App = () => {
           <Route path="/user/logout" element={<Logout />} />
           <Route path="/user/cart" element={<Cart />} />
           <Route path="/product/pay" element={<StripePayment />} />
+          <Route path="/product/search/:searchQry" element={<SearchedProducts />} />
           <Route path="/product/:productID" element={<SingleProduct />} />
           <Route path="/user/wishlist" element={<Wishlist />} />
           <Route path="/user/address" element={<Address />} />

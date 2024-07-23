@@ -3,15 +3,31 @@ import Products from "../components/Products";
 import GroupedProducts from "../components/GoupedProducts";
 import { useFindAllFieldsQuery, useGetAllProductsQuery } from "../redux/api/api";
 import { ProductTypes } from "../assets/demoData";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 
 const Home = () => {
     const allProducts:{data?:{message:ProductTypes[]}} = useGetAllProductsQuery("");
     const arrayOfCategories:{data?:{message:string[];}} = useFindAllFieldsQuery({groupedBy:"category"});
     const arrayOfBrands:{data?:{message:string[];}} = useFindAllFieldsQuery({groupedBy:"brand"});
+    const [searchQry, setSearchQry] = useState<string>("");
+    const navigate = useNavigate();
+
+
+    const searchClickHandler = () => {
+        navigate(`/product/search/${searchQry}`)
+    };
     return(
         <div className="home_bg">
-            <h1>Home</h1>
+            {/*<h1>Home</h1>
+            <p>{searchQry}</p>*/}
+            <div className="home_sub_accessbar">
+                <div className="search_inp_cont">
+                    <input type="text" name="search_inp" className="search_inp" placeholder="Search..." onChange={(e) => setSearchQry(e.target.value)} />
+                    <button onClick={searchClickHandler}>Search</button>
+                </div>
+            </div>
             <Products products={allProducts.data?.message} />
 
             {
