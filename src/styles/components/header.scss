@@ -83,7 +83,7 @@
         //height: 40px;
         border-radius: 4px;
         .left_part{
-            border: 2px solid red;
+            //border: 2px solid red;
             display: none;
             width: 8%;
             img{
@@ -110,12 +110,13 @@
             }
         }
         .right_part_mobile{
-            width: 30px;
+            //border: 2px solid green;
+            width: 60px;
             justify-content: space-between;
             display: flex;
             margin-right:10px;
             img{
-                width: 100%;
+                width: 60%;
             }
         }
     }
