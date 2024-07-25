@@ -1,24 +1,19 @@
-import { Link } from "react-router-dom";
 import "../styles/components/products.scss";
+import { Link } from "react-router-dom";
 import photo from "/public/vite.svg";
-//import { useEffect, useState } from "react";
 import { ProductTypes } from "../assets/demoData";
 import RatingSystem from "./RatingSystem";
-//import { useGetAllProductsQuery } from "../redux/api/api";
 import ProductBtnGroup from "./ProductBtnGroup";
+import { SyntheticEvent } from "react";
+import unknownProductImg from "/unknownProduct.png";
 
 
 const Products = ({products}:{products:ProductTypes[]|undefined}) => {
-    //const [products, setProducts] = useState<ProductTypes[]>([]);
-    //const {data, isLoading, isSuccess} = useGetAllProductsQuery("");
 
-
-    //useEffect(() => {
-    //    if (isSuccess) {
-    //        setProducts(data.message);
-    //    }
-    //}, [isSuccess]);
-
+    const imageFallbackHandler = (e:SyntheticEvent<HTMLImageElement>) => {
+        e.currentTarget.onerror = null;
+        e.currentTarget.src = unknownProductImg;
+    }
     return(
         <div className="products_bg">
             {
@@ -32,7 +27,7 @@ const Products = ({products}:{products:ProductTypes[]|undefined}) => {
                         <div className="product_cont" key={product._id}>
                             <div className="upper_part">
                                 <Link className="link" to={`/product/${product._id}`}>
-                                    <img src={product.images[0]} alt={photo} />
+                                    <img src={product.images[0]} alt={photo} onError={(e) => imageFallbackHandler(e)} />
                                 </Link>
                             </div>
                             <div className="middle_part">
