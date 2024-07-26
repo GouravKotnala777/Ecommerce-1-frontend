@@ -29,20 +29,35 @@ import ProductsOfSame from './pages/ProductsOfSame'
 import SearchedProducts from './pages/SearchedProducts'
 import { GoReport } from 'react-icons/go'
 import DialogWrapper from './components/DialogWrapper'
+import Form from './components/Form'
 
 
+const formFields = [
+  {type:"textArea", name:"message", placeHolder:"Message"}
+];
 
 const App = () => {
   const {isHamActive} = useSelector((state:{miscReducer:MiscReducerTypes}) => state.miscReducer);
   const myProfileData:{data?:{message:UserTypes}} = useMyProfileQuery("");
   const [reportDialogToggle, setReportDialogToggle] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
   const dispatch = useDispatch();
+
+
+  //const onChangeHandler = () => {
+
+  //};
+  const onClickHandler = () => {
+    console.log(message);
+  };
 
   useEffect(() => {
     if (isHamActive) {
+      console.log("UUUUUUUUUUUUUUUUUUUU");
       document.body.classList.add("freeze");
     }
     else{
+      console.log("IIIIIIIIIIIIIIIIIIII");
       document.body.classList.remove("freeze");
     }
 
@@ -56,7 +71,7 @@ const App = () => {
   return (
     <>
       <BrowserRouter>
-        <DialogWrapper toggler={reportDialogToggle} setToggler={setReportDialogToggle} Element={<Logout />} />
+        <DialogWrapper toggler={reportDialogToggle} setToggler={setReportDialogToggle} Element={<Form heading="Write Bug Report" formFields={formFields} onChangeHandler={(e) => setMessage(e.target.value)} onClickHandler={onClickHandler} />} />
         <Header />
         <Sidebar />
         {/*<pre>{JSON.stringify(myProfileData.data?.message, null, `\t`)}</pre>*/}

@@ -28,24 +28,26 @@ const DialogWrapper = ({toggler, setToggler, Element}:DialogWrapperTypes) => {
     useEffect(() => {
         if (toggler) {
             document.body.classList.add("freeze");
-            console.log("GGGGGGGGGGGGGGGGGGGGGGG");
+            document.body.classList.add("add_overlay");
         }
         else{
             document.body.classList.remove("freeze");
-            console.log("FFFFFFFFFFFFFFFFFFFFFFF");
+            document.body.classList.remove("add_overlay");
         }
     }, [toggler]);
 
 
     const close = () => {
-        dispatch((setToggler  as ActionCreatorWithPayload<boolean, "miscReducer/setIsReviewDialogActive">)(false));
-
-        //document.body.classList.remove("freeze");
+        if (typeof setToggler === "function" && "type" in setToggler){
+            dispatch((setToggler as ActionCreatorWithPayload<boolean, "miscReducer/setIsReviewDialogActive">)(false));
+        }
+        else{
+            setToggler(false);
+        }
     };
 
     return(
         <div className="dialog_cont" style={{display:toggler?"block":"none"}} onClick={close}>
-            {JSON.stringify(toggler)}
             <dialog id="dialog" ref={parentDivRef} open={toggler} >
                 {Element}
             </dialog>

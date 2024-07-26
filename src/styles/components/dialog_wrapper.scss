@@ -1,17 +1,17 @@
 
 
 .dialog_cont{
-    border:2px solid red;
+    //border:2px solid red;
     height:100vh;
     width:98%;
     position:absolute;
-    background:rgba(0, 0, 0, 0.3);
+    z-index: 11;
     dialog{
-        border: 2px solid green;
+        //border: 2px solid green;
         height:30rem;
         width:90%;
         border-radius:8px;
-        background:rgba(0, 0, 0, 0.3);
+        background:rgba(0, 0, 0, 0.28);
         border:none;
         box-shadow:0px 0px 100px 30px rgba(0,0,0,0.4);
     }

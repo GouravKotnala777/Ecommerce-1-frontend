@@ -4,7 +4,7 @@ import { useGetProductsOfSameQuery } from "../redux/api/api";
 import { ProductTypesPopulated } from "../assets/demoData";
 import { Link } from "react-router-dom";
 
-const ProductSlider = ({query, value}:{query:string; value:string|number;}) => {
+const ProductSlider = ({query, value}:{query:"category"|"brand"; value:string|number;}) => {
     const getSameProducts:{data?:{success:boolean; message:ProductTypesPopulated[];}} = useGetProductsOfSameQuery({query, value});
 
     return(
@@ -18,8 +18,8 @@ const ProductSlider = ({query, value}:{query:string; value:string|number;}) => {
                     <div className="slider_cont">
                         <div className="products_cont">
                             {
-                                getSameProducts.data?.message.map((item) => (
-                                    <div className="product_cont">
+                                getSameProducts.data?.message.map((item, index) => (
+                                    <div className="product_cont" key={index}>
                                         <Link to={`/product/${item._id}`} className="link">
                                             <img src={photo} alt={photo} />
                                         </Link>
