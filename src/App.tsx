@@ -1,9 +1,9 @@
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
- import './App.css'
+import './App.css'
 import Home from './pages/Home.Page'
 import Header from './components/Header'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Sidebar from './components/Sidebar'
 import { useDispatch, useSelector } from 'react-redux'
 import { MiscReducerTypes } from './redux/reducers/miscReducers'
@@ -27,12 +27,15 @@ import { setLoggedInUser } from './redux/reducers/loggedInUserReducer'
 import IncompleteProducts from './pages/admin/IncompleteProducts'
 import ProductsOfSame from './pages/ProductsOfSame'
 import SearchedProducts from './pages/SearchedProducts'
+import { GoReport } from 'react-icons/go'
+import DialogWrapper from './components/DialogWrapper'
 
 
 
 const App = () => {
   const {isHamActive} = useSelector((state:{miscReducer:MiscReducerTypes}) => state.miscReducer);
   const myProfileData:{data?:{message:UserTypes}} = useMyProfileQuery("");
+  const [reportDialogToggle, setReportDialogToggle] = useState<boolean>(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -53,6 +56,7 @@ const App = () => {
   return (
     <>
       <BrowserRouter>
+        <DialogWrapper toggler={reportDialogToggle} setToggler={setReportDialogToggle} Element={<Logout />} />
         <Header />
         <Sidebar />
         {/*<pre>{JSON.stringify(myProfileData.data?.message, null, `\t`)}</pre>*/}
@@ -76,6 +80,10 @@ const App = () => {
           <Route path="/admin/coupon" element={<Coupons />} />
         </Routes>
       </BrowserRouter>
+
+      <div className="bug_report_cont" onClick={() => setReportDialogToggle(true)}>
+        <GoReport className="GoReport" />
+      </div>
       
     </>
   )

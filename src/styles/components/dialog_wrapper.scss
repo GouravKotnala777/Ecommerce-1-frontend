@@ -1,0 +1,18 @@
+
+
+.dialog_cont{
+    border:2px solid red;
+    height:100vh;
+    width:98%;
+    position:absolute;
+    background:rgba(0, 0, 0, 0.3);
+    dialog{
+        border: 2px solid green;
+        height:30rem;
+        width:90%;
+        border-radius:8px;
+        background:rgba(0, 0, 0, 0.3);
+        border:none;
+        box-shadow:0px 0px 100px 30px rgba(0,0,0,0.4);
+    }
+}

@@ -1,14 +1,24 @@
-import { ReactElement, useEffect, useRef } from "react";
+import { Dispatch, ReactElement, useEffect, useRef } from "react";
+import "../styles/components/dialog_wrapper.scss";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
 
+interface DialogWrapperTypes {
+    toggler:boolean;
+    setToggler:Dispatch<React.SetStateAction<boolean>>|ActionCreatorWithPayload<boolean, "miscReducer/setIsReviewDialogActive">;
+    Element:ReactElement;
+}
 
-const DialogWrapper = ({toggler, Element}:{toggler:boolean; Element:ReactElement}) => {
+const DialogWrapper = ({toggler, setToggler, Element}:DialogWrapperTypes) => {
     const parentDivRef = useRef<HTMLDialogElement|null>(null);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const aaa = () => {
             const scrollPositionY = window.pageYOffset;
+            
             if (parentDivRef.current) {
-                (parentDivRef.current as HTMLDialogElement).style.top = `${-60+scrollPositionY}px`;
+                (parentDivRef.current as HTMLDialogElement).style.top = `${scrollPositionY}px`;
             }
         };
 
@@ -18,48 +28,28 @@ const DialogWrapper = ({toggler, Element}:{toggler:boolean; Element:ReactElement
     useEffect(() => {
         if (toggler) {
             document.body.classList.add("freeze");
+            console.log("GGGGGGGGGGGGGGGGGGGGGGG");
         }
         else{
             document.body.classList.remove("freeze");
+            console.log("FFFFFFFFFFFFFFFFFFFFFFF");
         }
     }, [toggler]);
-    useEffect(() => {
-        if (parentDivRef.current) {
-            const childNode = parentDivRef.current.firstChild as HTMLElement;
-            const grandChildNode = childNode.firstChild as HTMLElement;
-            grandChildNode.style.margin = "10px auto";
-            grandChildNode.style.boxShadow = "1px 1px 1px 350px rgba(0,0,0,0.5)";
-        }
-    }, []);
+
+
+    const close = () => {
+        dispatch((setToggler  as ActionCreatorWithPayload<boolean, "miscReducer/setIsReviewDialogActive">)(false));
+
+        //document.body.classList.remove("freeze");
+    };
 
     return(
-        <dialog id="dialog" ref={parentDivRef} open={toggler} style={
-            {
-                height:"30rem",
-                width:"90%",
-                borderRadius:"8px",
-                position:"relative",
-                marginTop:"0px",
-                background:"rgba(0, 0, 0, 0.3)",
-                border:"none",
-                boxShadow:"0px 0px 100px 30px rgba(0,0,0,0.4)"
-            }
-        }>
-            <div className="dialog_bg" style={
-                {
-                    height:"49%",
-                    width:"90%",
-                    borderRadius:"8px",
-                    top:"40%",
-                    left:"50%",
-                    position:"absolute",
-                    translate:"-50% -50%",
-                    padding:"0 10px",
-                }
-            }>
+        <div className="dialog_cont" style={{display:toggler?"block":"none"}} onClick={close}>
+            {JSON.stringify(toggler)}
+            <dialog id="dialog" ref={parentDivRef} open={toggler} >
                 {Element}
-            </div>
-        </dialog>
+            </dialog>
+        </div>
     )
 };
 

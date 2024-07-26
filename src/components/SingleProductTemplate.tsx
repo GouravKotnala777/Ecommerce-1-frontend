@@ -4,8 +4,9 @@ import RatingSystem from "./RatingSystem";
 import Skeleton from "./Skeleton";
 import ProductBtnGroup from "./ProductBtnGroup";
 import { useAddRemoveFromWishlistMutation } from "../redux/api/api";
-import { useEffect } from "react";
+import { SyntheticEvent, useEffect } from "react";
 import { NavLink } from "react-router-dom";
+import unknownProductImg from "/public/unknownProduct.png";
 
 
 interface SingleProductTemplatePropTypes{
@@ -24,6 +25,11 @@ interface SingleProductTemplatePropTypes{
 
 const SingleProductTemplate = ({productID, userWishlist, category, name, price, quantity, rating, description, photo, parent}:SingleProductTemplatePropTypes) => {
     const [addRemoveFromWishlist] = useAddRemoveFromWishlistMutation();
+
+    const imageFallbackHandler = (e:SyntheticEvent<HTMLImageElement>) => {
+        e.currentTarget.onerror = null;
+        e.currentTarget.src = unknownProductImg;
+    };
 
     useEffect(() => {
         console.log(userWishlist);
@@ -85,7 +91,7 @@ const SingleProductTemplate = ({productID, userWishlist, category, name, price, 
                     <div className="product_cont">
                         <div className="left_part">
                             <NavLink to={`/product/${productID}`} className="navlink">
-                                <img src={photo} alt={photo} />
+                                <img src={photo} alt={photo} onError={(e) => imageFallbackHandler(e)} />
                             </NavLink>
                         </div>
                         <div className="right_part">
