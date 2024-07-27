@@ -41,6 +41,9 @@
             border: 1px solid rgb(255, 69, 100);
             color: rgb(255, 69, 100);
             background: white;
+            &:hover{
+                background: rgba(255, 233, 237, 0.1);
+            }
         }
     }
 }
