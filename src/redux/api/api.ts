@@ -102,9 +102,16 @@ const api = createApi({
                 body:data
             })
         }),
+        //getAllProducts:builder.query({
+        //    query:(skip:number) => ({
+        //        url:`/api/v1/product/all?skip=${skip}`,
+        //        method:"GET",
+        //        credentials:"include"
+        //    })
+        //}),
         getAllProducts:builder.query({
-            query:() => ({
-                url:"/api/v1/product/all",
+            query:(skip:number) => ({
+                url:`/api/v1/product/all?skip=${skip}`,
                 method:"GET",
                 credentials:"include"
             })

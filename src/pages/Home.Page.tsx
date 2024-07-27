@@ -5,10 +5,13 @@ import { useFindAllFieldsQuery, useGetAllProductsQuery } from "../redux/api/api"
 import { ProductTypes } from "../assets/demoData";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import Pagination from "../components/Pagination";
 
 
 const Home = () => {
-    const allProducts:{data?:{message:ProductTypes[]}} = useGetAllProductsQuery("");
+    const [skip, setSkip] = useState<number>(0);
+    
+    const allProducts:{data?:{message:ProductTypes[]; totalProducts:number;}} = useGetAllProductsQuery(skip);
     const arrayOfCategories:{data?:{message:string[];}} = useFindAllFieldsQuery({groupedBy:"category"});
     const arrayOfBrands:{data?:{message:string[];}} = useFindAllFieldsQuery({groupedBy:"brand"});
     const [searchQry, setSearchQry] = useState<string>("");
@@ -44,6 +47,7 @@ const Home = () => {
             (body as HTMLElement).classList.remove("freeze");
         }
     };
+
     return(
         <div className="home_bg">
             {/*<h1>Home</h1>
@@ -55,6 +59,8 @@ const Home = () => {
                 </div>
             </div>
             <Products products={allProducts.data?.message} />
+
+            <Pagination documentCount={Math.ceil((allProducts.data?.totalProducts as number)/5)-1} skip={skip} setSkip={setSkip} />
 
             {
                 arrayOfCategories.data?.message &&
