@@ -10,10 +10,9 @@ interface ProductBtnGroupPropTypes{
     parent:string;
     productID:string;
     amount:number;
-    totalPrice:number;
 }
 
-const ProductBtnGroup = ({parent, productID, amount, totalPrice}:ProductBtnGroupPropTypes) => {
+const ProductBtnGroup = ({parent, productID, amount}:ProductBtnGroupPropTypes) => {
     const [addToCart] = useAddToCartMutation();
     const [removeFromCart] = useRemoveFromCartMutation();
     const [quantity, setQuantity] = useState<number>(1);

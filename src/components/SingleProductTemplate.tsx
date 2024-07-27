@@ -4,9 +4,9 @@ import RatingSystem from "./RatingSystem";
 import Skeleton from "./Skeleton";
 import ProductBtnGroup from "./ProductBtnGroup";
 import { useAddRemoveFromWishlistMutation } from "../redux/api/api";
-import { SyntheticEvent, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import unknownProductImg from "/public/unknownProduct.png";
+import ImageWithFallback from "./ImageWithFallback";
 
 
 interface SingleProductTemplatePropTypes{
@@ -26,22 +26,13 @@ interface SingleProductTemplatePropTypes{
 const SingleProductTemplate = ({productID, userWishlist, category, name, price, quantity, rating, description, photo, parent}:SingleProductTemplatePropTypes) => {
     const [addRemoveFromWishlist] = useAddRemoveFromWishlistMutation();
 
-    const imageFallbackHandler = (e:SyntheticEvent<HTMLImageElement>) => {
-        e.currentTarget.onerror = null;
-        e.currentTarget.src = unknownProductImg;
-    };
-
-    useEffect(() => {
-        console.log(userWishlist);
-    }, [userWishlist]);
-
     return(
         <div className="single_product_template_bg">
             {
                 !category&&!name&&!price&&!rating ?
                     <div className="product_cont">
                         <div className="left_part">
-                            <img src={photo} alt={photo} />
+                            <img src={unknownProductImg} alt={unknownProductImg} />
                         </div>
                         <div className="right_part">
                             <div className="whishlist_cont">
@@ -91,7 +82,7 @@ const SingleProductTemplate = ({productID, userWishlist, category, name, price, 
                     <div className="product_cont">
                         <div className="left_part">
                             <NavLink to={`/product/${productID}`} className="navlink">
-                                <img src={photo} alt={photo} onError={(e) => imageFallbackHandler(e)} />
+                                <ImageWithFallback src={photo} alt={photo} fallbackSrc={unknownProductImg} />
                             </NavLink>
                         </div>
                         <div className="right_part">
@@ -137,7 +128,6 @@ const SingleProductTemplate = ({productID, userWishlist, category, name, price, 
                                 parent={parent}
                                 productID={productID as string}
                                 amount={price as number}
-                                totalPrice={price as number}
                                  />
                         </div>
                     </div>

@@ -3,6 +3,8 @@ import photo from "../../public/vite.svg";
 import { useGetProductsOfSameQuery } from "../redux/api/api";
 import { ProductTypesPopulated } from "../assets/demoData";
 import { Link } from "react-router-dom";
+import unknownProductImg from "/public/unknownProduct.png";
+import ImageWithFallback from "./ImageWithFallback";
 
 const ProductSlider = ({query, value}:{query:"category"|"brand"|"rating"; value:string|number;}) => {
     const getSameProducts:{data?:{success:boolean; message:ProductTypesPopulated[];}} = useGetProductsOfSameQuery({query, value});
@@ -21,7 +23,7 @@ const ProductSlider = ({query, value}:{query:"category"|"brand"|"rating"; value:
                                 getSameProducts.data?.message.map((item, index) => (
                                     <div className="product_cont" key={index}>
                                         <Link to={`/product/${item._id}`} className="link">
-                                            <img src={photo} alt={photo} />
+                                        <ImageWithFallback src={photo} alt={photo} fallbackSrc={unknownProductImg} />
                                         </Link>
                                         <div className="detaile_cont">
                                             {/*<div className="heading">{query === "category" ? "Brand" : "Category"}</div>*/}
