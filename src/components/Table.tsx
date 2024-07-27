@@ -91,7 +91,7 @@ const Table = <T1 extends {_id:string; [key:string]:string;}, T2 extends (arg:ob
     return(
         <div className="table_bg">
             <div className="table">
-                {/*<pre>{JSON.stringify(list, null, `\t`)}</pre>*/}
+                {/*<pre>{JSON.stringify(data[0].images[0], null, `\t`)}</pre>*/}
                 <div className="thead">
                     <div className="th photo_cell">Img</div>
                     <div className="th id_cell">ID</div>
@@ -106,7 +106,8 @@ const Table = <T1 extends {_id:string; [key:string]:string;}, T2 extends (arg:ob
                 {
                     data&&data?.map((product) => (
                         <div className="tr" key={product._id}>
-                            <div className="td photo_cell"><img src={photo} alt={photo} /></div>
+                            <div className="td photo_cell"><img src={product.images[0]} alt={photo} /></div>
+                            {/*<div className="td photo_cell"><pre>{JSON.stringify(product.images[0], null, `\t`)}</pre></div>*/}
                             <div className="td id_cell">{product._id.split("").splice(14,10)}</div>
                             {
                                 thead.map((item) => (
