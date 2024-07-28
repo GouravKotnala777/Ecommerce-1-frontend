@@ -13,7 +13,7 @@ const Pagination = ({documentCount, skip, setSkip}:{documentCount:number; skip:n
                 color:skip+1 === num ? "white" : "rgb(255, 69, 100)"
             }} onClick={() => setSkip(num-1)}>{num}</button>);
         }
-        return arr;
+        return arr.splice(skip, 4);
     }
 
     return(
