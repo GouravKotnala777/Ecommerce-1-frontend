@@ -10,7 +10,7 @@ interface DialogWrapperTypes {
 }
 
 const DialogWrapper = ({toggler, setToggler, Element}:DialogWrapperTypes) => {
-    const parentDivRef = useRef<HTMLDialogElement|null>(null);
+    const parentDivRef = useRef<HTMLDivElement|null>(null);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -18,7 +18,7 @@ const DialogWrapper = ({toggler, setToggler, Element}:DialogWrapperTypes) => {
             const scrollPositionY = window.pageYOffset;
             
             if (parentDivRef.current) {
-                (parentDivRef.current as HTMLDialogElement).style.top = `${scrollPositionY}px`;
+                (parentDivRef.current as HTMLDivElement).style.top = `${scrollPositionY}px`;
             }
         };
 
@@ -28,11 +28,9 @@ const DialogWrapper = ({toggler, setToggler, Element}:DialogWrapperTypes) => {
     useEffect(() => {
         if (toggler) {
             document.body.classList.add("freeze");
-            document.body.classList.add("add_overlay");
         }
         else{
             document.body.classList.remove("freeze");
-            document.body.classList.remove("add_overlay");
         }
     }, [toggler]);
 
@@ -47,8 +45,8 @@ const DialogWrapper = ({toggler, setToggler, Element}:DialogWrapperTypes) => {
     };
 
     return(
-        <div className="dialog_cont" style={{display:toggler?"block":"none"}} onClick={close}>
-            <dialog id="dialog" ref={parentDivRef} open={toggler} >
+        <div className="dialog_cont" ref={parentDivRef} style={{display:toggler?"block":"none"}} onClick={close}>
+            <dialog id="dialog" open={toggler} >
                 {Element}
             </dialog>
         </div>
