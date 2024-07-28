@@ -30,6 +30,8 @@ import SearchedProducts from './pages/SearchedProducts'
 import { GoReport } from 'react-icons/go'
 import DialogWrapper from './components/DialogWrapper'
 import Form from './components/Form'
+import Footer from './components/Footer'
+import FooterSection from './components/FooterSection'
 
 
 const formFields = [
@@ -94,6 +96,8 @@ const App = () => {
           <Route path="/admin/product/incomplete" element={<IncompleteProducts />} />
           <Route path="/admin/coupon" element={<Coupons />} />
         </Routes>
+
+        <Footer />
       </BrowserRouter>
 
       <div className="bug_report_cont" onClick={() => setReportDialogToggle(true)}>
