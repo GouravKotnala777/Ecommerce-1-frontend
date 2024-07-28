@@ -11,6 +11,7 @@
     left:0;
     transition: 0.3s;
     background: linear-gradient(90deg, rgb(255, 156, 102), rgb(255, 75, 105));
+    z-index: 12;
     .left_part{
         //border: 2px solid violet;
         width: 40px;

@@ -15,7 +15,7 @@ const Pagination = ({documentCount, skip, setSkip}:{documentCount:number; skip:n
         }
         return arr.splice(skip, 4);
     }
-
+    
     return(
         <div className="pagination_cont">
                 <div className="btn_cont">
