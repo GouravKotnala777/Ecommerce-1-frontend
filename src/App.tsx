@@ -31,7 +31,6 @@ import { GoReport } from 'react-icons/go'
 import DialogWrapper from './components/DialogWrapper'
 import Form from './components/Form'
 import Footer from './components/Footer'
-import FooterSection from './components/FooterSection'
 
 
 const formFields = [
