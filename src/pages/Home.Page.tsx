@@ -60,6 +60,9 @@ const Home = () => {
             </div>
             <Products products={allProducts.data?.message} />
 
+            <div className="pagination_number">{
+                `${skip+1} of ${Math.ceil((allProducts.data?.totalProducts as number)/5)}`
+            }</div>
             <Pagination documentCount={Math.ceil((allProducts.data?.totalProducts as number)/5)-1} skip={skip} setSkip={setSkip} />
 
             {

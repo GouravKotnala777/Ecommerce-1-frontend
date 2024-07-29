@@ -2,7 +2,7 @@
 
 .pagination_cont{
     //border: 2px solid red;
-    margin: 30px 0;
+    margin-bottom: 30px;
     .btn_cont{
         //border: 2px solid green;
         width: 250px;
@@ -16,6 +16,8 @@
             background: white;
             color: rgb(255, 69, 100);
             border: 1px solid rgb(255, 69, 100);
+            //color: rgba(255, 69, 100, 0.2);
+            //border: 1px solid rgba(255, 69, 100, 0.2);
             cursor: pointer;
             &:hover{
                 background: rgba(255, 233, 237, 0.1);
