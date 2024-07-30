@@ -21,7 +21,8 @@
         //border: 2px solid orange;
         display: flex;
         flex-direction: column;
-        input{
+        input[type="file"],
+        input[type="text"]{
             //border: 2px solid blue;
             font-size: 1rem;
             margin: 10px 5px;

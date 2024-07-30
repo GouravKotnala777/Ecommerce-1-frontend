@@ -130,11 +130,19 @@ const api = createApi({
                 credentials:"include"
             })
         }),
-        searchProducts:builder.query({
-            query:({searchQry}:{searchQry:string}) => ({
+        //searchProducts:builder.query({
+        //    query:({searchQry, category, sub_category, brand}:{searchQry:string; category:string; sub_category:string; brand:string;}) => ({
+        //        url:`/api/v1/product/search/${searchQry}`,
+        //        method:"GET",
+        //        credentials:"include"
+        //    })
+        //}),
+        searchProducts:builder.mutation({
+            query:({searchQry, category, sub_category, brand, price}:{searchQry:string; category:string; sub_category:string; brand:string; price:{minPrice:number; maxPrice:number;}}) => ({
                 url:`/api/v1/product/search/${searchQry}`,
-                method:"GET",
-                credentials:"include"
+                method:"POST",
+                credentials:"include",
+                body:{category, sub_category, brand, price}
             })
         }),
         addToCart:builder.mutation({
@@ -291,7 +299,7 @@ const api = createApi({
 
 export default api;
 export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useUpdateMeMutation, useRemoveAddressMutation,
-    useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useGetProductsOfSameQuery, useFindAllFieldsQuery, useSearchProductsQuery,
+    useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useGetProductsOfSameQuery, useFindAllFieldsQuery, useSearchProductsMutation,
     useAddToCartMutation, useFetchMyCartQuery,  useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation, useMyWhishlistQuery, useAddRemoveFromWishlistMutation,
     useOutStockProductsQuery, useIncompleteProductsQuery, useUpdateProductMutation,
     useCreateCouponsMutation, useGetAllCouponsQuery, useGetSingleCouponMutation,
