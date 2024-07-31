@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useSearchProductsMutation} from "../redux/api/api";
 import { ProductTypes } from "../assets/demoData";
 import SingleProductTemplate from "../components/SingleProductTemplate";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Form, { FormFieldTypes } from "../components/Form";
 
 
@@ -76,6 +76,7 @@ const formFields:FormFieldTypes[] = [
     {type:"select", name:"brand", placeHolder:"Brand", options:["Avvatar", "Asitis", "Optimum", "Raw", "Labrada", "Bigflex", "MuscleTech", "BigMuscle"]}
 
 ];
+let skip:number = 0;
 
 
 const SearchedProducts = () => {
@@ -85,6 +86,9 @@ const SearchedProducts = () => {
     const [products, setProducts] = useState<ProductTypes[]>([]);
     const [aa, setAa] = useState<{minPrice:number; maxPrice:number;}>({minPrice:0, maxPrice:10000});
     const [filter, setFilter] = useState<{category:string; sub_category:string; brand:string; price:{minPrice?:number; maxPrice?:number;}}>({category:"", sub_category:"", brand:"", price:{minPrice:0, maxPrice:10000}});
+    const [isLoading, setIsLoading] = useState(false);
+    const searchedProductsBg = useRef<HTMLDivElement>(null);
+    //const [skip, setSkip] = useState<number>(0);
 
 
     const filterChangeHandler = (e:ChangeEvent<HTMLSelectElement|HTMLInputElement|HTMLTextAreaElement>) => {
@@ -93,46 +97,98 @@ const SearchedProducts = () => {
 
     const func = async() => {
         try {
-            const searchedProductsRes:{data?:{message:ProductTypes[];}} = await searchedProducts({searchQry:searchQry as string, category:filter.category, sub_category:filter.sub_category, brand:filter.brand, price:{minPrice:aa.minPrice, maxPrice:aa.maxPrice}});
+            const searchedProductsRes:{data?:{message:ProductTypes[];}} = await searchedProducts({searchQry:searchQry as string, skip:skip, category:filter.category, sub_category:filter.sub_category, brand:filter.brand, price:{minPrice:aa.minPrice, maxPrice:aa.maxPrice}});
 
             setProducts(searchedProductsRes.data?.message as ProductTypes[]);
-            console.log("------- Func");
+            console.log("------- Func1");
             console.log(searchedProductsRes);
-            console.log("------- Func");
+            console.log("------- Func1");
             
         } catch (error) {
-            console.log("------- Func");
+            console.log("------- Func1");
             console.log(error);
-            console.log("------- Func");
+            console.log("------- Func1");
             
         }
 
     };
 
     useEffect(() => {
+        const handleScroll = () => {
+            if (searchedProductsBg.current) {
+                //console.log("DDDDDDDDDDDDDDDDDD");
+                
+                const productsCont = searchedProductsBg.current;
+
+                //console.log(productsCont.scrollTop + productsCont.clientHeight+5, productsCont.scrollHeight);
+                
+                
+                if (productsCont.scrollTop + productsCont.clientHeight+5 >= productsCont.scrollHeight) {
+                    //setSkip(Number(skip)+1);
+                    skip = skip+1;
+                    //console.log({skip});
+                    fetchMoreProducts();
+                }
+            }
+        };
+        
+        const productsCont = searchedProductsBg.current;
+        if (productsCont) {
+            productsCont.addEventListener("scroll", handleScroll);
+        }
+        
+        return () => {
+            if (productsCont) {
+                productsCont.removeEventListener('scroll', handleScroll);
+            }
+        };
+    }, []);
+
+
+    const fetchMoreProducts = async() => {
+        try {
+            if (isLoading) return;
+    
+            setIsLoading(true);
+            
+
+            const searchedProductsRes:{data?:{message:ProductTypes[];}} = await searchedProducts({searchQry:searchQry as string, skip:skip, category:filter.category, sub_category:filter.sub_category, brand:filter.brand, price:{minPrice:aa.minPrice, maxPrice:aa.maxPrice}});
+
+            setProducts((prev) => [...prev, ...searchedProductsRes.data?.message as ProductTypes[]]);
+            console.log("------- Func2");
+            console.log(searchedProductsRes);
+            console.log("------- Func2");
+
+            setIsLoading(false);
+            
+        } catch (error) {
+            console.log("------- Func2");
+            console.log(error);
+            console.log("------- Func2");
+            
+        }
+    };
+
+    useEffect(() => {
         func();
-    }, [searchQry]);
+    }, []);
     
 
     return (
-        <div className="searched_products_bg">
+        <div ref={searchedProductsBg} id="searched_products_bg" className="searched_products_bg">
             <div className="filters_cont">
-                {/*<pre>{JSON.stringify(range, null, `\t`)}</pre>
-                <pre>{JSON.stringify(filter, null, `\t`)}</pre>*/}
-
+                {/*{skip}*/}
                 <Form heading="Filter" formFields={formFields} onChangeHandler={(e) => filterChangeHandler(e)} onClickHandler={func} aa={aa} setAa={setAa} />
-
-
-                
                 <button onClick={func}>Filter</button>
             </div>
-            <div className="products_cont">
+            <div id="products_cont" className="products_cont">
                 {
-                    products.map(({_id, name, price, category, description, rating, images}) => (
-                        <SingleProductTemplate parent="singleProduct" name={name} price={price} quantity={1} category={category} description={description} rating={rating} productID={_id} photo={images[0]} />
+                    products.map(({_id, name, price, category, description, rating, images}, index) => (
+                        <SingleProductTemplate key={index} parent="singleProduct" name={name} price={price} quantity={1} category={category} description={description} rating={rating} productID={_id} photo={images[0]} />
                     ))
                 }
             </div>
+            {isLoading && <p>Loading more products...</p>}
         </div>
     )
 };
