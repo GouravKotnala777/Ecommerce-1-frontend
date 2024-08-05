@@ -6,12 +6,12 @@ import { ProductTypes } from "../assets/demoData";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Pagination from "../components/Pagination";
+import Spinner from "../components/Spinner";
 
 
 const Home = () => {
     const [skip, setSkip] = useState<number>(0);
-    
-    const allProducts:{data?:{message:ProductTypes[]; totalProducts:number;}} = useGetAllProductsQuery(skip);
+    const allProducts:{isLoading:boolean; data?:{message:ProductTypes[]; totalProducts:number;}} = useGetAllProductsQuery(skip);
     const arrayOfCategories:{data?:{message:string[];}} = useFindAllFieldsQuery({groupedBy:"category"});
     const arrayOfBrands:{data?:{message:string[];}} = useFindAllFieldsQuery({groupedBy:"brand"});
     const [searchQry, setSearchQry] = useState<string>("");
@@ -50,15 +50,19 @@ const Home = () => {
 
     return(
         <div className="home_bg">
-            {/*<h1>Home</h1>
-            <p>{searchQry}</p>*/}
             <div className="home_sub_accessbar">
                 <div className="search_inp_cont">
                     <input type="text" id="search_inp" name="search_inp" onFocus={onFocusSearchInp} onBlur={onBlurSearchInp} className="search_inp" placeholder="Search..." onChange={(e) => setSearchQry(e.target.value)} />
                     <button id="search_btn" onClick={searchClickHandler}>Go</button>
                 </div>
             </div>
-            <Products products={allProducts.data?.message} />
+            {
+                allProducts.isLoading ?
+                    <Spinner type={1} heading="Loading..." width={100} thickness={6} />
+                    :
+                    allProducts.data?.message.length !== 0 &&
+                        <Products products={allProducts.data?.message} />
+            }
 
             <div className="pagination_number">{
                 `${skip+1} of ${Math.ceil((allProducts.data?.totalProducts as number)/5)}`
