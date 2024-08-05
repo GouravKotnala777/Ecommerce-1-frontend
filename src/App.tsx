@@ -45,9 +45,6 @@ const App = () => {
   const dispatch = useDispatch();
 
 
-  //const onChangeHandler = () => {
-
-  //};
   const onClickHandler = () => {
     console.log(message);
   };
@@ -70,40 +67,41 @@ const App = () => {
   
 
   return (
-    <>
-      <BrowserRouter>
-        <DialogWrapper toggler={reportDialogToggle} setToggler={setReportDialogToggle} Element={<Form heading="Write Bug Report" formFields={formFields} onChangeHandler={(e) => setMessage(e.target.value)} onClickHandler={onClickHandler} />} />
-        <Header />
-        <Sidebar />
-        {/*<pre>{JSON.stringify(myProfileData.data?.message, null, `\t`)}</pre>*/}
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/product/new" element={<AddProduct />} />
-          <Route path="/user/register" element={<Register />} />
-          <Route path="/user/login" element={<Login />} />
-          <Route path="/user/logout" element={<Logout />} />
-          <Route path="/user/cart" element={<Cart />} />
-          <Route path="/product/pay" element={<StripePayment />} />
-          <Route path="/product/search/:searchQry" element={<SearchedProducts />} />
-          <Route path="/product/:productID" element={<SingleProduct />} />
-          <Route path="/user/wishlist" element={<Wishlist />} />
-          <Route path="/user/address" element={<Address />} />
-          <Route path="/group/:query/:value" element={<ProductsOfSame />} />
-          <Route path="/admin/dashboard" element={<Dashboard />} />
-          <Route path="/admin/outstock" element={<OutStock />} />
-          <Route path="/admin/product/update" element={<UpdateProduct />} />
-          <Route path="/admin/product/incomplete" element={<IncompleteProducts />} />
-          <Route path="/admin/coupon" element={<Coupons />} />
-        </Routes>
+        <>
+          <BrowserRouter>
+            <DialogWrapper toggler={reportDialogToggle} setToggler={setReportDialogToggle} Element={<Form heading="Write Bug Report" formFields={formFields} onChangeHandler={(e) => setMessage(e.target.value)} onClickHandler={onClickHandler} />} />
+            <Header />
+            <Sidebar />
+            {/*<pre>{JSON.stringify(myProfileData.data?.message, null, `\t`)}</pre>*/}
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/product/new" element={<AddProduct />} />
+              <Route path="/user/register" element={<Register />} />
+              <Route path="/user/login" element={<Login />} />
+              <Route path="/user/logout" element={<Logout />} />
+              <Route path="/user/cart" element={<Cart />} />
+              <Route path="/product/pay" element={<StripePayment />} />
+              <Route path="/product/search/:searchQry" element={<SearchedProducts />} />
+              <Route path="/product/:productID" element={<SingleProduct />} />
+              <Route path="/user/wishlist" element={<Wishlist />} />
+              <Route path="/user/address" element={<Address />} />
+              <Route path="/group/:query/:value" element={<ProductsOfSame />} />
+              <Route path="/admin/dashboard" element={<Dashboard />} />
+              <Route path="/admin/outstock" element={<OutStock />} />
+              <Route path="/admin/product/update" element={<UpdateProduct />} />
+              <Route path="/admin/product/incomplete" element={<IncompleteProducts />} />
+              <Route path="/admin/coupon" element={<Coupons />} />
+            </Routes>
 
-        <Footer />
-      </BrowserRouter>
+            <Footer />
+          </BrowserRouter>
 
-      <div className="bug_report_cont" onClick={() => setReportDialogToggle(true)}>
-        <GoReport className="GoReport" />
-      </div>
-      
-    </>
+          <div className="bug_report_cont" onClick={() => setReportDialogToggle(true)}>
+            <GoReport className="GoReport" />
+          </div>
+          
+        </>
+    
   )
 }
 
