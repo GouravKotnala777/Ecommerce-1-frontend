@@ -44,7 +44,7 @@ const Form = ({heading, formFields, onChangeHandler, onClickHandler, aa, setAa}:
                             </select>
                             :
                             field.type === "text" || field.type === "number" ?
-                                <input type={field.type} name={field.name} placeholder={field.placeHolder} />
+                                <input type={field.type} name={field.name} placeholder={field.placeHolder} onChange={onChangeHandler} />
                                 :
                                 <></>
                     ))
