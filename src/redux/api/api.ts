@@ -45,7 +45,7 @@ export interface UpdateMeBodyType {
 const api = createApi({
     reducerPath:"api",
     baseQuery:fetchBaseQuery({
-        baseUrl:`http://localhost:8000`
+        baseUrl:import.meta.env.VITE_SERVER_URL
     }),
     endpoints:(builder) => ({
         register:builder.mutation({
@@ -102,13 +102,6 @@ const api = createApi({
                 body:data
             })
         }),
-        //getAllProducts:builder.query({
-        //    query:(skip:number) => ({
-        //        url:`/api/v1/product/all?skip=${skip}`,
-        //        method:"GET",
-        //        credentials:"include"
-        //    })
-        //}),
         getAllProducts:builder.query({
             query:(skip:number) => ({
                 url:`/api/v1/product/all?skip=${skip}`,
@@ -130,13 +123,6 @@ const api = createApi({
                 credentials:"include"
             })
         }),
-        //searchProducts:builder.query({
-        //    query:({searchQry, category, sub_category, brand}:{searchQry:string; category:string; sub_category:string; brand:string;}) => ({
-        //        url:`/api/v1/product/search/${searchQry}`,
-        //        method:"GET",
-        //        credentials:"include"
-        //    })
-        //}),
         searchProducts:builder.mutation({
             query:({searchQry, skip, category, sub_category, brand, price}:{searchQry:string; skip:number; category:string; sub_category:string; brand:string; price:{minPrice:number; maxPrice:number;}}) => ({
                 url:`/api/v1/product/search/${searchQry}?skip=${skip}`,
