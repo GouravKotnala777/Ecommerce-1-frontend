@@ -8,7 +8,7 @@ export interface UpdateProductBodyType {
     category?:string;
     stock?:number;
 
-    total_servings:number; diet_type:string; flavour:string; age_range:string; about:string[]; ingredient:string;
+    total_servings?:number; diet_type?:string; flavour?:string; age_range?:string; about?:string[]; ingredient?:string;
 
     images?:string;
     rating?:number;
