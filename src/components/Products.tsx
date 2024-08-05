@@ -13,13 +13,13 @@ const Products = ({products}:{products:ProductTypes[]|undefined}) => {
     return(
         <div className="products_bg">
             {
-                !products ? 
+                products?.length === 0 ? 
                 (
-                    <h1>Loading...</h1>
+                    <h1>Products Not Found</h1>
                 )
                 :
                 (
-                    products.map((product) =>(
+                    products?.map((product) =>(
                         <div className="product_cont" key={product._id}>
                             <div className="upper_part">
                                 <Link className="link" to={`/product/${product._id}`}>
