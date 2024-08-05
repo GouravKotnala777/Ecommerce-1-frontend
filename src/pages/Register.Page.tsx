@@ -14,7 +14,7 @@ const Register = () => {
     const [formData, setFormData] = useState<{name?:string; email?:string; mobile?:string; password?:string; c_password?:string;}>();
     const [register] = useRegisterMutation();
 
-    const onChangeHandler = (e:ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
+    const onChangeHandler = (e:ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
         setFormData({...formData, [e.target.name]:e.target.value});
     };
     const onClickHandler = async() => {
@@ -30,30 +30,7 @@ const Register = () => {
             console.log("----- Register.Page.tsx onClickHandler");
             console.log(error);
             console.log("----- Register.Page.tsx onClickHandler");
-        }
-
-        //try {
-        //    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/user/new`, {
-        //        method:"POST",
-        //        headers:{
-        //            "Content-Type":"application/json"
-        //        },
-        //        credentials:"include",
-        //        body:JSON.stringify(formData)
-        //    });
-    
-        //    const data = await res.json();
-            
-        //    console.log("----- Register.Page.tsx onClickHandler");
-        //    console.log(data);
-        //    console.log("----- Register.Page.tsx onClickHandler");
-        //} catch (error) {
-        //    console.log("----- Register.Page.tsx onClickHandler");
-        //    console.log(error);
-        //    console.log("----- Register.Page.tsx onClickHandler");
-        //}
-
-        
+        }        
     };
 
     return(

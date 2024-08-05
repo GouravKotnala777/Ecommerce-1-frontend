@@ -12,7 +12,7 @@ const Login = () => {
     const [login] = useLoginMutation();
 
 
-    const onChangeHandler = (e:ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
+    const onChangeHandler = (e:ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
         setFormData({...formData, [e.target.name]:e.target.value});
     };
     const onClickHandler = async() => {
@@ -34,7 +34,7 @@ const Login = () => {
 
     return(
         <div className="login_bg">
-            <Form heading="Login" formFields={formFields} onChangeHandler={onChangeHandler} onClickHandler={onClickHandler}  />
+            <Form heading="Login" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler}  />
         </div>
     )
 };
