@@ -1,6 +1,8 @@
 import { ChangeEvent, useState } from "react";
 import Form from "../components/Form";
 import { useRegisterMutation } from "../redux/api/api";
+import { MutationResTypes } from "../assets/demoData";
+import HandleMutationRes from "../components/HandleMutationRes";
 
 const formFields = [
     {type:"text", name:"name", placeHolder:"Name"},
@@ -13,6 +15,7 @@ const formFields = [
 const Register = () => {
     const [formData, setFormData] = useState<{name?:string; email?:string; mobile?:string; password?:string; c_password?:string;}>();
     const [register] = useRegisterMutation();
+    const [registerRes, setResgisterRes] = useState<MutationResTypes>();
 
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
         setFormData({...formData, [e.target.name]:e.target.value});
@@ -21,10 +24,10 @@ const Register = () => {
         console.log(formData);
         
         try {
-            const res = register(formData);
-
+            const res = await register(formData);
             console.log("----- Register.Page.tsx onClickHandler");
             console.log(res);
+            setResgisterRes(res);
             console.log("----- Register.Page.tsx onClickHandler");
         } catch (error) {
             console.log("----- Register.Page.tsx onClickHandler");
@@ -35,6 +38,7 @@ const Register = () => {
 
     return(
         <div className="register_bg">
+            <HandleMutationRes res={registerRes} />
             <Form heading="Register" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler}  />
         </div>
     )

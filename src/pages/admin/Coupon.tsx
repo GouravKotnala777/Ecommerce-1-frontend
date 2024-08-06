@@ -2,6 +2,8 @@ import "../../styles/admin/coupon.scss";
 import { ChangeEvent, useState } from "react";
 import Form from "../../components/Form";
 import { CreateCouponBodyType, useCreateCouponsMutation, useGetAllCouponsQuery } from "../../redux/api/api";
+import { MutationResTypes } from "../../assets/demoData";
+import HandleMutationRes from "../../components/HandleMutationRes";
 //import Table from "../../components/Table";
 //import { CouponTypes } from "../../assets/demoData";
 
@@ -30,6 +32,7 @@ const Coupons = () => {
     const couponData:{data?:{message:[{_id:string; code:string; amount:number; discountType:string; minPerchaseAmount:number; usedCount:number; usageLimit:number; endDate:Date;}]}} = useGetAllCouponsQuery("");
     const [createCoupon] = useCreateCouponsMutation();
     const [formFieldsData, setFormFieldsData] = useState<CouponFormFielsTypes>();
+    const [createCouponRes, setCreateCouponRes] = useState<MutationResTypes>();
     const parent = "admin";
 
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement>) => {
@@ -44,6 +47,7 @@ const Coupons = () => {
 
             console.log("------ Coupon.tsx  onCLickHandler");
             console.log(res);
+            setCreateCouponRes(res);
             console.log("------ Coupon.tsx  onCLickHandler");
             
         } catch (error) {
@@ -56,6 +60,7 @@ const Coupons = () => {
 
     return(
         <div className="coupon_bg">
+            <HandleMutationRes res={createCouponRes} />
             {/*<pre>{JSON.stringify(data, null, `\t`)}</pre>*/}
             <div className="left_part">
                 <p style={{margin:"0 auto", textAlign:"center"}}>All Coupons</p>

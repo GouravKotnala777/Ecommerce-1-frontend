@@ -1,8 +1,10 @@
 import "../styles/components/table.scss";
 import { RiStockLine } from "react-icons/ri";
 import photo from "/vite.svg";
-import { ChangeEvent, Dispatch } from "react";
+import { ChangeEvent, Dispatch, useState } from "react";
 import { useUpdateProductMutation } from "../redux/api/api";
+import { MutationResTypes } from "../assets/demoData";
+import HandleMutationRes from "./HandleMutationRes";
 //import { FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta, MutationDefinition } from "@reduxjs/toolkit/query";
 //import { BaseQueryFn } from "@reduxjs/toolkit/query";
 
@@ -45,6 +47,7 @@ interface TablePropTypes<T1>{
 
 const Table = <T1 extends {_id:string; [key:string]:string;}>({thead, data, list, setList}:TablePropTypes<T1>) => {
     const [updateProduct] = useUpdateProductMutation();
+    const [outStockRes, setOutStockRes] = useState<MutationResTypes>();
 
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement>, productID:string) => {
         setList({...list, [productID]:{...list[productID], [e.target.name.toLowerCase()]:e.target.value}})
@@ -58,6 +61,7 @@ const Table = <T1 extends {_id:string; [key:string]:string;}>({thead, data, list
                 const res = await updateProduct({productID, name:list[productID].name, price:list[productID].price, rating:list[productID].rating, stock:list[productID].stock, total_servings:list[productID].total_servings, diet_type:list[productID].diet_type, flavour:list[productID].flavour, age_range:list[productID].age_range, about:list[productID].about, ingredient:list[productID].ingredient});
                 console.log("::::::::::::::::::");
                 console.log(res);
+                setOutStockRes(res);
                 console.log("::::::::::::::::::");
             }
             else{
@@ -74,6 +78,7 @@ const Table = <T1 extends {_id:string; [key:string]:string;}>({thead, data, list
 
     return(
         <div className="table_bg">
+            <HandleMutationRes res={outStockRes} />
             <div className="table">
                 {/*<pre>{JSON.stringify(data[0].images[0], null, `\t`)}</pre>*/}
                 <div className="thead">

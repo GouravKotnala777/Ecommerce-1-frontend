@@ -1,6 +1,8 @@
 import { ChangeEvent, useState } from "react";
 import Form, { FormFieldTypes } from "../components/Form";
 import { useAddProductMutation } from "../redux/api/api";
+import { MutationResTypes } from "../assets/demoData";
+import HandleMutationRes from "../components/HandleMutationRes";
 
 
 interface AddProductFormType {
@@ -108,6 +110,7 @@ const AddProduct = () => {
     const [fieldData, setFieldData] = useState<AddProductFormType>();
     const [photo, setPhoto] = useState<File|undefined>();
     const [addProduct] = useAddProductMutation();
+    const [addProductRes, setAddProductRes] = useState<MutationResTypes>();
 
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
         if (e.target.type === "file") {
@@ -146,10 +149,12 @@ const AddProduct = () => {
         
         try {
             
-            const res = await addProduct(formData)
+            const res = await addProduct(formData);
+
 
             console.log("------- AddProduct.tsx onClickHandler");
             console.log(res);
+            setAddProductRes(res);
             console.log("------- AddProduct.tsx onClickHandler");
         } catch (error) {
             console.log("------- AddProduct.tsx onClickHandler");
@@ -162,6 +167,7 @@ const AddProduct = () => {
 
     return(
         <div className="add_product_bg">
+            <HandleMutationRes res={addProductRes} />
             <Form heading="Add Product" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler} />
         </div>
     )

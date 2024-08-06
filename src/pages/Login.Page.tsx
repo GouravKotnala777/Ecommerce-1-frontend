@@ -1,6 +1,8 @@
 import { ChangeEvent, useState } from "react";
 import Form from "../components/Form";
 import { useLoginMutation } from "../redux/api/api";
+import HandleMutationRes from "../components/HandleMutationRes";
+import { MutationResTypes } from "../assets/demoData";
 
 const formFields = [
     {type:"text", name:"email", placeHolder:"Email"},
@@ -10,6 +12,7 @@ const formFields = [
 const Login = () => {
     const [formData, setFormData] = useState<{email?:string; password?:string;}>();
     const [login] = useLoginMutation();
+    const [loginRes, setLoginRes] = useState<MutationResTypes>();
 
 
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
@@ -23,6 +26,7 @@ const Login = () => {
             
             console.log("----- Login.Page.tsx onClickHandler");
             console.log(res);
+            setLoginRes(res);
             console.log("----- Login.Page.tsx onClickHandler");
         } catch (error) {
             console.log("----- Login.Page.tsx onClickHandler");
@@ -34,6 +38,7 @@ const Login = () => {
 
     return(
         <div className="login_bg">
+            <HandleMutationRes res={loginRes} />
             <Form heading="Login" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler}  />
         </div>
     )

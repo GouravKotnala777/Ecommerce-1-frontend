@@ -4,6 +4,8 @@ import { useAddToCartMutation, useRemoveFromCartMutation } from "../redux/api/ap
 import { useDispatch } from "react-redux";
 import { setIsReviewDialogActive } from "../redux/reducers/miscReducers";
 import { useNavigate } from "react-router-dom";
+import { MutationResTypes } from "../assets/demoData";
+import HandleMutationRes from "./HandleMutationRes";
 
 
 interface ProductBtnGroupPropTypes{
@@ -16,10 +18,23 @@ const ProductBtnGroup = ({parent, productID, amount}:ProductBtnGroupPropTypes) =
     const [addToCart] = useAddToCartMutation();
     const [removeFromCart] = useRemoveFromCartMutation();
     const [quantity, setQuantity] = useState<number>(1);
+    const [addRemoveCartRes, setAddRemoveCartRes] = useState<MutationResTypes>();
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
 
+
+
+    const addToCartHandler = async() => {
+        if (parent === "cart") {
+            const res = await removeFromCart({productID:productID!, price:amount, quantity});
+            setAddRemoveCartRes(res);
+        }
+        else{
+            const res = await addToCart({productID:productID!, price:amount, quantity});
+            setAddRemoveCartRes(res);
+        }
+    }
     const buyHandler = async() => {
         try {
             console.log({orderItems2:[{productID, quantity}]});
@@ -42,32 +57,12 @@ const ProductBtnGroup = ({parent, productID, amount}:ProductBtnGroupPropTypes) =
 
     return(
         <>
-            {/*{JSON.stringify({
-                amount:amount,
-                quantity:quantity,
-                orderItems:[{productID, quantity}],
-                totalPrice:totalPrice,
-                coupon,
-                shippingType:"regular"
-            }, null, `\t`)}*/}
+        
+        <HandleMutationRes res={addRemoveCartRes} />
         <div className="btns_cont">
             <div className="upper_btns">
-                <button className="add_btn" style={{background:parent === "cart" ? "white":"linear-gradient(90deg, rgb(255, 34, 71), rgb(255, 156, 102))", border:parent === "cart"?"1px solid rgb(255, 34, 71)":"none", color:parent==="cart"?"rgb(255, 34, 71)":"white"}} onClick={() => parent === "cart"?removeFromCart({productID:productID!, price:amount, quantity}):addToCart({productID:productID!, price:amount, quantity})}>{parent === "cart" ? "Remove" : "Add"}</button>
+                <button className="add_btn" style={{background:parent === "cart" ? "white":"linear-gradient(90deg, rgb(255, 34, 71), rgb(255, 156, 102))", border:parent === "cart"?"1px solid rgb(255, 34, 71)":"none", color:parent==="cart"?"rgb(255, 34, 71)":"white"}} onClick={addToCartHandler}>{parent === "cart" ? "Remove" : "Add"}</button>
                 
-                {
-                    //parent === ""&&
-                    //    <select onChange={(e) => setQuantity(Number(e.target.value))}>
-                    //        <option>1</option>
-                    //        <option>2</option>
-                    //        <option>3</option>
-                    //        <option>4</option>
-                    //        <option>5</option>
-                    //        <option>6</option>
-                    //        <option>7</option>
-                    //        <option>8</option>
-                    //        <option>9</option>
-                    //    </select>
-                }
                 <select onChange={(e) => setQuantity(Number(e.target.value))}>
                     <option>1</option>
                     <option>2</option>

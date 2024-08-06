@@ -1,7 +1,7 @@
 import "../styles/pages/single_product.scss";
 import photo from "/vite.svg";
 import unknownUser from "/unknownUser.png"
-import { ProductTypesPopulated, UserTypes } from "../assets/demoData";
+import { MutationResTypes, ProductTypesPopulated, UserTypes } from "../assets/demoData";
 import SingleProductTemplate from "../components/SingleProductTemplate";
 import RatingSystem from "../components/RatingSystem";
 import { useCreateReviewMutation, useDeleteReviewMutation, useGetSingleProductQuery, useMyProfileQuery } from "../redux/api/api";
@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { MiscReducerTypes, setIsReviewDialogActive } from "../redux/reducers/miscReducers";
 import { MdDeleteForever } from "react-icons/md";
 import ProductSlider from "../components/ProductSlider";
+import HandleMutationRes from "../components/HandleMutationRes";
 
 
 const formFields = [
@@ -27,6 +28,7 @@ const SingleProduct = () => {
     const [formFieldData,setFormFieldData] = useState<{productID:string; rating:number; comment:string;}>({productID:"", rating:0, comment:""});
     const singleProduct:{data?:{success:boolean; message:ProductTypesPopulated;}; isLoading?:boolean; isSuccess:boolean;} = useGetSingleProductQuery(productID);
     const loginedUser:{success:boolean; message:UserTypes} = useMyProfileQuery("").data;
+    const [postReviewRes, setPostReviewRes] = useState<MutationResTypes>();
     const dispatch = useDispatch();
     const {isReviewDialogActive} = useSelector((state:{miscReducer:MiscReducerTypes}) => state.miscReducer);
     const [createReview] = useCreateReviewMutation();
@@ -42,8 +44,8 @@ const SingleProduct = () => {
 
             console.log("------- SingleProduct.tsx onClickHandler");
             console.log({productID:productID as string, rating:Number(formFieldData.rating), comment:formFieldData.comment});
+            setPostReviewRes(res);
             console.log(res);
-
             console.log("------- SingleProduct.tsx onClickHandler");
             dispatch(setIsReviewDialogActive(false));
         } catch (error) {
@@ -55,6 +57,7 @@ const SingleProduct = () => {
 
     return(
         <div className="single_product_bg">
+            <HandleMutationRes res={postReviewRes} />
 
             <DialogWrapper toggler={isReviewDialogActive} setToggler={setIsReviewDialogActive} Element={<Form heading="Give Review" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={postReviewHandler} />} />
 
