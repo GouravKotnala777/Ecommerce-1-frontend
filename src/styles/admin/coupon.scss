@@ -3,12 +3,13 @@
 .coupon_bg{
     //border: 2px solid red;
     display: flex;
+    flex-direction: row;
     .left_part{
+        height: 100vh;
         //border: 2px solid violet;
         width: 40%;
         .coupon_table_scroller{
             //border: 2px solid green;
-            height: 100vh;
             overflow-y: scroll;
             overflow-x: hidden;
             box-shadow: inset 1px 1px 5px 2px rgba(255, 75, 105, 0.2);
@@ -85,4 +86,19 @@
         width: 60%;
         
     }
+}
+
+
+@media screen and (width <= 570px){
+    .coupon_bg{
+        flex-direction: column-reverse;
+        .left_part{
+            width: 100%;
+        }
+        .right_part{
+            width: 100%;
+            
+        }
+    }
+    
 }

@@ -96,7 +96,6 @@ const Coupons = () => {
 
             </div>
             <div className="right_part">
-                <p style={{margin:"0 auto", textAlign:"center"}}>Create Coupons</p>
                 <Form heading="Create Coupon" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e as ChangeEvent<HTMLInputElement>)} onClickHandler={onClickHandler} />
             </div>
         </div>
