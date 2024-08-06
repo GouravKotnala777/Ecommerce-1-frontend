@@ -14,14 +14,14 @@ const Sidebar = () => {
         <div className="sidebar_bg" style={{left:isHamActive?"0%":"-100%"}}>
             <div className="left_part">
                 <div className="scrollable_part">
-                    <NavLink className="navlinks" to="/">Home</NavLink>
-                    <NavLink className="navlinks" to="/user/register">Register</NavLink>
-                    <NavLink className="navlinks" to="/user/login">Login</NavLink>
-                    <NavLink className="navlinks" to="/product/new">Add Product</NavLink>
-                    <NavLink className="navlinks" to="/user/wishlist">Wishlist</NavLink>
-                    <NavLink className="navlinks" to="/admin/dashboard">Dashboard</NavLink>
-                    <NavLink className="navlinks" to="/user/cart">Cart</NavLink>
-                    <NavLink className="navlinks" to="/user/logout">Logout</NavLink>
+                    <NavLink className="navlink" to="/">Home</NavLink>
+                    <NavLink className="navlink" to="/user/register">Register</NavLink>
+                    <NavLink className="navlink" to="/user/login">Login</NavLink>
+                    <NavLink className="navlink" to="/product/new">Add Product</NavLink>
+                    <NavLink className="navlink" to="/user/wishlist">Wishlist</NavLink>
+                    <NavLink className="navlink" to="/admin/dashboard">Dashboard</NavLink>
+                    <NavLink className="navlink" to="/user/cart">Cart</NavLink>
+                    <NavLink className="navlink" to="/user/logout">Logout</NavLink>
                 </div>
             </div>
             <div className="right_part" onClick={() => dispatch(setIsHamActive(false))}>
