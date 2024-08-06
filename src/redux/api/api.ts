@@ -91,6 +91,13 @@ const api = createApi({
                 body:{house, street, city, state, zip}
             })
         }),
+        logout:builder.mutation({
+            query:() => ({
+                url:"/api/v1/user/logout",
+                method:"POST",
+                credentials:"include"
+            })
+        }),
         addProduct:builder.mutation({
             query:(data) => ({
                 url:"/api/v1/product/new",
@@ -284,7 +291,7 @@ const api = createApi({
 })
 
 export default api;
-export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useUpdateMeMutation, useRemoveAddressMutation,
+export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useUpdateMeMutation, useRemoveAddressMutation, useLogoutMutation,
     useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useGetProductsOfSameQuery, useFindAllFieldsQuery, useSearchProductsMutation,
     useAddToCartMutation, useFetchMyCartQuery,  useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation, useMyWhishlistQuery, useAddRemoveFromWishlistMutation,
     useOutStockProductsQuery, useIncompleteProductsQuery, useUpdateProductMutation,
