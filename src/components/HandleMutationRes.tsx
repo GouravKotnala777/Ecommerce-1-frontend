@@ -2,10 +2,12 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { memo } from "react";
 import toast, {Toaster} from "react-hot-toast";
 import { MutationResTypes } from "../assets/demoData";
+import { useNavigate } from "react-router-dom";
 
 
 
-const HandleMutationRes = memo(({res}:{res:MutationResTypes|undefined}) => {
+const HandleMutationRes = memo(({res, redirect}:{res:MutationResTypes|undefined; redirect?:string;}) => {
+    const navigate = useNavigate();
     
     if (res?.error) {
         const error = res?.error as FetchBaseQueryError;
@@ -22,7 +24,13 @@ const HandleMutationRes = memo(({res}:{res:MutationResTypes|undefined}) => {
             toast.success(res?.data.message, {
                 position:"bottom-center",
                 duration:2000
-            })
+            });
+
+            if (redirect) {
+                setTimeout(() => {
+                    navigate(redirect);
+                }, 1500);
+            }
         }
         else{
             toast.error(res.data.message, {
