@@ -31,6 +31,7 @@ import { GoReport } from 'react-icons/go'
 import DialogWrapper from './components/DialogWrapper'
 import Form from './components/Form'
 import Footer from './components/Footer'
+import VerifyEmail from './pages/VerifyEmail'
 
 
 const formFields = [
@@ -85,6 +86,7 @@ const App = () => {
               <Route path="/product/:productID" element={<SingleProduct />} />
               <Route path="/user/wishlist" element={<Wishlist />} />
               <Route path="/user/address" element={<Address />} />
+              <Route path="/user/verifyemail" element={<VerifyEmail />} />
               <Route path="/group/:query/:value" element={<ProductsOfSame />} />
               <Route path="/admin/dashboard" element={<Dashboard />} />
               <Route path="/admin/outstock" element={<OutStock />} />
