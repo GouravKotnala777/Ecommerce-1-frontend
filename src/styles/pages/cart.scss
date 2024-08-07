@@ -16,18 +16,18 @@
         transition: 0.3s;
         background: linear-gradient(90deg, rgb(255, 156, 102), rgb(255, 75, 105));
         .left_part{
-            border: 2px solid violet;
+            //border: 2px solid violet;
             width: 40px;
             margin: 0 0 0 10px;
         }
         .right_part{
-            border: 2px solid indigo;
+            //border: 2px solid indigo;
             width: 76%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             .input_cont{
-                border: 1px solid red;
+                //border: 1px solid red;
                 padding: 5px 7px 7px 5px;
                 border-radius: 8px;
                 input{
@@ -43,13 +43,13 @@
                 }
             }
             .total_price_cont{
-                border: 2px solid blue;
+                //border: 2px solid blue;
                 .see_list{
-                    border: 2px solid green;
+                    //border: 2px solid green;
                     text-align: right;
                 }
                 .detailes{
-                    border: 2px solid yellow;
+                    //border: 2px solid yellow;
                     .heading{
                         font-size: 0.8rem;
 
@@ -60,7 +60,7 @@
                 }
             }  
             .buy_all{
-                border: 2px solid orange;
+                //border: 2px solid orange;
 
             }          
         }

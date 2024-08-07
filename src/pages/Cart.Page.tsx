@@ -4,11 +4,19 @@ import SingleProductTemplate from "../components/SingleProductTemplate";
 import { useFetchMyCartQuery, useGetSingleCouponMutation } from "../redux/api/api";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import { SerializedError } from "@reduxjs/toolkit";
+import Spinner from "../components/Spinner";
+import ItemNotFound from "../components/ItemNotFound";
 
 
 const Cart = () => {
     let totalAmount:number = 0;
-    const cartData:{data?:{success:boolean; message:{products:[{productID:ProductTypes; quantity:number;}], totalPrice:number;}};} = useFetchMyCartQuery("");
+    const cartData:{
+        isLoading:boolean;
+        data?:{success:boolean; message:{products:[{productID:ProductTypes; quantity:number;}], totalPrice:number;}};
+        error?:FetchBaseQueryError|SerializedError;
+    } = useFetchMyCartQuery("");
     const [getSingleCoupon] = useGetSingleCouponMutation();
     const [hideHeader, setHideHeader] = useState<boolean>(false);
     const [code, setCode] = useState<string>("");
@@ -55,22 +63,6 @@ const Cart = () => {
         }
     };
 
-
-    
-
-    console.log("NNNNNNNNNNNNNNNNNNNNNNNNN");
-
-    //useEffect(() => {
-    //    setDiscountedAmount(singleCoupon?.discountType === "percentage"?
-    //        totalAmount - ((singleCoupon.amount*totalAmount)/100)
-    //        :
-    //        singleCoupon?.discountType === "fixed"?
-    //            totalAmount - singleCoupon?.amount
-    //            :
-    //            totalAmount);
-        
-    //}, [singleCoupon]);
-
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollPos = window.pageYOffset;
@@ -83,7 +75,7 @@ const Cart = () => {
     
     return(
         <div className="cart_bg">
-            {/*<pre>{JSON.stringify(cartData.data?.message, null, `\t`)}</pre>*/}
+            {/*<pre>{JSON.stringify(cartData, null, `\t`)}</pre>*/}
             <div className="access_bar_bg" style={{bottom:hideHeader?"-12%":"0%"}}>
                 <div className="left_part">
                     <div className="feedback">
@@ -124,9 +116,20 @@ const Cart = () => {
             {/*<pre>{JSON.stringify(data?.message.products, null, `\t`)}</pre>*/}
             {/*<pre>{JSON.stringify(totalAmount, null, `\t`)}</pre>*/}
             {
-                cartData.data?.message?.products.map((product) => (
-                    <SingleProductTemplate key={product.productID._id} productID={product.productID._id} category={product.productID.category} name={product.productID.name} price={product.productID.price} quantity={product.quantity} rating={product.productID.rating} description={product.productID.description} photo={product.productID.images[0]} parent="cart" />
-                ))
+                cartData.isLoading ?
+                    <Spinner type={1} heading="Loading..." width={100} thickness={6} />
+                    :
+                    cartData.error &&
+                    "data" in cartData.error &&
+                    cartData.error.data &&
+                    typeof cartData.error.data === "object" &&
+                    "message" in cartData.error.data &&
+                    cartData.error.data.message ?
+                        <ItemNotFound heading={cartData.error.data.message as string} statusCode={cartData.error.status as number} />
+                        :
+                        cartData.data?.message?.products.map((product) => (
+                            <SingleProductTemplate key={product.productID._id} productID={product.productID._id} category={product.productID.category} name={product.productID.name} price={product.productID.price} quantity={product.quantity} rating={product.productID.rating} description={product.productID.description} photo={product.productID.images[0]} parent="cart" />
+                        ))
             }
         </div>
     )
