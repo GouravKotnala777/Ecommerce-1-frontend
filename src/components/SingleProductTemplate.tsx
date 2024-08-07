@@ -11,6 +11,7 @@ import ImageWithFallback from "./ImageWithFallback";
 import HandleMutationRes from "./HandleMutationRes";
 import { useState } from "react";
 import { MutationResTypes } from "../assets/demoData";
+import Spinner from "./Spinner";
 
 interface SingleProductTemplatePropTypes{
     productID?:string;
@@ -51,7 +52,9 @@ const SingleProductTemplate = ({productID, userWishlist, category, name, price, 
                     !category&&!name&&!price&&!rating ?
                         <div className="product_cont">
                             <div className="left_part">
-                                <img src={unknownProductImg} alt={unknownProductImg} />
+                                <div className="navlink">
+                                    <img src={unknownProductImg} alt={unknownProductImg} className="navlink" />
+                                </div>
                             </div>
                             <div className="right_part">
                                 <div className="whishlist_cont">
@@ -78,7 +81,7 @@ const SingleProductTemplate = ({productID, userWishlist, category, name, price, 
                                 <div className="btns_cont">
                                     <div className="upper_btns">
                                         
-                                        <button className="add_btn" style={{background:parent === "singleProduct" ? "linear-gradient(90deg, rgb(255, 34, 71), rgb(255, 156, 102))":"white", border:parent === "singleProduct"?"none":"1px solid rgb(255, 34, 71)", color:parent==="singleProduct"?"white":"rgb(255, 34, 71)"}}>{parent === "singleProduct" ? "Add" : "Remove"}</button>
+                                        <button className="add_btn" style={{background:parent === "singleProduct" ? "linear-gradient(90deg, rgb(255, 34, 71), rgb(255, 156, 102))":"white", border:parent === "singleProduct"?"none":"1px solid rgb(255, 34, 71)", color:parent==="singleProduct"?"white":"rgb(255, 34, 71)"}}><Spinner type={1} color="white" /></button>
                                         
                                         <select>
                                             <option>1</option>
@@ -86,12 +89,12 @@ const SingleProductTemplate = ({productID, userWishlist, category, name, price, 
                                             <option>3</option>
                                             <option>4</option>
                                         </select>
-                                        <button className="buy_btn">Buy</button>
+                                        <button className="buy_btn"><Spinner type={1} color="white" /></button>
                                     </div>
                                     {
                                         parent === "singleProduct" &&
                                             <div className="lower_btns">
-                                                <button className="review_btn">Review</button>
+                                                <button className="review_btn"><Spinner type={1} color="rgb(255, 69, 100)" /></button>
                                             </div>
                                     }
                                 </div>
