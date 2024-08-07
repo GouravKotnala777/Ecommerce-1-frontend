@@ -7,11 +7,18 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Pagination from "../components/Pagination";
 import Spinner from "../components/Spinner";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import { SerializedError } from "@reduxjs/toolkit";
+import ItemNotFound from "../components/ItemNotFound";
 
 
 const Home = () => {
     const [skip, setSkip] = useState<number>(0);
-    const allProducts:{isLoading:boolean; data?:{message:ProductTypes[]; totalProducts:number;}} = useGetAllProductsQuery(skip);
+    const allProducts:{
+        isLoading:boolean;
+        data?:{success:boolean; message:ProductTypes[]; totalProducts:number;};
+        error?:FetchBaseQueryError | SerializedError;
+    } = useGetAllProductsQuery(skip);
     const arrayOfCategories:{data?:{message:string[];}} = useFindAllFieldsQuery({groupedBy:"category"});
     const arrayOfBrands:{data?:{message:string[];}} = useFindAllFieldsQuery({groupedBy:"brand"});
     const [searchQry, setSearchQry] = useState<string>("");
@@ -48,27 +55,55 @@ const Home = () => {
         }
     };
 
+    //const func = () => {
+    //    if (allProducts.error) {
+    //        if ("data" in allProducts.error &&
+    //            allProducts.error.data &&
+    //            typeof allProducts.error.data === "object" &&
+    //            "message" in allProducts.error.data
+    //        ) {
+    //            return <pre>{JSON.stringify(allProducts.error?.data.message, null, `\t`)}</pre>
+    //        }
+    //        else{
+    //            return <></>
+    //        }
+    //    }
+    //}
+
     return(
         <div className="home_bg">
-            <div className="home_sub_accessbar">
-                <div className="search_inp_cont">
-                    <input type="text" id="search_inp" name="search_inp" onFocus={onFocusSearchInp} onBlur={onBlurSearchInp} className="search_inp" placeholder="Search..." onChange={(e) => setSearchQry(e.target.value)} />
-                    <button id="search_btn" onClick={searchClickHandler}>Go</button>
-                </div>
-            </div>
+            {
+                allProducts.data?.message &&
+                    <div className="home_sub_accessbar">
+                        <div className="search_inp_cont">
+                            <input type="text" id="search_inp" name="search_inp" onFocus={onFocusSearchInp} onBlur={onBlurSearchInp} className="search_inp" placeholder="Search..." onChange={(e) => setSearchQry(e.target.value)} />
+                            <button id="search_btn" onClick={searchClickHandler}>Go</button>
+                        </div>
+                    </div>
+            }
             {
                 allProducts.isLoading ?
                     <Spinner type={1} heading="Loading..." width={100} thickness={6} />
                     :
-                    allProducts.data?.message.length !== 0 &&
-                        <Products products={allProducts.data?.message} />
+                    allProducts.error &&
+                    "data" in allProducts.error &&
+                    allProducts.error.data &&
+                    typeof allProducts.error.data === "object" &&
+                    "message" in allProducts.error.data ?
+                        <ItemNotFound statusCode={allProducts.error.status as number} heading={allProducts.error?.data.message as string} />
+                        :
+                        allProducts.data?.message.length !== 0 &&
+                            <Products products={allProducts.data?.message} />
             }
-
-            <div className="pagination_number">{
-                `${skip+1} of ${Math.ceil((allProducts.data?.totalProducts as number)/5)}`
-            }</div>
-            <Pagination documentCount={Math.ceil((allProducts.data?.totalProducts as number)/5)-1} skip={skip} setSkip={setSkip} />
-
+            {
+                allProducts.data?.message &&
+                <>
+                    <div className="pagination_number">{
+                        `${skip+1} of ${Math.ceil((allProducts.data?.totalProducts as number)/5)}`
+                    }</div>
+                    <Pagination documentCount={Math.ceil((allProducts.data?.totalProducts as number)/5)-1} skip={skip} setSkip={setSkip} />
+                </>
+            }
             {
                 arrayOfCategories.data?.message &&
                     <div className="grouped_products_conts">
