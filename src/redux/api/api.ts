@@ -68,6 +68,14 @@ const api = createApi({
                 body:data
             })
         }),
+        verifyEmail:builder.mutation({
+            query:({verificationToken, emailType}:{verificationToken:string; emailType:string;}) => ({
+                url:"/api/v1/user/verifyemail",
+                method:"POST",
+                credentials:"include",
+                body:{verificationToken, emailType}
+            })
+        }),
         myProfile:builder.query({
             query:() => ({
                 url:"/api/v1/user/me",
@@ -291,7 +299,7 @@ const api = createApi({
 })
 
 export default api;
-export const {useRegisterMutation, useLoginMutation, useMyProfileQuery, useUpdateMeMutation, useRemoveAddressMutation, useLogoutMutation,
+export const {useRegisterMutation, useLoginMutation, useVerifyEmailMutation, useMyProfileQuery, useUpdateMeMutation, useRemoveAddressMutation, useLogoutMutation,
     useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useGetProductsOfSameQuery, useFindAllFieldsQuery, useSearchProductsMutation,
     useAddToCartMutation, useFetchMyCartQuery,  useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation, useMyWhishlistQuery, useAddRemoveFromWishlistMutation,
     useOutStockProductsQuery, useIncompleteProductsQuery, useUpdateProductMutation,
