@@ -1,34 +1,39 @@
 
 .sidebar_bg{
-    border: 2px solid red;
+    //border: 2px solid red;
     display: none;
-    width: 99%;
+    width: 100%;
     height: 104vh;
     background: rgba(0,0,0,0.7);
     position: absolute;
     top: 0%;
     left: 0%;
     transition: 0.3s;
+    z-index: 12;
     .left_part{
-        border: 2px solid violet;
+        //border: 2px solid violet;
         width: 60%;
         overflow: scroll;
         background: white;
         .scrollable_part{
-            border: 2px solid indigo;
+            //border: 2px solid rgb(149, 0, 255);
+            padding: 0 0 0 40px;
             .navlink{
                 text-decoration: none;
                 color: black;
                 display: flex;
                 flex-direction: column;
-                align-items: center;
+                //align-items:start;
                 color: #515151;
+                font-family: rokkitt;
+                font-weight: bold;
                 margin: 30px auto;
+                font-size: 1rem;
             }
         }
     }
     .right_part{
-        border: 2px solid blue;
+        //border: 2px solid blue;
         //background: transparent;
         width: 40%;
         .CgClose{
