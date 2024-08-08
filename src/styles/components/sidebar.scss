@@ -2,23 +2,23 @@
 .sidebar_bg{
     //border: 2px solid red;
     display: none;
-    width: 100%;
+    width: 102%;
     height: 104vh;
     background: rgba(0,0,0,0.7);
     position: absolute;
-    top: 0%;
-    left: 0%;
+    top: -20%;
+    //left: 0%;
     transition: 0.3s;
     z-index: 12;
-    .left_part{
+    .sidebar_left_part{
         //border: 2px solid violet;
         width: 60%;
         overflow: scroll;
         background: white;
-        .scrollable_part{
+        .sidebar_scrollable_part{
             //border: 2px solid rgb(149, 0, 255);
             padding: 0 0 0 40px;
-            .navlink{
+            .sidebar_navlink{
                 text-decoration: none;
                 color: black;
                 display: flex;
@@ -32,7 +32,7 @@
             }
         }
     }
-    .right_part{
+    .sidebar_right_part{
         //border: 2px solid blue;
         //background: transparent;
         width: 40%;
