@@ -19,14 +19,18 @@ const Login = () => {
         setFormData({...formData, [e.target.name]:e.target.value});
     };
     const onClickHandler = async() => {
-        console.log(formData);
-
         try {
             const res = await login(formData);
             
             console.log("----- Login.Page.tsx onClickHandler");
             console.log(res);
             setLoginRes(res);
+
+            if (res.data) {
+                setTimeout(() => {
+                    window.location.href = "/";
+                }, 2000);
+            }
             console.log("----- Login.Page.tsx onClickHandler");
         } catch (error) {
             console.log("----- Login.Page.tsx onClickHandler");

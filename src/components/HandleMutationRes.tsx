@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 
 
-const HandleMutationRes = memo(({res, redirect}:{res:MutationResTypes|undefined; redirect?:string;}) => {
+const HandleMutationRes = memo(({res, redirect}:{res:MutationResTypes|{error:{data:{message:string}}}|undefined; redirect?:string;}) => {
     const navigate = useNavigate();
 
 
