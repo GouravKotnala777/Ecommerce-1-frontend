@@ -4,9 +4,7 @@ import './App.css'
 import Home from './pages/Home.Page'
 import Header from './components/Header'
 import { useEffect, useState } from 'react'
-import Sidebar from './components/Sidebar'
-import { useDispatch, useSelector } from 'react-redux'
-import { MiscReducerTypes } from './redux/reducers/miscReducers'
+import { useDispatch } from 'react-redux'
 import SingleProduct from './pages/SingleProduct'
 import Cart from './pages/Cart.Page'
 import Login from './pages/Login.Page'
@@ -17,7 +15,6 @@ import Wishlist from './pages/Wishlist'
 import Dashboard from './pages/Dashboard'
 import OutStock from './pages/admin/OutStock'
 import UpdateProduct from './pages/admin/UpdateProduct'
-//import Discount from './pages/admin/Discount'
 import Coupons from './pages/admin/Coupon'
 import StripePayment from './pages/Payment'
 import Address from './pages/Address.Page'
@@ -39,7 +36,6 @@ const formFields = [
 ];
 
 const App = () => {
-  const {isHamActive} = useSelector((state:{miscReducer:MiscReducerTypes}) => state.miscReducer);
   const myProfileData:{data?:{message:UserTypes}} = useMyProfileQuery("");
   const [reportDialogToggle, setReportDialogToggle] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
@@ -49,18 +45,6 @@ const App = () => {
   const onClickHandler = () => {
     console.log(message);
   };
-
-  useEffect(() => {
-    if (isHamActive) {
-      console.log("UUUUUUUUUUUUUUUUUUUU");
-      document.body.classList.add("freeze");
-    }
-    else{
-      console.log("IIIIIIIIIIIIIIIIIIII");
-      document.body.classList.remove("freeze");
-    }
-
-  }, [isHamActive]);
   
   useEffect(() => {
     dispatch(setLoggedInUser({user:myProfileData.data?.message as UserTypes, isLoading:false, isError:false}));
@@ -72,8 +56,6 @@ const App = () => {
           <BrowserRouter>
             <DialogWrapper toggler={reportDialogToggle} setToggler={setReportDialogToggle} Element={<Form heading="Write Bug Report" formFields={formFields} onChangeHandler={(e) => setMessage(e.target.value)} onClickHandler={onClickHandler} />} />
             <Header />
-            <Sidebar />
-            {/*<pre>{JSON.stringify(myProfileData.data?.message, null, `\t`)}</pre>*/}
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/product/new" element={<AddProduct />} />

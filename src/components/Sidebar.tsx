@@ -1,34 +1,30 @@
-import { useDispatch, useSelector } from "react-redux";
 import "../styles/components/sidebar.scss";
-import { MiscReducerTypes, setIsHamActive } from "../redux/reducers/miscReducers";
 import { NavLink } from "react-router-dom";
 import { CgClose } from "react-icons/cg";
+import { Dispatch, SetStateAction } from "react";
 
 
-const Sidebar = () => {
-    const {isHamActive} = useSelector((state:{miscReducer:MiscReducerTypes}) => state.miscReducer);
-    const dispatch = useDispatch();
-
+const Sidebar = ({isHamActive, setIsHamActive}:{isHamActive:boolean; setIsHamActive:Dispatch<SetStateAction<boolean>>}) => {
+    
     const closeSidebarHandler = () => {
-        dispatch(setIsHamActive(false));
+        setIsHamActive(false);
     };
-
     
     return(
-        <div className="sidebar_bg" style={{left:isHamActive?"0%":"-100%"}}>
-            <div className="left_part">
-                <div className="scrollable_part">
-                    <NavLink className="navlink" to="/" onClick={closeSidebarHandler}>Home</NavLink>
-                    <NavLink className="navlink" to="/user/register" onClick={closeSidebarHandler}>Register</NavLink>
-                    <NavLink className="navlink" to="/user/login" onClick={closeSidebarHandler}>Login</NavLink>
-                    <NavLink className="navlink" to="/product/new" onClick={closeSidebarHandler}>Add Product</NavLink>
-                    <NavLink className="navlink" to="/user/wishlist" onClick={closeSidebarHandler}>Wishlist</NavLink>
-                    <NavLink className="navlink" to="/admin/dashboard" onClick={closeSidebarHandler}>Dashboard</NavLink>
-                    <NavLink className="navlink" to="/user/cart" onClick={closeSidebarHandler}>Cart</NavLink>
-                    <NavLink className="navlink" to="/user/logout" onClick={closeSidebarHandler}>Logout</NavLink>
+        <div className="sidebar_bg" style={{left:isHamActive?"-1%":"-104%"}}>
+            <div className="sidebar_left_part">
+                <div className="sidebar_scrollable_part">
+                    <NavLink className="sidebar_navlink" to="/" onClick={closeSidebarHandler}>Home</NavLink>
+                    <NavLink className="sidebar_navlink" to="/user/register" onClick={closeSidebarHandler}>Register</NavLink>
+                    <NavLink className="sidebar_navlink" to="/user/login" onClick={closeSidebarHandler}>Login</NavLink>
+                    <NavLink className="sidebar_navlink" to="/product/new" onClick={closeSidebarHandler}>Add Product</NavLink>
+                    <NavLink className="sidebar_navlink" to="/user/wishlist" onClick={closeSidebarHandler}>Wishlist</NavLink>
+                    <NavLink className="sidebar_navlink" to="/admin/dashboard" onClick={closeSidebarHandler}>Dashboard</NavLink>
+                    <NavLink className="sidebar_navlink" to="/user/cart" onClick={closeSidebarHandler}>Cart</NavLink>
+                    <NavLink className="sidebar_navlink" to="/user/logout" onClick={closeSidebarHandler}>Logout</NavLink>
                 </div>
             </div>
-            <div className="right_part" onClick={closeSidebarHandler}>
+            <div className="sidebar_right_part" onClick={closeSidebarHandler}>
                 <CgClose className="CgClose" />
             </div>
         </div>
