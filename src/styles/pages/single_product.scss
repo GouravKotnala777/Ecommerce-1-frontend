@@ -127,3 +127,41 @@
         }
     }
 }
+@media screen and (width <= 370px) {
+    .single_product_bg{
+        margin-top: 4.5rem;
+        .reviews_cont{
+            .review_cont{
+                .upper_part{
+                    font-size: 0.7rem;
+                }
+                .lower_part{
+                    display: flex;
+                    flex-direction: column;
+                    
+                    .left_part{
+                        img{
+                        }
+                    }
+                    .middle_part{
+                        .email{
+                            font-size: 0.8rem;
+                        }
+                        .rating{
+                            font-size: 0.7rem;
+                        }
+                    }
+                    .right_part{
+                        width: 100%;
+                        .comment_heading{
+                            font-size: 0.8rem;
+                        }
+                        .comment_value{
+                            font-size: 0.7rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
