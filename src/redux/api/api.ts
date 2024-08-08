@@ -47,6 +47,7 @@ const api = createApi({
     baseQuery:fetchBaseQuery({
         baseUrl:import.meta.env.VITE_SERVER_URL
     }),
+    tagTypes:["MyWishlistedProducts", "MyCartProducts", "SingleProduct"],
     endpoints:(builder) => ({
         register:builder.mutation({
             query:(data) => ({
@@ -81,7 +82,8 @@ const api = createApi({
                 url:"/api/v1/user/me",
                 method:"GET",
                 credentials:"include"
-            })
+            }),
+            providesTags:["MyWishlistedProducts"]
         }),
         updateMe:builder.mutation({
             query:({name, email, password, mobile, house, street, city, state, zip}:UpdateMeBodyType) => ({
@@ -129,7 +131,8 @@ const api = createApi({
                 url:`/api/v1/product/${productID}`,
                 method:"GET",
                 credentials:"include"
-            })
+            }),
+            providesTags:["SingleProduct"]
         }),
         getProductsOfSame:builder.query({
             query:({query, value}) => ({
@@ -155,7 +158,8 @@ const api = createApi({
                 },
                 credentials:"include",
                 body:data
-            })
+            }),
+            invalidatesTags:["MyCartProducts"]
         }),
         removeFromCart:builder.mutation({
             query:(data:{productID:string; price:number; quantity:number;}) => ({
@@ -166,7 +170,8 @@ const api = createApi({
                 },
                 credentials:"include",
                 body:data
-            })
+            }),
+            invalidatesTags:["MyCartProducts"]
         }),
         fetchMyCart:builder.query({
             query:() => ({
@@ -176,7 +181,8 @@ const api = createApi({
                     "Content-Type":"application/json"
                 },
                 credentials:"include"
-            })
+            }),
+            providesTags:["MyCartProducts"]
         }),
         createReview:builder.mutation({
             query:({productID, rating, comment}:{productID:string; rating:number; comment:string;}) => ({
@@ -184,28 +190,32 @@ const api = createApi({
                 method:"POST",
                 credentials:"include",
                 body:{rating, comment}
-            })
+            }),
+            invalidatesTags:["SingleProduct"]
         }),
         deleteReview:builder.mutation({
             query:({productID}:{productID:string;}) => ({
                 url:`/api/v1/review/${productID}/remove`,
                 method:"DELETE",
                 credentials:"include"
-            })
+            }),
+            invalidatesTags:["SingleProduct"]
         }),
         myWhishlist:builder.query({
             query:() => ({
                 url:`/api/v1/user/wishlist`,
                 method:"GET",
                 credentials:"include"
-            })
+            }),
+            providesTags:["MyWishlistedProducts"]
         }),
         addRemoveFromWishlist:builder.mutation({
             query:({productID}:{productID:string;}) => ({
                 url:`/api/v1/user/${productID}/wishlist`,
                 method:"PUT",
                 credentials:"include"
-            })
+            }),
+            invalidatesTags:["MyWishlistedProducts"]
         }),
         outStockProducts:builder.query({
             query:() => ({
