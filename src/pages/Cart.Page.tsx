@@ -28,11 +28,6 @@ const Cart = () => {
     const navigate = useNavigate();
     const [summeryData, setSummeryData] = useState<{_id:string; name:string; quantity:number; price:number;}[]>([]);
 
-    console.log("isse useEffect ke ander likhna hai......1");
-    cartData.data?.message.products.forEach((item) => {
-        totalAmount = totalAmount + (item.productID.price * item.quantity);
-    });
-    console.log("isse useEffect ke ander likhna hai......2");
     
 
     const applyCouponHandler = async() => {
@@ -70,6 +65,13 @@ const Cart = () => {
     };
 
     
+    useEffect(() => {
+        console.log("isse useEffect ke ander likhna hai......1");
+        cartData.data?.message.products.forEach((item) => {
+            totalAmount = totalAmount + (item.productID.price * item.quantity);
+        });
+        console.log("isse useEffect ke ander likhna hai......2");
+    }, []);
     
     useEffect(() => {
         const summeryDataLoc = cartData.data?.message.products.map((item1) => {
