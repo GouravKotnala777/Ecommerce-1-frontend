@@ -8,6 +8,7 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { SerializedError } from "@reduxjs/toolkit";
 import Spinner from "../components/Spinner";
 import ItemNotFound from "../components/ItemNotFound";
+import DialogWrapper from "../components/DialogWrapper";
 
 
 const Cart = () => {
@@ -23,11 +24,16 @@ const Cart = () => {
     const [singleCoupon, setSingleCoupon] = useState<CouponTypes>();
     //const [discountedAmount, setDiscountedAmount] = useState<number>(0);
     const previousScrollPos = useRef<number>(0);
+    const [summeryDialogToggle, setSummeryDialogToggle] = useState<boolean>(false);
     const navigate = useNavigate();
+    const [summeryData, setSummeryData] = useState<{_id:string; name:string; quantity:number; price:number;}[]>([]);
 
+    console.log("isse useEffect ke ander likhna hai......1");
     cartData.data?.message.products.forEach((item) => {
         totalAmount = totalAmount + (item.productID.price * item.quantity);
     });
+    console.log("isse useEffect ke ander likhna hai......2");
+    
 
     const applyCouponHandler = async() => {
         try {
@@ -63,6 +69,14 @@ const Cart = () => {
         }
     };
 
+    
+    
+    useEffect(() => {
+        const summeryDataLoc = cartData.data?.message.products.map((item1) => {
+                return {_id:item1.productID._id, name:item1.productID.name, quantity:item1.quantity, price:item1.productID.price}
+            })
+        setSummeryData(summeryDataLoc as {_id:string; name:string; quantity:number; price:number;}[]);
+    }, [summeryDialogToggle]);
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollPos = window.pageYOffset;
@@ -75,6 +89,10 @@ const Cart = () => {
     
     return(
         <div className="cart_bg">
+            <DialogWrapper Element={<SummeryComponent data={summeryData} totalAmount={totalAmount} />} toggler={summeryDialogToggle} setToggler={setSummeryDialogToggle} />
+
+
+
             <div className="access_bar_bg" style={{bottom:hideHeader?"-12%":"0%"}}>
                 <div className="left_part">
                     <div className="feedback">
@@ -87,7 +105,7 @@ const Cart = () => {
                         <button onClick={applyCouponHandler}>add</button>
                     </div>
                     <div className="total_price_cont">
-                        <div className="see_list">see</div>
+                        <div className="see_list" onClick={() => setSummeryDialogToggle(true)}>see</div>
                         <div className="detailes">
                             <div className="heading">Total Price</div>
                             <div className="value">{singleCoupon?.discountType === "percentage"?
@@ -112,6 +130,20 @@ const Cart = () => {
                     </div>
                 </nav>
             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             {
                 cartData.isLoading ?
                     <Spinner type={1} heading="Loading..." width={100} thickness={6} />
@@ -134,5 +166,41 @@ const Cart = () => {
         </div>
     )
 };
+
+const SummeryComponent = ({data, totalAmount}:{data:{name:string; quantity:number; price:number;}[]|undefined; totalAmount:number;}) => (
+        <div className="summery_cont">
+            <div className="heading">Summery</div>
+            <div className="summery_table">
+                <div className="scrollable_part">
+                    {
+                        data &&
+                            data.map((item) => (
+                                <div className="row">
+                                    <div className="col">
+                                        {item.name}
+                                    </div>
+                                    <div className="col">
+                                        {item.price}
+                                    </div>
+                                    <div className="col">
+                                        x {item.quantity}
+                                    </div>
+                                    <div className="col">
+                                        = {item.price * item.quantity}₹
+                                    </div>
+                                </div>
+                            ))
+                    }
+                </div>
+            </div>
+            <div className="footer total_amount_row">
+                <div className="col"></div>
+                <div className="col">Total</div>
+                <div className="col"></div>
+                <div className="col">{totalAmount}₹</div>
+            </div>
+                        
+        </div>
+)
 
 export default Cart;
