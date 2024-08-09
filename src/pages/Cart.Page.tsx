@@ -14,7 +14,7 @@ const Cart = () => {
     let totalAmount:number = 0;
     const cartData:{
         isLoading:boolean;
-        data?:{success:boolean; message:{products:[{productID:ProductTypes; quantity:number;}], totalPrice:number;}};
+        data?:{success:boolean; message:{products:{productID:ProductTypes; quantity:number;}[], totalPrice:number;}};
         error?:FetchBaseQueryError|SerializedError;
     } = useFetchMyCartQuery("");
     const [getSingleCoupon] = useGetSingleCouponMutation();
@@ -75,7 +75,6 @@ const Cart = () => {
     
     return(
         <div className="cart_bg">
-            {/*<pre>{JSON.stringify(cartData, null, `\t`)}</pre>*/}
             <div className="access_bar_bg" style={{bottom:hideHeader?"-12%":"0%"}}>
                 <div className="left_part">
                     <div className="feedback">
@@ -113,8 +112,6 @@ const Cart = () => {
                     </div>
                 </nav>
             </div>
-            {/*<pre>{JSON.stringify(data?.message.products, null, `\t`)}</pre>*/}
-            {/*<pre>{JSON.stringify(totalAmount, null, `\t`)}</pre>*/}
             {
                 cartData.isLoading ?
                     <Spinner type={1} heading="Loading..." width={100} thickness={6} />
@@ -123,13 +120,16 @@ const Cart = () => {
                     "data" in cartData.error &&
                     cartData.error.data &&
                     typeof cartData.error.data === "object" &&
-                    "message" in cartData.error.data &&
-                    cartData.error.data.message ?
-                        <ItemNotFound heading={cartData.error.data.message as string} statusCode={cartData.error.status as number} />
+                    "message" in cartData.error.data ?
+                        <ItemNotFound heading={cartData.error?.data.message as string} statusCode={cartData.error.status as number} />
                         :
-                        cartData.data?.message?.products.map((product) => (
-                            <SingleProductTemplate key={product.productID._id} productID={product.productID._id} category={product.productID.category} name={product.productID.name} price={product.productID.price} quantity={product.quantity} rating={product.productID.rating} description={product.productID.description} photo={product.productID.images[0]} parent="cart" />
-                        ))
+                        cartData.data?.message.products.length === 0 ?
+                            <ItemNotFound heading={"Cart is empty"} statusCode={204} />
+                            :
+                            cartData.data?.message?.products.map((product) => (
+                                <SingleProductTemplate key={product.productID._id} productID={product.productID._id} category={product.productID.category} name={product.productID.name} price={product.productID.price} quantity={product.quantity} rating={product.productID.rating} description={product.productID.description} photo={product.productID.images[0]} parent="cart" />
+                            ))
+
             }
         </div>
     )
