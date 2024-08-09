@@ -5,6 +5,7 @@ import { ChangeEvent, Dispatch, useState } from "react";
 import { useUpdateProductMutation } from "../redux/api/api";
 import { MutationResTypes } from "../assets/demoData";
 import HandleMutationRes from "./HandleMutationRes";
+import { BsInfoSquare } from "react-icons/bs";
 //import { FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta, MutationDefinition } from "@reduxjs/toolkit/query";
 //import { BaseQueryFn } from "@reduxjs/toolkit/query";
 
@@ -41,11 +42,12 @@ interface TablePropTypes<T1>{
             ingredient?: string;
         };
     }>>,
+    hideEditBtn?:boolean;
 }
 
 
 
-const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, data, list, setList}:TablePropTypes<T1>) => {
+const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, data, list, setList, hideEditBtn}:TablePropTypes<T1>) => {
     const [updateProduct] = useUpdateProductMutation();
     const [outStockRes, setOutStockRes] = useState<MutationResTypes>();
 
@@ -89,7 +91,14 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
                             <div className="th" key={item.th}>{item.th}</div>
                         ))
                     }
-                    <div className="th">Fill</div>
+                    {
+                        hideEditBtn &&
+                            <div className="th">Fill</div>
+                    }
+                    {
+                        !hideEditBtn &&
+                            <div className="th">View</div>
+                    }
                 </div>
                 <div className="tbody">
                 {
@@ -105,7 +114,14 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
                                     <div className="td" key={item.th}>{product[item.th.toLowerCase()]}</div>
                                 ))
                             }
-                            <div className="td update_btn" onClick={() => onClickHandler(product._id)}><RiStockLine /></div>
+                            {
+                                hideEditBtn &&
+                                    <div className="td update_btn" onClick={() => onClickHandler(product._id)}><RiStockLine /></div>
+                            }
+                            {
+                                !hideEditBtn &&
+                                    <div className="td update_btn" onClick={() => onClickHandler(product._id)}><BsInfoSquare/></div>
+                            }
                         </div>
                     ))
                 }
