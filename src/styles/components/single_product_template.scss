@@ -25,20 +25,39 @@
             //border: 2px solid blue;
             width: 16rem;
             margin: 10px auto;
-            .whishlist_cont{
+            .upper_part{
                 //border: 2px solid red;
                 display: flex;
-                justify-content: right;
+                justify-content: space-between;
                 align-items: center;
                 padding: 10px;
-                .BiHeart{
-                    //border: 2px solid rgb(0, 255, 47);
-                    font-size: 1.2rem;
+                .wishlist_cont{
+                    display: flex;
+                    align-items: center;
+                    .BiHeart{
+                        //border: 2px solid rgb(0, 255, 47);
+                        font-size: 1.2rem;
+                    }
+                    span{
+                        //border: 2px solid rgb(47, 0, 255);
+                        font-size: 0.6rem;
+                        color: rgb(255, 69, 100);
+                    }
                 }
-                span{
-                    //border: 2px solid rgb(47, 0, 255);
-                    font-size: 0.6rem;
-                    color: rgb(255, 69, 100);
+                .include_cont{
+                    display: flex;
+                    align-items: center;
+                    input{
+                        //border: 2px solid rgb(0, 255, 47);
+                        //font-size: 1.2rem;
+                        width: 0.9rem;
+                        height: 0.9rem;
+                    }
+                    span{
+                        //border: 2px solid rgb(47, 0, 255);
+                        font-size: 0.6rem;
+                        color: rgb(255, 69, 100);
+                    }
                 }
                 
             }

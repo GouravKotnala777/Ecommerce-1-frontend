@@ -108,19 +108,35 @@ const SingleProductTemplate = ({productID, userWishlist, category, name, price, 
                                 </NavLink>
                             </div>
                             <div className="right_part">
-                                <div className="whishlist_cont">
-                                    {
-                                        userWishlist?.includes(productID as string) ?
-                                        <BiSolidHeart className="BiHeart" color="rgb(255, 69, 100)" onClick={addRemoveFromWishlistHandler} />
-                                        :
-                                        <BiHeart className="BiHeart" color="rgb(255, 69, 100)" onClick={addRemoveFromWishlistHandler} />
-                                    }
-                                    {
-                                        userWishlist?.includes(productID as string) ?
-                                            <span>Remove from wishlist</span>
+                                <div className="upper_part">
+                                    <div className="wishlist_cont">
+                                        {
+                                            userWishlist?.includes(productID as string) ?
+                                            <BiSolidHeart className="BiHeart" color="rgb(255, 69, 100)" onClick={addRemoveFromWishlistHandler} />
                                             :
-                                            <span>Add to wishlist</span>
-                                    }
+                                            <BiHeart className="BiHeart" color="rgb(255, 69, 100)" onClick={addRemoveFromWishlistHandler} />
+                                        }
+                                        {
+                                            userWishlist?.includes(productID as string) ?
+                                                <span>Remove from wishlist</span>
+                                                :
+                                                <span>Add to wishlist</span>
+                                        }
+                                    </div>
+                                    <div className="include_cont">
+                                        {
+                                            userWishlist?.includes(productID as string) ?
+                                            <input type="checkbox" />
+                                            :
+                                            <input type="checkbox" />
+                                        }
+                                        {
+                                            userWishlist?.includes(productID as string) ?
+                                                <span>Include</span>
+                                                :
+                                                <span>Exclude</span>
+                                        }
+                                    </div>
                                 </div>
                                 <div className="info_cont">
                                     <div className="heading_values">
