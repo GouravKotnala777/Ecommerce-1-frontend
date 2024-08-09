@@ -12,7 +12,7 @@ import DialogWrapper from "../components/DialogWrapper";
 
 
 const Cart = () => {
-    let totalAmount:number = 0;
+    //let totalAmount:number = 0;
     const cartData:{
         isLoading:boolean;
         data?:{success:boolean; message:{products:{productID:ProductTypes; quantity:number;}[], totalPrice:number;}};
@@ -27,6 +27,7 @@ const Cart = () => {
     const [summeryDialogToggle, setSummeryDialogToggle] = useState<boolean>(false);
     const navigate = useNavigate();
     const [summeryData, setSummeryData] = useState<{_id:string; name:string; quantity:number; price:number;}[]>([]);
+    const [totalAmount, setTotalAmount] = useState<number>(0);
 
     
 
@@ -68,10 +69,10 @@ const Cart = () => {
     useEffect(() => {
         console.log("isse useEffect ke ander likhna hai......1");
         cartData.data?.message.products.forEach((item) => {
-            totalAmount = totalAmount + (item.productID.price * item.quantity);
+            setTotalAmount((prev) => prev + (item.productID.price * item.quantity));
         });
         console.log("isse useEffect ke ander likhna hai......2");
-    }, []);
+    }, [cartData.data, cartData.isLoading, cartData.error]);
     
     useEffect(() => {
         const summeryDataLoc = cartData.data?.message.products.map((item1) => {
