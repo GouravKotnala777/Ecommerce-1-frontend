@@ -29,6 +29,7 @@ import DialogWrapper from './components/DialogWrapper'
 import Form from './components/Form'
 import Footer from './components/Footer'
 import VerifyEmail from './pages/VerifyEmail'
+import MyOrders from './pages/MyOrders'
 
 
 const formFields = [
@@ -63,6 +64,7 @@ const App = () => {
               <Route path="/user/login" element={<Login />} />
               <Route path="/user/logout" element={<Logout />} />
               <Route path="/user/cart" element={<Cart />} />
+              <Route path="/user/order" element={<MyOrders />} />
               <Route path="/product/pay" element={<StripePayment />} />
               <Route path="/product/search/:searchQry" element={<SearchedProducts />} />
               <Route path="/product/:productID" element={<SingleProduct />} />

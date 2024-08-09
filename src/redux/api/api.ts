@@ -19,7 +19,13 @@ export interface UpdateProductBodyType {
     width?:number;
     depth?:number;
     weight?:number;
-    tags?:string
+    tags?:string;
+
+
+
+    transactionId?:string;
+    status?:string;
+    message?:string;
 }
 export interface CreateCouponBodyType {
     discountType:string;
@@ -304,6 +310,13 @@ const api = createApi({
                 credentials:"include",
                 body:{orderItems, totalPrice, coupon, transactionId, status, shippingType, message, parent}
             })
+        }),
+        myOrders:builder.query({
+            query:() => ({
+                url:"/api/v1/order/myOrders",
+                method:"GET",
+                credentials:"include"
+            })
         })
     })
 })
@@ -315,5 +328,5 @@ export const {useRegisterMutation, useLoginMutation, useVerifyEmailMutation, use
     useOutStockProductsQuery, useIncompleteProductsQuery, useUpdateProductMutation,
     useCreateCouponsMutation, useGetAllCouponsQuery, useGetSingleCouponMutation,
     useCreatePaymentMutation,
-    useNewOrderMutation
+    useNewOrderMutation, useMyOrdersQuery
 } = api;
