@@ -45,7 +45,7 @@ interface TablePropTypes<T1>{
 
 
 
-const Table = <T1 extends {_id:string; [key:string]:string;}>({thead, data, list, setList}:TablePropTypes<T1>) => {
+const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, data, list, setList}:TablePropTypes<T1>) => {
     const [updateProduct] = useUpdateProductMutation();
     const [outStockRes, setOutStockRes] = useState<MutationResTypes>();
 
@@ -93,10 +93,9 @@ const Table = <T1 extends {_id:string; [key:string]:string;}>({thead, data, list
                 </div>
                 <div className="tbody">
                 {
-                    data&&data?.map((product) => (
-                        <div className="tr" key={product._id}>
+                    data&&data?.map((product, index) => (
+                        <div className="tr" key={product._id+index}>
                             <div className="td photo_cell"><img src={product.images[0]} alt={photo} /></div>
-                            {/*<div className="td photo_cell"><pre>{JSON.stringify(product.images[0], null, `\t`)}</pre></div>*/}
                             <div className="td id_cell">{product._id.split("").splice(14,10)}</div>
                             {
                                 thead.map((item) => (
