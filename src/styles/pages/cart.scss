@@ -3,7 +3,7 @@
 .summery_cont{
     background: white;
     height: 70%;
-    width: 20rem;
+    width: 80%;
     position: absolute;
     top: 50%;
     left:50%;
@@ -36,9 +36,12 @@
                 display: grid;
                 grid-template-columns: 60% 12% 8% 22%;
                 font-size: 0.6rem;
+                .col{
+        
+                }
             }
-            .col{
-    
+            s{
+                color: #919191;
             }
         }
     }

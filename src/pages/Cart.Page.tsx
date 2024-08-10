@@ -98,9 +98,9 @@ const Cart = () => {
     
     return(
         <div className="cart_bg">
-            <DialogWrapper Element={<SummeryComponent data={summeryData} totalAmount={totalAmount} />} toggler={summeryDialogToggle} setToggler={setSummeryDialogToggle} />
+            <DialogWrapper Element={<SummeryComponent data={summeryData} totalAmount={totalAmount} includedProducts={includedProducts} />} toggler={summeryDialogToggle} setToggler={setSummeryDialogToggle} />
 
-            <pre>{JSON.stringify(includedProducts, null, `\t`)}</pre>
+            {/*<pre>{JSON.stringify(summeryData, null, `\t`)}</pre>*/}
 
 
             <div className="access_bar_bg" style={{bottom:hideHeader?"-12%":"0%"}}>
@@ -189,29 +189,49 @@ const Cart = () => {
     )
 };
 
-const SummeryComponent = ({data, totalAmount}:{data:{name:string; quantity:number; price:number;}[]|undefined; totalAmount:number;}) => (
+const SummeryComponent = ({data, totalAmount, includedProducts}:{data:{_id:string; name:string; quantity:number; price:number;}[]|undefined; totalAmount:number; includedProducts:{[key:string]:boolean;}}) => (
         <div className="summery_cont">
             <div className="heading">Summery</div>
             <div className="summery_table">
                 <div className="scrollable_part">
                     {
                         data &&
-                            data.map((item) => (
-                                <div className="row">
-                                    <div className="col">
-                                        {item.name}
+                            data.map((item) =>
+                                includedProducts[item._id] ?
+                                (
+                                    <div className="row">
+                                        <div className="col">
+                                            {item.name}
+                                        </div>
+                                        <div className="col">
+                                            {item.price}
+                                        </div>
+                                        <div className="col">
+                                            x {item.quantity}
+                                        </div>
+                                        <div className="col">
+                                            = {item.price * item.quantity}₹
+                                        </div>
                                     </div>
-                                    <div className="col">
-                                        {item.price}
-                                    </div>
-                                    <div className="col">
-                                        x {item.quantity}
-                                    </div>
-                                    <div className="col">
-                                        = {item.price * item.quantity}₹
-                                    </div>
-                                </div>
-                            ))
+                                )
+                                :
+                                (
+                                    <s className="row">
+                                        <div className="col">
+                                            {item.name}
+                                        </div>
+                                        <div className="col">
+                                            {item.price}
+                                        </div>
+                                        <div className="col">
+                                            x {item.quantity}
+                                        </div>
+                                        <div className="col">
+                                            = {item.price * item.quantity}₹
+                                        </div>
+                                    </s>
+                                )
+                            )
                     }
                 </div>
             </div>
