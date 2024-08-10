@@ -309,7 +309,8 @@ const api = createApi({
                 method:"POST",
                 credentials:"include",
                 body:{orderItems, totalPrice, coupon, transactionId, status, shippingType, message, parent}
-            })
+            }),
+            invalidatesTags:["MyCartProducts"]
         }),
         myOrders:builder.query({
             query:() => ({
