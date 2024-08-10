@@ -12,12 +12,12 @@ import DialogWrapper from "../components/DialogWrapper";
 
 
 const Cart = () => {
-    //let totalAmount:number = 0;
     const cartData:{
         isLoading:boolean;
-        data?:{success:boolean; message:{products:{productID:ProductTypes; quantity:number;}[], totalPrice:number;}};
+        data?:{success:boolean; message:{products:{productID:ProductTypes; quantity:number;}[]; totalPrice:number;}};
         error?:FetchBaseQueryError|SerializedError;
     } = useFetchMyCartQuery("");
+    const [includedProducts, setIncludedProducts] = useState<{[key:string]:boolean;}>({});
     const [getSingleCoupon] = useGetSingleCouponMutation();
     const [hideHeader, setHideHeader] = useState<boolean>(false);
     const [code, setCode] = useState<string>("");
@@ -28,6 +28,7 @@ const Cart = () => {
     const navigate = useNavigate();
     const [summeryData, setSummeryData] = useState<{_id:string; name:string; quantity:number; price:number;}[]>([]);
     const [totalAmount, setTotalAmount] = useState<number>(0);
+    const [oneTimeRefresh, setOneTimeRefresh] = useState<number>(0);
 
     
 
@@ -51,10 +52,10 @@ const Cart = () => {
             navigate("/user/address", {state:{
                 amount:amount,
                 quantity:1,
-                orderItems:cartData.data?.message.products.map((item) => ({
-                        productID:item.productID._id,
-                        quantity:item.quantity
-                    }))
+                orderItems:cartData.data?.message.products.filter((item) => includedProducts[item.productID._id]).map((item) => ({
+                    productID:item.productID._id,
+                    quantity:item.quantity
+                }))
                 ,
                 totalPrice:amount,
                 coupon:singleCoupon?._id,
@@ -65,15 +66,20 @@ const Cart = () => {
         }
     };
 
-    
     useEffect(() => {
-        console.log("isse useEffect ke ander likhna hai......1");
+        if (oneTimeRefresh < 3) {
+            cartData.data?.message.products.forEach((item) => {
+                setIncludedProducts((prev) => ({...prev, [item.productID._id]:true}))
+            })
+            setOneTimeRefresh((prev) => prev+1);
+        }
+    }, [totalAmount]);
+    useEffect(() => {
         cartData.data?.message.products.forEach((item) => {
-            setTotalAmount((prev) => prev + (item.productID.price * item.quantity));
+            setTotalAmount((prev) => prev+(item.productID.price * item.quantity));
         });
-        console.log("isse useEffect ke ander likhna hai......2");
     }, [cartData.data, cartData.isLoading, cartData.error]);
-    
+        
     useEffect(() => {
         const summeryDataLoc = cartData.data?.message.products.map((item1) => {
                 return {_id:item1.productID._id, name:item1.productID.name, quantity:item1.quantity, price:item1.productID.price}
@@ -94,6 +100,7 @@ const Cart = () => {
         <div className="cart_bg">
             <DialogWrapper Element={<SummeryComponent data={summeryData} totalAmount={totalAmount} />} toggler={summeryDialogToggle} setToggler={setSummeryDialogToggle} />
 
+            <pre>{JSON.stringify(includedProducts, null, `\t`)}</pre>
 
 
             <div className="access_bar_bg" style={{bottom:hideHeader?"-12%":"0%"}}>
@@ -162,7 +169,19 @@ const Cart = () => {
                             <ItemNotFound heading={"Cart is empty"} statusCode={204} />
                             :
                             cartData.data?.message?.products.map((product) => (
-                                <SingleProductTemplate key={product.productID._id} productID={product.productID._id} category={product.productID.category} name={product.productID.name} price={product.productID.price} quantity={product.quantity} rating={product.productID.rating} description={product.productID.description} photo={product.productID.images[0]} parent="cart" />
+                                <SingleProductTemplate key={product.productID._id}
+                                                       productID={product.productID._id}
+                                                       category={product.productID.category}
+                                                       name={product.productID.name}
+                                                       price={product.productID.price}
+                                                       quantity={product.quantity}
+                                                       rating={product.productID.rating}
+                                                       description={product.productID.description}
+                                                       photo={product.productID.images[0]}
+                                                       parent="cart"
+                                                       setTotalAmount={setTotalAmount}
+                                                       includedProducts={includedProducts}
+                                                       setIncludedProducts={setIncludedProducts} />
                             ))
 
             }

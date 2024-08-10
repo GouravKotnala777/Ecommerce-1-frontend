@@ -9,7 +9,7 @@ import unknownProductImg from "/public/unknownProduct.png";
 import ImageWithFallback from "./ImageWithFallback";
 //import {Toaster} from "react-hot-toast";
 import HandleMutationRes from "./HandleMutationRes";
-import { useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import { MutationResTypes } from "../assets/demoData";
 import Spinner from "./Spinner";
 
@@ -24,10 +24,14 @@ interface SingleProductTemplatePropTypes{
     description?:string;
     photo:string;
     parent:string;
+
+    setTotalAmount?:(value: SetStateAction<number>) => void;
+    includedProducts?:{[key:string]:boolean;};
+    setIncludedProducts?:Dispatch<SetStateAction<{[key:string]:boolean;}>>
 }
 
 
-const SingleProductTemplate = ({productID, userWishlist, category, name, price, quantity, rating, description, photo, parent}:SingleProductTemplatePropTypes) => {
+const SingleProductTemplate = ({productID, userWishlist, category, name, price, quantity, rating, description, photo, parent, setTotalAmount, includedProducts, setIncludedProducts}:SingleProductTemplatePropTypes) => {
     const [addRemoveFromWishlist] = useAddRemoveFromWishlistMutation();
     const [addRemoveFromWishlistRes, setAddRemoveFromWishlistRes] = useState<MutationResTypes>();
 
@@ -43,6 +47,18 @@ const SingleProductTemplate = ({productID, userWishlist, category, name, price, 
             console.log("----- error addRemoveFromWishlistHandler");   
         }
     };
+
+    const includeProductHandler = (e:ChangeEvent<HTMLInputElement>) => {
+        if (setTotalAmount) {
+            if (e.target.checked === true) {
+                setTotalAmount((prev) => prev + (price! * quantity!))
+            }
+            else{
+                setTotalAmount((prev) => prev - (price! * quantity!))
+            }
+        }
+        includedProducts && setIncludedProducts && setIncludedProducts({...includedProducts, [e.target.name]:e.target.checked})
+    }
 
     return(
         <>
@@ -128,7 +144,7 @@ const SingleProductTemplate = ({productID, userWishlist, category, name, price, 
                                             userWishlist?.includes(productID as string) ?
                                             <input type="checkbox" />
                                             :
-                                            <input type="checkbox" />
+                                            <input type="checkbox" name={`${productID}`} defaultChecked onChange={(e) => includeProductHandler(e)} />
                                         }
                                         {
                                             userWishlist?.includes(productID as string) ?
