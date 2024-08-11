@@ -5,6 +5,7 @@ import { ProductTypes } from "../assets/demoData";
 import SingleProductTemplate from "../components/SingleProductTemplate";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Form, { FormFieldTypes } from "../components/Form";
+//import Spinner from "../components/Spinner";
 
 
 //const onPriceChange = {min:0, max:1000};
@@ -81,33 +82,45 @@ let skip:number = 0;
 
 const SearchedProducts = () => {
     const {searchQry} = useParams();
-    //const searchedProducts:{data?:{message:ProductTypes[];}} = useSearchProductsQuery({searchQry:searchQry as string});
     const [searchedProducts] = useSearchProductsMutation();
     const [products, setProducts] = useState<ProductTypes[]>([]);
     const [aa, setAa] = useState<{minPrice:number; maxPrice:number;}>({minPrice:0, maxPrice:10000});
     const [filter, setFilter] = useState<{category:string; sub_category:string; brand:string; price:{minPrice?:number; maxPrice?:number;}}>({category:"", sub_category:"", brand:"", price:{minPrice:0, maxPrice:10000}});
-    const [isLoading, setIsLoading] = useState(false);
     const searchedProductsBg = useRef<HTMLDivElement>(null);
-    //const [skip, setSkip] = useState<number>(0);
+    const fetchAgainRef = useRef<boolean>(true);
 
 
     const filterChangeHandler = (e:ChangeEvent<HTMLSelectElement|HTMLInputElement|HTMLTextAreaElement>) => {
         setFilter({...filter, [e.target.name]:e.target.value});
     };
 
-    const func = async() => {
+    const firstTimeFetching = async() => {
         try {
-            const searchedProductsRes:{data?:{message:ProductTypes[];}} = await searchedProducts({searchQry:searchQry as string, skip:skip, category:filter.category, sub_category:filter.sub_category, brand:filter.brand, price:{minPrice:aa.minPrice, maxPrice:aa.maxPrice}});
+            const searchedProductsRes:{data?:{message:ProductTypes[];}} = await searchedProducts({searchQry:searchQry as string, skip:skip, limit:5, category:filter.category, sub_category:filter.sub_category, brand:filter.brand, price:{minPrice:aa.minPrice, maxPrice:aa.maxPrice}});
 
-            setProducts(searchedProductsRes.data?.message as ProductTypes[]);
-            console.log("------- Func1");
-            console.log(searchedProductsRes);
-            console.log("------- Func1");
-            
+            if (searchedProductsRes.data?.message && searchedProductsRes.data?.message.length > 4) {
+                setProducts((prev) => [...prev, ...searchedProductsRes.data?.message as ProductTypes[]]);
+                console.log("------- firstTimeFetching1");
+                console.log(searchedProductsRes);
+                console.log("------- firstTimeFetching1");
+                fetchAgainRef.current = true;
+            }
+            else if (searchedProductsRes.data?.message && searchedProductsRes.data?.message.length <= 4) {
+                if (fetchAgainRef.current === true) {
+                    setProducts((prev) => [...prev, ...searchedProductsRes.data?.message as ProductTypes[]]);
+                    console.log("------- firstTimeFetching2");
+                    console.log(searchedProductsRes);
+                    console.log("------- firstTimeFetching2");
+                    fetchAgainRef.current = false;
+                }
+                else{
+                    console.log(":::::::::::::");
+                }
+            }
         } catch (error) {
-            console.log("------- Func1");
+            console.log("------- firstTimeFetching error");
             console.log(error);
-            console.log("------- Func1");
+            console.log("------- firstTimeFetching error");
             
         }
 
@@ -116,18 +129,10 @@ const SearchedProducts = () => {
     useEffect(() => {
         const handleScroll = () => {
             if (searchedProductsBg.current) {
-                //console.log("DDDDDDDDDDDDDDDDDD");
-                
                 const productsCont = searchedProductsBg.current;
-
-                //console.log(productsCont.scrollTop + productsCont.clientHeight+5, productsCont.scrollHeight);
-                
-                
                 if (productsCont.scrollTop + productsCont.clientHeight+5 >= productsCont.scrollHeight) {
-                    //setSkip(Number(skip)+1);
                     skip = skip+1;
-                    //console.log({skip});
-                    fetchMoreProducts();
+                    firstTimeFetching();
                 }
             }
         };
@@ -145,41 +150,17 @@ const SearchedProducts = () => {
     }, []);
 
 
-    const fetchMoreProducts = async() => {
-        try {
-            if (isLoading) return;
-    
-            setIsLoading(true);
-            
-
-            const searchedProductsRes:{data?:{message:ProductTypes[];}} = await searchedProducts({searchQry:searchQry as string, skip:skip, category:filter.category, sub_category:filter.sub_category, brand:filter.brand, price:{minPrice:aa.minPrice, maxPrice:aa.maxPrice}});
-
-            setProducts((prev) => [...prev, ...searchedProductsRes.data?.message as ProductTypes[]]);
-            console.log("------- Func2");
-            console.log(searchedProductsRes);
-            console.log("------- Func2");
-
-            setIsLoading(false);
-            
-        } catch (error) {
-            console.log("------- Func2");
-            console.log(error);
-            console.log("------- Func2");
-            
-        }
-    };
-
     useEffect(() => {
-        func();
+        firstTimeFetching();
     }, []);
     
 
     return (
         <div ref={searchedProductsBg} id="searched_products_bg" className="searched_products_bg">
             <div className="filters_cont">
-                {/*{skip}*/}
-                <Form heading="Filter" formFields={formFields} onChangeHandler={(e) => filterChangeHandler(e)} onClickHandler={func} aa={aa} setAa={setAa} />
-                <button onClick={func}>Filter</button>
+                {JSON.stringify(fetchAgainRef.current)}
+                <Form heading="Filter" formFields={formFields} onChangeHandler={(e) => filterChangeHandler(e)} onClickHandler={firstTimeFetching} aa={aa} setAa={setAa} />
+                <button onClick={firstTimeFetching}>Filter</button>
             </div>
             <div id="products_cont" className="products_cont">
                 {
@@ -187,8 +168,10 @@ const SearchedProducts = () => {
                         <SingleProductTemplate key={index} parent="singleProduct" name={name} price={price} quantity={1} category={category} description={description} rating={rating} productID={_id} photo={images[0]} />
                     ))
                 }
+                {/*{isLoading && <h1>HHHHHHHHHHHHHHHHHH</h1>}*/}
+
+                {/*<Spinner type={1} width={30} thickness={3} />*/}
             </div>
-            {isLoading && <p>Loading more products...</p>}
         </div>
     )
 };
