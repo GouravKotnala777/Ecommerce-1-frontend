@@ -27,7 +27,6 @@ import SearchedProducts from './pages/SearchedProducts'
 import { GoReport } from 'react-icons/go'
 import DialogWrapper from './components/DialogWrapper'
 import Form from './components/Form'
-import Footer from './components/Footer'
 import VerifyEmail from './pages/VerifyEmail'
 import MyOrders from './pages/MyOrders'
 
@@ -79,7 +78,6 @@ const App = () => {
               <Route path="/admin/coupon" element={<Coupons />} />
             </Routes>
 
-            <Footer />
           </BrowserRouter>
 
           <div className="bug_report_cont" onClick={() => setReportDialogToggle(true)}>
