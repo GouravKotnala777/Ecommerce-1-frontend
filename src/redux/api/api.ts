@@ -148,11 +148,11 @@ const api = createApi({
             })
         }),
         searchProducts:builder.mutation({
-            query:({searchQry, skip, category, sub_category, brand, price}:{searchQry:string; skip:number; category:string; sub_category:string; brand:string; price:{minPrice:number; maxPrice:number;}}) => ({
+            query:({searchQry, limit, skip, category, sub_category, brand, price}:{searchQry:string; limit:number; skip:number; category:string; sub_category:string; brand:string; price:{minPrice:number; maxPrice:number;}}) => ({
                 url:`/api/v1/product/search/${searchQry}?skip=${skip}`,
                 method:"POST",
                 credentials:"include",
-                body:{category, sub_category, brand, price}
+                body:{category, sub_category, brand, price, limit}
             })
         }),
         addToCart:builder.mutation({
