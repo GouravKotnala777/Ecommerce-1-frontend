@@ -8,7 +8,7 @@ const Pagination = ({documentCount, skip, setSkip}:{documentCount:number; skip:n
     const numGenerator = (count:number) => {
         const arr = [];
         for (let num = 1; num <= count+1; num++) {
-            arr.push(<button style={{
+            arr.push(<button key={num} style={{
                 background:skip+1 === num ? "rgba(255, 69, 100, 0.9)" : "white",
                 color:skip+1 === num ? "white" : "rgb(255, 69, 100)"
             }} onClick={() => setSkip(num-1)}>{num}</button>);
