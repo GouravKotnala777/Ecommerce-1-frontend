@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import Sidebar from "./Sidebar";
 
 
-const Header = () => {
+const Header = ({userName}:{userName?:string;}) => {
     const [hideHeader, setHideHeader] = useState<boolean>(false);
     const previousScrollPos = useRef<number>(0);
     const [isHamActive, setIsHamActive] = useState<boolean>(false);
@@ -58,6 +58,7 @@ const Header = () => {
                     <GiHamburgerMenu className="GiHamburgerMenu" />
                 </div>
                 <div className="right_part_mobile">
+                    <div className="username">{userName&& `Hi ${userName}`}</div>
                     <img src={logo} alt={logo} />
                 </div>
                 <Sidebar isHamActive={isHamActive} setIsHamActive={setIsHamActive} />

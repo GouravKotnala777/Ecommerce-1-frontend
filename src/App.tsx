@@ -55,7 +55,7 @@ const App = () => {
         <>
           <BrowserRouter>
             <DialogWrapper toggler={reportDialogToggle} setToggler={setReportDialogToggle} Element={<Form heading="Write Bug Report" formFields={formFields} onChangeHandler={(e) => setMessage(e.target.value)} onClickHandler={onClickHandler} />} />
-            <Header />
+            <Header userName={myProfileData.data?.message.name} />
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/product/new" element={<AddProduct />} />

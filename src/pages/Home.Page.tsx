@@ -61,9 +61,11 @@ const Home = () => {
         e.stopPropagation();
         const homeBg = document.getElementById("home_bg");
         const productSuggessionCont = document.getElementById("product_suggession_cont");
-        console.log("click overlay1");
-        (homeBg as HTMLElement).classList.remove("add_overlay");
-        (homeBg as HTMLElement).classList.remove("freeze");
+        if ((homeBg as HTMLElement).classList.contains("add_overlay")) {
+            (homeBg as HTMLElement).classList.remove("add_overlay");
+            (homeBg as HTMLElement).classList.remove("freeze");
+        }
+        
         if (productSuggessionCont) {
             productSuggessionCont.style.display = "none";
         }
@@ -104,7 +106,7 @@ const Home = () => {
             <div id="home_bg" className="home_bg" onClick={(e) => {onClickOverlay(e)}}>
                 {
                     allProducts.data?.message &&
-                        <div className="home_sub_accessbar" onClick={() => {console.log("bbbbbbbbbbbb")}}>
+                        <div className="home_sub_accessbar">
                             <div className="search_inp_cont">
                                 <input value={searchQry} type="text" id="search_inp" name="search_inp" onFocus={(e) => onFocusSearchInp(e)} onBlur={(e) => onBlurSearchInp(e)} onClick={(e) => {e.stopPropagation()}} className="search_inp" placeholder="Search..." onChange={(e) => searchInpChangeHandler(e)} />
                                 <button id="search_btn" onClick={searchClickHandler}>Go</button>
