@@ -20,6 +20,7 @@ const Sidebar = ({isHamActive, setIsHamActive}:{isHamActive:boolean; setIsHamAct
                     <NavLink className="sidebar_navlink" to="/product/new" onClick={closeSidebarHandler}>Add Product</NavLink>
                     <NavLink className="sidebar_navlink" to="/user/wishlist" onClick={closeSidebarHandler}>Wishlist</NavLink>
                     <NavLink className="sidebar_navlink" to="/admin/dashboard" onClick={closeSidebarHandler}>Dashboard</NavLink>
+                    <NavLink className="sidebar_navlink" to="/user/orders" onClick={closeSidebarHandler}>Orders</NavLink>
                     <NavLink className="sidebar_navlink" to="/user/cart" onClick={closeSidebarHandler}>Cart</NavLink>
                     <NavLink className="sidebar_navlink" to="/user/logout" onClick={closeSidebarHandler}>Logout</NavLink>
                 </div>
