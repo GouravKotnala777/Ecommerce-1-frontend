@@ -1,7 +1,7 @@
 import { Dispatch, ReactElement, useEffect, useRef } from "react";
 import "../styles/components/dialog_wrapper.scss";
-import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
-import { useDispatch } from "react-redux";
+//import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+//import { useDispatch } from "react-redux";
 
 interface DialogWrapperTypes {
     toggler:boolean;
@@ -11,7 +11,7 @@ interface DialogWrapperTypes {
 
 const DialogWrapper = ({toggler, setToggler, Element}:DialogWrapperTypes) => {
     const parentDivRef = useRef<HTMLDivElement|null>(null);
-    const dispatch = useDispatch();
+    //const dispatch = useDispatch();
 
     useEffect(() => {
         const aaa = () => {
@@ -36,12 +36,12 @@ const DialogWrapper = ({toggler, setToggler, Element}:DialogWrapperTypes) => {
 
 
     const close = () => {
-        if (typeof setToggler === "function" && "type" in setToggler){
-            dispatch((setToggler as ActionCreatorWithPayload<boolean, "miscReducer/setIsReviewDialogActive">)(false));
-        }
-        else{
+        //if (typeof setToggler === "function" && "type" in setToggler){
+        //    dispatch((setToggler as ActionCreatorWithPayload<boolean, "miscReducer/setIsReviewDialogActive">)(false));
+        //}
+        //else{
             setToggler(false);
-        }
+        //}
     };
 
     return(
