@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 
 interface DialogWrapperTypes {
     toggler:boolean;
-    setToggler:Dispatch<React.SetStateAction<boolean>>|ActionCreatorWithPayload<boolean, "miscReducer/setIsReviewDialogActive">;
+    setToggler:Dispatch<React.SetStateAction<boolean>>;
     Element:ReactElement;
 }
 

@@ -30,6 +30,7 @@ interface Aa {
 				}
 			],
 			totalPrice:number;
+            createdAt:Date;
 		}
 	]
 }
@@ -40,7 +41,8 @@ const productTableHeadings = [
     {th:"Price", isEditable:false},
     {th:"transactionId", isEditable:false},
     {th:"status", isEditable:false},
-    {th:"message", isEditable:false},
+    //{th:"message", isEditable:false},
+    //{th:"shippingType", isEditable:false},
 ];
 
 const MyOrders = () => {
@@ -51,11 +53,11 @@ const MyOrders = () => {
     } = useMyOrdersQuery("");
     const [list, setList] = useState<{ [key: string]:UpdateProductBodyType;}>({});
 
-    const dataTransformer:() => UpdateProductBodyType[]|undefined = () => {
+    const dataTransformer:() => UpdateProductBodyType[]|undefined = () => {        
         return myOrders.data?.message.flatMap((item) => {
             const vv = item?.paymentInfo;
             return item.orderItems.map((item2) => {
-                return {_id:item2?.productID?._id, name:item2?.productID?.name, price:item2?.productID?.price, images:(item2?.productID?.images as string[])[0], ...vv}
+                return {_id:item2?.productID?._id, name:item2?.productID?.name, price:item2?.productID?.price, images:(item2?.productID?.images as string[])[0], createdAt:item.createdAt, ...vv}
             })
         });
     }
@@ -63,6 +65,8 @@ const MyOrders = () => {
 
     return(
         <div className="my_orders_bg">
+            {/*<pre>{JSON.stringify(dataTransformers, null, `\t`)}</pre>*/}
+            <div className="heading" style={{padding:"4px 4px", fontWeight:"bold"}}>My Orders</div>
             {
                 myOrders.isLoading ?
                     <h1>Loading...</h1>
@@ -75,7 +79,7 @@ const MyOrders = () => {
                         <ItemNotFound heading={myOrders.error?.data.message as string} statusCode={myOrders.error.status as number} />
                         :
                         myOrders.data?.success ?
-                            <Table data={dataTransformers as { [key: string]: string|string[]; _id: string; }[]} list={list} setList={setList} thead={productTableHeadings} hideEditBtn={false} />
+                            <Table data={dataTransformers as { [key: string]: string|string[]; _id: string; }[]} list={list} setList={setList} thead={productTableHeadings} hideEditBtn={true} />
                             :
                             <ItemNotFound heading={"You have not ordered anything yet!"} statusCode={204} />
 

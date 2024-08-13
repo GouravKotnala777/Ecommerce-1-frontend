@@ -1,11 +1,13 @@
 import "../styles/components/table.scss";
 import { RiStockLine } from "react-icons/ri";
 import photo from "/vite.svg";
-import { ChangeEvent, Dispatch, useState } from "react";
+import { ChangeEvent, Dispatch, MouseEvent, useState } from "react";
 import { useUpdateProductMutation } from "../redux/api/api";
 import { MutationResTypes } from "../assets/demoData";
 import HandleMutationRes from "./HandleMutationRes";
 import { BsInfoSquare } from "react-icons/bs";
+import DialogWrapper from "./DialogWrapper";
+import SingleProductTemplate from "./SingleProductTemplate";
 //import { FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta, MutationDefinition } from "@reduxjs/toolkit/query";
 //import { BaseQueryFn } from "@reduxjs/toolkit/query";
 
@@ -44,12 +46,32 @@ interface TablePropTypes<T1>{
     }>>,
     hideEditBtn?:boolean;
 }
+interface SingleOrderInfoTypes{
+    productID?:string;
+    category?:string;
+    name?:string;
+    price?:number;
+    quantity?:number;
+    rating?:number;
+    description?:string;
+    photo:string;
+    parent:string;
+
+    orderID?:string;
+    transactionId?:string;
+    shippingType:string;
+    status?:string;
+    message?:string;
+    createdAt?:string;
+}
 
 
 
 const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, data, list, setList, hideEditBtn}:TablePropTypes<T1>) => {
     const [updateProduct] = useUpdateProductMutation();
     const [outStockRes, setOutStockRes] = useState<MutationResTypes>();
+    const [isOrderInfoDialogOpen, setIsOrderInfoDialogOpen] = useState<boolean>(false);
+    const [orderNumber, setOrderNumber] = useState<number>(0);
 
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement>, productID:string) => {
         setList({...list, [productID]:{...list[productID], [e.target.name.toLowerCase()]:e.target.value}})
@@ -76,10 +98,15 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
             console.log("::::::::::::::::::");
         }
     };
-
+    const showOrderInfo = (e:MouseEvent<HTMLButtonElement>) => {
+        setOrderNumber(Number(e.currentTarget.value));
+        setIsOrderInfoDialogOpen(true);
+    }
 
     return(
         <div className="table_bg">
+            {/*<pre>{JSON.stringify(data, null, `\t`)}</pre>*/}
+            <DialogWrapper Element={<SingleOrderInfo parent="orders" orderID={data?.[orderNumber]._id} name={data?.[orderNumber].name as string} price={Number(data?.[orderNumber].price as string)} quantity={1} rating={Number(data?.[orderNumber].price as string)} description="aaaaaa" photo={""} transactionId={data?.[orderNumber].transactionId as string} shippingType={data?.[orderNumber].shippingType as string} status={data?.[orderNumber].status as string} message={data?.[orderNumber].message as string} createdAt={data?.[orderNumber].createdAt as string} />} toggler={isOrderInfoDialogOpen} setToggler={setIsOrderInfoDialogOpen} />
             <HandleMutationRes res={outStockRes} />
             <div className="table">
                 {/*<pre>{JSON.stringify(data[0].images[0], null, `\t`)}</pre>*/}
@@ -92,11 +119,11 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
                         ))
                     }
                     {
-                        hideEditBtn &&
+                        !hideEditBtn &&
                             <div className="th">Fill</div>
                     }
                     {
-                        !hideEditBtn &&
+                        hideEditBtn &&
                             <div className="th">View</div>
                     }
                 </div>
@@ -115,12 +142,12 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
                                 ))
                             }
                             {
-                                hideEditBtn &&
-                                    <div className="td update_btn" onClick={() => onClickHandler(product._id)}><RiStockLine /></div>
+                                !hideEditBtn &&
+                                    <button className="td update_btn" onClick={() => onClickHandler(product._id)}><RiStockLine /></button>
                             }
                             {
-                                !hideEditBtn &&
-                                    <div className="td update_btn" onClick={() => onClickHandler(product._id)}><BsInfoSquare/></div>
+                                hideEditBtn &&
+                                    <button className="td update_btn" value={index} onClick={(e) => showOrderInfo(e)}><BsInfoSquare/></button>
                             }
                         </div>
                     ))
@@ -130,6 +157,18 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
         </div>
     )
 };
+
+
+const SingleOrderInfo = ({ parent, name, price, quantity, rating, orderID, description, photo, transactionId, shippingType, status, message, createdAt}:SingleOrderInfoTypes) => {
+
+    return(
+        <div className="single_order_cont" onClick={(e) => e.stopPropagation()}>
+            <div className="single_order_scrollable">
+                <SingleProductTemplate parent={parent} name={name} price={price} quantity={quantity} rating={rating} productID={orderID} description={description} photo={photo} transactionId={transactionId} shippingType={shippingType} status={status} message={message} createdAt={createdAt} />
+            </div>
+        </div>
+    )
+}
 
 export default Table;
 

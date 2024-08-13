@@ -25,13 +25,20 @@ interface SingleProductTemplatePropTypes{
     photo:string;
     parent:string;
 
+
+    transactionId?:string;
+    shippingType?:string;
+    status?:string;
+    message?:string;
+    createdAt?:string;
+
     setTotalAmount?:(value: SetStateAction<number>) => void;
     includedProducts?:{[key:string]:boolean;};
     setIncludedProducts?:Dispatch<SetStateAction<{[key:string]:boolean;}>>
 }
 
 
-const SingleProductTemplate = ({productID, userWishlist, category, name, price, quantity, rating, description, photo, parent, setTotalAmount, includedProducts, setIncludedProducts}:SingleProductTemplatePropTypes) => {
+const SingleProductTemplate = ({productID, userWishlist, category, name, price, quantity, rating, description, photo, parent, transactionId, shippingType, status, message, createdAt,        setTotalAmount, includedProducts, setIncludedProducts}:SingleProductTemplatePropTypes) => {
     const [addRemoveFromWishlist] = useAddRemoveFromWishlistMutation();
     const [addRemoveFromWishlistRes, setAddRemoveFromWishlistRes] = useState<MutationResTypes>();
 
@@ -124,40 +131,46 @@ const SingleProductTemplate = ({productID, userWishlist, category, name, price, 
                                 </NavLink>
                             </div>
                             <div className="right_part">
-                                <div className="upper_part">
-                                    <div className="wishlist_cont">
-                                        {
-                                            userWishlist?.includes(productID as string) ?
-                                            <BiSolidHeart className="BiHeart" color="rgb(255, 69, 100)" onClick={addRemoveFromWishlistHandler} />
-                                            :
-                                            <BiHeart className="BiHeart" color="rgb(255, 69, 100)" onClick={addRemoveFromWishlistHandler} />
-                                        }
-                                        {
-                                            userWishlist?.includes(productID as string) ?
-                                                <span>Remove from wishlist</span>
-                                                :
-                                                <span>Add to wishlist</span>
-                                        }
-                                    </div>
-                                    <div className="include_cont">
-                                        {
-                                            userWishlist?.includes(productID as string) ?
-                                            <input type="checkbox" />
-                                            :
-                                            <input type="checkbox" name={`${productID}`} defaultChecked onChange={(e) => includeProductHandler(e)} />
-                                        }
-                                        {
-                                            userWishlist?.includes(productID as string) ?
-                                                <span>Include</span>
-                                                :
-                                                <span>Exclude</span>
-                                        }
-                                    </div>
-                                </div>
+                                {
+                                    parent !== "orders" &&
+                                        <div className="upper_part">
+                                            <div className="wishlist_cont">
+                                                {
+                                                    userWishlist?.includes(productID as string) ?
+                                                    <BiSolidHeart className="BiHeart" color="rgb(255, 69, 100)" onClick={addRemoveFromWishlistHandler} />
+                                                    :
+                                                    <BiHeart className="BiHeart" color="rgb(255, 69, 100)" onClick={addRemoveFromWishlistHandler} />
+                                                }
+                                                {
+                                                    userWishlist?.includes(productID as string) ?
+                                                        <span>Remove from wishlist</span>
+                                                        :
+                                                        <span>Add to wishlist</span>
+                                                }
+                                            </div>
+                                            <div className="include_cont">
+                                                {
+                                                    userWishlist?.includes(productID as string) ?
+                                                    <input type="checkbox" />
+                                                    :
+                                                    <input type="checkbox" name={`${productID}`} defaultChecked onChange={(e) => includeProductHandler(e)} />
+                                                }
+                                                {
+                                                    userWishlist?.includes(productID as string) ?
+                                                        <span>Include</span>
+                                                        :
+                                                        <span>Exclude</span>
+                                                }
+                                            </div>
+                                        </div>
+                                }
                                 <div className="info_cont">
-                                    <div className="heading_values">
-                                        <span className="info_heading">Category</span><span className="info_value">{category}</span>
-                                    </div>
+                                    {
+                                        category &&
+                                            <div className="heading_values">
+                                                <span className="info_heading">Category</span><span className="info_value">{category}</span>
+                                            </div>
+                                    }
                                     <div className="heading_values">
                                         <span className="info_heading">Name</span><span className="info_value">{name}</span>
                                     </div>
@@ -177,12 +190,42 @@ const SingleProductTemplate = ({productID, userWishlist, category, name, price, 
                                                 <span className="info_heading">Description</span><span className="info_value">{description}</span>
                                             </div>
                                     }
+                                    {
+                                        parent === "orders" &&
+                                            <>
+                                                <div className="heading_values">
+                                                    <span className="info_heading">OrderID</span><span className="info_value">{productID?.split("").splice(10,22).join("")}</span>
+                                                </div>
+                                                <div className="heading_values">
+                                                    <span className="info_heading">TransactionID</span><span className="info_value">{transactionId?.split("").splice(10,22).join("")}</span>
+                                                </div>
+                                                <div className="heading_values">
+                                                    <span className="info_heading">Status</span><span className="info_value">{status}</span>
+                                                </div>
+                                                <div className="heading_values">
+                                                    <span className="info_heading">Shipping Type</span><span className="info_value">{shippingType}</span>
+                                                </div>
+                                                <div className="heading_values">
+                                                    <span className="info_heading">Message</span><span className="info_value">{message}</span>
+                                                </div>
+                                                <div className="heading_values">
+                                                    <span className="info_heading">Created At</span><span className="info_value">{createdAt?.split("T")[0]}</span>
+                                                </div>
+                                                <div className="heading_values">
+                                                    <span className="info_heading">Time</span><span className="info_value">{createdAt?.split("T")[1]}</span>
+                                                </div>
+                                            </>
+                                    }
                                 </div>
-                                <ProductBtnGroup
-                                    parent={parent}
-                                    productID={productID as string}
-                                    amount={price as number}
-                                    />
+
+                                {
+                                    parent !== "orders" &&
+                                        <ProductBtnGroup
+                                            parent={parent}
+                                            productID={productID as string}
+                                            amount={price as number}
+                                            />
+                                }
                             </div>
                         </div>
                 }
