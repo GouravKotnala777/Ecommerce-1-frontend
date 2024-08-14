@@ -44,10 +44,10 @@ const Form = ({heading, formFields, onChangeHandler, onClickHandler, aa, setAa}:
                             </select>
                             :
                             field.type === "file" ?
-                                <input type={field.type} name={field.name} placeholder={field.placeHolder} onChange={onChangeHandler} />
+                                <input key={index} type={field.type} name={field.name} placeholder={field.placeHolder} onChange={onChangeHandler} />
                                 :
                                 field.type === "text" || field.type === "number" ?
-                                    <input type={field.type} name={field.name} placeholder={field.placeHolder} onChange={onChangeHandler} />
+                                    <input key={index} type={field.type} name={field.name} placeholder={field.placeHolder} onChange={onChangeHandler} />
                                     :
                                     <></>
                     ))
