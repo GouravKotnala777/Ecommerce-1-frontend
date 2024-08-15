@@ -4,7 +4,7 @@ import { useRegisterMutation } from "../redux/api/api";
 import { MutationResTypes } from "../assets/demoData";
 import HandleMutationRes from "../components/HandleMutationRes";
 
-const formFields = [
+export const registerFormFields = [
     {type:"text", name:"name", placeHolder:"Name"},
     {type:"text", name:"email", placeHolder:"Email"},
     {type:"text", name:"mobile", placeHolder:"Mobile"},
@@ -39,7 +39,7 @@ const Register = () => {
     return(
         <div className="register_bg">
             <HandleMutationRes res={registerRes} />
-            <Form heading="Register" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler}  />
+            <Form heading="Register" formFields={registerFormFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler}  />
         </div>
     )
 };

@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import Register, { formFields } from "../../pages/Register.Page";
+import Register, { registerFormFields } from "../../pages/Register.Page";
 import { Provider } from "react-redux";
 import { store } from "../../redux/store";
 import { BrowserRouter } from "react-router-dom";
@@ -19,7 +19,7 @@ beforeEach(() => {
 })
 
 test("Render all input fields correctly in the Register form", () => {
-    formFields.forEach(field => {
+    registerFormFields.forEach(field => {
         const inputElement = screen.getByPlaceholderText(field.placeHolder);
         expect(inputElement).toBeInTheDocument();
         expect(inputElement).toHaveAttribute("type", field.type);
@@ -28,7 +28,7 @@ test("Render all input fields correctly in the Register form", () => {
 });
 
 test("Test onchange event of all input fields in the Register form", () => {
-    formFields.forEach(field => {
+    registerFormFields.forEach(field => {
         const inputElement = screen.getByPlaceholderText(field.placeHolder) as HTMLInputElement;
         fireEvent.change(inputElement, {target:{value:"a"}});
         expect(inputElement.value).toBe("a")
