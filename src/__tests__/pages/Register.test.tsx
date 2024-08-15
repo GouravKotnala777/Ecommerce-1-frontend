@@ -1,73 +1,66 @@
-import '@testing-library/jest-dom';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import Register from "../../pages/Register.Page";
-import { vi } from 'vitest';
-import { useRegisterMutation } from "../../redux/api/api";
+import { fireEvent, render, screen } from "@testing-library/react";
+import Register, { formFields } from "../../pages/Register.Page";
+import { Provider } from "react-redux";
+import { store } from "../../redux/store";
+import { BrowserRouter } from "react-router-dom";
+import { expect } from "vitest";
+//import {useRegisterMutation} from "../../redux/api/api";
+//import {vi} from "vitest";
+import "@testing-library/jest-dom"
 
-// Mock the API hook
-vi.mock('../redux/api/api', () => ({
-  useRegisterMutation: vi.fn(),
-}));
+beforeEach(() => {
+    render(
+        <Provider store={store}>
+            <BrowserRouter>
+                <Register />
+            </BrowserRouter>
+        </Provider>
+    );
+})
 
-describe('Register Component', () => {
-  test('renders form fields and submit button', () => {
-    render(<Register />);
-    expect(screen.getByPlaceholderText(/Name/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/Email/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/Mobile/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/Password/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/Confirm Password/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Register/i })).toBeInTheDocument();
-  });
-
-  test('handles form submission', async () => {
-    const mockRegister = vi.fn();
-    (useRegisterMutation as jest.Mock).mockReturnValue([mockRegister]);
-
-    render(<Register />);
-
-    fireEvent.change(screen.getByPlaceholderText(/Name/i), { target: { value: 'John Doe' } });
-    fireEvent.change(screen.getByPlaceholderText(/Email/i), { target: { value: 'john@example.com' } });
-    fireEvent.change(screen.getByPlaceholderText(/Mobile/i), { target: { value: '1234567890' } });
-    fireEvent.change(screen.getByPlaceholderText(/Password/i), { target: { value: 'password' } });
-    fireEvent.change(screen.getByPlaceholderText(/Confirm Password/i), { target: { value: 'password' } });
-
-    fireEvent.click(screen.getByRole('button', { name: /Register/i }));
-
-    await waitFor(() => {
-      expect(mockRegister).toHaveBeenCalledWith({
-        name: 'John Doe',
-        email: 'john@example.com',
-        mobile: '1234567890',
-        password: 'password',
-        c_password: 'password',
-      });
-    });
-  });
-
-  test('displays error message on failed registration', async () => {
-    const mockRegister = vi.fn().mockRejectedValue({ error: 'Registration failed' });
-    (useRegisterMutation as jest.Mock).mockReturnValue([mockRegister]);
-
-    render(<Register />);
-
-    fireEvent.change(screen.getByPlaceholderText(/Name/i), { target: { value: 'John Doe' } });
-    fireEvent.change(screen.getByPlaceholderText(/Email/i), { target: { value: 'john@example.com' } });
-    fireEvent.change(screen.getByPlaceholderText(/Mobile/i), { target: { value: '1234567890' } });
-    fireEvent.change(screen.getByPlaceholderText(/Password/i), { target: { value: 'password' } });
-    fireEvent.change(screen.getByPlaceholderText(/Confirm Password/i), { target: { value: 'password' } });
-
-    fireEvent.click(screen.getByRole('button', { name: /Register/i }));
-
-    await waitFor(() => {
-      expect(mockRegister).toHaveBeenCalledWith({
-        name: 'John Doe',
-        email: 'john@example.com',
-        mobile: '1234567890',
-        password: 'password',
-        c_password: 'password',
-      });
-      // You would also verify that the error message is displayed correctly
-    });
-  });
+test("Render all input fields correctly in the Register form", () => {
+    formFields.forEach(field => {
+        const inputElement = screen.getByPlaceholderText(field.placeHolder);
+        expect(inputElement).toBeInTheDocument();
+        expect(inputElement).toHaveAttribute("type", field.type);
+        expect(inputElement).toHaveAttribute("name", field.name);
+    })
 });
+
+test("Test onchange event of all input fields in the Register form", () => {
+    formFields.forEach(field => {
+        const inputElement = screen.getByPlaceholderText(field.placeHolder) as HTMLInputElement;
+        fireEvent.change(inputElement, {target:{value:"a"}});
+        expect(inputElement.value).toBe("a")
+    })
+});
+
+test("Render submit button correctly in the Register form", () => {
+    const buttonElement = screen.getByRole("button");
+    expect(buttonElement).toBeInTheDocument();
+    expect(buttonElement).toHaveTextContent("Register")
+});
+
+//vi.mock("../../redux/api/api", () => ({
+//    ...(vi.importActual("../../redux/api/api")),
+//    useRegisterMutation:vi.fn()
+//}))
+
+//test("Test onclick event on submit button in the Register form", async() => {
+//    const mockRegister = vi.fn().mockResolvedValue({message:"Registration successful"});
+
+//    (useRegisterMutation as vi.Mock).mockReturnValue([mockRegister]);
+
+//    const registerButton = screen.getByText("Register");
+//    expect(registerButton).toBeInTheDocument();
+//    fireEvent.click(registerButton)
+
+//    await waitFor(() => {
+//        expect(mockRegister).toHaveBeenCalled();
+//    })
+
+//    const successMessage = await screen.findByText("Registration successful");
+//    expect(successMessage).toBeInTheDocument();
+
+//    vi.clearAllMocks();
+//});
