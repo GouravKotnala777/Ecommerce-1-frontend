@@ -4,7 +4,7 @@ import { useLoginMutation } from "../redux/api/api";
 import HandleMutationRes from "../components/HandleMutationRes";
 import { MutationResTypes } from "../assets/demoData";
 
-const formFields = [
+export const loginFormFields = [
     {type:"text", name:"email", placeHolder:"Email"},
     {type:"text", name:"password", placeHolder:"Password"},
 ];
@@ -43,7 +43,7 @@ const Login = () => {
     return(
         <div className="login_bg">
             <HandleMutationRes res={loginRes} />
-            <Form heading="Login" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler}  />
+            <Form heading="Login" formFields={loginFormFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler}  />
         </div>
     )
 };
