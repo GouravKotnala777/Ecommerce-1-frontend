@@ -1,7 +1,7 @@
 import "../styles/pages/cart.scss";
 import { CouponTypes, ProductTypes } from "../assets/demoData";
 import SingleProductTemplate from "../components/SingleProductTemplate";
-import { useFetchMyCartQuery, useGetSingleCouponMutation } from "../redux/api/api";
+import { useGetSingleCouponMutation } from "../redux/api/api";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
@@ -11,12 +11,16 @@ import ItemNotFound from "../components/ItemNotFound";
 import DialogWrapper from "../components/DialogWrapper";
 
 
-const Cart = () => {
-    const cartData:{
-        isLoading:boolean;
-        data?:{success:boolean; message:{products:{productID:ProductTypes; quantity:number;}[]; totalPrice:number;}};
-        error?:FetchBaseQueryError|SerializedError;
-    } = useFetchMyCartQuery("");
+const Cart = ({cartData}:{cartData:{
+    isLoading:boolean;
+    data?:{success:boolean; message:{products:{productID:ProductTypes; quantity:number;}[]; totalPrice:number;}};
+    error?:FetchBaseQueryError|SerializedError;
+}}) => {
+    //const cartData:{
+    //    isLoading:boolean;
+    //    data?:{success:boolean; message:{products:{productID:ProductTypes; quantity:number;}[]; totalPrice:number;}};
+    //    error?:FetchBaseQueryError|SerializedError;
+    //} = useFetchMyCartQuery("");
     const [includedProducts, setIncludedProducts] = useState<{[key:string]:boolean;}>({});
     const [getSingleCoupon] = useGetSingleCouponMutation();
     const [hideHeader, setHideHeader] = useState<boolean>(false);

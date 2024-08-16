@@ -4,12 +4,22 @@ import { NavLink } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useEffect, useRef, useState } from "react";
 import Sidebar from "./Sidebar";
+//import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+//import { SerializedError } from "@reduxjs/toolkit";
+//import { useFetchMyCartQuery } from "../redux/api/api";
+//import { ProductTypes } from "../assets/demoData";
 
 
-const Header = ({userName}:{userName?:string;}) => {
+const Header = ({userName, cartNotification}:{userName?:string; cartNotification:number;}) => {
     const [hideHeader, setHideHeader] = useState<boolean>(false);
     const previousScrollPos = useRef<number>(0);
     const [isHamActive, setIsHamActive] = useState<boolean>(false);
+    //const {productsCount} = useSelector((state:{cartNotificationReducer:cartNotificationReducerTypes}) => state.cartNotificationReducer);
+    //const cartData:{
+    //    isLoading:boolean;
+    //    data?:{success:boolean; message:{products:{productID:ProductTypes; quantity:number;}[]; totalPrice:number;}};
+    //    error?:FetchBaseQueryError|SerializedError;
+    //} = useFetchMyCartQuery("");
     
     
 
@@ -48,7 +58,9 @@ const Header = ({userName}:{userName?:string;}) => {
                         <NavLink className="navlinks" to="/user/wishlist">Wishlist</NavLink>
                         <NavLink className="navlinks" to="/admin/dashboard">Dashboard</NavLink>
                         <NavLink className="navlinks" to="/user/orders">Orders</NavLink>
-                        <NavLink className="navlinks" to="/user/cart">Cart</NavLink>
+                        <NavLink className="navlinks cart_navlinks" to="/user/cart">
+                            {cartNotification !== 0 && cartNotification !== undefined && <div className="cart_notification">{cartNotification}</div>} Cart
+                        </NavLink>
                         <NavLink className="navlinks" to="/user/logout">Logout</NavLink>
                     </div>
                 </nav>

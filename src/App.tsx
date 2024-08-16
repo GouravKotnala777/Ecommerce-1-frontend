@@ -18,8 +18,8 @@ import UpdateProduct from './pages/admin/UpdateProduct'
 import Coupons from './pages/admin/Coupon'
 import StripePayment from './pages/Payment'
 import Address from './pages/Address.Page'
-import { useMyProfileQuery } from './redux/api/api'
-import { UserTypes } from './assets/demoData'
+import { useFetchMyCartQuery, useMyProfileQuery } from './redux/api/api'
+import { ProductTypes, UserTypes } from './assets/demoData'
 import { setLoggedInUser } from './redux/reducers/loggedInUserReducer'
 import IncompleteProducts from './pages/admin/IncompleteProducts'
 import ProductsOfSame from './pages/ProductsOfSame'
@@ -29,6 +29,9 @@ import DialogWrapper from './components/DialogWrapper'
 import Form from './components/Form'
 import VerifyEmail from './pages/VerifyEmail'
 import MyOrders from './pages/MyOrders'
+import Test from './Test'
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { SerializedError } from '@reduxjs/toolkit'
 
 
 const formFields = [
@@ -39,6 +42,11 @@ const App = () => {
   const myProfileData:{data?:{message:UserTypes}} = useMyProfileQuery("");
   const [reportDialogToggle, setReportDialogToggle] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
+  const cartData:{
+    isLoading:boolean;
+    data?:{success:boolean; message:{products:{productID:ProductTypes; quantity:number;}[]; totalPrice:number;}};
+    error?:FetchBaseQueryError|SerializedError;
+} = useFetchMyCartQuery("");
   const dispatch = useDispatch();
 
 
@@ -55,14 +63,15 @@ const App = () => {
         <>
           <BrowserRouter>
             <DialogWrapper toggler={reportDialogToggle} setToggler={setReportDialogToggle} Element={<Form heading="Write Bug Report" formFields={formFields} onChangeHandler={(e) => setMessage(e.target.value)} onClickHandler={onClickHandler} />} />
-            <Header userName={myProfileData.data?.message.name} />
+            <Header userName={myProfileData.data?.message.name} cartNotification={cartData.data?.message.products.reduce((acc, iter) => acc+iter.quantity, 0) as number} />
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/test" element={<Test />} />
               <Route path="/product/new" element={<AddProduct />} />
               <Route path="/user/register" element={<Register />} />
               <Route path="/user/login" element={<Login />} />
               <Route path="/user/logout" element={<Logout />} />
-              <Route path="/user/cart" element={<Cart />} />
+              <Route path="/user/cart" element={<Cart cartData={cartData} />} />
               <Route path="/user/orders" element={<MyOrders />} />
               <Route path="/product/pay" element={<StripePayment />} />
               <Route path="/product/search/:searchQry" element={<SearchedProducts />} />

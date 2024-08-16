@@ -42,6 +42,22 @@
                 text-decoration: none;
                 color: white;
             }
+            .cart_navlinks{
+                position: relative;
+                .cart_notification{
+                    position: absolute;
+                    top: -10px;
+                    right: -10px;
+                    background: white;
+                    color: #ff4b69;
+                    width: 16px;
+                    height: 16px;
+                    display: grid;
+                    place-items:center;
+                    border-radius: 50%;
+                    font-size: 0.5rem;
+                }
+            }
         }
     }
 
