@@ -103,46 +103,53 @@ const Home = () => {
 
     return(
         <>
+            <div className="heading" style={{padding:"4px 4px", fontWeight:"bold"}}>Home</div>
             <div id="home_bg" className="home_bg" onClick={(e) => {onClickOverlay(e)}}>
-                {
-                    allProducts.data?.message &&
-                        <div className="home_sub_accessbar">
-                            <div className="search_inp_cont">
-                                <input value={searchQry} type="text" id="search_inp" name="search_inp" onFocus={(e) => onFocusSearchInp(e)} onBlur={(e) => onBlurSearchInp(e)} onClick={(e) => {e.stopPropagation()}} className="search_inp" placeholder="Search..." onChange={(e) => searchInpChangeHandler(e)} />
-                                <button id="search_btn" onClick={searchClickHandler}>Go</button>
-                                <div id="product_suggession_cont" className="product_suggession_cont">
-                                    {
-                                        suggession?.map((item, index) => (
-                                            <div key={index} className="row" onClick={(e) => {onClickSuggessionHandler(e)}}>
-                                                <div className="col">
-                                                    <BiSearch />
-                                                </div>
-                                                <div className="col">
-                                                    <span className="span_left">{item.name.split(searchQry)[0]}</span>
-                                                    <span className="span_middle">{searchQry}</span>
-                                                    <span className="span_right">{item.name.split(searchQry)[1]}</span>
-                                                </div>
-                                            </div>
-                                        ))
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                }
-                {
-                    allProducts.isLoading ?
-                        <Spinner type={1} heading="Loading..." width={100} thickness={6} />
+            {
+                allProducts.isLoading ?
+                    //<h1>loading...</h1>
+                    <Spinner type={1} heading="Loading..." width={100} thickness={6} />
+                    :
+                    allProducts.error &&
+                    "data" in allProducts.error &&
+                    allProducts.error.data &&
+                    typeof allProducts.error.data === "object" &&
+                    "message" in allProducts.error.data ?
+                        <ItemNotFound heading={allProducts.error?.data.message as string} statusCode={allProducts.error.status as number} />
                         :
-                        allProducts.error &&
-                        "data" in allProducts.error &&
-                        allProducts.error.data &&
-                        typeof allProducts.error.data === "object" &&
-                        "message" in allProducts.error.data ?
-                            <ItemNotFound statusCode={allProducts.error.status as number} heading={allProducts.error?.data.message as string} />
+                        allProducts.data?.message ?
+                            allProducts.data?.message.length === 0 ?
+                                <ItemNotFound heading={"You have not ordered anything yet!"} statusCode={204} />
+                                :
+                                <>
+                                    <div className="home_sub_accessbar">
+                                        <div className="search_inp_cont">
+                                            <input value={searchQry} type="text" id="search_inp" name="search_inp" onFocus={(e) => onFocusSearchInp(e)} onBlur={(e) => onBlurSearchInp(e)} onClick={(e) => {e.stopPropagation()}} className="search_inp" placeholder="Search..." onChange={(e) => searchInpChangeHandler(e)} />
+                                            <button id="search_btn" onClick={searchClickHandler}>Go</button>
+                                            <div id="product_suggession_cont" className="product_suggession_cont">
+                                                {
+                                                    suggession?.map((item, index) => (
+                                                        <div key={index} className="row" onClick={(e) => {onClickSuggessionHandler(e)}}>
+                                                            <div className="col">
+                                                                <BiSearch />
+                                                            </div>
+                                                            <div className="col">
+                                                                <span className="span_left">{item.name.split(searchQry)[0]}</span>
+                                                                <span className="span_middle">{searchQry}</span>
+                                                                <span className="span_right">{item.name.split(searchQry)[1]}</span>
+                                                            </div>
+                                                        </div>
+                                                    ))
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <Products products={allProducts.data?.message} />     
+                                </>
                             :
-                            allProducts.data?.message.length !== 0 &&
-                                <Products products={allProducts.data?.message} />
-                }
+                            <ItemNotFound heading={"No Internet Connection!"} statusCode={523} />
+
+            }
                 {
                     allProducts.data?.message &&
                     <>

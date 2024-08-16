@@ -99,7 +99,7 @@ const Cart = () => {
     return(
         <div className="cart_bg">
             <DialogWrapper Element={<SummeryComponent data={summeryData} totalAmount={totalAmount} includedProducts={includedProducts} />} toggler={summeryDialogToggle} setToggler={setSummeryDialogToggle} />
-
+            <div className="heading" style={{padding:"4px 4px", fontWeight:"bold"}}>Cart</div>
             {/*<pre>{JSON.stringify(summeryData, null, `\t`)}</pre>*/}
 
 
@@ -165,24 +165,27 @@ const Cart = () => {
                     "message" in cartData.error.data ?
                         <ItemNotFound heading={cartData.error?.data.message as string} statusCode={cartData.error.status as number} />
                         :
-                        cartData.data?.message.products.length === 0 ?
-                            <ItemNotFound heading={"Cart is empty"} statusCode={204} />
+                        cartData.data?.message?.products ?
+                            cartData.data?.message.products.length === 0 ?
+                                <ItemNotFound heading={"Cart is empty"} statusCode={204} />
+                                :
+                                cartData.data?.message?.products.map((product) => (
+                                    <SingleProductTemplate key={product.productID._id}
+                                                        productID={product.productID._id}
+                                                        category={product.productID.category}
+                                                        name={product.productID.name}
+                                                        price={product.productID.price}
+                                                        quantity={product.quantity}
+                                                        rating={product.productID.rating}
+                                                        description={product.productID.description}
+                                                        photo={product.productID.images[0]}
+                                                        parent="cart"
+                                                        setTotalAmount={setTotalAmount}
+                                                        includedProducts={includedProducts}
+                                                        setIncludedProducts={setIncludedProducts} />
+                                ))
                             :
-                            cartData.data?.message?.products.map((product) => (
-                                <SingleProductTemplate key={product.productID._id}
-                                                       productID={product.productID._id}
-                                                       category={product.productID.category}
-                                                       name={product.productID.name}
-                                                       price={product.productID.price}
-                                                       quantity={product.quantity}
-                                                       rating={product.productID.rating}
-                                                       description={product.productID.description}
-                                                       photo={product.productID.images[0]}
-                                                       parent="cart"
-                                                       setTotalAmount={setTotalAmount}
-                                                       includedProducts={includedProducts}
-                                                       setIncludedProducts={setIncludedProducts} />
-                            ))
+                            <ItemNotFound heading={"No Internet Connection!"} statusCode={523} />
 
             }
         </div>

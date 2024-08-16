@@ -1,38 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Table from "../components/Table";
 import { UpdateProductBodyType, useMyOrdersQuery } from "../redux/api/api";
 import ItemNotFound from "../components/ItemNotFound";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { SerializedError } from "@reduxjs/toolkit";
+import Spinner from "../components/Spinner";
 
 interface Aa {
 	success: boolean;
-	message: [
-		{
-			paymentInfo?: {
-				transactionId:string;
-				status:string;
-				shippingType:string;
-				message:string;
-			},
-			_id:string;
-			userID:string;
-			orderItems: [
-				{
-					productID?: {
-						_id:string;
-						name?:string;
-						price?:number;
-                        images?:string[];
-					},
-					quantity:number;
-					_id:string;
-				}
-			],
-			totalPrice:number;
-            createdAt:Date;
-		}
-	]
+	message:{
+        paymentInfo?: {
+            transactionId:string;
+            status:string;
+            shippingType:string;
+            message:string;
+        },
+        _id:string;
+        userID:string;
+        orderItems:{
+                productID?: {
+                    _id:string;
+                    name?:string;
+                    price?:number;
+                    images?:string[];
+                },
+                quantity:number;
+                _id:string;
+        }[];
+        totalPrice:number;
+        createdAt:Date;
+	}[];
 }
 
 
@@ -52,6 +49,7 @@ const MyOrders = () => {
         error?:FetchBaseQueryError | SerializedError;
     } = useMyOrdersQuery("");
     const [list, setList] = useState<{ [key: string]:UpdateProductBodyType;}>({});
+    const [transformedData, setTransformedData] = useState<UpdateProductBodyType[]>([]);
 
     const dataTransformer:() => UpdateProductBodyType[]|undefined = () => {        
         return myOrders.data?.message.flatMap((item) => {
@@ -61,15 +59,22 @@ const MyOrders = () => {
             })
         });
     }
-    const dataTransformers = dataTransformer()
+    
+    useEffect(() => {
+        console.log("XXXXXXXXXXXXXXXXXXXX");
+        //dataTransformers = dataTransformer() as UpdateProductBodyType[]
+        setTransformedData(dataTransformer() as UpdateProductBodyType[])
+        console.log("XXXXXXXXXXXXXXXXXXXX");
+    }, []);
 
     return(
         <div className="my_orders_bg">
-            {/*<pre>{JSON.stringify(dataTransformers, null, `\t`)}</pre>*/}
+            {/*<pre>{JSON.stringify(transformedData, null, `\t`)}</pre>*/}
+            {/*<pre>{JSON.stringify(myOrders, null, `\t`)}</pre>*/}
             <div className="heading" style={{padding:"4px 4px", fontWeight:"bold"}}>My Orders</div>
             {
                 myOrders.isLoading ?
-                    <h1>Loading...</h1>
+                <Spinner type={1} heading="Loading..." width={100} thickness={6} />
                     :
                     myOrders.error &&
                     "data" in myOrders.error &&
@@ -78,10 +83,13 @@ const MyOrders = () => {
                     "message" in myOrders.error.data ?
                         <ItemNotFound heading={myOrders.error?.data.message as string} statusCode={myOrders.error.status as number} />
                         :
-                        myOrders.data?.success ?
-                            <Table data={dataTransformers as { [key: string]: string|string[]; _id: string; }[]} list={list} setList={setList} thead={productTableHeadings} hideEditBtn={true} />
+                        myOrders.data?.message ?
+                            myOrders.data?.message.length === 0 ?
+                                <ItemNotFound heading={"You have not ordered anything yet!"} statusCode={204} />
+                                :
+                                <Table data={transformedData as { [key: string]: string|string[]; _id: string; }[]} list={list} setList={setList} thead={productTableHeadings} hideEditBtn={true} />
                             :
-                            <ItemNotFound heading={"You have not ordered anything yet!"} statusCode={204} />
+                            <ItemNotFound heading={"No Internet Connection!"} statusCode={523} />
 
             }
         </div>
