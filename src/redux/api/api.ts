@@ -76,11 +76,11 @@ const api = createApi({
             })
         }),
         verifyEmail:builder.mutation({
-            query:({verificationToken, emailType}:{verificationToken:string; emailType:string;}) => ({
+            query:({verificationToken, emailType, newPassword}:{verificationToken:string; emailType:string; newPassword?:string;}) => ({
                 url:"/api/v1/user/verifyemail",
                 method:"POST",
                 credentials:"include",
-                body:{verificationToken, emailType}
+                body:{verificationToken, emailType, newPassword}
             })
         }),
         myProfile:builder.query({
@@ -97,6 +97,14 @@ const api = createApi({
                 method:"PUT",
                 credentials:"include",
                 body:{name, email, password, mobile, house, street, city, state, zip}
+            })
+        }),
+        forgetPassword:builder.mutation({
+            query:({email}:{email:string}) => ({
+                url:"/api/v1/user/forgetPassword",
+                method:"PUT",
+                credentials:"include",
+                body:{email}
             })
         }),
         removeAddress:builder.mutation({
@@ -323,7 +331,7 @@ const api = createApi({
 })
 
 export default api;
-export const {useRegisterMutation, useLoginMutation, useVerifyEmailMutation, useMyProfileQuery, useUpdateMeMutation, useRemoveAddressMutation, useLogoutMutation,
+export const {useRegisterMutation, useLoginMutation, useVerifyEmailMutation, useMyProfileQuery, useForgetPasswordMutation, useUpdateMeMutation, useRemoveAddressMutation, useLogoutMutation,
     useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useGetProductsOfSameQuery, useFindAllFieldsQuery, useSearchProductsMutation,
     useAddToCartMutation, useFetchMyCartQuery,  useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation, useMyWhishlistQuery, useAddRemoveFromWishlistMutation,
     useOutStockProductsQuery, useIncompleteProductsQuery, useUpdateProductMutation,

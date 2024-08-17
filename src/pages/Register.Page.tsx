@@ -3,6 +3,7 @@ import Form from "../components/Form";
 import { useRegisterMutation } from "../redux/api/api";
 import { MutationResTypes } from "../assets/demoData";
 import HandleMutationRes from "../components/HandleMutationRes";
+import { Link } from "react-router-dom";
 
 export const registerFormFields = [
     {type:"text", name:"name", placeHolder:"Name"},
@@ -39,7 +40,11 @@ const Register = () => {
     return(
         <div className="register_bg">
             <HandleMutationRes res={registerRes} />
-            <Form heading="Register" formFields={registerFormFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler}  />
+            <Form heading="Register" formFields={registerFormFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler} />
+            <div className="lower_part" style={{display:"flex", justifyContent:"space-between", maxWidth:"380px", margin:"10px auto", padding:"15px 10px", borderRadius:"8px", boxShadow:"01px 0.1px 4px 0.2px #f44b69", background:"white"}}>
+                <button style={{border:"none", background:"transparent", textDecoration:"underline", textDecorationColor:"blue", fontSize:"0.8rem", color:"blue"}}></button>
+                <div className="register" style={{fontSize:"0.8rem"}}> already have account <Link to="/user/login"> Login</Link></div>
+            </div>
         </div>
     )
 };
