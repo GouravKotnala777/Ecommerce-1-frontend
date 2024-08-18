@@ -71,6 +71,62 @@
     }
 }
 
+.my_profile_dialog_cont{
+    //border:2px solid red;
+    background:white;
+    padding:2px 10px 20px 10px;
+    border-radius:8px;
+    max-width:400px;
+    margin:20px auto;
+    .main_heading{
+        border: 1px solid #f44b69;
+        text-align:center;
+        font-weight: bold;
+        color: #f44b69;
+        margin: 10px 0;
+        border-radius: 4px;
+    }
+    .my_details{
+        //border: 2px solid blue;
+        display: grid;
+        grid-template-columns: 40% 60%;
+        .heading{
+            //border: 2px solid green;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #515151;
+            
+        }
+        .value{
+            //border: 2px solid violet;
+            font-size: 0.8rem;
+            word-wrap: break-word;
+            .BiEdit{
+                color: #f44b69;
+            }
+        }
+    }
+    .btns{
+        //border: 2px solid red;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        .close_btn{
+            background: #f44b69;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px;
+        }
+        .update_btn{
+            background: rgb(57, 146, 255);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px;
+        }
+    }
+}
 
 
 @media screen and (width <= 770px){

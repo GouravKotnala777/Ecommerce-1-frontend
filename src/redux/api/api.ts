@@ -37,6 +37,7 @@ export interface CreateCouponBodyType {
     usedCount:number;
 }
 export interface UpdateMeBodyType {
+    oldPassword:string;
     name?:string;
     email?:string;
     password?:string;
@@ -92,11 +93,11 @@ const api = createApi({
             providesTags:["MyWishlistedProducts"]
         }),
         updateMe:builder.mutation({
-            query:({name, email, password, mobile, house, street, city, state, zip}:UpdateMeBodyType) => ({
+            query:({oldPassword, name, email, password, mobile, house, street, city, state, zip}:UpdateMeBodyType) => ({
                 url:"/api/v1/user/update",
                 method:"PUT",
                 credentials:"include",
-                body:{name, email, password, mobile, house, street, city, state, zip}
+                body:{oldPassword, name, email, password, mobile, house, street, city, state, zip}
             })
         }),
         forgetPassword:builder.mutation({

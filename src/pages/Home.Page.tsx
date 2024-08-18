@@ -103,7 +103,6 @@ const Home = () => {
 
     return(
         <>
-            <div className="heading" style={{padding:"4px 4px", fontWeight:"bold"}}>Home</div>
             <div id="home_bg" className="home_bg" onClick={(e) => {onClickOverlay(e)}}>
             {
                 allProducts.isLoading ?
