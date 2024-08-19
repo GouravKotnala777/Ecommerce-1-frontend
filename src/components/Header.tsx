@@ -22,8 +22,6 @@ const Header = ({userName, cartNotification}:{userName?:string; cartNotification
     const [isHamActive, setIsHamActive] = useState<boolean>(false);
     const [isMyProfileDialogOpen, setIsMyProfileDialogOpen] = useState<boolean>(false);
     
-    
-    
 
     useEffect(() => {
         const handleScroll = () => {
@@ -78,7 +76,7 @@ const Header = ({userName, cartNotification}:{userName?:string; cartNotification
                     <div className="username">{userName&& `Hi ${userName}`}</div>
                     <img src={logo} alt={logo} />
                 </div>
-                <Sidebar isHamActive={isHamActive} setIsHamActive={setIsHamActive} />
+                <Sidebar isHamActive={isHamActive} setIsHamActive={setIsHamActive} setIsMyProfileDialogOpen={setIsMyProfileDialogOpen} />
             </div>
         </>
     )

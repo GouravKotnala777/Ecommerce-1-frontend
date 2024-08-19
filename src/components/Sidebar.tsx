@@ -4,7 +4,7 @@ import { CgClose } from "react-icons/cg";
 import { Dispatch, SetStateAction } from "react";
 
 
-const Sidebar = ({isHamActive, setIsHamActive}:{isHamActive:boolean; setIsHamActive:Dispatch<SetStateAction<boolean>>}) => {
+const Sidebar = ({isHamActive, setIsHamActive, setIsMyProfileDialogOpen}:{isHamActive:boolean; setIsHamActive:Dispatch<SetStateAction<boolean>>; setIsMyProfileDialogOpen:Dispatch<SetStateAction<boolean>>;}) => {
     
     const closeSidebarHandler = () => {
         setIsHamActive(false);
@@ -22,6 +22,7 @@ const Sidebar = ({isHamActive, setIsHamActive}:{isHamActive:boolean; setIsHamAct
                     <NavLink className="sidebar_navlink" to="/admin/dashboard" onClick={closeSidebarHandler}>Dashboard</NavLink>
                     <NavLink className="sidebar_navlink" to="/user/orders" onClick={closeSidebarHandler}>Orders</NavLink>
                     <NavLink className="sidebar_navlink" to="/user/cart" onClick={closeSidebarHandler}>Cart</NavLink>
+                    <div className="sidebar_navlink" style={{cursor:"pointer"}} onClick={() => {setIsMyProfileDialogOpen(true); closeSidebarHandler();}}>My Profile</div>
                     <NavLink className="sidebar_navlink" to="/user/logout" onClick={closeSidebarHandler}>Logout</NavLink>
                 </div>
             </div>
