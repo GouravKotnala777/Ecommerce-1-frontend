@@ -29,7 +29,6 @@ import DialogWrapper from './components/DialogWrapper'
 import Form from './components/Form'
 import VerifyEmail from './pages/VerifyEmail'
 import MyOrders from './pages/MyOrders'
-import Test from './Test'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { SerializedError } from '@reduxjs/toolkit'
 
@@ -66,7 +65,6 @@ const App = () => {
             <Header userName={myProfileData.data?.message.name} cartNotification={cartData.data?.message.products.reduce((acc, iter) => acc+iter.quantity, 0) as number} />
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/test" element={<Test />} />
               <Route path="/product/new" element={<AddProduct />} />
               <Route path="/user/register" element={<Register />} />
               <Route path="/user/login" element={<Login />} />
