@@ -133,9 +133,9 @@ const Home = () => {
                                                                 <BiSearch />
                                                             </div>
                                                             <div className="col">
-                                                                <span className="span_left">{item.name.split(searchQry)[0]}</span>
-                                                                <span className="span_middle">{searchQry}</span>
-                                                                <span className="span_right">{item.name.split(searchQry)[1]}</span>
+                                                                <span className="span_left">{item.name.split(searchQry.toLowerCase())[0]}</span>
+                                                                <span className="span_middle">{searchQry.toLowerCase()}</span>
+                                                                <span className="span_right">{item.name.split(searchQry.toLowerCase())[1]}</span>
                                                             </div>
                                                         </div>
                                                     ))
