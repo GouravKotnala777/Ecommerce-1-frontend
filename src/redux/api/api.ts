@@ -37,7 +37,7 @@ export interface CreateCouponBodyType {
     usedCount:number;
 }
 export interface UpdateMeBodyType {
-    oldPassword:string;
+    oldPassword?:string;
     name?:string;
     email?:string;
     password?:string;
