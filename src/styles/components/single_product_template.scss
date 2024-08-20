@@ -1,8 +1,7 @@
-
+@import "../utils.scss";
 
 
 .single_product_template_bg{
-    //border: 2px solid red;
     margin-top: 4.5rem;
     .product_cont{
         //border: 2px solid violet;
@@ -26,23 +25,23 @@
             width: 16rem;
             margin: 10px auto;
             .upper_part{
-                border: 1px solid #ff4b69;
+                @include containerHollow();
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 padding: 7px;
-                border-radius: 8px;
                 .wishlist_cont{
                     display: flex;
                     align-items: center;
                     .BiHeart{
                         //border: 2px solid rgb(0, 255, 47);
                         font-size: 1.2rem;
+                        color: $primary;
                     }
                     span{
                         //border: 2px solid rgb(47, 0, 255);
                         font-size: 0.6rem;
-                        color: rgb(255, 69, 100);
+                        color: $primary;
                     }
                 }
                 .include_cont{
@@ -57,7 +56,7 @@
                     span{
                         //border: 2px solid rgb(47, 0, 255);
                         font-size: 0.6rem;
-                        color: rgb(255, 69, 100);
+                        color: $primary;
                     }
                 }
                 
@@ -86,6 +85,9 @@
                         font-size: 0.8rem;
                         place-self: center;
                         text-align: justify;
+                        .star_icons{
+                            color: $primary;
+                        }
                     }
                 }
             }

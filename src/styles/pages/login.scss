@@ -1,0 +1,27 @@
+@import "../utils";
+
+.login_bg{
+    
+    .lower_part{
+        display:flex;
+        justify-content:space-between;
+        max-width:380px;
+        margin:10px auto;
+        padding:15px 10px;
+        background:white;
+        @include containerHollow();
+        box-shadow: $shadow;
+    
+        button{
+            border:none;
+            background:transparent;
+            text-decoration:underline;
+            text-decoration-color:blue;
+            font-size:0.8rem;
+            color:blue;
+        }
+        .dont_have_acc{
+            font-size:0.8rem;
+        }
+    }
+}

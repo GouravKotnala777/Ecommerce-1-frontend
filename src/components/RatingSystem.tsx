@@ -11,14 +11,14 @@ const RatingSystem = ({rating}:{rating?:number}) => {
     for (let i = 0; i < totalStars; i++) {
         if (i < filledStars) {
             
-            stars.push(<span key={i}><BsStarFill color="rgb(255, 34, 71)" /></span>)
+            stars.push(<span key={i}><BsStarFill className="star_icons" /></span>)
         }
         else if (i === filledStars + 0.5) {
             
-            stars.push(<span key={i}><BsStarHalf color="rgb(255, 34, 71)" /></span>)
+            stars.push(<span key={i}><BsStarHalf className="star_icons" /></span>)
         }
         else{
-            stars.push(<span key={i}><BsStar color="rgb(255, 34, 71)" /></span>)
+            stars.push(<span key={i}><BsStar className="star_icons" /></span>)
         }
         
     }

@@ -1,4 +1,4 @@
-
+@import "../utils.scss";
 
 .home_bg{
     //border: 2px solid blue;
@@ -12,8 +12,8 @@
             display: inline-flex;
             padding: 6px;
             border-radius: 4px;
-            background: linear-gradient(90deg, rgb(255, 156, 102), rgb(255, 75, 105));
-            box-shadow: 1px 1px 10px 1px rgba(255, 75, 105, 0.3);
+            background: linear-gradient(90deg, $secondary, $primary);
+            box-shadow: $shadow;
             position: relative;
             input{
                 //border: 2px solid orange;
@@ -27,7 +27,7 @@
                 border:none;
                 padding: 4px;
                 border-radius: 0 2px 2px 0;
-                background:rgb(255, 75, 105);
+                background:$primary;
                 color: white;
                 cursor: pointer;
                 margin-left: 2px;
@@ -82,7 +82,7 @@
             font-weight: bold;
             color: white;
             //box-shadow: 1px 1px 10px 1px rgba(255, 75, 105, 0.3);            
-            background: linear-gradient(270deg, rgb(255, 156, 102), rgb(255, 75, 105));
+            background: linear-gradient(270deg, $secondary, $primary);
             border-radius: 4px;
         }
         .products{
@@ -90,8 +90,6 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: space-around;
-            //border:1px solid rgba(255, 75, 105, 0.3);
-            //box-shadow: 1px 1px 10px 1px rgba(255, 75, 105, 0.3);
         }
     }
 }

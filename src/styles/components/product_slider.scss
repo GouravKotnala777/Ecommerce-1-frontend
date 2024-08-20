@@ -1,12 +1,8 @@
-
+@import "../utils.scss";
 
 .product_slider_cont{
-    //border: 2px solid red;
-    //padding: 5px;
     .slider_heading{
-        //border: 2px sold green;
-        background: linear-gradient(90deg, rgb(255, 156, 102), rgb(255, 75, 105));
-        //color: rgb(255, 75, 105);
+        background: linear-gradient(90deg, $secondary, $primary);
         color: white;
         padding: 0 10px;
         border-radius: 4px;

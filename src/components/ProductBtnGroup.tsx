@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { MutationResTypes } from "../assets/demoData";
 import HandleMutationRes from "./HandleMutationRes";
 import Spinner from "./Spinner";
+import { PRIMARY, SECONDARY } from "../styles/utils";
 
 
 interface ProductBtnGroupPropTypes{
@@ -71,7 +72,7 @@ const ProductBtnGroup = ({parent, productID, amount}:ProductBtnGroupPropTypes) =
         <HandleMutationRes res={addRemoveCartRes} />
         <div className="btns_cont">
             <div className="upper_btns">
-                <button className="add_btn" style={{background:parent === "cart" ? "white":"linear-gradient(90deg, rgb(255, 34, 71), rgb(255, 156, 102))", border:parent === "cart"?"1px solid rgb(255, 34, 71)":"none", color:parent==="cart"?"rgb(255, 34, 71)":"white"}} onClick={addToCartHandler}>{isAddRemoveCartloading ? <Spinner type={2} color="white" width={14} /> : parent === "cart" ? "Remove" : "Add"}</button>
+                <button className="add_btn" style={{background:parent === "cart" ? "white":`linear-gradient(90deg, ${PRIMARY}, ${SECONDARY})`, border:parent === "cart"?`1px solid ${PRIMARY}`:"none", color:parent==="cart"?PRIMARY:"white"}} onClick={addToCartHandler}>{isAddRemoveCartloading ? <Spinner type={2} color="white" width={14} /> : parent === "cart" ? "Remove" : "Add"}</button>
                 
                 <select onChange={(e) => setQuantity(Number(e.target.value))}>
                     <option>1</option>

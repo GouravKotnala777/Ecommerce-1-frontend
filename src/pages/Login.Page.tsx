@@ -1,3 +1,4 @@
+import "../styles/pages/login.scss";
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import Form from "../components/Form";
 import { useForgetPasswordMutation, useLoginMutation } from "../redux/api/api";
@@ -50,9 +51,9 @@ const Login = () => {
             <DialogWrapper Element={<ForgetPasswordDialog email={email} setEmail={setEmail} setIsForgetPassDialogOpen={setIsForgetPassDialogOpen} />} toggler={isForgetPassDialogOpen} setToggler={setIsForgetPassDialogOpen} />
             <HandleMutationRes res={loginRes} />
             <Form heading="Login" formFields={loginFormFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler}  />
-            <div className="lower_part" style={{display:"flex", justifyContent:"space-between", maxWidth:"380px", margin:"10px auto", padding:"15px 10px", borderRadius:"8px", boxShadow:"01px 0.1px 4px 0.2px #f44b69", background:"white"}}>
-                <button style={{border:"none", background:"transparent", textDecoration:"underline", textDecorationColor:"blue", fontSize:"0.8rem", color:"blue"}} onClick={() => setIsForgetPassDialogOpen(true)}>Forget Password</button>
-                <div className="register" style={{fontSize:"0.8rem"}}> don't have account <Link to="/user/register"> Register</Link></div>
+            <div className="lower_part">
+                <button onClick={() => setIsForgetPassDialogOpen(true)}>Forget Password</button>
+                <div className="dont_have_acc"> don't have account <Link to="/user/register"> Register</Link></div>
             </div>
         </div>
     )

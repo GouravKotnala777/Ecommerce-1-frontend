@@ -1,3 +1,4 @@
+@import "../utils.scss";
 
 .header_bg{
     //border: 2px solid red;
@@ -10,7 +11,7 @@
     top: 1%;
     left:0.5%;
     transition: 0.3s;
-    background: linear-gradient(90deg, rgb(255, 156, 102), rgb(255, 75, 105));
+    background: linear-gradient(90deg, $secondary, $primary);
     z-index: 12;
     padding: 0 0.5%;
     .left_part{
@@ -49,7 +50,7 @@
                     top: -10px;
                     right: -10px;
                     background: white;
-                    color: #ff4b69;
+                    color:$primary;
                     width: 16px;
                     height: 16px;
                     display: grid;
@@ -83,10 +84,10 @@
         //border: 2px solid green;
         margin-top: 10px;
         .main_heading{
-            border: 1px solid #f44b69;
+            border: 1px solid $primary;
             text-align:center;
             font-weight: bold;
-            color: #f44b69;
+            color: $primary;
             border-radius: 4px;
             //font-size: 0.8rem;
         }
@@ -107,7 +108,7 @@
                 font-size: 0.7rem;
                 word-wrap: break-word;
                 .BiEdit{
-                    color: #f44b69;
+                    color: $primary;
                 }
             }
         }
@@ -116,10 +117,10 @@
         //border:2px solid blue;
         margin-top: 10px;
         .main_heading{
-            border: 1px solid #f44b69;
+            border: 1px solid $primary;
             text-align:center;
             font-weight: bold;
-            color: #f44b69;
+            color: $primary;
             border-radius: 4px;
         }
         .my_details{
@@ -144,7 +145,7 @@
                     width: 40%;
                 }
                 .BiEdit{
-                    color: #f44b69;
+                    color: $primary;
                     font-size: 1rem;
                     margin-left: 5px;
                 }
@@ -156,7 +157,7 @@
             justify-content: space-between;
             margin-top: 20px;
             .close_btn{
-                background: #f44b69;
+                background: $primary;
                 color: white;
                 border: none;
                 border-radius: 4px;

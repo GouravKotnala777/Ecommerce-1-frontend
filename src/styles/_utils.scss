@@ -1,0 +1,57 @@
+//==============================================
+//==============================================
+$primary:#ff4b69;
+$secondary:#ff9c66;
+$primaryLow:#ff4b6999;
+$secondaryLow:#ff9c6699;
+$primaryHover:#ff4b691a;
+$secondaryHover:#ff9c661a;
+$btnDefault:#3e98ff;
+$btnHover:#3e98ffb0;
+$bgPrimary:#fff7f8;
+$shadow:1px 1px 8px 1px #ff4b6941;
+//==============================================
+//==============================================
+
+@mixin containerHollow($radius:8px){
+    border:1px solid $primary;
+    border-radius: $radius;
+}
+
+
+
+@mixin headingSm(){
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #515151;
+}
+@mixin headingMed(){
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #515151;
+}
+@mixin headingLg(){
+    font-size: 1rem;
+    font-weight: bold;
+    color: #515151;
+}
+
+
+
+
+.bug_report_cont{
+    /*border: 2px solid red;*/
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-content: center;
+    border-radius: 50%;
+    background: linear-gradient(90deg, $secondary, $primary);
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
+    .GoReport{
+        /*border: 2px solid blue;*/
+        color: white;
+    }
+}

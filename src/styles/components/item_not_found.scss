@@ -1,25 +1,24 @@
-
+@import "../utils.scss";
 
 .item_not_found_outer_cont{
-    border: 2px solid rgb(255, 75, 105);
+    border: 2px solid $primary;
     border-radius: 8px;
     padding: 4px;
-    //background: rgba(255, 75, 105, 0.2);
-    background: rgba(255, 156, 102, 0.4);
+    background: $secondaryLow;
     .item_not_found_inner_cont{
         //border: 2px solid red;
         height: 200px;
         display: grid;
         place-content: center;
-        border: 1px solid rgb(255, 75, 105);
+        border: 1px solid $primary;
         border-radius: 5px;
-        background: rgb(255, 247, 248);
+        background: $bgPrimary;
         .statusCode{
             //border: 2px solid blue;
             font-size: 2rem;
             font-weight: bold;
             text-align: center;
-            color: rgb(255, 75, 105);
+            color: $primary;
         }
         .heading{
             //border: 2px solid green;

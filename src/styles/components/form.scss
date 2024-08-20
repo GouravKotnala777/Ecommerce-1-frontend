@@ -1,15 +1,15 @@
-
+@import "../utils.scss";
 
 .form_cont{
     //border: 2px solid violet;
-    box-shadow: 0.1px 0.1px 5px rgb(255, 75, 105);
-    border-radius: 8px;
     padding: 10px 0;
     display: flex;
     flex-direction: column;
     margin: 70px auto 20px auto;
     max-width: 400px;
-    background: rgba(255, 75, 105, 0.092);
+    //border-radius: 8px;
+    @include containerHollow();
+    box-shadow: $shadow;
     background: white;
     .heading_cont{
         //border: 2px solid indigo;
@@ -33,8 +33,8 @@
             transition: 0.2s;
             cursor: pointer;
             &:focus{
-                border: 2px solid rgb(62, 152, 255);
-                box-shadow: 0.2px 0.2px 5px rgba(62, 152, 255, 0.5);
+                border: 2px solid $btnDefault;
+                box-shadow: 0.2px 0.2px 5px #3e98ff80;
             }
         }
         select{
@@ -48,7 +48,7 @@
             transition: 0.2s;
             cursor: pointer;
             &:focus{
-                border: 2px solid rgb(62, 152, 255);
+                border: 2px solid $btnDefault;
                 box-shadow: 0.2px 0.2px 5px rgba(62, 152, 255, 0.5);
             }
         }
@@ -63,20 +63,23 @@
             transition: 0.2s;
             cursor: pointer;
             &:focus{
-                border: 2px solid rgb(62, 152, 255);
+                border: 2px solid $btnDefault;
                 box-shadow: 0.2px 0.2px 5px rgba(62, 152, 255, 0.5);
             }
         }
         button{
             //border: 2px solid green;
             font-size: 1rem;
-            background: rgb(94, 169, 255);
+            background: $btnDefault;
             color: white;    
             margin: 10px 5px;
             padding: 10px;
             border-radius: 8px;
             border: none;
             cursor: pointer;
+            &:hover{
+                background: $btnHover;
+            }
         }
     }
 }

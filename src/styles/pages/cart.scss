@@ -1,4 +1,4 @@
-
+@import "../utils.scss";
 
 .summery_cont{
     background: white;
@@ -13,9 +13,9 @@
     .heading{
         text-align: center;
         font-weight: bold;
-        border: 1px solid #ff4b69;
+        border: 1px solid $primary;
         margin: 0 0 10px 0;
-        color: #ff4b69;
+        color: $primary;
         border-radius: 5px;
     }
     .summery_table{
@@ -50,7 +50,7 @@
         grid-template-columns: 60% 12% 8% 22%;
         font-size: 0.6rem;
         font-weight: bold;
-        border: 1px solid #ff4b69;
+        border: 1px solid $primary;
         height: 13px;
         border-radius: 0 0 5px 5px;
         padding: 10px 0;
@@ -75,7 +75,7 @@
         bottom: 0%;
         left:0;
         transition: 0.3s;
-        background: linear-gradient(90deg, rgb(255, 156, 102), rgb(255, 75, 105));
+        background: linear-gradient(90deg, $secondary, $primary);
         .left_part{
             //border: 2px solid violet;
             width: 40px;

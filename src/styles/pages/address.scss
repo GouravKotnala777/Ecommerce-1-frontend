@@ -1,4 +1,4 @@
-
+@import "../utils.scss";
 
 h4{
     //margin:-80px auto 0 auto;
@@ -7,8 +7,9 @@ h4{
 .shipping_type_cont{
     //border: 2px solid red;
     font-size: 0.7rem;
-    border: 1px solid rgba(255, 75, 105, 1);
-    border-radius: 8px;
+    //border: 1px solid $primary;
+    //border-radius: 8px;
+    @include containerHollow();
     margin-top: 20px;
     .upper_cont{
         //border: 2px solid violet;
@@ -30,7 +31,7 @@ h4{
         .heading{
             //border: 2px solid red;
             font-weight: bold;
-            color: rgba(255, 75, 105, 1);
+            color: $primary;
         }
         .radios_cont{
             //border: 2px solid pink;
@@ -42,9 +43,8 @@ h4{
                 margin: 20px 0;
                 padding: 5px 10px;
                 font-size: 0.7rem;
-                border-radius: 8px;
-                box-shadow: 0.1px 0.1px 5px rgba(255, 75, 105, 0.5);
-                border: 1px solid rgba(255, 75, 105, 1);
+                @include containerHollow();
+                box-shadow: $shadow;
 
                 &:focus-within{
                     background: rgba(255, 75, 105, 0.2);
@@ -90,7 +90,7 @@ h4{
             margin:5px auto;
             padding:10px;
             border-radius:8px;
-            box-shadow: 0.1px 0.1px 5px rgb(255, 75, 105);
+            box-shadow: 0.1px 0.1px 5px $primary;
             cursor:pointer;
             &:hover{
                 box-shadow: 0.1px 0.1px 5px rgba(255, 75, 105, 0.5);
@@ -105,7 +105,7 @@ h4{
                     border-radius: 4px;
                     padding: 1px;
                     &:hover{
-                        background: rgba(255, 75, 105, 1);
+                        background: $primary;
                         color: white;
                     }
                 }

@@ -1,4 +1,4 @@
-
+@import "../utils.scss";
 
 .btns_cont{
     //border: 2px solid blue;
@@ -22,7 +22,7 @@
         }
         .buy_btn{
             //border: 2px solid green;
-            background: linear-gradient(90deg, rgb(255, 156, 102), rgb(255, 34, 71));
+            background: linear-gradient(90deg, $secondary, $primary);
             border: none;
             color: white;
         }
@@ -38,8 +38,9 @@
             font-size: 0.8rem;
         }
         .review_btn{
-            border: 1px solid rgb(255, 69, 100);
-            color: rgb(255, 69, 100);
+            //border: 1px solid $primary;
+            @include containerHollow(4px);
+            color: $primary;
             background: white;
             &:hover{
                 background: rgba(255, 233, 237, 0.1);

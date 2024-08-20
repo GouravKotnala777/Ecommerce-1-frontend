@@ -1,6 +1,7 @@
 import "../styles/components/pagination.scss";
 import { Dispatch, SetStateAction } from "react";
 import { BiLeftArrow, BiRightArrow } from "react-icons/bi";
+import { PRIMARY, PRIMARY_HOVER, SECONDARY } from "../styles/utils";
 
 
 const Pagination = ({documentCount, skip, setSkip}:{documentCount:number; skip:number; setSkip:Dispatch<SetStateAction<number>>}) => {
@@ -9,8 +10,8 @@ const Pagination = ({documentCount, skip, setSkip}:{documentCount:number; skip:n
         const arr = [];
         for (let num = 1; num <= count+1; num++) {
             arr.push(<button key={num} style={{
-                background:skip+1 === num ? "rgba(255, 69, 100, 0.9)" : "white",
-                color:skip+1 === num ? "white" : "rgb(255, 69, 100)"
+                background:skip+1 === num ? `linear-gradient(90deg, ${PRIMARY}, ${SECONDARY})` : "white",
+                color:skip+1 === num ? "white" : PRIMARY
             }} onClick={() => setSkip(num-1)}>{num}</button>);
         }
 
@@ -27,8 +28,8 @@ const Pagination = ({documentCount, skip, setSkip}:{documentCount:number; skip:n
         <div className="pagination_cont">
             <div className="btn_cont">
                 <button style={{
-                    border:skip > 0? `1px solid rgba(255, 69, 100, 1)` : `1px solid rgba(255, 69, 100, 0.2)`,
-                    color:skip > 0? `rgba(255, 69, 100, 1)` : `rgba(255, 69, 100, 0.2)`
+                    border:skip > 0? `1px solid ${PRIMARY}` : `1px solid ${PRIMARY_HOVER}`,
+                    color:skip > 0? PRIMARY : PRIMARY_HOVER
                 }} onClick={() => {
                     if (skip > 0) {
                         setSkip(skip-1)
@@ -42,8 +43,8 @@ const Pagination = ({documentCount, skip, setSkip}:{documentCount:number; skip:n
                 
 
                 <button style={{
-                    border:skip < documentCount? `1px solid rgba(255, 69, 100, 1)` : `1px solid rgba(255, 69, 100, 0.2)`,
-                    color:skip < documentCount? `rgba(255, 69, 100, 1)` : `rgba(255, 69, 100, 0.2)`
+                    border:skip < documentCount? `1px solid ${PRIMARY}` : `1px solid ${PRIMARY_HOVER}`,
+                    color:skip < documentCount? PRIMARY : PRIMARY_HOVER
                 }} onClick={() => {
                     if (skip < documentCount) {
                         setSkip(skip+1)

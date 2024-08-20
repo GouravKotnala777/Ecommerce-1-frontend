@@ -1,4 +1,4 @@
-
+@import "../utils";
 
 .table_bg{
     //border: 2px solid green;
@@ -19,7 +19,8 @@
             display: flex;
             justify-content: space-between;
             font-size: 0.8rem;
-            background: linear-gradient(90deg, rgba(255, 156, 102, 0.5), rgba(255, 75, 105, 0.5));
+            //background: linear-gradient(90deg, rgba(255, 156, 102, 0.5), rgba(255, 75, 105, 0.5));
+            background: linear-gradient(90deg, $secondaryLow, $primaryLow);
             color: #515151;
             font-weight: bold;
             border-radius: 8px;
@@ -51,12 +52,12 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                box-shadow: 1px 1px 10px 1px rgba(255, 75, 105, 0.3);
+                box-shadow: $shadow;
                 margin: 10px 0;
                 border-radius: 8px;
                 padding: 0 10px;
                 &:hover{
-                    background: linear-gradient(90deg, rgba(255, 156, 102, 0.1), rgba(255, 75, 105, 0.2));
+                    background: linear-gradient(90deg, $secondaryHover, $primaryHover);
                 }
                 .td{
                     //border: 2px solid yellow;
@@ -87,13 +88,13 @@
                     width: 80px;
                 }
                 .update_btn{
-                    border: 1px solid rgba(255, 75, 105, 0.5);
+                    border: 1px solid $primaryLow;
                     width: 37px;
                     border-radius: 8px;
                     background: rgba(255, 75, 105, 0.1);
                     cursor: pointer;
                     &:hover{
-                        background: rgba(255, 75, 105, 0.5);
+                        background: $primaryLow;
                         color: white;
                     }
                 }

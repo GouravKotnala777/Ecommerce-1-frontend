@@ -1,4 +1,4 @@
-
+@import "../utils.scss";
 
 form{
     border: 2px solid hotpink;
@@ -6,7 +6,7 @@ form{
     margin: 20px auto;
     padding: 10px;
     border-radius: 8px;
-    box-shadow: 0.1px 0.1px 5px rgb(255, 75, 105);
+    box-shadow: 0.1px 0.1px 5px $primary;
     
     .card_element{
         //border: 2px solid blue;
@@ -22,7 +22,7 @@ form{
         padding: 10px;
         font-weight: bold;
         color: white;
-        background: rgb(94, 169, 255);
+        background: $btnDefault;
         border: none;
         margin-top: 30px;
         border-radius: 4px;

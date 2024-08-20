@@ -1,4 +1,4 @@
-
+@import "../utils";
 
 .footer_cont{
     // border: 2px solid red;
@@ -11,10 +11,9 @@
         justify-content: space-around;
         padding: 10px 0 20px 0;
         border-radius: 8px;
-        box-shadow: 1px 1px 10px 1px rgba(255, 75, 105, 0.3) inset;
-        //background: rgba(255, 69, 100, 0.5);
-        //background: rgba(255, 133, 67, 0.6);
-        background: linear-gradient(90deg, rgba(255, 156, 102, 0.6), rgba(255, 75, 105, 0.6));
+        box-shadow: $shadow inset;
+        background: linear-gradient(90deg, $secondaryLow, $primaryLow);
+        //background: linear-gradient(90deg, rgba(255, 156, 102), rgba(255, 75, 105));
         .link_cont{
             // border: 2px solid green;
             // margin: 10px;
@@ -31,8 +30,8 @@
                 margin: 10px 0;
                 border-bottom:1px solid white;
                 &:hover{
-                    color: red;
-                    border-bottom:1px solid red;
+                    color: $primary;
+                    border-bottom:1px solid $primary;
                 }
             }
         }

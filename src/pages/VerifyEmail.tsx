@@ -114,7 +114,7 @@ const VerifyEmail = () => {
         }
     }, []);
     return(
-        <div className="verify_email" style={{width:"60%", margin:"20px auto", padding:"20px", borderRadius:"8px", textAlign:"center", boxShadow:"0.1px 0.1px 4px 0.5px #f44b69"}}>
+        <div className="verify_email" style={{width:"60%", margin:"20px auto", padding:"20px", borderRadius:"8px", textAlign:"center", boxShadow:"0.1px 0.1px 4px 0.5px #ff4b69"}}>
             <Toaster />
             <div className="heading" style={{textAlign:"center", fontWeight:"bold", margin:"10px auto"}}>{emailtype === "VERIFY" ? "Verify Email" : "Reset Password"}</div>
             {
@@ -132,12 +132,12 @@ const VerifyEmail = () => {
                 "message" in verifyEmailRes.error.data &&
                 verifyEmailRes?.error.data.message ?
                 <>
-                    <h1 style={{color:"#f44b69"}}>{verifyEmailRes.error.status}</h1>
+                    <h1 style={{color:"#ff4b69"}}>{verifyEmailRes.error.status}</h1>
                     <p style={{color:"#919191", fontSize:"0.8rem"}}>{verifyEmailRes.error.data.message as string}</p>
                 </>
                 :
                 <>
-                    <h1 style={{color:"#f44b69"}}>200</h1>
+                    <h1 style={{color:"#ff4b69"}}>200</h1>
                     <p style={{color:"#919191", fontSize:"0.8rem"}}>{verifyEmailRes?.data?.message}</p>
                 </>
             }

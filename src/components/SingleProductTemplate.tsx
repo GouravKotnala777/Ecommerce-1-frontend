@@ -12,6 +12,7 @@ import HandleMutationRes from "./HandleMutationRes";
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import { MutationResTypes } from "../assets/demoData";
 import Spinner from "./Spinner";
+import { PRIMARY, SECONDARY } from "../styles/utils";
 
 interface SingleProductTemplatePropTypes{
     productID?:string;
@@ -81,7 +82,7 @@ const SingleProductTemplate = ({productID, userWishlist, category, name, price, 
                             </div>
                             <div className="right_part">
                                 <div className="whishlist_cont">
-                                    <BiHeart className="BiHeart" color="rgb(255, 69, 100)" />
+                                    <BiHeart className="BiHeart" color="#ff4b69" />
                                     <span>Add to wishlist</span>
                                 </div>
                                 <div className="info_cont">
@@ -104,7 +105,7 @@ const SingleProductTemplate = ({productID, userWishlist, category, name, price, 
                                 <div className="btns_cont">
                                     <div className="upper_btns">
                                         
-                                        <button className="add_btn" style={{background:parent === "singleProduct" ? "linear-gradient(90deg, rgb(255, 34, 71), rgb(255, 156, 102))":"white", border:parent === "singleProduct"?"none":"1px solid rgb(255, 34, 71)", color:parent==="singleProduct"?"white":"rgb(255, 34, 71)"}}><Spinner type={1} color="white" /></button>
+                                        <button className="add_btn" style={{background:parent === "singleProduct" ? `linear-gradient(90deg, ${PRIMARY}, ${SECONDARY})`:"white", border:parent === "singleProduct"?"none":PRIMARY, color:parent==="singleProduct"?"white":PRIMARY}}><Spinner type={1} color="white" /></button>
                                         
                                         <select>
                                             <option>1</option>
@@ -117,7 +118,7 @@ const SingleProductTemplate = ({productID, userWishlist, category, name, price, 
                                     {
                                         parent === "singleProduct" &&
                                             <div className="lower_btns">
-                                                <button className="review_btn"><Spinner type={1} color="rgb(255, 69, 100)" /></button>
+                                                <button className="review_btn"><Spinner type={1} color={PRIMARY} /></button>
                                             </div>
                                     }
                                 </div>
@@ -137,9 +138,9 @@ const SingleProductTemplate = ({productID, userWishlist, category, name, price, 
                                             <div className="wishlist_cont">
                                                 {
                                                     userWishlist?.includes(productID as string) ?
-                                                    <BiSolidHeart className="BiHeart" color="rgb(255, 69, 100)" onClick={addRemoveFromWishlistHandler} />
+                                                    <BiSolidHeart className="BiHeart" onClick={addRemoveFromWishlistHandler} />
                                                     :
-                                                    <BiHeart className="BiHeart" color="rgb(255, 69, 100)" onClick={addRemoveFromWishlistHandler} />
+                                                    <BiHeart className="BiHeart" onClick={addRemoveFromWishlistHandler} />
                                                 }
                                                 {
                                                     userWishlist?.includes(productID as string) ?
