@@ -1,17 +1,17 @@
 import "../styles/pages/home.scss";
-import Products from "../components/Products";
-import GroupedProducts from "../components/GoupedProducts";
-import { useFindAllFieldsQuery, useGetAllProductsQuery, useSearchProductsMutation } from "../redux/api/api";
-import { ProductTypes } from "../assets/demoData";
+import Products from "../components/Products.tsx";
+import GroupedProducts from "../components/GoupedProducts.tsx";
+import { useFindAllFieldsQuery, useGetAllProductsQuery, useSearchProductsMutation } from "../redux/api/api.ts";
+import { ProductTypes } from "../assets/demoData.ts";
 import { useNavigate } from "react-router-dom";
 import { ChangeEvent, FocusEvent, MouseEvent, useEffect, useState } from "react";
-import Pagination from "../components/Pagination";
-import Spinner from "../components/Spinner";
+import Pagination from "../components/Pagination.tsx";
+import Spinner from "../components/Spinner.tsx";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { SerializedError } from "@reduxjs/toolkit";
-import ItemNotFound from "../components/ItemNotFound";
+import ItemNotFound from "../components/ItemNotFound.tsx";
 import { BiSearch } from "react-icons/bi";
-import Footer from "../components/Footer";
+import Footer from "../components/Footer.tsx";
 
 
 const Home = () => {
