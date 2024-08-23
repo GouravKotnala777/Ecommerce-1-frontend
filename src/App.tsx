@@ -32,6 +32,7 @@ import MyOrders from './pages/MyOrders'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { SerializedError } from '@reduxjs/toolkit'
 import Chatbot from './Chatbot'
+import ChatbotAdmin from './ChatbotAdmin'
 
 
 const formFields = [
@@ -39,7 +40,7 @@ const formFields = [
 ];
 
 const App = () => {
-  const myProfileData:{data?:{message:UserTypes}} = useMyProfileQuery("");
+  const myProfileData:{isLoading:boolean; data?:{message:UserTypes;};} = useMyProfileQuery("");
   const [reportDialogToggle, setReportDialogToggle] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const cartData:{
@@ -66,7 +67,8 @@ const App = () => {
             <Header userName={myProfileData.data?.message.name} cartNotification={cartData.data?.message.products.reduce((acc, iter) => acc+iter.quantity, 0) as number} />
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/chat" element={<Chatbot />} />
+              <Route path="/chat" element={<Chatbot USERID={myProfileData.data?.message._id} USERNAME={myProfileData.data?.message.name} />} />
+              <Route path="/chat-admin" element={<ChatbotAdmin USERID={myProfileData.data?.message._id} USERNAME={myProfileData.data?.message.name} />} />
               <Route path="/product/new" element={<AddProduct />} />
               <Route path="/user/register" element={<Register />} />
               <Route path="/user/login" element={<Login />} />
