@@ -53,7 +53,7 @@ const Header = ({userName, cartNotification}:{userName?:string; cartNotification
                 <nav className="right_part">
                     <div className="nav_section">
                         <NavLink className="navlinks" to="/">Home</NavLink>
-                        <NavLink className="navlinks" to="/chat">Chat</NavLink>
+                        <NavLink className="navlinks" to="/chat-admin">Chats</NavLink>
                         <NavLink className="navlinks" to="/user/register">Register</NavLink>
                         <NavLink className="navlinks" to="/user/login">Login</NavLink>
                         <NavLink className="navlinks" to="/product/new">Add Product</NavLink>
