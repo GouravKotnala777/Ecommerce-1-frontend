@@ -38,18 +38,12 @@ import ChatbotAdmin from './ChatbotAdmin'
 const App = () => {
   const myProfileData:{isLoading:boolean; data?:{message:UserTypes;};} = useMyProfileQuery("");
   const [reportDialogToggle, setReportDialogToggle] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>("");
   const cartData:{
     isLoading:boolean;
     data?:{success:boolean; message:{products:{productID:ProductTypes; quantity:number;}[]; totalPrice:number;}};
     error?:FetchBaseQueryError|SerializedError;
 } = useFetchMyCartQuery("");
   const dispatch = useDispatch();
-
-
-  //const onClickHandler = () => {
-  //  console.log(message);
-  //};
   
   useEffect(() => {
     dispatch(setLoggedInUser({user:myProfileData.data?.message as UserTypes, isLoading:false, isError:false}));
