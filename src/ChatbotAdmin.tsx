@@ -10,13 +10,8 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { MessageTypes } from "./Chatbot";
 import photo from "./assets/react.svg";
+import { ADMIN_ID, DEFAULT_ID } from "./assets/utiles";
 
-
-const ADMINID = "66bb37913c60c222387502ed";
-//const demoUsers = {
-//	"667fbf303194b1022c59bfda": "JibpoH-eqiggv1mxAAAk",
-//	"66bb37913c60c222387502ed": "-2ZW3UhvBplgKET9AAAn"
-//};
 
 let socket:Socket<DefaultEventsMap, DefaultEventsMap>;
 const ChatbotAdmin = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) => {
@@ -34,18 +29,7 @@ const ChatbotAdmin = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) =>
     const userID = searchParams.get("userID");
     
 
-    const startChatHandler = () => {
-        //if (USERNAME) {
-            //socket = io("http://localhost:8000");
-            //socket.emit("registerUser", {userID:ADMINID, userName:USERNAME as string});
-            //}
-        setIsChatStarted(true);
-    };
-    const endChatHandler = () => {
-        navigate("/chat-admin");
-        setIsChatStarted(false);
-    };
-    
+
     const likeHandler = (e:MouseEvent<SVGElement>) => {
         if (e.currentTarget.id === "like") {
             setHasLiked(!hasLiked);
@@ -57,28 +41,50 @@ const ChatbotAdmin = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) =>
         }
     }
 
+
+    const startChatHandler = () => {
+        if (userID) {
+            socket?.emit("adminSelectedUser", {userID:userID, adminName:USERNAME as string, defaultMsg:`${USERNAME} connected`});
+            setIsChatStarted(true);
+        }
+    };
+    const endChatHandler = () => {
+        socket.emit("adminEndedChat", {userID:userID as string, defaultMsg:`${USERNAME} left`});
+        navigate("/chat-admin");
+        setIsChatStarted(false);
+    };
+
     const sendMessageHandler = () => {
-        socket?.emit("adminResponse", {adminID:ADMINID, userID, userName:USERNAME as string, response:message});
-        console.log(`${message} to ${ADMINID}`);
-        setMessages((prev) => [...prev, {senderID:ADMINID, senderName:USERNAME as string, receiver:"aaaaa", content:message, createdAt:"22-08-2024"}]);
+        socket?.emit("adminResponse", {adminID:ADMIN_ID, userID, userName:USERNAME as string, response:message});
+        console.log(`${message} to ${ADMIN_ID}`);
+        setMessages((prev) => [...prev, {senderID:ADMIN_ID, senderName:USERNAME as string, receiver:"aaaaa", content:message, createdAt:"22-08-2024"}]);
         setMessage("");
     };
 
     useEffect(() => {
+        console.log("1111111111111111111");
+        startChatHandler();
+        console.log("1111111111111111111");
+        
+    }, [userID]);
+
+    useEffect(() => {
         socket = io("http://localhost:8000");
-        //if (USERNAME) {
-            //startChatHandler();
-            socket.emit("registerUser", {userID:ADMINID, userName:USERNAME as string});
-            socket.on("usersList", (users) => {
-                console.log({users});
-                setUsersList(users);
-            });
-    
-            socket.on("adminReceiveMessage", ({userID, userName, msg}) => {
-                console.log(`admin receive message : ${msg} from ${userID}`);
-                setMessages((prev) => [...prev, {senderID:userID, senderName:userName, receiver:"aaaaa", content:msg, createdAt:"22-08-2024"}]);
-            })
-        //}
+        
+        socket.emit("registerUser", {userID:ADMIN_ID, userName:USERNAME as string});
+        socket.on("usersList", (users) => {
+            setUsersList(users);
+        });
+
+        socket.on("connectionEnded", ({defaultMsg}) => {
+            setMessages((prev) => [...prev, {senderID:DEFAULT_ID, senderName:"Default", receiver:"aaaaa", content:defaultMsg, createdAt:"22-08-2024"}]);
+            setUsersList({});
+        });
+
+        socket.on("adminReceiveMessage", ({userID, userName, msg}) => {
+            console.log(`admin receive message : ${msg} from ${userID}`);
+            setMessages((prev) => [...prev, {senderID:userID, senderName:userName, receiver:"aaaaa", content:msg, createdAt:"22-08-2024"}]);
+        });
 
 
         return () => {
@@ -87,10 +93,10 @@ const ChatbotAdmin = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) =>
     }, [USERNAME, USERID]);
 
     return(
-        <>
-        
-        <h5>UserID : {userID}</h5>
         <div className="chatbot_bg">
+            {/*<pre>{JSON.stringify(usersList, null, `\t`)}</pre>*/}
+            {/*<h4>userID : {userID}</h4>*/}
+            <div className="heading">Connected Users</div>
             {
                 !isChatStarted &&
                     Object.keys(usersList).map((userId, index) => (
@@ -111,14 +117,15 @@ const ChatbotAdmin = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) =>
                                 <BiUserCircle className="BiUserCircle" />
                             </div>
                             <div className="customer_name">
-                                <div className="name">AAAAA</div>
-                                <div className="post">customer support</div>
+                                {/*<div className="name">{usersList[userID as string].userName}</div>*/}
+                                <div className="name">AAAAAAA</div>
+                                <div className="post">user name</div>
                             </div>
                             <div className="like_dislike">
                                 <BiLike id="like" className="like" color={hasLiked?PRIMARY:"unset"} onClick={(e) => likeHandler(e)} /><BiDislike id="dislike" className="dislike" color={hasDisliked?PRIMARY:"unset"} onClick={(e) => likeHandler(e)} />
                             </div>
                         </div>
-                        <div className="middle_part"><Message messagesArr={messages} loggedInUserID={ADMINID as string} loggedInUserName={USERNAME as string}  /></div>
+                        <div className="middle_part"><Message messagesArr={messages} loggedInUserID={ADMIN_ID as string} loggedInUserName={USERNAME as string}  /></div>
                         <div className="lower_part">
                             <div className="upper_cont">
                                 <textarea className="comment" placeholder="Comment..." cols={2} value={message} style={{resize:"none"}} onChange={(e) => setMessage(e.target.value)}></textarea>
@@ -131,7 +138,6 @@ const ChatbotAdmin = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) =>
                     </div>
             }
         </div>
-        </>
     );
 };
 

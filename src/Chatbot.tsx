@@ -8,6 +8,7 @@ import { PRIMARY } from "./styles/utils";
 import { io, Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { useNavigate } from "react-router-dom";
+import { DEFAULT_ID } from "./assets/utiles";
 
 export interface MessageTypes {
     senderID: string;
@@ -16,7 +17,7 @@ export interface MessageTypes {
     content: string;
     createdAt: string;
 }
-//const USERID = "gourav123";
+
 
 let socket:Socket<DefaultEventsMap, DefaultEventsMap>;
 const Chatbot = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) => {
@@ -26,19 +27,10 @@ const Chatbot = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) => {
     const [message, setMessage] = useState<string>("");
     const [messages, setMessages] = useState<MessageTypes[]>([]);
     const navigate = useNavigate();
+    const [adminName, setAdminName] = useState<string>("");
     //const [isAdminBuisy, setIsAdminBuisy] = useState()
     
 
-    const startChatHandler = (socket?: Socket<DefaultEventsMap, DefaultEventsMap>) => {
-        socket?.emit("registerUser", {userID:USERID as string, userName:USERNAME as string});
-        console.log({USERID});
-        setIsChatStarted(true);
-    };
-    const endChatHandler = () => {
-        navigate("/chat");
-        setIsChatStarted(false);
-    };
-    
     const likeHandler = (e:MouseEvent<SVGElement>) => {
         if (e.currentTarget.id === "like") {
             setHasLiked(!hasLiked);
@@ -50,9 +42,18 @@ const Chatbot = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) => {
         }
     }
 
+    const startChatHandler = (socket?: Socket<DefaultEventsMap, DefaultEventsMap>) => {
+        socket?.emit("registerUser", {userID:USERID as string, userName:USERNAME as string});
+        setIsChatStarted(true);
+    };
+    const endChatHandler = () => {
+        socket.emit("userEndedChat", {defaultMsg:`${USERNAME} left`});
+        navigate("/chat");
+        setIsChatStarted(false);
+    };
+
     const sendMessageHandler = () => {
         socket?.emit("userMessage", {userID:USERID as string, userName:USERNAME as string, msg:message});
-        console.log({message});
         setMessages((prev) => [...prev, {senderID:USERID as string, senderName:USERNAME as string, receiver:"aaaaa", content:message, createdAt:"22-08-2024"}]);
         setMessage("");
     };
@@ -61,6 +62,19 @@ const Chatbot = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) => {
         socket = io("http://localhost:8000");
 
         //startChatHandler(socket);
+
+
+        //socket.on("defaultEventBE", ({defaultMsg}) => {
+        //    setMessages((prev) => [...prev, {senderID:DEFAULT_ID, senderName:"Default", receiver:"aaaaa", content:defaultMsg, createdAt:"22-08-2024"}]);
+        //});
+        socket.on("adminSelectedUserBE", ({adminName, defaultMsg}) => {
+            setMessages((prev) => [...prev, {senderID:DEFAULT_ID, senderName:"Default", receiver:"aaaaa", content:defaultMsg, createdAt:"22-08-2024"}]);
+            setAdminName(adminName);
+        });
+
+        socket.on("connectionEnded", ({defaultMsg}) => {
+            setMessages((prev) => [...prev, {senderID:DEFAULT_ID, senderName:"Default", receiver:"aaaaa", content:defaultMsg, createdAt:"22-08-2024"}]);
+        });
 
         socket.on("userReceiveResponse", ({adminID, userName, response}) => {
             console.log(`admin ${adminID} response : ${response}`);
@@ -79,12 +93,15 @@ const Chatbot = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) => {
             {/*<pre style={{fontSize:"0.5rem"}}>{JSON.stringify(messages, null, `\t`)}</pre>*/}
             {
                 !isChatStarted &&
+                <>
+                    {/*<Form heading="Start Chat" formFields={formFields} onChangeHandler={() => {}} onClickHandler={() => startChatHandler()} />*/}
                     <div className="form_cont">
                         <input type="text" className="name" placeholder="Name" />
                         <input type="text" className="email" placeholder="Email" />
                         <input type="text" className="comment" placeholder="Comment..." />
                         <button onClick={() => startChatHandler(socket)}>Start</button>
                     </div>
+                </>
             }
             {
                 isChatStarted &&
@@ -94,7 +111,7 @@ const Chatbot = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) => {
                                 <BiUserCircle className="BiUserCircle" />
                             </div>
                             <div className="customer_name">
-                                <div className="name">{USERNAME}</div>
+                                <div className="name">{adminName}</div>
                                 <div className="post">customer support</div>
                             </div>
                             <div className="like_dislike">
