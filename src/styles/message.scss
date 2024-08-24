@@ -1,0 +1,53 @@
+@import "./utils";
+
+.messanger_cont{
+    //border: 2px solid rgb(0, 255, 0);
+    width: 100%;
+    .message_cont{
+        //border: 1px solid red;
+        width: 60%;
+        margin: 8px;
+        padding: 6px;
+        background: white;
+        box-shadow: $shadow;
+        .name{
+            //border: 1px solid red;
+            font-size: 0.55rem;
+            font-weight: 500;
+            color: $primary;
+        }
+        .content{
+            //border: 1px solid blue;
+            font-size: 0.65rem;
+            color: #515151;
+            text-align: justify;
+        }
+        .date{
+            //border: 1px solid green;
+            font-size: 0.5rem;
+            color: #515151;
+            text-align: right;
+        }
+    }
+    .default_message_cont{
+        margin: 20px auto;
+
+        .date{
+            font-size: 0.5rem;
+            color: $primary;
+            text-align: center;
+            font-weight: 500;
+        }
+        .content{
+            width: 80%;
+            margin: 0px auto;
+            padding: 4px;
+            background: linear-gradient(90deg, $primary, $secondary);
+            box-shadow: $shadow;
+            border-radius: 8px;
+            font-size: 0.65rem;
+            color: white;
+            text-align: center;
+        }
+    }
+}

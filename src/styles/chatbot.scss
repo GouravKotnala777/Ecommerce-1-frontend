@@ -1,0 +1,179 @@
+@import "./utils";
+
+.chatbot_bg{
+    //border: 2px solid red;
+    height:88vh;
+    //display: grid;
+    //place-items: center;
+    position: relative;
+    .heading{
+        color: $primary;
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-align: center;
+    }
+    .form_cont{
+        //border: 2px solid violet;
+        position: absolute;
+        display:flex;
+        flex-direction: column;
+        padding: 10px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 8px;
+        background: linear-gradient(90deg, $primary, $secondary);
+
+        input{
+            margin-top: 10px;
+            width: 300px;
+            padding: 10px;
+            box-shadow: $shadow;
+            @include containerHollow(4px);
+            &:focus{
+                outline: 1px solid white;
+                //box-shadow:1px 1px 4px 1px white;
+            }
+        }
+        button{
+            margin: 10px 0;
+            padding: 10px;
+            cursor: pointer;
+            border: 1px solid white;
+            background: #51515126;
+            color: white;
+            font-weight: 500;
+            &:hover{
+                background: #5151510f;
+            }
+        }
+    }
+    .user_link{
+        //border: 2px solid rgb(13, 255, 0);
+        text-decoration: none;
+        margin-top: 10px;
+        @include containerHollow();
+        box-shadow: $shadow;
+        background: white;
+        &:hover{
+         background: $primaryHover;   
+        }
+        .user{
+            //border: 2px solid violet;
+            display: grid;
+            grid-template-columns: 15% 40% 45%;
+            place-items: center;
+            padding: 8px;
+            .photo{
+                //border: 2px solid indigo;
+                img{
+                    width: 40px;
+                    height: 40px;
+                }
+            }
+            .name{
+                //border: 2px solid blue;
+                font-size: 0.7rem;
+                color: #515151;
+                font-weight: 600;
+
+            }
+            .socket_id{
+                //border: 2px solid green;
+                font-size: 0.7rem;
+                color: #919191;
+            }
+        }
+    }
+    .chatbot_cont{
+        border:1px solid $primary;
+        width:320px;
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%, -50%);
+        padding:6px;
+        box-sizing:border-box;
+        background: linear-gradient(90deg, $secondary, $primary);
+        border-radius: 8px;
+
+        .upper_part{
+            //border: 2px solid violet;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            background: #ffffffc9;
+            border-radius: 4px 4px 0 0;
+            .customer_photo{
+                //border: 2px solid green;
+                .BiUserCircle{
+                    font-size: 40px;
+                }
+            }
+            .customer_name{
+                .name{
+                    font-size: 1rem;
+                }
+                .post{
+                    font-size: 0.7rem;
+                }
+            }
+            .like_dislike{
+                //border: 2px solid yellow;
+                display: flex;
+                //gap: 20px;
+                //align-items: center;
+                margin-left: auto;
+                .like{
+                    margin-right: 20px;
+                }
+                .dislike{
+                    margin-right: 10px;
+                }
+            }
+        }
+        .middle_part{
+            //border: 2px solid indigo;
+            height: 50vh;
+            overflow-y: scroll;
+            background: $bgPrimary;
+        }
+        .lower_part{
+            //border: 2px solid blue;
+            display: flex;
+            flex-direction: column;
+            .upper_cont{
+                //border: 2px solid violet;
+                display:flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 4px 0;
+                textArea{
+                    //border: 2px solid blue;
+                    padding: 5px;
+                    width: 80%;
+                }
+                .BiSend{
+                    //border: 2px solid green;
+                    width: 14%;
+                    height: 100%;
+                    border-radius: 50%;
+                    color: white;
+
+                    //font-size: 20px;
+                    //margin: 6px;
+                }
+            }
+            .lower_cont{
+                //border: 2px solid red;
+                display: flex;
+                justify-content: flex-end;
+                gap: 20px;
+                box-sizing: border-box;
+                padding: 5px;
+                color: white;
+            }
+    
+        }
+    }
+}
