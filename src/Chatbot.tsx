@@ -60,7 +60,7 @@ const Chatbot = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) => {
     };
 
     useEffect(() => {
-        socket = io("http://localhost:8000");
+        socket = io(import.meta.env.VITE_SERVER_URL);
 
         //startChatHandler(socket);
 

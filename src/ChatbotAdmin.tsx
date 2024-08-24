@@ -66,14 +66,12 @@ const ChatbotAdmin = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) =>
     };
 
     useEffect(() => {
-        console.log("1111111111111111111");
         startChatHandler();
-        console.log("1111111111111111111");
         
     }, [userID]);
 
     useEffect(() => {
-        socket = io("http://localhost:8000");
+        socket = io(import.meta.env.VITE_SERVER_URL);
         
         socket.emit("registerUser", {userID:ADMIN_ID, userName:USERNAME as string});
         socket.on("usersList", (users) => {
