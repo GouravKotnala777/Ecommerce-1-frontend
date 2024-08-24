@@ -10,7 +10,7 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { MessageTypes } from "./Chatbot";
 import photo from "./assets/react.svg";
-import { ADMIN_ID, DEFAULT_ID } from "./assets/utiles";
+import { ADMIN_ID, CHATBOT_ID, DEFAULT_ID } from "./assets/utiles";
 
 
 let socket:Socket<DefaultEventsMap, DefaultEventsMap>;
@@ -48,10 +48,14 @@ const ChatbotAdmin = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) =>
             setIsChatStarted(true);
         }
     };
-    const endChatHandler = () => {
+    const endChatWarningHandler = () => {
+        setMessages((prev) => [...prev, {senderID:CHATBOT_ID, senderName:"Chatbot", receiver:"aaaaa", content:"Do you want to left chat, all your chats will be removed!", createdAt:"22-08-2024"}]);
+    };
+    const endChatConfirmedHandler = () => {
         socket.emit("adminEndedChat", {userID:userID as string, defaultMsg:`${USERNAME} left`});
         navigate("/chat-admin");
         setIsChatStarted(false);
+        setMessages([]);
     };
 
     const sendMessageHandler = () => {
@@ -78,7 +82,6 @@ const ChatbotAdmin = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) =>
 
         socket.on("connectionEnded", ({defaultMsg}) => {
             setMessages((prev) => [...prev, {senderID:DEFAULT_ID, senderName:"Default", receiver:"aaaaa", content:defaultMsg, createdAt:"22-08-2024"}]);
-            setUsersList({});
         });
 
         socket.on("adminReceiveMessage", ({userID, userName, msg}) => {
@@ -94,7 +97,7 @@ const ChatbotAdmin = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) =>
 
     return(
         <div className="chatbot_bg">
-            {/*<pre>{JSON.stringify(usersList, null, `\t`)}</pre>*/}
+            <pre>{JSON.stringify(usersList, null, `\t`)}</pre>
             {/*<h4>userID : {userID}</h4>*/}
             <div className="heading">Connected Users</div>
             {
@@ -117,22 +120,22 @@ const ChatbotAdmin = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) =>
                                 <BiUserCircle className="BiUserCircle" />
                             </div>
                             <div className="customer_name">
-                                {/*<div className="name">{usersList[userID as string].userName}</div>*/}
-                                <div className="name">AAAAAAA</div>
+                                <div className="name">{usersList[userID as string]?.userName}</div>
+                                {/*<div className="name"></div>*/}
                                 <div className="post">user name</div>
                             </div>
                             <div className="like_dislike">
                                 <BiLike id="like" className="like" color={hasLiked?PRIMARY:"unset"} onClick={(e) => likeHandler(e)} /><BiDislike id="dislike" className="dislike" color={hasDisliked?PRIMARY:"unset"} onClick={(e) => likeHandler(e)} />
                             </div>
                         </div>
-                        <div className="middle_part"><Message messagesArr={messages} loggedInUserID={ADMIN_ID as string} loggedInUserName={USERNAME as string}  /></div>
+                        <div className="middle_part"><Message messagesArr={messages} loggedInUserID={ADMIN_ID as string} loggedInUserName={USERNAME as string} endChatConfirmedHandler={endChatConfirmedHandler}  /></div>
                         <div className="lower_part">
                             <div className="upper_cont">
                                 <textarea className="comment" placeholder="Comment..." cols={2} value={message} style={{resize:"none"}} onChange={(e) => setMessage(e.target.value)}></textarea>
                                 <BiSend className="BiSend" onClick={sendMessageHandler} />
                             </div>
                             <div className="lower_cont">
-                                <GrAttachment /><LuLogOut onClick={endChatHandler} />
+                                <GrAttachment /><LuLogOut onClick={endChatWarningHandler} />
                             </div>
                         </div>
                     </div>

@@ -7,8 +7,7 @@ import Message from "./Messanger";
 import { PRIMARY } from "./styles/utils";
 import { io, Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
-import { useNavigate } from "react-router-dom";
-import { DEFAULT_ID } from "./assets/utiles";
+import { CHATBOT_ID, DEFAULT_ID } from "./assets/utiles";
 
 export interface MessageTypes {
     senderID: string;
@@ -26,7 +25,6 @@ const Chatbot = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) => {
     const [hasDisliked, setHasDisliked] = useState<boolean>(false);
     const [message, setMessage] = useState<string>("");
     const [messages, setMessages] = useState<MessageTypes[]>([]);
-    const navigate = useNavigate();
     const [adminName, setAdminName] = useState<string>("");
     //const [isAdminBuisy, setIsAdminBuisy] = useState()
     
@@ -46,10 +44,13 @@ const Chatbot = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) => {
         socket?.emit("registerUser", {userID:USERID as string, userName:USERNAME as string});
         setIsChatStarted(true);
     };
-    const endChatHandler = () => {
+    const endChatWarningHandler = () => {
+        setMessages((prev) => [...prev, {senderID:CHATBOT_ID, senderName:"Chatbot", receiver:"aaaaa", content:"Do you want to left chat, all your chats will be removed!", createdAt:"22-08-2024"}]);
+    };
+    const endChatConfirmedHandler = () => {
         socket.emit("userEndedChat", {defaultMsg:`${USERNAME} left`});
-        navigate("/chat");
         setIsChatStarted(false);
+        setMessages([]);
     };
 
     const sendMessageHandler = () => {
@@ -93,19 +94,16 @@ const Chatbot = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) => {
             {/*<pre style={{fontSize:"0.5rem"}}>{JSON.stringify(messages, null, `\t`)}</pre>*/}
             {
                 !isChatStarted &&
-                <>
-                    {/*<Form heading="Start Chat" formFields={formFields} onChangeHandler={() => {}} onClickHandler={() => startChatHandler()} />*/}
-                    <div className="form_cont">
-                        <input type="text" className="name" placeholder="Name" />
-                        <input type="text" className="email" placeholder="Email" />
-                        <input type="text" className="comment" placeholder="Comment..." />
-                        <button onClick={() => startChatHandler(socket)}>Start</button>
-                    </div>
-                </>
+                <div className="chatbot_form_cont" onClick={(e) => e.stopPropagation()}>
+                    <input type="text" className="name" placeholder="Name (optional)" />
+                    <input type="text" className="email" placeholder="Email (optional)" />
+                    <input type="text" className="comment" placeholder="Comment... (optional)" />
+                    <button onClick={() => startChatHandler(socket)}>Start Chat</button>
+                </div>
             }
             {
                 isChatStarted &&
-                    <div className="chatbot_cont">
+                    <div className="chatbot_cont" onClick={(e) => e.stopPropagation()}>
                         <div className="upper_part">
                             <div className="customer_photo">
                                 <BiUserCircle className="BiUserCircle" />
@@ -118,14 +116,14 @@ const Chatbot = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) => {
                                 <BiLike id="like" className="like" color={hasLiked?PRIMARY:"unset"} onClick={(e) => likeHandler(e)} /><BiDislike id="dislike" className="dislike" color={hasDisliked?PRIMARY:"unset"} onClick={(e) => likeHandler(e)} />
                             </div>
                         </div>
-                        <div className="middle_part"><Message messagesArr={messages} loggedInUserID={USERID as string} loggedInUserName={USERNAME as string} /></div>
+                        <div className="middle_part"><Message messagesArr={messages} loggedInUserID={USERID as string} loggedInUserName={USERNAME as string} endChatConfirmedHandler={endChatConfirmedHandler} /></div>
                         <div className="lower_part">
                             <div className="upper_cont">
                                 <textarea className="comment" placeholder="Comment..." cols={2} value={message} style={{resize:"none"}} onChange={(e) => setMessage(e.target.value)}></textarea>
                                 <BiSend className="BiSend" onClick={sendMessageHandler} />
                             </div>
                             <div className="lower_cont">
-                                <GrAttachment /><LuLogOut onClick={endChatHandler} />
+                                <GrAttachment /><LuLogOut onClick={endChatWarningHandler} />
                             </div>
                         </div>
                     </div>
