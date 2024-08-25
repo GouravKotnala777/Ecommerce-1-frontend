@@ -19,7 +19,7 @@ const Sidebar = ({isHamActive, setIsHamActive, setIsMyProfileDialogOpen}:{isHamA
                     <NavLink className="sidebar_navlink" to="/user/login" onClick={closeSidebarHandler}>Login</NavLink>
                     <NavLink className="sidebar_navlink" to="/product/new" onClick={closeSidebarHandler}>Add Product</NavLink>
                     <NavLink className="sidebar_navlink" to="/user/wishlist" onClick={closeSidebarHandler}>Wishlist</NavLink>
-                    <NavLink className="sidebar_navlink" to="/chat-admin">Chats</NavLink>
+                    <NavLink className="sidebar_navlink" to="/chat-admin" onClick={closeSidebarHandler}>Chats</NavLink>
                     <NavLink className="sidebar_navlink" to="/admin/dashboard" onClick={closeSidebarHandler}>Dashboard</NavLink>
                     <NavLink className="sidebar_navlink" to="/user/orders" onClick={closeSidebarHandler}>Orders</NavLink>
                     <NavLink className="sidebar_navlink" to="/user/cart" onClick={closeSidebarHandler}>Cart</NavLink>
