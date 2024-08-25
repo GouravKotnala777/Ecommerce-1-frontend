@@ -44,12 +44,12 @@ const ChatbotAdmin = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) =>
 
     const startChatHandler = () => {
         if (userID) {
-            socket?.emit("adminSelectedUser", {userID:userID, adminName:USERNAME as string, defaultMsg:`${USERNAME} connected`});
+            socket?.emit("adminSelectedUser", {userID:userID, adminID:USERID as string, adminName:USERNAME as string, defaultMsg:`${USERNAME} connected`});
             setIsChatStarted(true);
         }
     };
     const endChatWarningHandler = () => {
-        setMessages((prev) => [...prev, {senderID:CHATBOT_ID, senderName:"Chatbot", receiver:"aaaaa", content:"Do you want to left chat, all your chats will be removed!", createdAt:"22-08-2024"}]);
+        setMessages((prev) => [...prev, {senderID:CHATBOT_ID, senderName:"Chatbot", content:"Do you want to left chat, all your chats will be removed!", createdAt:"22-08-2024"}]);
     };
     const endChatConfirmedHandler = () => {
         socket.emit("adminEndedChat", {userID:userID as string, defaultMsg:`${USERNAME} left`});
@@ -61,7 +61,7 @@ const ChatbotAdmin = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) =>
     const sendMessageHandler = () => {
         socket?.emit("adminResponse", {adminID:ADMIN_ID, userID, userName:USERNAME as string, response:message});
         console.log(`${message} to ${ADMIN_ID}`);
-        setMessages((prev) => [...prev, {senderID:ADMIN_ID, senderName:USERNAME as string, receiver:"aaaaa", content:message, createdAt:"22-08-2024"}]);
+        setMessages((prev) => [...prev, {senderID:ADMIN_ID, senderName:USERNAME as string, content:message, createdAt:"22-08-2024"}]);
         setMessage("");
     };
 
@@ -79,12 +79,12 @@ const ChatbotAdmin = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) =>
         });
 
         socket.on("connectionEnded", ({defaultMsg}) => {
-            setMessages((prev) => [...prev, {senderID:DEFAULT_ID, senderName:"Default", receiver:"aaaaa", content:defaultMsg, createdAt:"22-08-2024"}]);
+            setMessages((prev) => [...prev, {senderID:DEFAULT_ID, senderName:"Default", content:defaultMsg, createdAt:"22-08-2024"}]);
         });
 
         socket.on("adminReceiveMessage", ({userID, userName, msg}) => {
             console.log(`admin receive message : ${msg} from ${userID}`);
-            setMessages((prev) => [...prev, {senderID:userID, senderName:userName, receiver:"aaaaa", content:msg, createdAt:"22-08-2024"}]);
+            setMessages((prev) => [...prev, {senderID:userID, senderName:userName, content:msg, createdAt:"22-08-2024"}]);
         });
 
 
@@ -95,7 +95,7 @@ const ChatbotAdmin = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) =>
 
     return(
         <div className="chatbot_bg">
-            <pre>{JSON.stringify(usersList, null, `\t`)}</pre>
+            {/*<pre>{JSON.stringify(usersList, null, `\t`)}</pre>*/}
             {/*<h4>userID : {userID}</h4>*/}
             <div className="heading">Connected Users</div>
             {

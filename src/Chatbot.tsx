@@ -8,11 +8,11 @@ import { PRIMARY } from "./styles/utils";
 import { io, Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { CHATBOT_ID, DEFAULT_ID } from "./assets/utiles";
+import { useCreateChatMutation, useUpdateChatsHelpfulnessMutation } from "./redux/api/api";
 
 export interface MessageTypes {
     senderID: string;
     senderName: string;
-    receiver: string;
     content: string;
     createdAt: string;
 }
@@ -21,22 +21,51 @@ export interface MessageTypes {
 let socket:Socket<DefaultEventsMap, DefaultEventsMap>;
 const Chatbot = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) => {
     const [isChatStarted, setIsChatStarted] = useState<boolean>(false);
-    const [hasLiked, setHasLiked] = useState<boolean>(false);
-    const [hasDisliked, setHasDisliked] = useState<boolean>(false);
+    const [isHelpfulPageActive, setIsHelpfulPageActive] = useState<boolean>(false);
+    const [isHelpful, setIsHelpful] = useState<boolean>();
     const [message, setMessage] = useState<string>("");
     const [messages, setMessages] = useState<MessageTypes[]>([]);
-    const [adminName, setAdminName] = useState<string>("");
-    //const [isAdminBuisy, setIsAdminBuisy] = useState()
+    const [adminInfo, setAdminInfo] = useState<{adminID:string; adminName:string;}>({adminID:"", adminName:""});
+    const [createChat] = useCreateChatMutation();
+    const [updateIsHelpful] = useUpdateChatsHelpfulnessMutation();
+    const [createChatRes, setCreateChatRes] = useState<{success:boolean; message:string;}>({success:false, message:""});
     
 
-    const likeHandler = (e:MouseEvent<SVGElement>) => {
+    const likeHandler = async(e:MouseEvent<SVGElement>) => {
+        
         if (e.currentTarget.id === "like") {
-            setHasLiked(!hasLiked);
-            setHasDisliked(false);
+            setIsHelpful((prev) => !prev?true:undefined);
+            if (isHelpfulPageActive) {
+                try {
+                    const res = await updateIsHelpful({chatID:createChatRes.message, isHelpful:true});
+                    console.log("------ likeHandler  updateIsHelpful1");
+                    console.log(res);
+                    console.log("------ likeHandler  updateIsHelpful1");
+                } catch (error) {
+                    console.log("------ likeHandler  error1");
+                    console.log(error);
+                    console.log("------ likeHandler  error1");
+                }
+                setIsHelpfulPageActive(false);
+                setIsChatStarted(false);
+            }
         }
         else{
-            setHasDisliked(!hasDisliked);
-            setHasLiked(false);
+            setIsHelpful((prev) => (prev === undefined||prev === true)?false:undefined);
+            if (isHelpfulPageActive) {
+                try {
+                    const res = await updateIsHelpful({chatID:createChatRes.message, isHelpful:false});
+                    console.log("------ likeHandler  updateIsHelpful2");
+                    console.log(res);
+                    console.log("------ likeHandler  updateIsHelpful2");
+                } catch (error) {
+                    console.log("------ likeHandler  error2");
+                    console.log(error);
+                    console.log("------ likeHandler  error2");
+                }
+                setIsHelpfulPageActive(false);
+                setIsChatStarted(false);
+            }
         }
     }
 
@@ -45,41 +74,59 @@ const Chatbot = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) => {
         setIsChatStarted(true);
     };
     const endChatWarningHandler = () => {
-        setMessages((prev) => [...prev, {senderID:CHATBOT_ID, senderName:"Chatbot", receiver:"aaaaa", content:"Do you want to left chat, all your chats will be removed!", createdAt:"22-08-2024"}]);
+        setMessages((prev) => [...prev, {senderID:CHATBOT_ID, senderName:"Chatbot", content:"Do you want to left chat, all your chats will be removed!", createdAt:"22-08-2024"}]);
     };
-    const endChatConfirmedHandler = () => {
+    const endChatConfirmedHandler = async() => {
+        console.log("---------- (1)");
+        
         socket.emit("userEndedChat", {defaultMsg:`${USERNAME} left`});
-        setIsChatStarted(false);
+        console.log("---------- (2)");
+        try {
+            console.log("---------- (3)");
+            const res = await createChat({adminID:adminInfo.adminID, chats:messages, isHelpful});
+            console.log("---------- (3.1)");
+            
+            console.log("------- endChatConfirmedHandler createChat");
+            console.log(res);
+            if (res.data) {
+                console.log("---------- (3.2)");
+                setCreateChatRes(res.data);
+            }
+            console.log("------- endChatConfirmedHandler createChat");
+        } catch (error) {
+            console.log("---------- (4)");
+            console.log("------- endChatConfirmedHandler createChat");
+            console.log(error);
+            console.log("------- endChatConfirmedHandler createChat");
+        }
         setMessages([]);
+        setIsHelpful(undefined);
+        setIsHelpfulPageActive(true);
     };
 
     const sendMessageHandler = () => {
-        socket?.emit("userMessage", {userID:USERID as string, userName:USERNAME as string, msg:message});
-        setMessages((prev) => [...prev, {senderID:USERID as string, senderName:USERNAME as string, receiver:"aaaaa", content:message, createdAt:"22-08-2024"}]);
-        setMessage("");
+        if (message&&message.trim() !== "") {
+            socket?.emit("userMessage", {userID:USERID as string, userName:USERNAME as string, msg:message});
+            setMessages((prev) => [...prev, {senderID:USERID as string, senderName:USERNAME as string, content:message, createdAt:"22-08-2024"}]);
+            setMessage("");
+        }
     };
 
     useEffect(() => {
         socket = io(import.meta.env.VITE_SERVER_URL);
 
-        //startChatHandler(socket);
-
-
-        //socket.on("defaultEventBE", ({defaultMsg}) => {
-        //    setMessages((prev) => [...prev, {senderID:DEFAULT_ID, senderName:"Default", receiver:"aaaaa", content:defaultMsg, createdAt:"22-08-2024"}]);
-        //});
-        socket.on("adminSelectedUserBE", ({adminName, defaultMsg}) => {
-            setMessages((prev) => [...prev, {senderID:DEFAULT_ID, senderName:"Default", receiver:"aaaaa", content:defaultMsg, createdAt:"22-08-2024"}]);
-            setAdminName(adminName);
+        socket.on("adminSelectedUserBE", ({adminID, adminName, defaultMsg}) => {
+            setMessages((prev) => [...prev, {senderID:DEFAULT_ID, senderName:"Default", content:defaultMsg, createdAt:"22-08-2024"}]);
+            setAdminInfo({adminID, adminName});
         });
 
         socket.on("connectionEnded", ({defaultMsg}) => {
-            setMessages((prev) => [...prev, {senderID:DEFAULT_ID, senderName:"Default", receiver:"aaaaa", content:defaultMsg, createdAt:"22-08-2024"}]);
+            setMessages((prev) => [...prev, {senderID:DEFAULT_ID, senderName:"Default", content:defaultMsg, createdAt:"22-08-2024"}]);
         });
 
         socket.on("userReceiveResponse", ({adminID, userName, response}) => {
             console.log(`admin ${adminID} response : ${response}`);
-            setMessages((prev) => [...prev, {senderID:adminID, senderName:userName, receiver:"aaaaa", content:response, createdAt:"22-08-2024"}]);
+            setMessages((prev) => [...prev, {senderID:adminID, senderName:userName, content:response, createdAt:"22-08-2024"}]);
         });
 
 
@@ -91,7 +138,7 @@ const Chatbot = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) => {
     return(
         <div className="chatbot_bg">
             
-            {/*<pre style={{fontSize:"0.5rem"}}>{JSON.stringify(messages, null, `\t`)}</pre>*/}
+            {/*<pre style={{fontSize:"0.5rem"}}>{JSON.stringify(isHelpfulPageActive, null, `\t`)}</pre>*/}
             {
                 !isChatStarted &&
                 <div className="chatbot_form_cont" onClick={(e) => e.stopPropagation()}>
@@ -109,18 +156,35 @@ const Chatbot = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) => {
                                 <BiUserCircle className="BiUserCircle" />
                             </div>
                             <div className="customer_name">
-                                <div className="name">{adminName}</div>
+                                <div className="name">{adminInfo.adminName?adminInfo.adminName:"Please wait..."}</div>
                                 <div className="post">customer support</div>
                             </div>
                             <div className="like_dislike">
-                                <BiLike id="like" className="like" color={hasLiked?PRIMARY:"unset"} onClick={(e) => likeHandler(e)} /><BiDislike id="dislike" className="dislike" color={hasDisliked?PRIMARY:"unset"} onClick={(e) => likeHandler(e)} />
+                                <BiLike id="like" className="like" color={isHelpful === true?PRIMARY:"unset"} onClick={(e) => likeHandler(e)} />
+                                <BiDislike id="dislike" className="dislike" color={isHelpful === false?PRIMARY:"unset"} onClick={(e) => likeHandler(e)} />
                             </div>
                         </div>
-                        <div className="middle_part"><Message messagesArr={messages} loggedInUserID={USERID as string} loggedInUserName={USERNAME as string} endChatConfirmedHandler={endChatConfirmedHandler} /></div>
+                        <div className="middle_part">
+                            {
+                                isHelpfulPageActive ?
+                                    <div className="is_helpful_cont">
+                                        <div className="heading">Is it helpful</div>
+                                        <div className="like_icons">
+                                            <BiLike id="like" className="like" color={isHelpful === true?PRIMARY:"unset"} onClick={(e) => likeHandler(e)} />
+                                            <BiDislike id="dislike" className="dislike" color={isHelpful === false?PRIMARY:"unset"} onClick={(e) => likeHandler(e)} />
+                                        </div>
+                                        <button className="skip_btn" onClick={() => {setIsHelpfulPageActive(false); setIsChatStarted(false);}}>
+                                            Skip
+                                        </button>
+                                    </div>
+                                    :
+                                    <Message messagesArr={messages} loggedInUserID={USERID as string} loggedInUserName={USERNAME as string} endChatConfirmedHandler={endChatConfirmedHandler} />
+                            }
+                        </div>
                         <div className="lower_part">
                             <div className="upper_cont">
                                 <textarea className="comment" placeholder="Comment..." cols={2} value={message} style={{resize:"none"}} onChange={(e) => setMessage(e.target.value)}></textarea>
-                                <BiSend className="BiSend" onClick={sendMessageHandler} />
+                                <BiSend className="BiSend" style={{display:message&&message.trim()!==""?"block":"none"}} onClick={sendMessageHandler} />
                             </div>
                             <div className="lower_cont">
                                 <GrAttachment /><LuLogOut onClick={endChatWarningHandler} />

@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { MessageTypes } from "../../Chatbot";
 
 export interface UpdateProductBodyType {
     productID?:string;
@@ -47,6 +48,17 @@ export interface UpdateMeBodyType {
     city?:string;
     state?:string;
     zip?:string;
+}
+//export interface MessagesTypes {
+//    senderID: string;
+//    content: string;
+//    createdAt: string;
+//}
+export interface ChatTypes {
+    adminID:string;
+    chats:MessageTypes[];
+    isHelpful?:boolean;
+    createdAt?:string;
 }
 
 const api = createApi({
@@ -327,6 +339,22 @@ const api = createApi({
                 method:"GET",
                 credentials:"include"
             })
+        }),
+        createChat:builder.mutation({
+            query:({adminID, chats, isHelpful}:ChatTypes) => ({
+                url:"/api/v1/chat/new",
+                method:"POST",
+                credentials:"include",
+                body:{adminID, chats, isHelpful}
+            })
+        }),
+        updateChatsHelpfulness:builder.mutation({
+            query:({chatID, isHelpful}:{chatID:string; isHelpful:boolean;}) => ({
+                url:"/api/v1/chat/isHelpfull",
+                method:"PUT",
+                credentials:"include",
+                body:{chatID, isHelpful}
+            })
         })
     })
 })
@@ -338,5 +366,6 @@ export const {useRegisterMutation, useLoginMutation, useVerifyEmailMutation, use
     useOutStockProductsQuery, useIncompleteProductsQuery, useUpdateProductMutation,
     useCreateCouponsMutation, useGetAllCouponsQuery, useGetSingleCouponMutation,
     useCreatePaymentMutation,
-    useNewOrderMutation, useMyOrdersQuery
+    useNewOrderMutation, useMyOrdersQuery,
+    useCreateChatMutation, useUpdateChatsHelpfulnessMutation
 } = api;

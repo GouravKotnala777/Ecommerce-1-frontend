@@ -50,13 +50,18 @@
     }
     .user_link{
         //border: 2px solid rgb(13, 255, 0);
+        max-width: 600px;
         text-decoration: none;
-        margin-top: 10px;
-        @include containerHollow();
+        margin: 10px auto;
+        border-radius: 8px;
         box-shadow: $shadow;
         background: white;
         &:hover{
-         background: $primaryHover;   
+            background: linear-gradient(90deg, $primaryLow, $secondaryLow);
+            
+        }
+        &:hover> .user :not(:first-child) {
+            color: white;
         }
         .user{
             //border: 2px solid violet;
@@ -66,6 +71,11 @@
             padding: 8px;
             .photo{
                 //border: 2px solid indigo;
+                border-radius: 50%;
+                display: grid;
+                place-content: center;
+                padding: 5px;
+                background: white;
                 img{
                     width: 40px;
                     height: 40px;
@@ -76,7 +86,6 @@
                 font-size: 0.7rem;
                 color: #515151;
                 font-weight: 600;
-
             }
             .socket_id{
                 //border: 2px solid green;
@@ -108,6 +117,7 @@
                 //border: 2px solid green;
                 .BiUserCircle{
                     font-size: 40px;
+                    margin:5px 5px 0px 5px;
                 }
             }
             .customer_name{
@@ -137,6 +147,44 @@
             height: 50vh;
             overflow-y: scroll;
             background: $bgPrimary;
+            .is_helpful_cont{
+                //border: 2px solid green;
+                height: 96%;
+                display: grid;
+                place-content: center;
+                .heading{
+                    color: #919191;
+                    font-weight: 600;
+                }
+                .like_icons{
+                    //border: 2px solid blue;
+                    display: flex;
+                    justify-content: space-around;
+                    .like{
+                        font-size: 30px;
+                    }
+                    .dislike{
+                        font-size: 30px;
+
+                    }
+                }
+                .skip_btn{
+                    //border: 2px solid blue;
+                    margin-top: 10px;
+                    padding: 5px 0;
+                    font-size: 0.9rem;
+                    text-align: center;
+                    color: $primary;
+                    border: 1px solid $primary;
+                    border-radius: 4px;
+                    box-shadow: $shadow;
+                    background: linear-gradient(90deg, $primaryHover, $secondaryHover);
+                    cursor: pointer;
+                    &:hover{
+                        opacity: 0.6;
+                    }
+                }
+            }
         }
         .lower_part{
             //border: 2px solid blue;
