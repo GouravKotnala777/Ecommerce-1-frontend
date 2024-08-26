@@ -48,6 +48,10 @@
                     font-size: 0.7rem;
                     margin-top: 12px;
                     margin-bottom: 12px;
+                    cursor: pointer;
+                    &:hover{
+                        color: $primary;
+                    }
                     .col{
                         //border: 1px solid pink;
                         .span_left{
