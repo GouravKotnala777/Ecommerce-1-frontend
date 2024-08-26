@@ -91,30 +91,55 @@ const SearchedProducts = () => {
 
 
     const filterChangeHandler = (e:ChangeEvent<HTMLSelectElement|HTMLInputElement|HTMLTextAreaElement>) => {
-        setFilter({...filter, [e.target.name]:e.target.value});
+        setFilter({...(filter as {
+            category: string;
+            sub_category: string;
+            brand: string;
+            price: {
+                minPrice?: number;
+                maxPrice?: number;
+            };
+        }), [e.target.name]:e.target.value});
     };
 
-    const firstTimeFetching = async() => {
+    const firstTimeFetching = async(runByFilter?:boolean) => {
         try {
+            if (runByFilter) {
+                skip = 0;
+            }
+            //console.log(filter);
+            console.log({searchQry:searchQry as string, skip:skip, limit:5, category:filter?.category, sub_category:filter?.sub_category, brand:filter?.brand, price:{minPrice:aa.minPrice, maxPrice:aa.maxPrice}});
+            
             const searchedProductsRes:{data?:{message:ProductTypes[];}} = await searchedProducts({searchQry:searchQry as string, skip:skip, limit:5, category:filter.category, sub_category:filter.sub_category, brand:filter.brand, price:{minPrice:aa.minPrice, maxPrice:aa.maxPrice}});
 
-            if (searchedProductsRes.data?.message && searchedProductsRes.data?.message.length > 4) {
-                setProducts((prev) => [...prev, ...searchedProductsRes.data?.message as ProductTypes[]]);
-                console.log("------- firstTimeFetching1");
-                console.log(searchedProductsRes);
-                console.log("------- firstTimeFetching1");
+
+            if (runByFilter) {
                 fetchAgainRef.current = true;
+                setProducts([...searchedProductsRes.data?.message as ProductTypes[]]);
+                console.log("------- firstTimeFetchingRunByFilter");
+                console.log(searchedProductsRes);
+                console.log("------- firstTimeFetchingRunByFilter");
             }
-            else if (searchedProductsRes.data?.message && searchedProductsRes.data?.message.length <= 4) {
-                if (fetchAgainRef.current === true) {
+            else{
+                if (searchedProductsRes.data?.message && searchedProductsRes.data?.message.length > 4) {
                     setProducts((prev) => [...prev, ...searchedProductsRes.data?.message as ProductTypes[]]);
-                    console.log("------- firstTimeFetching2");
+                    console.log("------- firstTimeFetching1");
                     console.log(searchedProductsRes);
-                    console.log("------- firstTimeFetching2");
-                    fetchAgainRef.current = false;
+                    console.log("------- firstTimeFetching1");
+                    fetchAgainRef.current = true;
+                    skip = skip+1;
                 }
-                else{
-                    console.log(":::::::::::::");
+                else if (searchedProductsRes.data?.message && searchedProductsRes.data?.message.length <= 4) {
+                    if (fetchAgainRef.current === true) {
+                        setProducts((prev) => [...prev, ...searchedProductsRes.data?.message as ProductTypes[]]);
+                        console.log("------- firstTimeFetching2");
+                        console.log(searchedProductsRes);
+                        console.log("------- firstTimeFetching2");
+                        fetchAgainRef.current = false;
+                    }
+                    else{
+                        console.log(":::::::::::::");
+                    }
                 }
             }
         } catch (error) {
@@ -131,8 +156,9 @@ const SearchedProducts = () => {
             if (searchedProductsBg.current) {
                 const productsCont = searchedProductsBg.current;
                 if (productsCont.scrollTop + productsCont.clientHeight+5 >= productsCont.scrollHeight) {
-                    skip = skip+1;
-                    firstTimeFetching();
+                    if (fetchAgainRef.current) {
+                        firstTimeFetching();
+                    }
                 }
             }
         };
@@ -147,7 +173,7 @@ const SearchedProducts = () => {
                 productsCont.removeEventListener('scroll', handleScroll);
             }
         };
-    }, []);
+    }, [aa, filter]);
 
 
     useEffect(() => {
@@ -158,9 +184,8 @@ const SearchedProducts = () => {
     return (
         <div ref={searchedProductsBg} id="searched_products_bg" className="searched_products_bg">
             <div className="filters_cont">
-                {JSON.stringify(fetchAgainRef.current)}
-                <Form heading="Filter" formFields={formFields} onChangeHandler={(e) => filterChangeHandler(e)} onClickHandler={firstTimeFetching} aa={aa} setAa={setAa} />
-                <button onClick={firstTimeFetching}>Filter</button>
+                <Form heading="Filter" formFields={formFields} onChangeHandler={(e) => filterChangeHandler(e)} onClickHandler={() => firstTimeFetching(true)} aa={aa} setAa={setAa} />
+                <button onClick={() => firstTimeFetching()}>Filter</button>
             </div>
             <div id="products_cont" className="products_cont">
                 {

@@ -32,6 +32,7 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { SerializedError } from '@reduxjs/toolkit'
 import Chatbot from './Chatbot'
 import ChatbotAdmin from './ChatbotAdmin'
+import Test from './Test'
 
 
 
@@ -57,7 +58,7 @@ const App = () => {
             <Header userName={myProfileData.data?.message.name} cartNotification={cartData.data?.message.products.reduce((acc, iter) => acc+iter.quantity, 0) as number} />
             <Routes>
               <Route path="/" element={<Home />} />
-              {/*<Route path="/chat" element={<Chatbot/>} />*/}
+              <Route path="/test" element={<Test/>} />
               <Route path="/chat-admin" element={<ChatbotAdmin USERID={myProfileData.data?.message._id} USERNAME={myProfileData.data?.message.name} />} />
               <Route path="/product/new" element={<AddProduct />} />
               <Route path="/user/register" element={<Register />} />
