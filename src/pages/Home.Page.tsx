@@ -43,7 +43,7 @@ const Home = () => {
         
         if (homeBg) {
             (homeBg as HTMLElement).classList.add("add_overlay");
-            (homeBg as HTMLElement).classList.add("freeze");
+            document.body.classList.add("freeze");
         }
         if (productSuggessionCont) {
             productSuggessionCont.style.display = "block";
@@ -51,11 +51,6 @@ const Home = () => {
     };
     const onBlurSearchInp = (e:FocusEvent<HTMLInputElement>) => {
         e.stopPropagation();
-        const searchInp = document.getElementById("search_inp");
-        const searchBtn = document.getElementById("search_btn");
-        (searchInp as HTMLElement).style.zIndex = "0";
-        (searchBtn as HTMLElement).style.zIndex = "0";
-
     };
     const onClickOverlay = (e:MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
@@ -63,7 +58,7 @@ const Home = () => {
         const productSuggessionCont = document.getElementById("product_suggession_cont");
         if ((homeBg as HTMLElement).classList.contains("add_overlay")) {
             (homeBg as HTMLElement).classList.remove("add_overlay");
-            (homeBg as HTMLElement).classList.remove("freeze");
+            document.body.classList.remove("freeze");
         }
         
         if (productSuggessionCont) {
