@@ -6,7 +6,7 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { SerializedError } from "@reduxjs/toolkit";
 import Spinner from "../components/Spinner";
 
-interface Aa {
+export interface OrderResponseType {
 	success: boolean;
 	message:{
         paymentInfo?: {
@@ -45,7 +45,7 @@ const productTableHeadings = [
 const MyOrders = () => {
     const myOrders:{
         isLoading:boolean;
-        data?:Aa;
+        data?:OrderResponseType;
         error?:FetchBaseQueryError | SerializedError;
     } = useMyOrdersQuery("");
     const [list, setList] = useState<{ [key: string]:UpdateProductBodyType;}>({});
