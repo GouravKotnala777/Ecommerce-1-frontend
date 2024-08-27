@@ -8,8 +8,8 @@ const RatingSystem = ({rating}:{rating?:number}) => {
     const stars:ReactElement[] = [];
     
 
-    for (let i = 0; i < totalStars; i++) {
-        if (i < filledStars) {
+    for (let i = 1; i < totalStars+1; i++) {
+        if (i <= filledStars) {
             
             stars.push(<span key={i}><BsStarFill className="star_icons" /></span>)
         }
