@@ -12,9 +12,10 @@ import { ChangeEvent, useState } from "react";
 import DialogWrapper from "../components/DialogWrapper";
 import { useDispatch, useSelector } from "react-redux";
 import { MiscReducerTypes, setIsReviewDialogActive } from "../redux/reducers/miscReducers";
-import { MdDeleteForever } from "react-icons/md";
+import { MdDeleteForever, MdVerified } from "react-icons/md";
 import ProductSlider from "../components/ProductSlider";
 import HandleMutationRes from "../components/HandleMutationRes";
+import { FaArrowAltCircleDown, FaArrowAltCircleUp } from "react-icons/fa";
 
 
 const formFields = [
@@ -126,8 +127,18 @@ const SingleProduct = () => {
                                             <div className="rating"><RatingSystem rating={review?.rating} /></div>
                                         </div>
                                         <div className="right_part">
-                                            <div className="comment_heading">Comment:</div>
+                                            <div className="comment_heading"><span>Comment:</span><span className="verified_purchases"><MdVerified className="MdVerified"/></span></div>
                                             <div className="comment_value">{review.comment}</div>
+                                            <div className="vote_icons">
+                                                <div className="down_vote">
+                                                    <FaArrowAltCircleDown className="FaArrowAltCircleDown"/>
+                                                    <div className="down_vote_value">6</div>
+                                                </div>
+                                                <div className="up_vote">
+                                                    <FaArrowAltCircleUp className="FaArrowAltCircleUp"/>
+                                                    <div className="up_vote_value">141</div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

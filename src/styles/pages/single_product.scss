@@ -80,6 +80,30 @@
                         border-radius: 4px 4px 0 0;                    
                         padding: 5px;
                         font-weight: 500;
+                        display: flex;
+                        align-items: center;
+                        .verified_purchases{
+                            //border: 1px solid red;
+                            margin-left: 50%;
+                            display: flex;
+                            position: relative;
+                            &:hover{
+                                &::after{
+                                    content: "verified purchase";
+                                    position: absolute;
+                                    text-wrap: nowrap;
+                                    font-size: 0.6rem;
+                                    background: #3a3a3a;
+                                    top: 20px;
+                                    left: -150%;
+                                    padding: 4px;
+                                    border-radius: 4px;
+                                }
+                            }
+                            .MdVerified{
+                                font-size: 1rem;
+                            }
+                        }
                     }
                     .comment_value{
                         //border: 2px solid blue;
@@ -87,6 +111,43 @@
                         color: #646464;
                         padding: 5px;
                         text-align: justify;
+                    }
+                    .vote_icons{
+                        //border: 1px solid red;
+                        display: flex;
+                        font-size: 0.7rem;
+                        color: #c7c7c7;
+                        .down_vote{
+                            display: flex;
+                            align-items: center;
+                            
+                            .FaArrowAltCircleDown{
+                                cursor: pointer;
+                                font-size: 0.8rem;
+                                &:hover{
+                                    color: $primaryLow;
+                                }
+                            }
+                            .down_vote_value{
+                                margin-left: 5px;
+                            }
+                        }
+                        .up_vote{
+                            display: flex;
+                            align-items: center;
+                            margin-left: 40px;
+
+                            .FaArrowAltCircleUp{
+                                font-size: 0.8rem;
+                                cursor: pointer;
+                                &:hover{
+                                    color: $primaryLow;
+                                }
+                            }
+                            .up_vote_value{
+                                margin-left: 5px;
+                            }
+                        }
                     }
                 }
             }
