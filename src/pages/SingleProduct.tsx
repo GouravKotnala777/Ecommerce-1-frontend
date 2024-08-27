@@ -23,7 +23,6 @@ const formFields = [
     {type:"text", name:"comment", placeHolder:"Comment"},
 ];
 
-
 const SingleProduct = () => {
     const {productID} = useParams();
     const [formFieldData,setFormFieldData] = useState<{productID:string; rating:number; comment:string;}>({productID:"", rating:0, comment:""});
@@ -34,6 +33,8 @@ const SingleProduct = () => {
     const {isReviewDialogActive} = useSelector((state:{miscReducer:MiscReducerTypes}) => state.miscReducer);
     const [createReview] = useCreateReviewMutation();
     const [deleteReview] = useDeleteReviewMutation();
+    
+
     //const getSameProducts:{data?:{success:boolean; message:ProductTypesPopulated[];}} = useGetProductsOfSameQuery({query:"brand", value:"labrada"});
 
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
@@ -56,8 +57,12 @@ const SingleProduct = () => {
         }
     };
 
+
+
     return(
         <div className="single_product_bg">
+            {/*<button onClick={yy}>Fetch</button>
+            <pre>{JSON.stringify(singleProduct.data?.message, null, `\t`)}</pre>*/}
             <HandleMutationRes res={postReviewRes} />
 
             <DialogWrapper toggler={isReviewDialogActive} setToggler={setIsReviewDialogActive} Element={<Form heading="Give Review" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={postReviewHandler} />} />
@@ -102,7 +107,15 @@ const SingleProduct = () => {
                                     <div className="rating"><RatingSystem rating={review.rating} /></div>
                                 </div>
                                 <div className="right_part">
-                                    <div className="comment_heading">Comment:</div>
+                                    <div className="comment_heading">
+                                    <span>Comment:</span>
+                                        <span className="verified_purchases">
+                                            {
+                                                review.isPurchaseVerified &&
+                                                    <MdVerified className="MdVerified"/>
+                                            }
+                                        </span>
+                                    </div>
                                     <div className="comment_value">{review.comment}</div>
                                 </div>
                             </div>
@@ -127,7 +140,15 @@ const SingleProduct = () => {
                                             <div className="rating"><RatingSystem rating={review?.rating} /></div>
                                         </div>
                                         <div className="right_part">
-                                            <div className="comment_heading"><span>Comment:</span><span className="verified_purchases"><MdVerified className="MdVerified"/></span></div>
+                                            <div className="comment_heading">
+                                                <span>Comment:</span>
+                                                <span className="verified_purchases">
+                                                    {
+                                                        review.isPurchaseVerified &&
+                                                            <MdVerified className="MdVerified"/>
+                                                    }
+                                                </span>
+                                            </div>
                                             <div className="comment_value">{review.comment}</div>
                                             <div className="vote_icons">
                                                 <div className="down_vote">

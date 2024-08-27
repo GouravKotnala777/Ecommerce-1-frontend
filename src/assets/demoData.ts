@@ -89,6 +89,7 @@ export interface ProductTypesPopulated {
         },
         rating:number;
         comment:string;
+        isPurchaseVerified: boolean;
         updatedAt:string;
         createdAt:string;
     }[];

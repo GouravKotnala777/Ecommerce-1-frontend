@@ -51,6 +51,22 @@ const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPri
     
             if (error) {
                 setError(error.message);
+
+                console.log({paymentIntent});
+                
+                const newOrderRes = await newOrder({
+                    orderItems,
+                    totalPrice,
+                    coupon,
+                    transactionId:"no transactionID",
+                    shippingType, status:"cancelled",
+                    message:error.message?error.message:"no message",
+                    parent:parent as string
+                });
+
+                console.log("---- Payment.tsx");
+                console.log(newOrderRes);
+                console.log("---- Payment.tsx");
             }
             else if(paymentIntent.status === "succeeded"){
                 setPaymentSuccess(true);
