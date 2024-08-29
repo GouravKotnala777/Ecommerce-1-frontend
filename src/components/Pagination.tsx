@@ -24,10 +24,10 @@ const Pagination = ({documentCount, skip, setSkip}:{documentCount:number; skip:n
         <div className="pagination_cont">
             <div className="btn_cont">
                 <button style={{
-                    border:skip > 0? `1px solid ${PRIMARY}` : `1px solid ${PRIMARY_HOVER}`,
-                    color:skip > 0? PRIMARY : PRIMARY_HOVER
+                    border:skip > 3? `1px solid ${PRIMARY}` : `1px solid ${PRIMARY_HOVER}`,
+                    color:skip > 3? PRIMARY : PRIMARY_HOVER
                 }} onClick={() => {
-                    if (skip > 0) {
+                    if (skip > 3) {
                         setSkip(skip-(4+(skip%4)))
                     }
                 }}><BiLeftArrow /></button>
@@ -39,10 +39,10 @@ const Pagination = ({documentCount, skip, setSkip}:{documentCount:number; skip:n
                 
 
                 <button style={{
-                    border:skip < documentCount? `1px solid ${PRIMARY}` : `1px solid ${PRIMARY_HOVER}`,
-                    color:skip < documentCount? PRIMARY : PRIMARY_HOVER
+                    border:skip+3 < documentCount? `1px solid ${PRIMARY}` : `1px solid ${PRIMARY_HOVER}`,
+                    color:skip+3 < documentCount? PRIMARY : PRIMARY_HOVER
                 }} onClick={() => {
-                    if (skip < documentCount) {
+                    if (skip+3 < documentCount) {
                         setSkip(skip+(4-(skip%4)))
                     }
                 }}><BiRightArrow /></button>
