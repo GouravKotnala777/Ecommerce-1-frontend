@@ -15,13 +15,9 @@ const Pagination = ({documentCount, skip, setSkip}:{documentCount:number; skip:n
             }} onClick={() => setSkip(num-1)}>{num}</button>);
         }
 
-        const arr2 = [...arr];
-
-        return (arr2.splice(skip, 4).length > 3 ?
-                    arr.splice(skip, 4)
-                    :
-                    arr.splice(count-3, 4)
-                );
+        const arr2 = [...arr];        
+        
+        return arr2.splice(Math.floor(skip / 4)*4, 4);
     }
     
     return(
@@ -32,7 +28,7 @@ const Pagination = ({documentCount, skip, setSkip}:{documentCount:number; skip:n
                     color:skip > 0? PRIMARY : PRIMARY_HOVER
                 }} onClick={() => {
                     if (skip > 0) {
-                        setSkip(skip-1)
+                        setSkip(skip-(4+(skip%4)))
                     }
                 }}><BiLeftArrow /></button>
 
@@ -47,7 +43,7 @@ const Pagination = ({documentCount, skip, setSkip}:{documentCount:number; skip:n
                     color:skip < documentCount? PRIMARY : PRIMARY_HOVER
                 }} onClick={() => {
                     if (skip < documentCount) {
-                        setSkip(skip+1)
+                        setSkip(skip+(4-(skip%4)))
                     }
                 }}><BiRightArrow /></button>
             </div>
