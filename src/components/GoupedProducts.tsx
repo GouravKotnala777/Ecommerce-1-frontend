@@ -9,7 +9,7 @@ const GroupedProducts = ({query, value}:{query:string; value:string|number}) => 
     return(
         <Link to={`/group/${query}/${value}`} className="grouped_products_cont">
             <div className="upper_part">
-                <img src={photo} alt={photo} />
+                <img src={`https://res.cloudinary.com/dx4comsu3/image/upload/v1714731879/${query}/${value}.jpg`} alt={photo} />
             </div>
             <div className="lower_part">
                 <div className="grouped_products_name">
