@@ -1,22 +1,24 @@
 @import "../utils";
 
 .grouped_products_cont{
-    //border: 2px solid red;
     width: 90px;
     padding: 10px;
     margin: 10px 0;
     text-decoration: none;
-    @include containerHollow;
+    border-radius: 8px;
     box-shadow: $shadow;
+    border: 1px solid rgba(255, 0, 0, 0.198);
+    background: white;
     .upper_part{
         //border: 2px solid violet;
         text-align: center;
-        width: 86px;
+        width: 88px;
         height: 86px;
         img{
             //border: 2px solid indianred;
-            width: 96%;
+            width: 98%;
             height: 96%;
+            border-radius: 4px;
         }
     }
     .lower_part{
