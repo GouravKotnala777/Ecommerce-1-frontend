@@ -16,7 +16,7 @@ import { useUpdateMeMutation } from "../redux/api/api";
 //import { ProductTypes } from "../assets/demoData";
 
 
-const Header = ({userName, cartNotification}:{userName?:string; cartNotification:number;}) => {
+const Header = ({userName, wishlistNotification, cartNotification}:{userName?:string; wishlistNotification?:number; cartNotification:number;}) => {
     const [hideHeader, setHideHeader] = useState<boolean>(false);
     const previousScrollPos = useRef<number>(0);
     const [isHamActive, setIsHamActive] = useState<boolean>(false);
@@ -57,11 +57,13 @@ const Header = ({userName, cartNotification}:{userName?:string; cartNotification
                         <NavLink className="navlinks" to="/user/register">Register</NavLink>
                         <NavLink className="navlinks" to="/user/login">Login</NavLink>
                         <NavLink className="navlinks" to="/product/new">Add Product</NavLink>
-                        <NavLink className="navlinks" to="/user/wishlist">Wishlist</NavLink>
+                        <NavLink className="navlinks cart_navlinks" to="/user/wishlist">
+                            {wishlistNotification !== 0 && wishlistNotification !== undefined && <div className="notification">{wishlistNotification}</div>} Wishlist
+                        </NavLink>
                         <NavLink className="navlinks" to="/admin/dashboard">Dashboard</NavLink>
                         <NavLink className="navlinks" to="/user/orders">Orders</NavLink>
                         <NavLink className="navlinks cart_navlinks" to="/user/cart">
-                            {cartNotification !== 0 && cartNotification !== undefined && <div className="cart_notification">{cartNotification}</div>} Cart
+                            {cartNotification !== 0 && cartNotification !== undefined && <div className="notification">{cartNotification}</div>} Cart
                         </NavLink>
                         <div className="navlinks" style={{cursor:"pointer"}} onClick={() => setIsMyProfileDialogOpen(true)}>My Profile</div>
                         <NavLink className="navlinks" to="/user/logout">Logout</NavLink>

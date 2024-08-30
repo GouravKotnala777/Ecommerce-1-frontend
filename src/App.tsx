@@ -18,7 +18,7 @@ import UpdateProduct from './pages/admin/UpdateProduct'
 import Coupons from './pages/admin/Coupon'
 import StripePayment from './pages/Payment'
 import Address from './pages/Address.Page'
-import { useFetchMyCartQuery, useMyProfileQuery } from './redux/api/api'
+import { useFetchMyCartQuery, useMyProfileQuery, useMyWhishlistQuery } from './redux/api/api'
 import { ProductTypes, UserTypes } from './assets/demoData'
 import { setLoggedInUser } from './redux/reducers/loggedInUserReducer'
 import IncompleteProducts from './pages/admin/IncompleteProducts'
@@ -42,7 +42,12 @@ const App = () => {
     isLoading:boolean;
     data?:{success:boolean; message:{products:{productID:ProductTypes; quantity:number;}[]; totalPrice:number;}};
     error?:FetchBaseQueryError|SerializedError;
-} = useFetchMyCartQuery("");
+  } = useFetchMyCartQuery("");
+  const  wishlistData:{
+    isLoading:boolean;
+    data?:{success:boolean; message:ProductTypes[]};
+    error?:FetchBaseQueryError | SerializedError;
+  } = useMyWhishlistQuery("");
   const dispatch = useDispatch();
   
   useEffect(() => {
@@ -54,7 +59,7 @@ const App = () => {
         <>
           <BrowserRouter>
             <DialogWrapper toggler={reportDialogToggle} setToggler={setReportDialogToggle} Element={<Chatbot USERID={myProfileData.data?.message._id} USERNAME={myProfileData.data?.message.name} />} />
-            <Header userName={myProfileData.data?.message.name} cartNotification={cartData.data?.message.products.reduce((acc, iter) => acc+iter.quantity, 0) as number} />
+            <Header userName={myProfileData.data?.message.name} wishlistNotification={wishlistData.data?.message.length} cartNotification={cartData.data?.message.products.reduce((acc, iter) => acc+iter.quantity, 0) as number} />
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/chat-admin" element={<ChatbotAdmin USERID={myProfileData.data?.message._id} USERNAME={myProfileData.data?.message.name} />} />
@@ -67,7 +72,7 @@ const App = () => {
               <Route path="/product/pay" element={<StripePayment />} />
               <Route path="/product/search/:searchQry" element={<SearchedProducts />} />
               <Route path="/product/:productID" element={<SingleProduct />} />
-              <Route path="/user/wishlist" element={<Wishlist />} />
+              <Route path="/user/wishlist" element={<Wishlist wishlistData={wishlistData} />} />
               <Route path="/user/address" element={<Address />} />
               <Route path="/user/verifyemail" element={<VerifyEmail />} />
               <Route path="/group/:query/:value" element={<ProductsOfSame />} />

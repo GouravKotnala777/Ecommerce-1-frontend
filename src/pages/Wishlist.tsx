@@ -1,18 +1,16 @@
 import { SerializedError } from "@reduxjs/toolkit";
 import { ProductTypes } from "../assets/demoData";
 import SingleProductTemplate from "../components/SingleProductTemplate";
-import { useMyWhishlistQuery } from "../redux/api/api";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import ItemNotFound from "../components/ItemNotFound";
 import Spinner from "../components/Spinner";
 
 
-const Wishlist = () => {
-    const wishlistData:{
+const Wishlist = ({wishlistData}:{wishlistData:{
         isLoading:boolean;
         data?:{success:boolean; message:ProductTypes[]};
         error?:FetchBaseQueryError | SerializedError;
-    } = useMyWhishlistQuery("");
+    }}) => {
 
 
     return(
