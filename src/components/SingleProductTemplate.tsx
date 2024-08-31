@@ -128,7 +128,7 @@ const SingleProductTemplate = ({productID, userWishlist, category, name, price, 
                         <div className="product_cont">
                             <div className="left_part">
                                 <NavLink to={`/product/${productID}`} className="navlink">
-                                    <ImageWithFallback src={photo} alt={photo} fallbackSrc={unknownProductImg} />
+                                    <ImageWithFallback src={photo.split("/upload")[0]+"/upload/w_256,h_256"+photo.split("/upload")[1]} alt={photo} fallbackSrc={unknownProductImg} />
                                 </NavLink>
                             </div>
                             <div className="right_part">

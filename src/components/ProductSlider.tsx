@@ -21,18 +21,16 @@ const ProductSlider = ({query, value}:{query:"category"|"brand"|"rating"; value:
                         <div className="products_cont">
                             {
                                 getSameProducts.data?.message.map((item, index) => (
-                                    <div className="product_cont" key={index}>
-                                        <Link to={`/product/${item._id}`} className="link">
-                                        <ImageWithFallback src={photo} alt={photo} fallbackSrc={unknownProductImg} />
-                                        </Link>
+                                    <Link to={`/product/${item._id}`} className="product_cont" key={index}>
+                                        <div  className="img_cont">
+                                            <ImageWithFallback src={item.images[0].split("/upload")[0]+"/upload/w_100,h_80"+item.images[0].split("/upload")[1]} alt={photo} fallbackSrc={unknownProductImg} />
+                                        </div>
                                         <div className="detaile_cont">
-                                            {/*<div className="heading">{query === "category" ? "Brand" : "Category"}</div>*/}
                                             <div className="value">{item[query]}</div>
-                                            <div className="value">{item[query === "category" ? "brand" : "category"]}</div>
-                                            {/*<div className="heading">Price</div>*/}
+                                            <div className="value name">{item.name}</div>
                                             <div className="value">{item.price}₹</div>
                                         </div>
-                                    </div>
+                                    </Link>
                                 ))
                             }
                             

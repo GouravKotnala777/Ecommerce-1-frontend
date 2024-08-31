@@ -23,7 +23,7 @@ const Products = ({products}:{products:ProductTypes[]|undefined}) => {
                         <div className="product_cont" key={product._id}>
                             <div className="upper_part">
                                 <Link className="link" to={`/product/${product._id}`}>
-                                    <ImageWithFallback src={product.images[0]} alt={unknownProductImg} fallbackSrc={unknownProductImg} />
+                                    <ImageWithFallback src={product.images[0].split("/upload")[0]+"/upload/w_200,h_200"+product.images[0].split("/upload")[1]} alt={unknownProductImg} fallbackSrc={unknownProductImg} />
                                 </Link>
                             </div>
                             <div className="middle_part">

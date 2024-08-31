@@ -13,13 +13,27 @@
         .products_cont{
             //border: 2px solid violet;
             display: flex;
+            margin: 10px 0 20px 0;
+            gap:30px;
             .product_cont{
                 //border: 2px solid indigo;
                 text-align: center;
                 margin: 5px;
-                .link{
+                margin: 5px;
+                background: white;
+                padding: 10px;
+                border-radius: 8px;
+                box-shadow: $shadow;
+                display: block;
+                text-decoration: none;
+                //width: 50px;
+                //height: 50px;
+                &:hover{
+                    background:linear-gradient(90deg, $primaryHover, $secondaryHover);
+                }
+                .img_cont{
                     //border: 1px solid rgb(255, 0, 0);
-                    display: block;
+                    //display: block;
                     img{
                         //border: 1px solid rosybrown;
                         width: 100px;
@@ -30,14 +44,16 @@
                     //border: 2px solid green;
                     //display: grid;
                     //grid-template-columns: 50% 50%;
-                    .heading{
-                        //border: 2px solid orange;
-                        font-size: 0.7rem;
-                    }
                     .value{
                         //border: 2px solid blue;
                         font-size: 0.6rem;
-    
+                        color: #515151;
+                        font-weight: 600;
+                    }
+                    .name{
+                        font-size: 0.7rem;
+                        font-weight: bold;
+                        color: $primary;
                     }
                 }
     
