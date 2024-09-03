@@ -18,6 +18,7 @@ interface SingleProductTemplatePropTypes{
     productID?:string;
     userWishlist?:string[];
     category?:string;
+    brand?:string;
     name?:string;
     price?:number;
     quantity?:number;
@@ -39,7 +40,7 @@ interface SingleProductTemplatePropTypes{
 }
 
 
-const SingleProductTemplate = ({productID, userWishlist, category, name, price, quantity, rating, description, photo, parent, transactionId, shippingType, status, message, createdAt,        setTotalAmount, includedProducts, setIncludedProducts}:SingleProductTemplatePropTypes) => {
+const SingleProductTemplate = ({productID, userWishlist, category, brand, name, price, quantity, rating, description, photo, parent, transactionId, shippingType, status, message, createdAt, setTotalAmount, includedProducts, setIncludedProducts}:SingleProductTemplatePropTypes) => {
     const [addRemoveFromWishlist] = useAddRemoveFromWishlistMutation();
     const [addRemoveFromWishlistRes, setAddRemoveFromWishlistRes] = useState<MutationResTypes>();
 
@@ -225,6 +226,9 @@ const SingleProductTemplate = ({productID, userWishlist, category, name, price, 
                                             parent={parent}
                                             productID={productID as string}
                                             amount={price as number}
+                                            brand={brand as string}
+                                            category={category as string}
+                                            setTotalAmount={setTotalAmount}
                                             />
                                 }
                             </div>

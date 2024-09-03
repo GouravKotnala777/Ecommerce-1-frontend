@@ -1,11 +1,14 @@
 import "../styles/pages/address.scss";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
 import Form from "../components/Form";
-import { useCreatePaymentMutation, useRemoveAddressMutation, useUpdateMeMutation } from "../redux/api/api";
+import { useCreatePaymentMutation, useProductRecommendationMutation, useRemoveAddressMutation, useUpdateMeMutation } from "../redux/api/api";
 import { loggedInUserInitialState } from "../redux/reducers/loggedInUserReducer";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CgClose } from "react-icons/cg";
+import { ProductTypes } from "../assets/demoData";
+import ImageWithFallback from "../components/ImageWithFallback";
+import unknownProductImg from "../../public/unknownProduct.png";
 
 export interface AddressBodyTypes {
     house?:string;
@@ -29,35 +32,41 @@ const Address = () => {
     const [updateMe] = useUpdateMeMutation();
     const [removeAddress] = useRemoveAddressMutation();
     const [createPayment] = useCreatePaymentMutation();
+    //const [searchedProducts] = useSearchProductsMutation();
+    const [productRecommendation] = useProductRecommendationMutation();
     const {user} = useSelector((state:{loggedInUserReducer:loggedInUserInitialState}) => state.loggedInUserReducer);
-    const location:{amount:number; quantity:number; orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; shippingType:string; parent:string;} = useLocation().state;
+    const location:{amount:number; quantity:number; orderItems:{productID:string; quantity:number; category:string; brand:string;}[]; totalPrice:number; coupon:string; shippingType:string; parent:string;} = useLocation().state;
     const navigate = useNavigate();
+    const [sameCategoryProduct, setSameCategoryProduct] = useState<Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[]>([]);
+    const [sameBrandProduct, setSameBrandProduct] = useState<Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[]>([]);
+    const [recommendationProducts, setRecommendationProducts] = useState<{productID:string; price:number; quantity:number;}[]>([]);
 
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement>) => {
         setAddress({...address, [e.target.name]:e.target.value});
     };
 
-    const onClickHandler = async() => {
+    const buyHandler = async() => {
         try {
             const res = await updateMe({...address});
             const paymentIntendRes = await createPayment({
                 amount:shippingType === "express"?
-                            location.amount + 500
+                            location.amount+500
                             :
                             shippingType === "standared"?
                                 location.amount + 300
                                 :
                                 location.amount as number,
-                quantity:location.quantity
+                quantity:location.quantity,
+                amountFormRecomm:recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
             });
 
 
             
-            console.log("----- Address.Page.tsx onClickHandler");
+            console.log("----- Address.Page.tsx buyHandler");
             console.log(address);
             console.log({orderItems:location.orderItems});
             console.log(res);
-            console.log("----- Address.Page.tsx onClickHandler");
+            console.log("----- Address.Page.tsx buyHandler");
 
             if (paymentIntendRes.data.message) {
                 navigate("/product/pay", {state:{
@@ -66,8 +75,8 @@ const Address = () => {
                     address:address,
                     amount:location.amount,
                     quantity:location.quantity,
-                    orderItems:location.orderItems,
-                    totalPrice:location.totalPrice,
+                    orderItems:[...location.orderItems, ...recommendationProducts],
+                    totalPrice:location.totalPrice+recommendationProducts.reduce((acc, iter) => acc+iter.price, 0),
                     coupon:location.coupon,
                     shippingType:shippingType,
                     parent:location.parent
@@ -78,9 +87,9 @@ const Address = () => {
             }
             
         } catch (error) {
-            console.log("----- Address.Page.tsx onClickHandler");
+            console.log("----- Address.Page.tsx buyHandler");
             console.log(error);
-            console.log("----- Address.Page.tsx onClickHandler");
+            console.log("----- Address.Page.tsx buyHandler");
         }
     };
     
@@ -93,23 +102,19 @@ const Address = () => {
                                 location.amount + 300
                                 :
                                 location.amount as number,
-            quantity:location.quantity
+            quantity:location.quantity,
+            amountFormRecomm:recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
         });
-
-
-        //console.log({paymentIntendRes});
-        //console.log({amount:location.amount, quantity:location.quantity});
-        
 
         if (paymentIntendRes.data.message) {
             navigate("/product/pay", {state:{
                 clientSecret:paymentIntendRes.data.message,
                 userDetailes:{name:user?.name, email:user?.email, phone:user?.mobile},
                 address:templateData,
-                amount:location.amount,
+                amount:location.amount+recommendationProducts.reduce((acc, iter) => acc+iter.price, 0),
                 quantity:location.quantity,
-                orderItems:location.orderItems,
-                totalPrice:location.totalPrice,
+                orderItems:[...location.orderItems, ...recommendationProducts],
+                totalPrice:location.totalPrice+recommendationProducts.reduce((acc, iter) => acc+iter.price, 0),
                 coupon:location.coupon,
                 shippingType:shippingType,
                 parent:location.parent
@@ -134,10 +139,30 @@ const Address = () => {
             console.log("----- Addesss.Page.tsx  removeAddressTemplate");
         }
     };
+
+    const getProductRecommendation = async() => {
+        try {
+            const sameCategoryProductRes:{data?:{message:Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[];}} = await productRecommendation({category:location.orderItems.map((iter) => (iter.category)), brand:location.orderItems.map((iter) => (iter.brand))});
+            const sameBrandProductRes:{data?:{message:Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[];}} = await productRecommendation({category:[], brand:location.orderItems.map((iter) => iter.brand)});
+
+            if (sameCategoryProductRes.data?.message) {
+                setSameCategoryProduct(sameCategoryProductRes.data.message);
+            }
+            if (sameBrandProductRes.data?.message) {
+                setSameBrandProduct(sameBrandProductRes.data?.message);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    
+    useEffect(() => {
+        getProductRecommendation();
+    }, []);
     
     return(
         <div className="address_bg">
-            {/*{JSON.stringify(address)}*/}
+            {/*<pre>{JSON.stringify(recommendationProducts, null, `\t`)}</pre>*/}
             {/*<pre>{JSON.stringify({
                 amount:location.amount,
                 quantity:location.quantity,
@@ -150,7 +175,7 @@ const Address = () => {
             <div className="shipping_type_cont">
                 <div className="upper_cont">
                     <div className="heading">subtotal:</div>
-                    <div className="value">₹{location.totalPrice*location.quantity}/-</div>
+                    <div className="value">₹{location.totalPrice + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)}/-</div>
                 </div>
                 <div className="middle_cont">
                     <div className="heading">Shipping Type:</div>
@@ -171,7 +196,7 @@ const Address = () => {
                 </div>
                 <div className="lower_cont">
                     <div className="heading">total:</div>
-                    <div className="value">₹{location.totalPrice*location.quantity} - {shippingType.toUpperCase()}({
+                    <div className="value">₹{location.totalPrice + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)} + {shippingType.toUpperCase()}({
                             shippingType === "express"?
                                 "₹500"
                                 :
@@ -183,20 +208,47 @@ const Address = () => {
                         }) =  
                         {
                             shippingType === "express"?
-                                ` ₹${location.totalPrice + 500}/-`
+                                ` ₹${location.totalPrice + 500 + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)}/-`
                                 :
                                 shippingType === "standared"?
-                                    ` ₹${location.totalPrice + 300}/-`
+                                    ` ₹${location.totalPrice + 300 + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)}/-`
                                     :
-                                    ` ₹${location.totalPrice}/-`
+                                    ` ₹${location.totalPrice + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)}/-`
 
                         }
                     </div>
                 </div>
             </div>
 
+            {
+                sameCategoryProduct.length !== 0 &&
+                    <ProductsRecommendation heading="Products you may like" arrayOfSameProducts={
+                        sameCategoryProduct.filter((product) => {
+                            return location.orderItems.filter((iter) => {
+                                if (iter.brand !== product.brand) {
+                                    return {category:product.category, brand:product.brand, name:product.name, price:product.price, images:product.images}
+                                }
+                            })
+                        }).splice(0,3)}
+                        recommendationProducts={recommendationProducts}
+                        setRecommendationProducts={setRecommendationProducts}
+                    />
+            }
+            {
+                sameBrandProduct.length !== 0 &&
+                    <ProductsRecommendation heading="Products of same Brand you may like" arrayOfSameProducts={
+                        sameBrandProduct.filter((product) => {
+                            if (product.category !== location.orderItems[0].category) {
+                                return {category:product.category, brand:product.brand, name:product.name, price:product.price, images:product.images}
+                            }
+                        }).splice(0,2)}
+                        recommendationProducts={recommendationProducts}
+                        setRecommendationProducts={setRecommendationProducts}
+                    />
+            }
 
-            <Form heading="Address" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e as ChangeEvent<HTMLInputElement>)} onClickHandler={onClickHandler} />
+
+            <Form heading="Address" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e as ChangeEvent<HTMLInputElement>)} onClickHandler={buyHandler} />
             
 
 
@@ -223,5 +275,59 @@ const Address = () => {
         </div>
     )
 };
+
+const ProductsRecommendation = ({heading, arrayOfSameProducts, recommendationProducts, setRecommendationProducts}:{heading:string; arrayOfSameProducts?:Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[]; recommendationProducts:{productID:string; price:number; quantity:number;}[]; setRecommendationProducts:Dispatch<SetStateAction<{productID:string; price:number; quantity:number;}[]>>}) => {
+    const func2 = ({e, _id, price}:{e:MouseEvent<HTMLButtonElement>; _id:string; price:number;}) => {
+        const recommendRealContBtn = document.getElementById(`${_id}-add_from_recomm`)?.parentElement;
+        const recommendPlaceHolderBtn = document.getElementById(`${_id}-remove_from_recomm`)?.parentElement;
+        if (e.currentTarget.id === `${_id}-add_from_recomm`) {
+            setRecommendationProducts([...recommendationProducts, {productID:_id, quantity:1, price}]);
+    
+            if (recommendRealContBtn&&recommendPlaceHolderBtn) {
+                recommendPlaceHolderBtn.style.transform = "rotateY(0deg)";
+                recommendRealContBtn.style.transform = "rotateY(90deg)";
+            }
+        }
+        else{
+            setRecommendationProducts([...recommendationProducts.filter((iter) => iter.productID !== _id)]);
+            
+            if (recommendRealContBtn&&recommendPlaceHolderBtn) {
+                recommendPlaceHolderBtn.style.transform = "rotateY(90deg)";
+                recommendRealContBtn.style.transform = "rotateY(0deg)";
+            }
+        }
+    };
+
+    return(
+        <div className="recommendation_cont">
+            <div className="same_brand_recommendation">
+                <div className="heading">{heading}</div>
+                <div className="products">
+                    {
+                        arrayOfSameProducts?.map((product, index) => (
+                            <div className="product_cont" key={index}>
+                                <div className="product_placeholder_cont">
+                                    <div className="heading">
+                                        Product Added to checkout
+                                    </div>
+                                    <button id={`${product._id}-remove_from_recomm`} onClick={(e) => func2({e, _id:product._id, price:product.price})}>Remove from Checkout</button>
+                                </div>
+                                <div className="real_cont" key={index}>
+                                    <div className="image_cont">
+                                        <ImageWithFallback src={product.images[0].split("/upload")[0]+"/upload/w_200,h_200"+product.images[0].split("/upload")[1]} alt={product.images[0].split("/upload")[0]+"/upload/w_200,h_200"+product.images[0].split("/upload")[1]} fallbackSrc={unknownProductImg}/>
+                                    </div>
+                                    <div className="name">{product?.name}</div>
+                                    <div className="price">{product?.price}/- ₹</div>
+                                    <button id={`${product._id}-add_from_recomm`} onClick={(e) => func2({e, _id:product._id, price:product.price})}>Add to Checkout</button>
+                                </div>
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
+        </div>
+    )
+}
+
 
 export default Address;

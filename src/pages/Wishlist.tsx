@@ -34,7 +34,17 @@ const Wishlist = ({wishlistData}:{wishlistData:{
                                 <ItemNotFound heading={"You have not ordered anything yet!"} statusCode={204} />
                                 :
                                 wishlistData.data?.message.map((product) => (
-                                    <SingleProductTemplate key={product._id} parent="wishlist" productID={product._id} category={product.category} name={product.name} price={product.price} rating={product.rating} description={product.description} photo={product.images[0]} />
+                                    <SingleProductTemplate key={product._id}
+                                        parent="wishlist"
+                                        productID={product._id}
+                                        category={product.category}
+                                        brand={product.brand}
+                                        name={product.name}
+                                        price={product.price}
+                                        rating={product.rating}
+                                        description={product.description}
+                                        photo={product.images[0]}
+                                    />
                                 ))                              
                             :
                             <ItemNotFound heading={"No Internet Connection!"} statusCode={523} />

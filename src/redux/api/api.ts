@@ -176,6 +176,14 @@ const api = createApi({
                 body:{category, sub_category, brand, price, limit}
             })
         }),
+        productRecommendation:builder.mutation({
+            query:({category, brand}:{category?:string[]; brand?:string[];}) => ({
+                url:"/api/v1/product/recommendation",
+                method:"POST",
+                credentials:"include",
+                body:{category, brand}
+            })
+        }),
         addToCart:builder.mutation({
             query:(data:{productID:string; price:number; quantity:number;}) => ({
                 url:"/api/v1/cart/add",
@@ -317,11 +325,11 @@ const api = createApi({
             })
         }),
         createPayment:builder.mutation({
-            query:({amount, quantity}:{amount:number; quantity:number;}) => ({
+            query:({amount, quantity, amountFormRecomm}:{amount:number; quantity:number; amountFormRecomm:number|0;}) => ({
                 url:"/api/v1/payment/new",
                 method:"POST",
                 credentials:"include",
-                body:{amount, quantity}
+                body:{amount, quantity, amountFormRecomm}
             })
         }),
         newOrder:builder.mutation({
@@ -361,7 +369,7 @@ const api = createApi({
 
 export default api;
 export const {useRegisterMutation, useLoginMutation, useVerifyEmailMutation, useMyProfileQuery, useForgetPasswordMutation, useUpdateMeMutation, useRemoveAddressMutation, useLogoutMutation,
-    useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useGetProductsOfSameQuery, useFindAllFieldsQuery, useSearchProductsMutation,
+    useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useGetProductsOfSameQuery, useFindAllFieldsQuery, useSearchProductsMutation, useProductRecommendationMutation,
     useAddToCartMutation, useFetchMyCartQuery,  useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation, useMyWhishlistQuery, useAddRemoveFromWishlistMutation,
     useOutStockProductsQuery, useIncompleteProductsQuery, useUpdateProductMutation,
     useCreateCouponsMutation, useGetAllCouponsQuery, useGetSingleCouponMutation,

@@ -32,7 +32,7 @@ const Products = ({products}:{products:ProductTypes[]|undefined}) => {
                                 <div className="info rating"><RatingSystem rating={product.rating} /></div>
                             </div>
                             <div className="lower_part">
-                                <ProductBtnGroup parent="home" productID={product._id} amount={product.price} />
+                                <ProductBtnGroup parent="home" productID={product._id} amount={product.price} category={product.category} brand={product.brand} />
                             </div>
                         </div>
                     ))

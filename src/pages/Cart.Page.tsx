@@ -10,17 +10,16 @@ import Spinner from "../components/Spinner";
 import ItemNotFound from "../components/ItemNotFound";
 import DialogWrapper from "../components/DialogWrapper";
 
-
 const Cart = ({cartData}:{cartData:{
     isLoading:boolean;
     data?:{success:boolean; message:{products:{productID:ProductTypes; quantity:number;}[]; totalPrice:number;}};
     error?:FetchBaseQueryError|SerializedError;
 }}) => {
     //const cartData:{
-    //    isLoading:boolean;
-    //    data?:{success:boolean; message:{products:{productID:ProductTypes; quantity:number;}[]; totalPrice:number;}};
-    //    error?:FetchBaseQueryError|SerializedError;
-    //} = useFetchMyCartQuery("");
+        //    isLoading:boolean;
+        //    data?:{success:boolean; message:{products:{productID:ProductTypes; quantity:number;}[]; totalPrice:number;}};
+        //    error?:FetchBaseQueryError|SerializedError;
+        //} = useFetchMyCartQuery("");
     const [includedProducts, setIncludedProducts] = useState<{[key:string]:boolean;}>({});
     const [getSingleCoupon] = useGetSingleCouponMutation();
     const [hideHeader, setHideHeader] = useState<boolean>(false);
@@ -33,6 +32,9 @@ const Cart = ({cartData}:{cartData:{
     const [summeryData, setSummeryData] = useState<{_id:string; name:string; quantity:number; price:number;}[]>([]);
     const [totalAmount, setTotalAmount] = useState<number>(0);
     const [oneTimeRefresh, setOneTimeRefresh] = useState<number>(0);
+    //const [refresh, setRefresh] = useState<boolean>(false);
+    
+    let num = 0;
 
     
 
@@ -58,7 +60,9 @@ const Cart = ({cartData}:{cartData:{
                 quantity:1,
                 orderItems:cartData.data?.message.products.filter((item) => includedProducts[item.productID._id]).map((item) => ({
                     productID:item.productID._id,
-                    quantity:item.quantity
+                    quantity:item.quantity,
+                    category:item.productID.category,
+                    brand:item.productID.brand
                 }))
                 ,
                 totalPrice:amount,
@@ -79,10 +83,13 @@ const Cart = ({cartData}:{cartData:{
         }
     }, [totalAmount]);
     useEffect(() => {
-        cartData.data?.message.products.forEach((item) => {
-            setTotalAmount((prev) => prev+(item.productID.price * item.quantity));
-        });
-    }, [cartData.data, cartData.isLoading, cartData.error]);
+        if (num < 1) {
+            cartData.data?.message.products.forEach((item) => {
+                setTotalAmount((prev) => prev+(item.productID.price * item.quantity));
+            });
+        }
+        num += 1;
+    }, [cartData.data]);
         
     useEffect(() => {
         const summeryDataLoc = cartData.data?.message.products.map((item1) => {
@@ -102,9 +109,9 @@ const Cart = ({cartData}:{cartData:{
     
     return(
         <div className="cart_bg">
+            {/*<pre>{JSON.stringify(cartData.data?.message.products, null, `\t`)}</pre>*/}
             <DialogWrapper Element={<SummeryComponent data={summeryData} totalAmount={totalAmount} includedProducts={includedProducts} />} toggler={summeryDialogToggle} setToggler={setSummeryDialogToggle} />
             <div className="heading" style={{padding:"4px 4px", fontWeight:"bold"}}>Cart</div>
-            {/*<pre>{JSON.stringify(summeryData, null, `\t`)}</pre>*/}
 
 
             <div className="access_bar_bg" style={{bottom:hideHeader?"-12%":"0%"}}>
@@ -175,18 +182,20 @@ const Cart = ({cartData}:{cartData:{
                                 :
                                 cartData.data?.message?.products.map((product) => (
                                     <SingleProductTemplate key={product.productID._id}
-                                                        productID={product.productID._id}
-                                                        category={product.productID.category}
-                                                        name={product.productID.name}
-                                                        price={product.productID.price}
-                                                        quantity={product.quantity}
-                                                        rating={product.productID.rating}
-                                                        description={product.productID.description}
-                                                        photo={product.productID.images[0]}
-                                                        parent="cart"
-                                                        setTotalAmount={setTotalAmount}
-                                                        includedProducts={includedProducts}
-                                                        setIncludedProducts={setIncludedProducts} />
+                                        productID={product.productID._id}
+                                        category={product.productID.category}
+                                        brand={product.productID.brand}
+                                        name={product.productID.name}
+                                        price={product.productID.price}
+                                        quantity={product.quantity}
+                                        rating={product.productID.rating}
+                                        description={product.productID.description}
+                                        photo={product.productID.images[0]}
+                                        parent="cart"
+                                        setTotalAmount={setTotalAmount}
+                                        includedProducts={includedProducts}
+                                        setIncludedProducts={setIncludedProducts}
+                                    />
                                 ))
                             :
                             <ItemNotFound heading={"No Internet Connection!"} statusCode={523} />
@@ -206,7 +215,7 @@ const SummeryComponent = ({data, totalAmount, includedProducts}:{data:{_id:strin
                             data.map((item) =>
                                 includedProducts[item._id] ?
                                 (
-                                    <div className="row">
+                                    <div className="row" key={item._id}>
                                         <div className="col">
                                             {item.name}
                                         </div>
@@ -223,7 +232,7 @@ const SummeryComponent = ({data, totalAmount, includedProducts}:{data:{_id:strin
                                 )
                                 :
                                 (
-                                    <s className="row">
+                                    <s className="row" key={item._id}>
                                         <div className="col">
                                             {item.name}
                                         </div>

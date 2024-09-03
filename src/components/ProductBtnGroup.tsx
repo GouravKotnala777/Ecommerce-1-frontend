@@ -1,5 +1,5 @@
 import "../styles/components/product_btn_group.scss";
-import { MouseEvent, useState } from "react";
+import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
 import { useAddToCartMutation, useRemoveFromCartMutation } from "../redux/api/api";
 import { useDispatch } from "react-redux";
 import { setIsReviewDialogActive } from "../redux/reducers/miscReducers";
@@ -14,9 +14,12 @@ interface ProductBtnGroupPropTypes{
     parent:string;
     productID:string;
     amount:number;
+    category:string;
+    brand:string;
+    setTotalAmount?:Dispatch<SetStateAction<number>>;
 }
 
-const ProductBtnGroup = ({parent, productID, amount}:ProductBtnGroupPropTypes) => {
+const ProductBtnGroup = ({parent, productID, amount, category, brand, setTotalAmount}:ProductBtnGroupPropTypes) => {
     const [addToCart] = useAddToCartMutation();
     const [removeFromCart] = useRemoveFromCartMutation();
     const [quantity, setQuantity] = useState<number>(1);
@@ -35,8 +38,18 @@ const ProductBtnGroup = ({parent, productID, amount}:ProductBtnGroupPropTypes) =
                 const res = await removeFromCart({productID:productID!, price:amount, quantity});
                 setAddRemoveCartRes(res);
                 setIsAddRemoveCartLoading(false);
+                console.log("===================");
+                if (setTotalAmount) {
+                    console.log(":::::::::::::::::::");
+                    
+                    console.log(amount);                    
+                    setTotalAmount(0);
+                    console.log(":::::::::::::::::::");
+                }
             }
             else{
+                console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                
                 const res = await addToCart({productID:productID!, price:amount, quantity});
                 setAddRemoveCartRes(res);
                 setIsAddRemoveCartLoading(false);
@@ -53,7 +66,7 @@ const ProductBtnGroup = ({parent, productID, amount}:ProductBtnGroupPropTypes) =
             navigate("/user/address", {state:{
                 amount,
                 quantity,
-                orderItems:[{productID, quantity}],
+                orderItems:[{productID, quantity, category, brand}],
                 totalPrice:(amount*quantity),
                 parent
             }});
