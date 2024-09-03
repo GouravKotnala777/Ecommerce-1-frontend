@@ -1,10 +1,13 @@
 import "../styles/components/payment.scss";
 import { CardElement, Elements, useElements, useStripe } from "@stripe/react-stripe-js";
 import { loadStripe, StripeCardElement } from "@stripe/stripe-js";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { AddressBodyTypes } from "./Address.Page";
-import { useNewOrderMutation } from "../redux/api/api";
+import { useCreatePaymentMutation, useNewOrderMutation, useProductRecommendationMutation } from "../redux/api/api";
+import Spinner from "../components/Spinner";
+import { ProductTypes } from "../assets/demoData";
+import ProductsRecommendation from "../components/ProductsRecommendation";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -15,10 +18,12 @@ const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPri
     const elements = useElements();
     const [error, setError] = useState<string>();
     const [paymentSuccess, setPaymentSuccess] = useState(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [newOrder] = useNewOrderMutation();
 
     const handleSubmit = async(e:FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setIsLoading(true);
 
         try {
             if (!stripe || !elements) {
@@ -88,10 +93,12 @@ const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPri
                 console.log("---- Payment.tsx");
                 
             }
+            setIsLoading(false);
         } catch (error) {
             console.log("---- error from Payment.tsx");
             console.log(error);
             console.log("---- error from Payment.tsx");
+            setIsLoading(false);
         }
 
     };
@@ -105,7 +112,7 @@ const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPri
                 shippingType
             }, null, `\t`)}</pre>*/}
             <CardElement className="card_element" />
-            <button type="submit" disabled={!stripe}>{totalPrice}₹ Pay</button>
+            <button type="submit" disabled={!stripe}>{isLoading ? <Spinner type={2} color="white" width={16} /> : `${totalPrice}₹ Pay`}</button>
             {error && <div>{error}</div>}
             {paymentSuccess && <div>Payment Successfull</div>}
         </form>
@@ -118,34 +125,143 @@ const StripePayment = () => {
         clientSecret:string;
         userDetailes:{name:string; email:string; phone:string;};
         address:AddressBodyTypes;
-        orderItems:{productID:string; quantity:number;}[];
+        orderItems:{productID:string; quantity:number; category:string; brand:string;}[];
         totalPrice:number;
         shippingType:string;
         coupon:string;
         parent?:string;
     }|undefined = useLocation().state;
+    const [productRecommendation] = useProductRecommendationMutation();
+    const [createPayment] = useCreatePaymentMutation();
+    const [sameCategoryProduct, setSameCategoryProduct] = useState<Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[]>([]);
+    const [sameBrandProduct, setSameBrandProduct] = useState<Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[]>([]);
+    const [recommendationProducts, setRecommendationProducts] = useState<{productID:string; price:number; quantity:number;}[]>([]);
+    const [clientSecret, setClientSecret] = useState<string>("");
 
     console.log({clientSecret:location?.clientSecret});
     console.log({orderItems1:location?.orderItems});
-    
+
+
+    const getProductRecommendation = async() => {
+        try {
+            const sameCategoryProductRes:{data?:{message:Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[];}} = await productRecommendation({category:location?.orderItems.map((iter) => (iter.category)), brand:location?.orderItems.map((iter) => (iter.brand))});
+            const sameBrandProductRes:{data?:{message:Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[];}} = await productRecommendation({category:[], brand:location?.orderItems.map((iter) => iter.brand)});
+
+            if (sameCategoryProductRes.data?.message) {
+                setSameCategoryProduct(sameCategoryProductRes.data.message);
+            }
+            if (sameBrandProductRes.data?.message) {
+                setSameBrandProduct(sameBrandProductRes.data?.message);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const requestForClientSecretAgain = async(e:FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        try {
+            const paymentIntendRes = await createPayment({
+                amount:location?.totalPrice as number,
+                quantity:1,
+                amountFormRecomm:recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
+            });
+
+
+
+            
+            console.log("----- Payment.tsx requestForClientSecretAgain");
+            console.log({amount:location?.totalPrice as number});
+            console.log({quantity:1});
+            console.log({amountFormRecomm:recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)});
+            console.log("----- Payment.tsx requestForClientSecretAgain");
+
+            if (paymentIntendRes.data.message) {
+                setClientSecret(paymentIntendRes.data.message);
+            }
+            if (paymentIntendRes.error) {
+                console.log("error aa gaya");
+                setClientSecret("");
+            }
+            
+        } catch (error) {
+            console.log("----- Payment.tsx requestForClientSecretAgain");
+            console.log(error);
+            setClientSecret("");
+            console.log("----- Payment.tsx requestForClientSecretAgain");
+        }
+    };
+
+
+    useEffect(() => {
+        getProductRecommendation();
+    }, []);    
     
 
     return(
         <Elements stripe={stripePromise}>
+            <pre>{JSON.stringify(recommendationProducts, null, `\t`)}</pre>
+            <pre>{JSON.stringify(clientSecret, null, `\t`)}</pre>
+            {
+                sameCategoryProduct.length >= 4 &&
+                    <ProductsRecommendation
+                        heading="Products you may like"
+                        arrayOfSameProducts={
+                            sameCategoryProduct.filter((product) => {
+                                return location?.orderItems.filter((iter) => {
+                                    if (iter.brand !== product.brand) {
+                                        return {category:product.category, brand:product.brand, name:product.name, price:product.price, images:product.images}
+                                    }
+                                })
+                            }).splice(3,3)
+                        }
+                        recommendationProducts={recommendationProducts}
+                        setRecommendationProducts={setRecommendationProducts}
+                    />
+            }
+            {
+                sameBrandProduct.length >= 4 &&
+                    <ProductsRecommendation
+                        heading="Products of same brand you may like"
+                        arrayOfSameProducts={
+                            sameBrandProduct.filter((product) => {
+                                return location?.orderItems.filter((iter) => {
+                                    if (iter.brand !== product.brand) {
+                                        return {category:product.category, brand:product.brand, name:product.name, price:product.price, images:product.images}
+                                    }
+                                })
+                            }).splice(3,3)
+                        }
+                        recommendationProducts={recommendationProducts}
+                        setRecommendationProducts={setRecommendationProducts}
+                    />
+            }
+
+            {
+                recommendationProducts.length !== 0 &&
+                    <form onSubmit={requestForClientSecretAgain}>
+                        <div className="heading"></div>
+                        <button  type="submit">Add these products also</button>
+                    </form>
+            }
+
             <CheckoutForm 
-                clientSecret={location?.clientSecret as string}
+                clientSecret={clientSecret ? clientSecret : location?.clientSecret as string}
                 userDetailes={location?.userDetailes as {name:string; email:string; phone:string;}}
                 address={location?.address as AddressBodyTypes}
-                orderItems={location?.orderItems as {productID:string; quantity:number;}[]}
+                orderItems={[
+                    ...location?.orderItems as {productID:string; quantity:number;}[],
+                    ...recommendationProducts
+                ]}
                 totalPrice=
                     {
                         location?.shippingType === "express"?
-                            location.totalPrice + 500
+                            location.totalPrice + 500 + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
                             :
                             location?.shippingType === "standared"?
-                                location.totalPrice + 300
+                                location.totalPrice + 300 + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
                                 :
-                                location?.totalPrice as number
+                                (location?.totalPrice as number) + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
 
                     }
                 coupon={location?.coupon as string}
