@@ -1,6 +1,6 @@
 import { MouseEvent, useEffect, useState } from "react";
 import "./styles/chatbot.scss";
-import { BiDislike, BiLike, BiSend, BiUserCircle } from "react-icons/bi";
+import { BiDislike, BiLike, BiUserCircle } from "react-icons/bi";
 import { GrAttachment } from "react-icons/gr";
 import { LuLogOut } from "react-icons/lu";
 import Message from "./Messanger";
@@ -9,6 +9,7 @@ import { io, Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { CHATBOT_ID, DEFAULT_ID } from "./assets/utiles";
 import { useCreateChatMutation, useUpdateChatsHelpfulnessMutation } from "./redux/api/api";
+import { IoIosSend } from "react-icons/io";
 
 export interface MessageTypes {
     senderID: string;
@@ -184,7 +185,7 @@ const Chatbot = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) => {
                         <div className="lower_part">
                             <div className="upper_cont">
                                 <textarea className="comment" placeholder="Comment..." cols={2} value={message} style={{resize:"none"}} onChange={(e) => setMessage(e.target.value)}></textarea>
-                                <BiSend className="BiSend" style={{display:message&&message.trim()!==""?"block":"none"}} onClick={sendMessageHandler} />
+                                <IoIosSend className="BiSend" style={{display:message&&message.trim()!==""?"block":"none"}} onClick={sendMessageHandler} />
                             </div>
                             <div className="lower_cont">
                                 <GrAttachment /><LuLogOut onClick={endChatWarningHandler} />
