@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Table from "../components/Table";
 import { UpdateProductBodyType, useMyOrdersQuery } from "../redux/api/api";
 import ItemNotFound from "../components/ItemNotFound";
@@ -50,28 +50,33 @@ const MyOrders = () => {
     } = useMyOrdersQuery("");
     const [list, setList] = useState<{ [key: string]:UpdateProductBodyType;}>({});
     const [transformedData, setTransformedData] = useState<UpdateProductBodyType[]>([]);
+    
 
-    const dataTransformer:() => UpdateProductBodyType[]|undefined = () => {        
+    const dataTransformer = useCallback((): UpdateProductBodyType[] | undefined => {
         return myOrders.data?.message.flatMap((item) => {
             const vv = item?.paymentInfo;
             return item.orderItems.map((item2) => {
-                return {_id:item2?.productID?._id, name:item2?.productID?.name, price:item2?.productID?.price, images:(item2?.productID?.images as string[])[0], createdAt:item.createdAt, ...vv}
-            })
+                return {
+                    _id: item2?.productID?._id,
+                    name: item2?.productID?.name,
+                    price: item2?.productID?.price,
+                    images: (item2?.productID?.images as string[])[0],
+                    createdAt: item.createdAt,
+                    ...vv,
+                };
+            });
         });
-    }
-    
+    }, [myOrders.data]);
+
     useEffect(() => {
-        console.log("XXXXXXXXXXXXXXXXXXXX");
-        //dataTransformers = dataTransformer() as UpdateProductBodyType[]
         setTransformedData(dataTransformer() as UpdateProductBodyType[])
-        console.log("XXXXXXXXXXXXXXXXXXXX");
-    }, []);
+    }, [dataTransformer]);
 
     return(
         <div className="my_orders_bg">
             {/*<pre>{JSON.stringify(transformedData, null, `\t`)}</pre>*/}
-            {/*<pre>{JSON.stringify(myOrders, null, `\t`)}</pre>*/}
             <div className="heading" style={{padding:"4px 4px", fontWeight:"bold"}}>My Orders</div>
+
             {
                 myOrders.isLoading ?
                 <Spinner type={1} heading="Loading..." width={100} thickness={6} />
