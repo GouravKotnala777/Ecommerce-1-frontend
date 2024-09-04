@@ -5,12 +5,12 @@ import ImageWithFallback from "./ImageWithFallback";
 import unknownProductImg from "../../public/unknownProduct.png";
 
 
-const ProductsRecommendation = ({heading, arrayOfSameProducts, recommendationProducts, setRecommendationProducts}:{heading:string; arrayOfSameProducts?:Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[]; recommendationProducts:{productID:string; price:number; quantity:number;}[]; setRecommendationProducts:Dispatch<SetStateAction<{productID:string; price:number; quantity:number;}[]>>}) => {
-    const addRemoveFromRecommHandler = ({e, _id, price}:{e:MouseEvent<HTMLButtonElement>; _id:string; price:number;}) => {
+const ProductsRecommendation = ({heading, arrayOfSameProducts, recommendationProducts, setRecommendationProducts}:{heading:string; arrayOfSameProducts?:Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[]; recommendationProducts:{productID:string; name:string; price:number; quantity:number;}[]; setRecommendationProducts:Dispatch<SetStateAction<{productID:string; name:string; price:number; quantity:number;}[]>>}) => {
+    const addRemoveFromRecommHandler = ({e, _id, name, price}:{e:MouseEvent<HTMLButtonElement>; _id:string; name:string; price:number;}) => {
         const recommendRealContBtn = document.getElementById(`${_id}-add_from_recomm`)?.parentElement;
         const recommendPlaceHolderBtn = document.getElementById(`${_id}-remove_from_recomm`)?.parentElement;
         if (e.currentTarget.id === `${_id}-add_from_recomm`) {
-            setRecommendationProducts([...recommendationProducts, {productID:_id, quantity:1, price}]);
+            setRecommendationProducts([...recommendationProducts, {productID:_id, name, quantity:1, price}]);
     
             if (recommendRealContBtn&&recommendPlaceHolderBtn) {
                 recommendPlaceHolderBtn.style.transform = "rotateY(0deg)";
@@ -39,7 +39,7 @@ const ProductsRecommendation = ({heading, arrayOfSameProducts, recommendationPro
                                     <div className="heading">
                                         Product Added to checkout
                                     </div>
-                                    <button id={`${product._id}-remove_from_recomm`} onClick={(e) => addRemoveFromRecommHandler({e, _id:product._id, price:product.price})}>Remove from Checkout</button>
+                                    <button id={`${product._id}-remove_from_recomm`} onClick={(e) => addRemoveFromRecommHandler({e, _id:product._id, name:product.name, price:product.price})}>Remove from Checkout</button>
                                 </div>
                                 <div className="real_cont" key={index}>
                                     <div className="image_cont">
@@ -47,7 +47,7 @@ const ProductsRecommendation = ({heading, arrayOfSameProducts, recommendationPro
                                     </div>
                                     <div className="name">{product?.name}</div>
                                     <div className="price">{product?.price}/- ₹</div>
-                                    <button id={`${product._id}-add_from_recomm`} onClick={(e) => addRemoveFromRecommHandler({e, _id:product._id, price:product.price})}>Add to Checkout</button>
+                                    <button id={`${product._id}-add_from_recomm`} onClick={(e) => addRemoveFromRecommHandler({e, _id:product._id, name:product.name, price:product.price})}>Add to Checkout</button>
                                 </div>
                             </div>
                         ))

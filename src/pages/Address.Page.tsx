@@ -38,7 +38,7 @@ const Address = () => {
     const navigate = useNavigate();
     const [sameCategoryProduct, setSameCategoryProduct] = useState<Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[]>([]);
     const [sameBrandProduct, setSameBrandProduct] = useState<Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[]>([]);
-    const [recommendationProducts, setRecommendationProducts] = useState<{productID:string; price:number; quantity:number;}[]>([]);
+    const [recommendationProducts, setRecommendationProducts] = useState<{productID:string; name:string; price:number; quantity:number;}[]>([]);
 
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement>) => {
         setAddress({...address, [e.target.name]:e.target.value});
@@ -246,13 +246,10 @@ const Address = () => {
                     />
             }
 
-
-            <Form heading="Address" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e as ChangeEvent<HTMLInputElement>)} onClickHandler={buyHandler} />
-            
-
-
-
-            <h4>Select from previous address</h4>
+            {
+                user?.address.length !== 0 &&
+                    <div className="heading">Select from previous address</div>
+            }
             <div className="addresses_cont">
                 {
                     user?.address.map((address, index) => (
@@ -271,6 +268,8 @@ const Address = () => {
                     ))
                 }
             </div>
+
+            <Form heading="Address" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e as ChangeEvent<HTMLInputElement>)} onClickHandler={buyHandler} />
         </div>
     )
 };

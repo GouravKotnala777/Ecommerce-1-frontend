@@ -135,12 +135,14 @@ const StripePayment = () => {
     const [createPayment] = useCreatePaymentMutation();
     const [sameCategoryProduct, setSameCategoryProduct] = useState<Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[]>([]);
     const [sameBrandProduct, setSameBrandProduct] = useState<Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[]>([]);
-    const [recommendationProducts, setRecommendationProducts] = useState<{productID:string; price:number; quantity:number;}[]>([]);
+    const [recommendationProducts, setRecommendationProducts] = useState<{productID:string; name:string; price:number; quantity:number;}[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [hideGetClientSecretAgain, setHideGetClientSecretAgain] = useState<boolean>(false);
+
+    //????????????????????????????????????
+
+
     const [clientSecret, setClientSecret] = useState<string>("");
-
-    console.log({clientSecret:location?.clientSecret});
-    console.log({orderItems1:location?.orderItems});
-
 
     const getProductRecommendation = async() => {
         try {
@@ -160,6 +162,7 @@ const StripePayment = () => {
 
     const requestForClientSecretAgain = async(e:FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setIsLoading(true);
         try {
             const paymentIntendRes = await createPayment({
                 amount:location?.totalPrice as number,
@@ -183,11 +186,14 @@ const StripePayment = () => {
                 console.log("error aa gaya");
                 setClientSecret("");
             }
+            setIsLoading(false);
+            setHideGetClientSecretAgain(true);
             
         } catch (error) {
             console.log("----- Payment.tsx requestForClientSecretAgain");
             console.log(error);
             setClientSecret("");
+            setIsLoading(false);
             console.log("----- Payment.tsx requestForClientSecretAgain");
         }
     };
@@ -195,13 +201,16 @@ const StripePayment = () => {
 
     useEffect(() => {
         getProductRecommendation();
-    }, []);    
+    }, []);
+    useEffect(() => {
+        setHideGetClientSecretAgain(false);
+    }, [recommendationProducts]);
     
 
     return(
         <Elements stripe={stripePromise}>
-            <pre>{JSON.stringify(recommendationProducts, null, `\t`)}</pre>
-            <pre>{JSON.stringify(clientSecret, null, `\t`)}</pre>
+            {/*<pre>{JSON.stringify(recommendationProducts, null, `\t`)}</pre>
+            <pre>{JSON.stringify(clientSecret, null, `\t`)}</pre>*/}
             {
                 sameCategoryProduct.length >= 4 &&
                     <ProductsRecommendation
@@ -238,10 +247,18 @@ const StripePayment = () => {
             }
 
             {
-                recommendationProducts.length !== 0 &&
-                    <form onSubmit={requestForClientSecretAgain}>
-                        <div className="heading"></div>
-                        <button  type="submit">Add these products also</button>
+                recommendationProducts.length !== 0 && !hideGetClientSecretAgain &&
+                    <form className="getClientSecretAgain" onSubmit={requestForClientSecretAgain}>
+                        {
+                            recommendationProducts.map((product, index) => (
+                                <div className="row" key={index}>
+                                    <div className="col">{index+1}.</div>
+                                    <div className="col">{product.name}</div>
+                                    <div className="col">{product.price}/- ₹</div>
+                                </div>
+                            ))
+                        }
+                        <button  type="submit" disabled={isLoading} >{isLoading ? <Spinner type={2} color="white" width={16} /> : "Add these products also"}</button>
                     </form>
             }
 
