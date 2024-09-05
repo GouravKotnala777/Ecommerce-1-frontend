@@ -236,6 +236,15 @@ const api = createApi({
             }),
             invalidatesTags:["SingleProduct"]
         }),
+        updateVote:builder.mutation({
+            query:({reviewID, voted}:{reviewID:string; voted:boolean|undefined}) => ({
+                url:"/api/v1/review/vote",
+                method:"PUT",
+                credentials:"include",
+                body:{reviewID, voted}
+            }),
+            invalidatesTags:["SingleProduct"]
+        }),
         myWhishlist:builder.query({
             query:() => ({
                 url:`/api/v1/user/wishlist`,
@@ -370,7 +379,8 @@ const api = createApi({
 export default api;
 export const {useRegisterMutation, useLoginMutation, useVerifyEmailMutation, useMyProfileQuery, useForgetPasswordMutation, useUpdateMeMutation, useRemoveAddressMutation, useLogoutMutation,
     useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useGetProductsOfSameQuery, useFindAllFieldsQuery, useSearchProductsMutation, useProductRecommendationMutation,
-    useAddToCartMutation, useFetchMyCartQuery,  useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation, useMyWhishlistQuery, useAddRemoveFromWishlistMutation,
+    useAddToCartMutation, useFetchMyCartQuery,  useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation, useUpdateVoteMutation,
+    useMyWhishlistQuery, useAddRemoveFromWishlistMutation,
     useOutStockProductsQuery, useIncompleteProductsQuery, useUpdateProductMutation,
     useCreateCouponsMutation, useGetAllCouponsQuery, useGetSingleCouponMutation,
     useCreatePaymentMutation,

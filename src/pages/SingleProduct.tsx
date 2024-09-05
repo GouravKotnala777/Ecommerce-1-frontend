@@ -4,7 +4,7 @@ import unknownUser from "/unknownUser.png"
 import { MutationResTypes, ProductTypesPopulated, UserTypes } from "../assets/demoData";
 import SingleProductTemplate from "../components/SingleProductTemplate";
 import RatingSystem from "../components/RatingSystem";
-import { useCreateReviewMutation, useDeleteReviewMutation, useGetSingleProductQuery, useMyProfileQuery } from "../redux/api/api";
+import { useCreateReviewMutation, useDeleteReviewMutation, useGetSingleProductQuery, useMyProfileQuery, useUpdateVoteMutation } from "../redux/api/api";
 import Skeleton from "../components/Skeleton";
 import { useParams } from "react-router-dom";
 import Form from "../components/Form";
@@ -16,6 +16,7 @@ import { MdDeleteForever, MdVerified } from "react-icons/md";
 import ProductSlider from "../components/ProductSlider";
 import HandleMutationRes from "../components/HandleMutationRes";
 import { FaArrowAltCircleDown, FaArrowAltCircleUp } from "react-icons/fa";
+import { PRIMARY_LOW } from "../styles/utils";
 
 
 const formFields = [
@@ -33,6 +34,7 @@ const SingleProduct = () => {
     const {isReviewDialogActive} = useSelector((state:{miscReducer:MiscReducerTypes}) => state.miscReducer);
     const [createReview] = useCreateReviewMutation();
     const [deleteReview] = useDeleteReviewMutation();
+    const [updateVote] = useUpdateVoteMutation();
     
 
     //const getSameProducts:{data?:{success:boolean; message:ProductTypesPopulated[];}} = useGetProductsOfSameQuery({query:"brand", value:"labrada"});
@@ -54,6 +56,20 @@ const SingleProduct = () => {
             console.log("------- SingleProduct.tsx onClickHandler");
             console.log(error);
             console.log("------- SingleProduct.tsx onClickHandler");
+        }
+    };
+    const updateReviewVoteHandler = async(reviewID:string, voted:boolean|undefined) => {
+        try {
+            const updateVoteRes = await updateVote({reviewID, voted});
+
+            console.log("------ updateReviewVoteHandler  SingleProduct.tsx");
+            console.log(updateVoteRes);
+            console.log("------ updateReviewVoteHandler  SingleProduct.tsx");
+            
+        } catch (error) {
+            console.log("------ updateReviewVoteHandler  SingleProduct.tsx");
+            console.log(error);
+            console.log("------ updateReviewVoteHandler  SingleProduct.tsx");
         }
     };
 
@@ -152,12 +168,12 @@ const SingleProduct = () => {
                                             <div className="comment_value">{review.comment}</div>
                                             <div className="vote_icons">
                                                 <div className="down_vote">
-                                                    <FaArrowAltCircleDown className="FaArrowAltCircleDown"/>
-                                                    <div className="down_vote_value">6</div>
+                                                    <FaArrowAltCircleDown className="FaArrowAltCircleDown" style={{color:review.downVotes.includes(loginedUser.message._id) ? PRIMARY_LOW : "unset"}} onClick={() => updateReviewVoteHandler(review._id, false)}/>
+                                                    <div className="down_vote_value">{review.downVotes.length}</div>
                                                 </div>
                                                 <div className="up_vote">
-                                                    <FaArrowAltCircleUp className="FaArrowAltCircleUp"/>
-                                                    <div className="up_vote_value">141</div>
+                                                    <FaArrowAltCircleUp className="FaArrowAltCircleUp" style={{color:review.upVotes.includes(loginedUser.message._id) ? PRIMARY_LOW : "unset"}} onClick={() => updateReviewVoteHandler(review._id, true)}/>
+                                                    <div className="up_vote_value">{review.upVotes.length}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -165,18 +181,12 @@ const SingleProduct = () => {
                                 </div>
                             ))
                             :
-                            <div className="review_cont">
-                                    <div className="lower_part">
-                                        <div className="middle_part">
-                                            <div className="email" style={{fontWeight:"bold"}}>No Reviews Yet!</div>
-                                            <div className="rating">for this product</div>
-                                        </div>
-                                        {/*<div className="right_part">
-                                            <div className="comment_heading">Comment:</div>
-                                            <div className="comment_value">give your review</div>
-                                        </div>*/}
-                                    </div>
+                            <div className="review_cont_no_reviews">
+                                <div className="heading_para">
+                                    <div className="heading" style={{fontWeight:"bold"}}>No Reviews Yet!</div>
+                                    <div className="para">for this product</div>
                                 </div>
+                            </div>
                         :
                         [1,2,3].map((q) => (
                             <div className="review_cont" key={q}>

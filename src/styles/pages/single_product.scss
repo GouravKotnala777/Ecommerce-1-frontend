@@ -124,9 +124,6 @@
                             .FaArrowAltCircleDown{
                                 cursor: pointer;
                                 font-size: 0.8rem;
-                                &:hover{
-                                    color: $primaryLow;
-                                }
                             }
                             .down_vote_value{
                                 margin-left: 5px;
@@ -140,15 +137,37 @@
                             .FaArrowAltCircleUp{
                                 font-size: 0.8rem;
                                 cursor: pointer;
-                                &:hover{
-                                    color: $primaryLow;
-                                }
                             }
                             .up_vote_value{
                                 margin-left: 5px;
                             }
                         }
                     }
+                }
+            }
+        }
+        .review_cont_no_reviews{
+            //border: 2px solid red;
+            background: white;
+            border-radius: 8px;
+            margin: 10px 0 40px 0;
+            padding: 5px;
+            box-shadow: 1px 1px 10px rgba(0,0,0,0.1);
+            .heading_para{
+                //border: 2px solid blue;
+                max-width: 400px;
+                margin: 0 auto;
+                text-align: center;
+                .heading{
+                    //border: 2px solid green;
+                    font-size: 0.9rem;
+                    color: $primary;
+                }
+                .para{
+                    //border: 2px solid orange;
+                    font-size: 0.8rem;
+                    color: #919191;
+                    font-weight: 500;
                 }
             }
         }
