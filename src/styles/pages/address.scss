@@ -79,7 +79,7 @@ h4{
 }
 .address_bg{
     //border:2px solid red;
-    .heading{
+    .select_address_heading{
         background: linear-gradient(90deg, $primary, $secondary);
         padding: 5px 20px;
         font-size: 0.9rem;
@@ -129,12 +129,13 @@ h4{
                 align-items: center;                
                 .heading{
                     font-size: 0.8rem;
-                    color: #515151;
+                    color: $primary;
+                    font-weight: bold;
                     background: unset;
                     place-content: center;                    
                 }
                 .value{
-        
+                    color: #515151;
                 }
             }
         }

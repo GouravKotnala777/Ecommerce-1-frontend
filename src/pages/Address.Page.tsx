@@ -248,7 +248,7 @@ const Address = () => {
 
             {
                 user?.address.length !== 0 &&
-                    <div className="heading">Select from previous address</div>
+                    <div className="select_address_heading">Select from previous address</div>
             }
             <div className="addresses_cont">
                 {
