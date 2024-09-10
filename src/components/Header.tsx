@@ -1,4 +1,5 @@
 import logo from "/public/vite.svg";
+import logo2 from "../../public/logo2.jpg";
 import "../styles/components/header.scss";
 import { NavLink } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -10,10 +11,6 @@ import { loggedInUserInitialState } from "../redux/reducers/loggedInUserReducer"
 import { BiEdit, BiRightArrowAlt } from "react-icons/bi";
 import { CgClose } from "react-icons/cg";
 import { useUpdateMeMutation } from "../redux/api/api";
-//import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-//import { SerializedError } from "@reduxjs/toolkit";
-//import { useFetchMyCartQuery } from "../redux/api/api";
-//import { ProductTypes } from "../assets/demoData";
 
 
 const Header = ({userName, wishlistNotification, cartNotification}:{userName?:string; wishlistNotification?:number; cartNotification:number;}) => {
@@ -77,7 +74,7 @@ const Header = ({userName, wishlistNotification, cartNotification}:{userName?:st
                 </div>
                 <div className="right_part_mobile">
                     <div className="username">{userName&& `Hi ${userName}`}</div>
-                    <img src={logo} alt={logo} />
+                    <img src={logo2} alt={logo2} />
                 </div>
                 <Sidebar isHamActive={isHamActive} setIsHamActive={setIsHamActive} setIsMyProfileDialogOpen={setIsMyProfileDialogOpen} />
             </div>

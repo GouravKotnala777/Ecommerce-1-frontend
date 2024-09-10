@@ -5,6 +5,7 @@
     display: flex;
     border-radius: 8px;
     justify-content: space-between;
+    //align-items: center;
     width: 98%;
     margin: 10px 0;
     position: fixed;
@@ -17,7 +18,7 @@
     .left_part{
         //border: 2px solid violet;
         width: 40px;
-        margin: 0 0 0 10px;
+        margin: 5px 0 0 10px;
         img{
             width: 40px;
             height: 40px;
@@ -205,6 +206,7 @@
         align-items: center;
         padding: 0 2%;
         width: 95%;
+        background: linear-gradient(90deg, $primary, $secondary);
         
         //width: 95%;
         .left_part{
@@ -232,7 +234,10 @@
                 color: white;
                 font-weight: 500;
             }
-            img{
+            img{    
+                width: 34px;
+                height: 34px;
+                border-radius: 50%;
             }
         }
     }
