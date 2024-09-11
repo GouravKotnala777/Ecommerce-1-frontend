@@ -32,6 +32,8 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { SerializedError } from '@reduxjs/toolkit'
 import Chatbot from './Chatbot'
 import ChatbotAdmin from './ChatbotAdmin'
+import ProtectedRoute from './components/ProtectedRoute'
+import PageNotFound from './pages/PageNotFound'
 
 
 
@@ -59,28 +61,52 @@ const App = () => {
         <>
           <BrowserRouter>
             <DialogWrapper toggler={reportDialogToggle} setToggler={setReportDialogToggle} Element={<Chatbot USERID={myProfileData.data?.message._id} USERNAME={myProfileData.data?.message.name} />} />
-            <Header userName={myProfileData.data?.message.name} wishlistNotification={wishlistData.data?.message.length} cartNotification={cartData.data?.message.products.reduce((acc, iter) => acc+iter.quantity, 0) as number} />
+            <Header userName={myProfileData.data?.message.name} userRole={myProfileData.data?.message.role} wishlistNotification={wishlistData.data?.message.length} cartNotification={cartData.data?.message.products.reduce((acc, iter) => acc+iter.quantity, 0) as number} />
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/chat-admin" element={<ChatbotAdmin USERID={myProfileData.data?.message._id} USERNAME={myProfileData.data?.message.name} />} />
-              <Route path="/product/new" element={<AddProduct />} />
-              <Route path="/user/register" element={<Register />} />
-              <Route path="/user/login" element={<Login />} />
-              <Route path="/user/logout" element={<Logout />} />
-              <Route path="/user/cart" element={<Cart cartData={cartData} />} />
-              <Route path="/user/orders" element={<MyOrders />} />
-              <Route path="/product/pay" element={<StripePayment />} />
+              <Route path="/group/:query/:value" element={<ProductsOfSame />} />
+
+
+              {
+                !myProfileData.data?.message._id &&
+                  <>
+                    <Route path="/user/register" element={<Register />} />
+                    <Route path="/user/login" element={<Login />} />
+                  </>
+              }
+              {
+                myProfileData.data?.message._id &&
+                  <>
+                    <Route path="/user/cart" element={<ProtectedRoute accessibleFor="user" children={<Cart cartData={cartData} />} userRole={myProfileData.data?.message.role} />} />
+                    <Route path="/user/orders" element={<ProtectedRoute children={<MyOrders />} userRole={myProfileData.data?.message.role} />} />
+                    <Route path="/user/wishlist" element={<ProtectedRoute children={<Wishlist wishlistData={wishlistData} />} userRole={myProfileData.data?.message.role} />} />
+                    <Route path="/user/logout" element={<Logout />} />
+                  </>
+              }
+              
+              <Route path="/user/address" element={<ProtectedRoute children={<Address />} userRole={myProfileData.data?.message.role} />} />
+              <Route path="/user/verifyemail" element={<VerifyEmail />} />
+
+
+              <Route path="/product/pay" element={<ProtectedRoute children={<StripePayment />} userRole={myProfileData.data?.message.role} />} />
               <Route path="/product/search/:searchQry" element={<SearchedProducts />} />
               <Route path="/product/:productID" element={<SingleProduct />} />
-              <Route path="/user/wishlist" element={<Wishlist wishlistData={wishlistData} />} />
-              <Route path="/user/address" element={<Address />} />
-              <Route path="/user/verifyemail" element={<VerifyEmail />} />
-              <Route path="/group/:query/:value" element={<ProductsOfSame />} />
-              <Route path="/admin/dashboard" element={<Dashboard />} />
-              <Route path="/admin/outstock" element={<OutStock />} />
-              <Route path="/admin/product/update" element={<UpdateProduct />} />
-              <Route path="/admin/product/incomplete" element={<IncompleteProducts />} />
-              <Route path="/admin/coupon" element={<Coupons />} />
+
+
+              {
+                myProfileData.data?.message.role === "admin" &&
+                <>
+                  <Route path="/chat-admin" element={<ChatbotAdmin USERID={myProfileData.data?.message._id} USERNAME={myProfileData.data?.message.name} />} />
+                  <Route path="/product/new" element={<ProtectedRoute accessibleFor="admin" children={<AddProduct />} userRole={myProfileData.data?.message.role} />} />
+                  <Route path="/admin/dashboard" element={<ProtectedRoute accessibleFor="admin" children={<Dashboard />} userRole={myProfileData.data?.message.role} />} />
+                  <Route path="/admin/outstock" element={<ProtectedRoute accessibleFor="admin" children={<OutStock />} userRole={myProfileData.data?.message.role} />} />
+                  <Route path="/admin/product/update" element={<ProtectedRoute accessibleFor="admin" children={<UpdateProduct />} userRole={myProfileData.data?.message.role} />} />
+                  <Route path="/admin/product/incomplete" element={<ProtectedRoute accessibleFor="admin" children={<IncompleteProducts />} userRole={myProfileData.data?.message.role} />} />
+                  <Route path="/admin/coupon" element={<ProtectedRoute accessibleFor="admin" children={<Coupons />} userRole={myProfileData.data?.message.role} />} />
+                </>
+              }
+
+              <Route path="*" element={<PageNotFound />} />
             </Routes>
 
           </BrowserRouter>

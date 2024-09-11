@@ -13,7 +13,7 @@ import { CgClose } from "react-icons/cg";
 import { useUpdateMeMutation } from "../redux/api/api";
 
 
-const Header = ({userName, wishlistNotification, cartNotification}:{userName?:string; wishlistNotification?:number; cartNotification:number;}) => {
+const Header = ({userName, userRole, wishlistNotification, cartNotification}:{userName?:string; userRole:string|undefined; wishlistNotification?:number; cartNotification:number;}) => {
     const [hideHeader, setHideHeader] = useState<boolean>(false);
     const previousScrollPos = useRef<number>(0);
     const [isHamActive, setIsHamActive] = useState<boolean>(false);
@@ -50,20 +50,35 @@ const Header = ({userName, wishlistNotification, cartNotification}:{userName?:st
                 <nav className="right_part">
                     <div className="nav_section">
                         <NavLink className="navlinks" to="/">Home</NavLink>
-                        <NavLink className="navlinks" to="/chat-admin">Chats</NavLink>
-                        <NavLink className="navlinks" to="/user/register">Register</NavLink>
-                        <NavLink className="navlinks" to="/user/login">Login</NavLink>
-                        <NavLink className="navlinks" to="/product/new">Add Product</NavLink>
-                        <NavLink className="navlinks cart_navlinks" to="/user/wishlist">
-                            {wishlistNotification !== 0 && wishlistNotification !== undefined && <div className="notification">{wishlistNotification}</div>} Wishlist
-                        </NavLink>
-                        <NavLink className="navlinks" to="/admin/dashboard">Dashboard</NavLink>
-                        <NavLink className="navlinks" to="/user/orders">Orders</NavLink>
-                        <NavLink className="navlinks cart_navlinks" to="/user/cart">
-                            {cartNotification !== 0 && cartNotification !== undefined && <div className="notification">{cartNotification}</div>} Cart
-                        </NavLink>
-                        <div className="navlinks" style={{cursor:"pointer"}} onClick={() => setIsMyProfileDialogOpen(true)}>My Profile</div>
-                        <NavLink className="navlinks" to="/user/logout">Logout</NavLink>
+                        {
+                            !userName &&
+                                <>
+                                    <NavLink className="navlinks" to="/user/register">Register</NavLink>
+                                    <NavLink className="navlinks" to="/user/login">Login</NavLink>
+                                </>
+                        }
+                        {
+                            userRole === "admin" &&
+                                <>
+                                    <NavLink className="navlinks" to="/chat-admin">Chats</NavLink>
+                                    <NavLink className="navlinks" to="/product/new">Add Product</NavLink>
+                                    <NavLink className="navlinks" to="/admin/dashboard">Dashboard</NavLink>
+                                </>
+                        }
+                        {
+                            userName &&
+                                <>
+                                    <div className="navlinks" style={{cursor:"pointer"}} onClick={() => setIsMyProfileDialogOpen(true)}>My Profile</div>
+                                    <NavLink className="navlinks cart_navlinks" to="/user/wishlist">
+                                        {wishlistNotification !== 0 && wishlistNotification !== undefined && <div className="notification">{wishlistNotification}</div>} Wishlist
+                                    </NavLink>
+                                    <NavLink className="navlinks" to="/user/orders">Orders</NavLink>
+                                    <NavLink className="navlinks cart_navlinks" to="/user/cart">
+                                        {cartNotification !== 0 && cartNotification !== undefined && <div className="notification">{cartNotification}</div>} Cart
+                                    </NavLink>
+                                    <NavLink className="navlinks" to="/user/logout">Logout</NavLink>
+                                </>
+                        }
                     </div>
                 </nav>
 
