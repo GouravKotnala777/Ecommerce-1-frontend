@@ -77,7 +77,7 @@ const App = () => {
               {
                 myProfileData.data?.message._id &&
                   <>
-                    <Route path="/user/cart" element={<ProtectedRoute accessibleFor="user" children={<Cart cartData={cartData} />} userRole={myProfileData.data?.message.role} />} />
+                    <Route path="/user/cart" element={<ProtectedRoute children={<Cart cartData={cartData} />} userRole={myProfileData.data?.message.role} />} />
                     <Route path="/user/orders" element={<ProtectedRoute children={<MyOrders />} userRole={myProfileData.data?.message.role} />} />
                     <Route path="/user/wishlist" element={<ProtectedRoute children={<Wishlist wishlistData={wishlistData} />} userRole={myProfileData.data?.message.role} />} />
                     <Route path="/user/logout" element={<Logout />} />
