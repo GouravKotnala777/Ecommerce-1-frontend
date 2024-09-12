@@ -34,6 +34,7 @@ import Chatbot from './Chatbot'
 import ChatbotAdmin from './ChatbotAdmin'
 import ProtectedRoute from './components/ProtectedRoute'
 import PageNotFound from './pages/PageNotFound'
+import MacroCalculator from './pages/MacroCalculator'
 
 
 
@@ -64,6 +65,7 @@ const App = () => {
             <Header userName={myProfileData.data?.message.name} userRole={myProfileData.data?.message.role} wishlistNotification={wishlistData.data?.message.length} cartNotification={cartData.data?.message.products.reduce((acc, iter) => acc+iter.quantity, 0) as number} />
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/tools/macro_calculator" element={<MacroCalculator />} />
               <Route path="/group/:query/:value" element={<ProductsOfSame />} />
 
 

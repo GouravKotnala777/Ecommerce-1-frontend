@@ -50,6 +50,7 @@ const Header = ({userName, userRole, wishlistNotification, cartNotification}:{us
                 <nav className="right_part">
                     <div className="nav_section">
                         <NavLink className="navlinks" to="/">Home</NavLink>
+                        <NavLink className="navlinks" to="/tools/macro_calculator">Tools</NavLink>
                         {
                             !userName &&
                                 <>

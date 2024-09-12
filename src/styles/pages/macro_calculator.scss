@@ -1,0 +1,90 @@
+
+
+.macro_calculator_bg{
+    //border: 2px solid violet;
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 1px 1px 2px 1px rgba(0,0,0,0.1);
+    .heading{
+        //border: 2px solid indigo;
+        font-weight: 500;
+        font-size: 0.7rem;
+        margin-bottom: 5px;
+    }
+    .inputs_cont{
+        //border: 2px solid blue;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex-wrap: wrap;
+        font-size: 0.6rem;
+        margin-bottom: 20px;
+    }
+    .sub_result{
+        //border: 2px solid palevioletred;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin: 10px auto;
+        padding: 10px;
+        max-width: 550px;
+        border-radius: 8px;        
+        .sub_result_heading{
+            //border: 2px solid gold;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        .sub_result_value{
+            //border: 2px solid orange;
+            font-size: 0.7rem;
+            //width: 250px;
+            overflow-x: scroll;
+        }
+    }
+    .result{
+        //border: 2px solid palevioletred;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        margin: 10px auto;
+        padding: 10px;
+        max-width: 550px;
+        border-radius: 8px;        
+        .heading{
+            //border: 2px solid gold;
+            font-size: 0.8rem;
+        }
+        .value{
+            //border: 2px solid orange;
+            font-size: 0.8rem;
+            width: 250px;
+            overflow-x: scroll;
+            margin-top: 10px;
+
+            .table{
+                //border: 1px solid black;
+                width: 250px;
+                font-size: 0.6rem;
+                .thead{
+                    //border: 1px solid violet;
+                    display: grid;
+                    grid-template-columns: 30% 30% 40%;
+                    .th{
+                        text-align: center;
+                    }
+                    
+                }
+                .tbody{
+                    //border: 1px solid purple;
+                    display: grid;
+                    grid-template-columns: 30% 30% 40%;
+                    .td{
+                        //border: 2px solid orange;
+                    }
+                }
+            }
+        }
+    }
+}

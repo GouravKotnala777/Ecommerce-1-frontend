@@ -15,6 +15,7 @@ const Sidebar = ({userName, userRole, wishlistNotification, cartNotification, is
             <div className="sidebar_left_part">
                 <div className="sidebar_scrollable_part">
                     <NavLink className="sidebar_navlink" to="/" onClick={closeSidebarHandler}>Home</NavLink>
+                    <NavLink className="sidebar_navlink" to="/tools/macro_calculator" onClick={closeSidebarHandler}>Tools</NavLink>
                     {
                         !userName &&
                         <>
