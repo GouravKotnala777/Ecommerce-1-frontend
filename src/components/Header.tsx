@@ -91,7 +91,7 @@ const Header = ({userName, userRole, wishlistNotification, cartNotification}:{us
                     <div className="username">{userName&& `Hi ${userName}`}</div>
                     <img src={logo2} alt={logo2} />
                 </div>
-                <Sidebar isHamActive={isHamActive} setIsHamActive={setIsHamActive} setIsMyProfileDialogOpen={setIsMyProfileDialogOpen} />
+                <Sidebar userName={userName} userRole={userRole} wishlistNotification={wishlistNotification} cartNotification={cartNotification} isHamActive={isHamActive} setIsHamActive={setIsHamActive} setIsMyProfileDialogOpen={setIsMyProfileDialogOpen} />
             </div>
         </>
     )

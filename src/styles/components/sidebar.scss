@@ -1,3 +1,4 @@
+@import "../utils";
 
 .sidebar_bg{
     //border: 2px solid red;
@@ -14,21 +15,45 @@
         //border: 2px solid violet;
         width: 60%;
         overflow: scroll;
-        background: white;
+        background: linear-gradient(90deg, $bgPrimary, white);
+        //box-shadow: 4px 8px 16px rgba(0,0,0,0.9);
+
         .sidebar_scrollable_part{
             //border: 2px solid rgb(149, 0, 255);
-            padding: 0 0 0 40px;
+            //padding: 0 0 0 0px;
             .sidebar_navlink{
+                //border: 1px solid blue;
                 text-decoration: none;
                 color: black;
                 display: flex;
                 flex-direction: column;
-                //align-items:start;
                 color: #515151;
                 font-family: rokkitt;
                 font-weight: bold;
                 margin: 30px auto;
                 font-size: 1rem;
+                width: 100px;
+                //width: ;
+            }
+            .cart_sidebar_navlink{
+                //border: 1px solid red;
+                position: relative;
+                .notification{
+                    //border: 1px solid red;
+                    background: linear-gradient(90deg, $primary, $secondary);
+                    color: white;
+                    position: absolute;
+                    top: 1px;
+                    right: 0px;
+                    //background: white;
+                    //color:$primary;
+                    width: 18px;
+                    height: 18px;
+                    display: grid;
+                    place-items:center;
+                    border-radius: 50%;
+                    font-size: 0.8rem;
+                }
             }
         }
     }
