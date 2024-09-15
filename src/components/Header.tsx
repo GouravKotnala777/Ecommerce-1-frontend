@@ -11,9 +11,10 @@ import { loggedInUserInitialState } from "../redux/reducers/loggedInUserReducer"
 import { BiEdit, BiRightArrowAlt } from "react-icons/bi";
 import { CgClose } from "react-icons/cg";
 import { useUpdateMeMutation } from "../redux/api/api";
+import { UserLocationTypes } from "../pages/Login.Page";
 
 
-const Header = ({userName, userRole, wishlistNotification, cartNotification}:{userName?:string; userRole:string|undefined; wishlistNotification?:number; cartNotification:number;}) => {
+const Header = ({userName, userRole, wishlistNotification, cartNotification, userLocation}:{userName?:string; userRole:string|undefined; wishlistNotification?:number; cartNotification:number; userLocation:UserLocationTypes|undefined;}) => {
     const [hideHeader, setHideHeader] = useState<boolean>(false);
     const previousScrollPos = useRef<number>(0);
     const [isHamActive, setIsHamActive] = useState<boolean>(false);
@@ -42,7 +43,7 @@ const Header = ({userName, userRole, wishlistNotification, cartNotification}:{us
 
     return(
         <>
-            <DialogWrapper Element={<MyProfileDialog setIsMyProfileDialogOpen={setIsMyProfileDialogOpen} />} toggler={isMyProfileDialogOpen} setToggler={setIsMyProfileDialogOpen} />
+            <DialogWrapper Element={<MyProfileDialog setIsMyProfileDialogOpen={setIsMyProfileDialogOpen} userLocation={userLocation as UserLocationTypes} />} toggler={isMyProfileDialogOpen} setToggler={setIsMyProfileDialogOpen} />
             <div className="header_bg" style={{top:hideHeader?"-13%":"-1.5%"}}>
                 <div className="left_part">
                     <img src={logo} alt={logo} />
@@ -98,7 +99,7 @@ const Header = ({userName, userRole, wishlistNotification, cartNotification}:{us
     )
 };
 
-const MyProfileDialog = ({setIsMyProfileDialogOpen}:{setIsMyProfileDialogOpen:Dispatch<SetStateAction<boolean>>;}) => {
+const MyProfileDialog = ({setIsMyProfileDialogOpen, userLocation}:{setIsMyProfileDialogOpen:Dispatch<SetStateAction<boolean>>; userLocation:UserLocationTypes;}) => {
     const {isLoading, user} = useSelector((state:{loggedInUserReducer:loggedInUserInitialState}) => state.loggedInUserReducer);
     const [updateMe] = useUpdateMeMutation();
     const [editFieldList, setEditFieldList] = useState<string[]>([]);
@@ -132,7 +133,7 @@ const MyProfileDialog = ({setIsMyProfileDialogOpen}:{setIsMyProfileDialogOpen:Di
     };
     const updateMeHandler = async() => {
         try {
-            const res = await updateMe({...updateFormData, action:"profile_update", ipAddress:"1210002", userAgent:"chrome", userLocation:"faridabad", platform:"web", device:"windows", referrer:"google", success:false});
+            const res = await updateMe({...updateFormData, action:"profile_update", userLocation});
 
             console.log("----- MyProfileDialog updateMeHandler");
             console.log(res);

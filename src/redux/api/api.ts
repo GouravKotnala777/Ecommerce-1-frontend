@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { MessageTypes } from "../../Chatbot";
+import { UserLocationTypes } from "../../pages/Login.Page";
 
 export interface UpdateProductBodyType {
     productID?:string;
@@ -50,7 +51,10 @@ export interface UpdateMeBodyType {
     zip?:string;
 
 
-    action:string; ipAddress:string; userAgent:string; userLocation:string; platform:string; device:string; referrer:string; success:boolean; errorDetails?:string;
+    action:string;
+    userLocation:UserLocationTypes;
+
+    //ipAddress:string; userAgent:string; userLocation:string; platform:string; device:string; referrer:string; success:boolean; errorDetails?:string;
 }
 //export interface MessagesTypes {
 //    senderID: string;
@@ -108,11 +112,15 @@ const api = createApi({
             providesTags:["MyWishlistedProducts"]
         }),
         updateMe:builder.mutation({
-            query:({oldPassword, name, email, password, mobile, house, street, city, state, zip,           action, device, errorDetails, ipAddress, platform, referrer, success, userAgent, userLocation}:UpdateMeBodyType) => ({
+            query:({oldPassword, name, email, password, mobile, house, street, city, state, zip,           action, userLocation
+                //device, errorDetails, ipAddress, platform, referrer, success, userAgent, userLocation
+            }:UpdateMeBodyType) => ({
                 url:"/api/v1/user/update",
                 method:"PUT",
                 credentials:"include",
-                body:{oldPassword, name, email, password, mobile, house, street, city, state, zip,        action, device, errorDetails, ipAddress, platform, referrer, success, userAgent, userLocation}
+                body:{oldPassword, name, email, password, mobile, house, street, city, state, zip,        action, userLocation
+                    //device, errorDetails, ipAddress, platform, referrer, success, userAgent, userLocation
+                }
             })
         }),
         forgetPassword:builder.mutation({

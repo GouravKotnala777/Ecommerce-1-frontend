@@ -72,6 +72,7 @@ const Home = () => {
         setSearchQry(e.currentTarget.innerText);
         navigate(`/product/search/${e.currentTarget.innerText}`)
     };
+    
 
     useEffect(() => {
         const rr = setTimeout(async() => {

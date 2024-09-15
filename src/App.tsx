@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import SingleProduct from './pages/SingleProduct'
 import Cart from './pages/Cart.Page'
-import Login from './pages/Login.Page'
+import Login, { UserLocationTypes } from './pages/Login.Page'
 import Register from './pages/Register.Page'
 import Logout from './pages/Logout'
 import AddProduct from './pages/AddProduct'
@@ -51,18 +51,46 @@ const App = () => {
     data?:{success:boolean; message:ProductTypes[]};
     error?:FetchBaseQueryError | SerializedError;
   } = useMyWhishlistQuery("");
+  const [userLocation, setUserLocation] = useState<UserLocationTypes>();
   const dispatch = useDispatch();
+
+  const getUserLocationData = async() => {
+    try {
+        const resIP = await fetch(`https://ipinfo.io/json`, {
+            method:"GET"
+        });
+
+        if (resIP.ok) {
+          const dataIP:UserLocationTypes = await resIP.json();
+          console.log("--------- Home.Page.tsx  getUserLocationData Ok");
+          console.log(dataIP);
+          setUserLocation(dataIP);
+          console.log("--------- Home.Page.tsx  getUserLocationData Ok");
+        }
+        else{
+          console.log("--------- Home.Page.tsx  getUserLocationData NotOk");
+        }
+
+    } catch (error) {
+        console.log("--------- Home.Page.tsx  getUserLocationData error");
+        console.log(error);
+        console.log("--------- Home.Page.tsx  getUserLocationData error");
+    }
+};
   
   useEffect(() => {
     dispatch(setLoggedInUser({user:myProfileData.data?.message as UserTypes, isLoading:false, isError:false}));
   }, [myProfileData.data?.message]);
-  
+
+  useEffect(() => {
+    getUserLocationData();
+  }, []);
 
   return (
         <>
           <BrowserRouter>
             <DialogWrapper toggler={reportDialogToggle} setToggler={setReportDialogToggle} Element={<Chatbot USERID={myProfileData.data?.message._id} USERNAME={myProfileData.data?.message.name} />} />
-            <Header userName={myProfileData.data?.message.name} userRole={myProfileData.data?.message.role} wishlistNotification={wishlistData.data?.message.length} cartNotification={cartData.data?.message.products.reduce((acc, iter) => acc+iter.quantity, 0) as number} />
+            <Header userName={myProfileData.data?.message.name} userRole={myProfileData.data?.message.role} wishlistNotification={wishlistData.data?.message.length} cartNotification={cartData.data?.message.products.reduce((acc, iter) => acc+iter.quantity, 0) as number} userLocation={userLocation} />
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/tools/macro_calculator" element={<MacroCalculator />} />
@@ -73,7 +101,7 @@ const App = () => {
                 !myProfileData.data?.message._id &&
                   <>
                     <Route path="/user/register" element={<Register />} />
-                    <Route path="/user/login" element={<Login />} />
+                    <Route path="/user/login" element={<Login userLocation={userLocation as UserLocationTypes} />} />
                   </>
               }
               {

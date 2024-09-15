@@ -7,17 +7,30 @@ import { MutationResTypes } from "../assets/demoData";
 import DialogWrapper from "../components/DialogWrapper";
 import { Link } from "react-router-dom";
 
+export interface UserLocationTypes {
+    city:string;
+    country:string;
+    ip:string;
+    loc:string;
+    org:string;
+    postal:string;
+    readme:string;
+    region:string;
+    timezone:string;
+}
+
 export const loginFormFields = [
     {type:"text", name:"email", placeHolder:"Email"},
     {type:"text", name:"password", placeHolder:"Password"},
 ];
 
-const Login = () => {
+const Login = ({userLocation}:{userLocation:UserLocationTypes}) => {
     const [formData, setFormData] = useState<{email?:string; password?:string;}>();
     const [login] = useLoginMutation();
     const [loginRes, setLoginRes] = useState<MutationResTypes>();
     const [isForgetPassDialogOpen, setIsForgetPassDialogOpen] = useState<boolean>(false);
     const [email, setEmail] = useState<string>("");
+    //const [userLocation, setUserLocation] = useState<UserLocationTypes>({city:"", country:"", ip:"", loc:"", org:"", postal:"", readme:"", region:"", timezone:""});
 
 
 
@@ -26,22 +39,24 @@ const Login = () => {
     };
     const onClickHandler = async() => {
         try {
-            const res = await login({...formData, action:"signin", ipAddress:"1210002", userAgent:"chrome", userLocation:"faridabad", platform:"web", device:"windows", referrer:"google", success:false});
+            const loginRes = await login({...formData, action:"signin", userLocation
+                //ipAddress:"1210002", userAgent:"chrome", userLocation:"faridabad", platform:"web", device:"windows", referrer:"google", success:false
+            });
             
             console.log("----- Login.Page.tsx onClickHandler");
-            console.log(res);
-            setLoginRes(res);
+            console.log(loginRes);
+            setLoginRes(loginRes);
 
-            if (res.data) {
+            if (loginRes.data) {
                 setTimeout(() => {
                     window.location.href = "/";
                 }, 2000);
             }
             console.log("----- Login.Page.tsx onClickHandler");
         } catch (error) {
-            console.log("----- Login.Page.tsx onClickHandler");
+            console.log("----- Login.Page.tsx onClickHandler error");
             console.log(error);
-            console.log("----- Login.Page.tsx onClickHandler");
+            console.log("----- Login.Page.tsx onClickHandler error");
         }
 
     };
@@ -50,6 +65,7 @@ const Login = () => {
         <div className="login_bg">
             <DialogWrapper Element={<ForgetPasswordDialog email={email} setEmail={setEmail} setIsForgetPassDialogOpen={setIsForgetPassDialogOpen} />} toggler={isForgetPassDialogOpen} setToggler={setIsForgetPassDialogOpen} />
             <HandleMutationRes res={loginRes} />
+            {/*<pre>{JSON.stringify(userLocation, null, `\t`)}</pre>*/}
             <Form heading="Login" formFields={loginFormFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler}  />
             <div className="lower_part">
                 <button onClick={() => setIsForgetPassDialogOpen(true)}>Forget Password</button>
