@@ -26,7 +26,7 @@ const Login = () => {
     };
     const onClickHandler = async() => {
         try {
-            const res = await login(formData);
+            const res = await login({...formData, action:"signin", ipAddress:"1210002", userAgent:"chrome", userLocation:"faridabad", platform:"web", device:"windows", referrer:"google", success:false});
             
             console.log("----- Login.Page.tsx onClickHandler");
             console.log(res);

@@ -103,6 +103,9 @@ const MyProfileDialog = ({setIsMyProfileDialogOpen}:{setIsMyProfileDialogOpen:Di
     const [updateMe] = useUpdateMeMutation();
     const [editFieldList, setEditFieldList] = useState<string[]>([]);
     const [updateFormData, setUpdateFormData] = useState<{oldPassword:string; name?:string; password?:string; mobile?:string;}>({oldPassword:""});
+    const [updatedName, setUpdatedName] = useState<string>("");
+    //const [updatedPassword, setUpdatedPassword] = useState<string>("");
+    const [updatedMobile, setUpdatedMobile] = useState<string>("");
 
     //const forgetPasswordSendEmail = () => {
     //        setIsMyProfileDialogOpen(false);
@@ -129,10 +132,26 @@ const MyProfileDialog = ({setIsMyProfileDialogOpen}:{setIsMyProfileDialogOpen:Di
     };
     const updateMeHandler = async() => {
         try {
-            const res = await updateMe({...updateFormData});
+            const res = await updateMe({...updateFormData, action:"profile_update", ipAddress:"1210002", userAgent:"chrome", userLocation:"faridabad", platform:"web", device:"windows", referrer:"google", success:false});
 
             console.log("----- MyProfileDialog updateMeHandler");
             console.log(res);
+            if (res.data) {
+                setUpdateFormData({oldPassword:""});
+                setEditFieldList([]);
+                if (updateFormData.name) {
+                    setUpdatedName(updateFormData.name);
+                }
+                if (updateFormData.mobile) {
+                    setUpdatedMobile(updateFormData.mobile);
+                }
+            }
+
+
+
+
+
+
             console.log("----- MyProfileDialog updateMeHandler");
         } catch (error) {
             console.log("----- MyProfileDialog updateMeHandler");
@@ -167,13 +186,13 @@ const MyProfileDialog = ({setIsMyProfileDialogOpen}:{setIsMyProfileDialogOpen:Di
                             <div className="my_details">
                                 <div className="heading">Name</div>
                                     <div className="value">
-                                        {!editFieldList.includes("name")&&user?.name}
+                                        {!editFieldList.includes("name")&& (updatedName ? updatedName : user?.name)}
                                         <input type="text" name="name" id="name" placeholder="New Name" value={updateFormData?.name ? updateFormData?.name : ""} onChange={(e) => updateFormChangeHandler(e)} style={{display:editFieldList.includes("name")?"block":"none"}} />
                                         {editFieldList.includes("name") ? <CgClose id="name-CgClose" className="BiEdit" onClick={(e) => func(e)}  /> : <BiEdit id="name-BiEdit" className="BiEdit" onClick={(e) => func(e)} />}
                                     </div>
                                 <div className="heading">Email</div><div className="value">{user?.email}</div>
                                 <div className="heading">Password</div><div className="value">{!editFieldList.includes("password")&&"**********"} <input type="text" name="password" id="password" placeholder="New Password" value={updateFormData?.password ? updateFormData?.password : ""} onChange={(e) => updateFormChangeHandler(e)} style={{display:editFieldList.includes("password")?"block":"none"}} /> {editFieldList.includes("password") ? <CgClose id="password-CgClose" className="BiEdit" onClick={(e) => func(e)}  /> : <BiEdit id="password-BiEdit" className="BiEdit" onClick={(e) => func(e)} />}</div>
-                                <div className="heading">Mobile</div><div className="value">{!editFieldList.includes("mobile")&&user?.mobile} <input type="text" name="mobile" id="mobile" placeholder="New Mobile" value={updateFormData?.mobile ? updateFormData?.mobile : ""} onChange={(e) => updateFormChangeHandler(e)} style={{display:editFieldList.includes("mobile")?"block":"none"}} /> {editFieldList.includes("mobile") ? <CgClose id="mobile-CgClose" className="BiEdit" onClick={(e) => func(e)}  /> : <BiEdit id="mobile-BiEdit" className="BiEdit" onClick={(e) => func(e)} />}</div>
+                                <div className="heading">Mobile</div><div className="value">{!editFieldList.includes("mobile")&& (updatedMobile ? updatedMobile : user?.mobile)} <input type="text" name="mobile" id="mobile" placeholder="New Mobile" value={updateFormData?.mobile ? updateFormData?.mobile : ""} onChange={(e) => updateFormChangeHandler(e)} style={{display:editFieldList.includes("mobile")?"block":"none"}} /> {editFieldList.includes("mobile") ? <CgClose id="mobile-CgClose" className="BiEdit" onClick={(e) => func(e)}  /> : <BiEdit id="mobile-BiEdit" className="BiEdit" onClick={(e) => func(e)} />}</div>
                                 <div className="heading">Role</div><div className="value">{user?.role}</div>
                                 {
                                     editFieldList.length !== 0 &&

@@ -48,6 +48,9 @@ export interface UpdateMeBodyType {
     city?:string;
     state?:string;
     zip?:string;
+
+
+    action:string; ipAddress:string; userAgent:string; userLocation:string; platform:string; device:string; referrer:string; success:boolean; errorDetails?:string;
 }
 //export interface MessagesTypes {
 //    senderID: string;
@@ -105,11 +108,11 @@ const api = createApi({
             providesTags:["MyWishlistedProducts"]
         }),
         updateMe:builder.mutation({
-            query:({oldPassword, name, email, password, mobile, house, street, city, state, zip}:UpdateMeBodyType) => ({
+            query:({oldPassword, name, email, password, mobile, house, street, city, state, zip,           action, device, errorDetails, ipAddress, platform, referrer, success, userAgent, userLocation}:UpdateMeBodyType) => ({
                 url:"/api/v1/user/update",
                 method:"PUT",
                 credentials:"include",
-                body:{oldPassword, name, email, password, mobile, house, street, city, state, zip}
+                body:{oldPassword, name, email, password, mobile, house, street, city, state, zip,        action, device, errorDetails, ipAddress, platform, referrer, success, userAgent, userLocation}
             })
         }),
         forgetPassword:builder.mutation({
@@ -372,7 +375,15 @@ const api = createApi({
                 credentials:"include",
                 body:{chatID, isHelpful}
             })
-        })
+        }),
+        //newUserActivity:builder.mutation({
+        //    query:({}:{}) => ({
+        //        url:"/api/activity/new",
+        //        method:"POST",
+        //        credentials:"include",
+        //        body:{}
+        //    })
+        //})
     })
 })
 
