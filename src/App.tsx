@@ -35,6 +35,7 @@ import ChatbotAdmin from './ChatbotAdmin'
 import ProtectedRoute from './components/ProtectedRoute'
 import PageNotFound from './pages/PageNotFound'
 import MacroCalculator from './pages/MacroCalculator'
+import UserActivities from './pages/UserActivities'
 
 
 
@@ -110,7 +111,7 @@ const App = () => {
                     <Route path="/user/cart" element={<ProtectedRoute children={<Cart cartData={cartData} />} userRole={myProfileData.data?.message.role} />} />
                     <Route path="/user/orders" element={<ProtectedRoute children={<MyOrders />} userRole={myProfileData.data?.message.role} />} />
                     <Route path="/user/wishlist" element={<ProtectedRoute children={<Wishlist wishlistData={wishlistData} />} userRole={myProfileData.data?.message.role} />} />
-                    <Route path="/user/logout" element={<Logout />} />
+                    <Route path="/user/logout" element={<Logout userLocation={userLocation as UserLocationTypes} />} />
                   </>
               }
               
@@ -132,6 +133,7 @@ const App = () => {
                   <Route path="/admin/outstock" element={<ProtectedRoute accessibleFor="admin" children={<OutStock />} userRole={myProfileData.data?.message.role} />} />
                   <Route path="/admin/product/update" element={<ProtectedRoute accessibleFor="admin" children={<UpdateProduct />} userRole={myProfileData.data?.message.role} />} />
                   <Route path="/admin/product/incomplete" element={<ProtectedRoute accessibleFor="admin" children={<IncompleteProducts />} userRole={myProfileData.data?.message.role} />} />
+                  <Route path="/admin/activities" element={<ProtectedRoute accessibleFor="admin" children={<UserActivities />} userRole={myProfileData.data?.message.role} />} />
                   <Route path="/admin/coupon" element={<ProtectedRoute accessibleFor="admin" children={<Coupons />} userRole={myProfileData.data?.message.role} />} />
                 </>
               }

@@ -3,6 +3,7 @@ import { MessageTypes } from "../../Chatbot";
 import { UserLocationTypes } from "../../pages/Login.Page";
 
 export interface UpdateProductBodyType {
+    _id?:string;
     productID?:string;
     name?:string;
     description?:string;
@@ -28,6 +29,9 @@ export interface UpdateProductBodyType {
     transactionId?:string;
     status?:string;
     message?:string;
+
+    shippingType?:string;
+    createdAt?:Date;
 }
 export interface CreateCouponBodyType {
     discountType:string;
@@ -140,9 +144,17 @@ const api = createApi({
             })
         }),
         logout:builder.mutation({
-            query:() => ({
+            query:({action, userLocation}:{action:string; userLocation:UserLocationTypes;}) => ({
                 url:"/api/v1/user/logout",
                 method:"POST",
+                credentials:"include",
+                body:{action, userLocation}
+            })
+        }),
+        getAllUsersActivities:builder.query({
+            query:() => ({
+                url:"/api/v1/user/activities",
+                method:"GET",
                 credentials:"include"
             })
         }),
@@ -396,7 +408,7 @@ const api = createApi({
 })
 
 export default api;
-export const {useRegisterMutation, useLoginMutation, useVerifyEmailMutation, useMyProfileQuery, useForgetPasswordMutation, useUpdateMeMutation, useRemoveAddressMutation, useLogoutMutation,
+export const {useRegisterMutation, useLoginMutation, useVerifyEmailMutation, useMyProfileQuery, useForgetPasswordMutation, useUpdateMeMutation, useRemoveAddressMutation, useLogoutMutation, useGetAllUsersActivitiesQuery,
     useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useGetProductsOfSameQuery, useFindAllFieldsQuery, useSearchProductsMutation, useProductRecommendationMutation,
     useAddToCartMutation, useFetchMyCartQuery,  useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation, useUpdateVoteMutation,
     useMyWhishlistQuery, useAddRemoveFromWishlistMutation,

@@ -5,7 +5,7 @@ import Table from "../../components/Table";
 
 
 const productTableHeadings = [
-    {th:"Name", isEditable:false},
+    {th:"name", isEditable:false},
     {th:"total_servings", isEditable:true},
     {th:"diet_type", isEditable:true},
     {th:"flavour", isEditable:true},

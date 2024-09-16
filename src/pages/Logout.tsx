@@ -3,9 +3,10 @@ import HandleMutationRes from "../components/HandleMutationRes";
 import { useLogoutMutation } from "../redux/api/api";
 import "../styles/pages/logout.scss";
 import { useState } from "react";
+import { UserLocationTypes } from "./Login.Page";
 
 
-const Logout = () => {
+const Logout = ({userLocation}:{userLocation:UserLocationTypes}) => {
     const [confirmation, setConfirmation] = useState<boolean>(false);
     const [logout] = useLogoutMutation();
     const [logoutRes, setLogoutRes] = useState<MutationResTypes|{error:{data:{message:string}}}>();
@@ -13,7 +14,7 @@ const Logout = () => {
     const logoutHandler = async() => {
         if (confirmation){
             console.log("Logout successfull");
-            const res = await logout({});
+            const res = await logout({action:"logout", userLocation});
             setLogoutRes(res);
             if (res.data) {
                 window.location.href = "/";

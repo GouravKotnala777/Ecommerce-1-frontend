@@ -1,13 +1,16 @@
 import "../styles/components/table.scss";
 import { RiStockLine } from "react-icons/ri";
 import photo from "/vite.svg";
-import { ChangeEvent, Dispatch, MouseEvent, useState } from "react";
+import { ChangeEvent, Dispatch, MouseEvent, ReactElement, SetStateAction, useState } from "react";
 import { useUpdateProductMutation } from "../redux/api/api";
 import { MutationResTypes } from "../assets/demoData";
 import HandleMutationRes from "./HandleMutationRes";
 import { BsInfoSquare } from "react-icons/bs";
 import DialogWrapper from "./DialogWrapper";
-import SingleProductTemplate from "./SingleProductTemplate";
+//import SingleProductTemplate from "./SingleProductTemplate";
+import { UserLocationTypes } from "../pages/Login.Page";
+//import { SingleOrderInfoTypes } from "../pages/MyOrders";
+//import { SingleOrderInfo } from "../pages/MyOrders";
 //import { FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta, MutationDefinition } from "@reduxjs/toolkit/query";
 //import { BaseQueryFn } from "@reduxjs/toolkit/query";
 
@@ -28,6 +31,21 @@ interface TablePropTypes<T1>{
             age_range?: string;
             about?: string[];
             ingredient?: string;
+
+
+
+
+            userID?: string;
+            action?: string;
+            ipAddress?: string;
+            userAgent?: string;
+            userLocation?: UserLocationTypes;
+            platform?: string;
+            device?: string;
+            referrer?: string;
+            success?: boolean;
+            errorDetails?: string;
+            timestamp?: Date;
         };
     };
     setList:Dispatch<React.SetStateAction<{
@@ -42,36 +60,58 @@ interface TablePropTypes<T1>{
             age_range?: string;
             about?: string[];
             ingredient?: string;
+
+
+
+
+
+            userID?: string;
+            action?: string;
+            ipAddress?: string;
+            userAgent?: string;
+            userLocation?: UserLocationTypes;
+            platform?: string;
+            device?: string;
+            referrer?: string;
+            success?: boolean;
+            errorDetails?: string;
+            timestamp?: Date;
         };
     }>>,
     hideEditBtn?:boolean;
+    hideImg?:boolean;
+
+    DialogElement?:ReactElement;
+    dialogShowInfo?:(e:MouseEvent<HTMLButtonElement>) => void;
+    isOrderInfoDialogOpen?:boolean;
+    setIsOrderInfoDialogOpen?:Dispatch<SetStateAction<boolean>>
 }
-interface SingleOrderInfoTypes{
-    productID?:string;
-    category?:string;
-    name?:string;
-    price?:number;
-    quantity?:number;
-    rating?:number;
-    description?:string;
-    photo:string;
-    parent:string;
+//interface SingleOrderInfoTypes{
+//    productID?:string;
+//    category?:string;
+//    name?:string;
+//    price?:number;
+//    quantity?:number;
+//    rating?:number;
+//    description?:string;
+//    photo:string;
+//    parent:string;
 
-    orderID?:string;
-    transactionId?:string;
-    shippingType:string;
-    status?:string;
-    message?:string;
-    createdAt?:string;
-}
+//    orderID?:string;
+//    transactionId?:string;
+//    shippingType:string;
+//    status?:string;
+//    message?:string;
+//    createdAt?:string;
+//}
 
 
 
-const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, data, list, setList, hideEditBtn}:TablePropTypes<T1>) => {
+const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, data, list, setList, hideEditBtn, hideImg,                          DialogElement, dialogShowInfo, isOrderInfoDialogOpen, setIsOrderInfoDialogOpen}:TablePropTypes<T1>) => {
     const [updateProduct] = useUpdateProductMutation();
     const [outStockRes, setOutStockRes] = useState<MutationResTypes>();
-    const [isOrderInfoDialogOpen, setIsOrderInfoDialogOpen] = useState<boolean>(false);
-    const [orderNumber, setOrderNumber] = useState<number>(0);
+    //const [isOrderInfoDialogOpen, setIsOrderInfoDialogOpen] = useState<boolean>(false);
+    //const [orderNumber, setOrderNumber] = useState<number>(0);
 
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement>, productID:string) => {
         setList({...list, [productID]:{...list[productID], [e.target.name.toLowerCase()]:e.target.value}})
@@ -98,20 +138,26 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
             console.log("::::::::::::::::::");
         }
     };
-    const showOrderInfo = (e:MouseEvent<HTMLButtonElement>) => {
-        setOrderNumber(Number(e.currentTarget.value));
-        setIsOrderInfoDialogOpen(true);
-    }
+    //const showOrderInfo = (e:MouseEvent<HTMLButtonElement>) => {
+    //    setOrderNumber(Number(e.currentTarget.value));
+    //    setIsOrderInfoDialogOpen(true);
+    //}
 
     return(
         <div className="table_bg">
             {/*<pre>{JSON.stringify(data, null, `\t`)}</pre>*/}
-            <DialogWrapper Element={<SingleOrderInfo parent="orders" orderID={data?.[orderNumber]._id} name={data?.[orderNumber].name as string} price={Number(data?.[orderNumber].price as string)} quantity={1} rating={Number(data?.[orderNumber].price as string)} description="aaaaaa" photo={""} transactionId={data?.[orderNumber].transactionId as string} shippingType={data?.[orderNumber].shippingType as string} status={data?.[orderNumber].status as string} message={data?.[orderNumber].message as string} createdAt={data?.[orderNumber].createdAt as string} />} toggler={isOrderInfoDialogOpen} setToggler={setIsOrderInfoDialogOpen} />
+            {
+                DialogElement &&
+                    <DialogWrapper Element={DialogElement as ReactElement} toggler={isOrderInfoDialogOpen as boolean} setToggler={setIsOrderInfoDialogOpen as Dispatch<SetStateAction<boolean>>} />
+            }
             <HandleMutationRes res={outStockRes} />
             <div className="table">
-                {/*<pre>{JSON.stringify(data[0].images[0], null, `\t`)}</pre>*/}
+                {/*<pre>{JSON.stringify(data, null, `\t`)}</pre>*/}
                 <div className="thead">
-                    <div className="th photo_cell">Img</div>
+                    {
+                        !hideImg &&
+                        <div className="th photo_cell">Img</div>
+                    }
                     <div className="th id_cell">ID</div>
                     {
                         thead.map((item) => (
@@ -131,14 +177,21 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
                 {
                     data&&data?.map((product, index) => (
                         <div className="tr" key={product._id+index}>
-                            <div className="td photo_cell"><img src={product.images[0]} alt={photo} /></div>
+                            {/*<pre>{JSON.stringify(product, null, `\t`)}</pre>*/}
+                            {
+                                product?.images&&product.images[0] &&
+                                    <div className="td photo_cell"><img src={product.images[0]} alt={photo} /></div>
+                            }
                             <div className="td id_cell">{product._id.split("").splice(14,10)}</div>
                             {
                                 thead.map((item) => (
                                     item.isEditable ? 
-                                    <div className="td" key={item.th}><input type="text" name={item.th} placeholder={product[item.th.toLowerCase()] as string} onChange={(e) => onChangeHandler(e, product._id)} /></div>
+                                    <div className="td" key={item.th}><input type="text" name={item.th} placeholder={product[item.th.toString().toLowerCase()] as string} onChange={(e) => onChangeHandler(e, product._id)} /></div>
                                     :
-                                    <div className="td" key={item.th}>{product[item.th.toLowerCase()]}</div>
+                                    item.th === "userID" ?
+                                        <div className="td" key={item.th}>{product[item.th].slice(13, 24)}</div>
+                                        :
+                                        <div className="td" key={item.th}>{product[item.th]}</div>
                                 ))
                             }
                             {
@@ -147,7 +200,7 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
                             }
                             {
                                 hideEditBtn &&
-                                    <button className="td update_btn" value={index} onClick={(e) => showOrderInfo(e)}><BsInfoSquare/></button>
+                                    <button className="td update_btn" value={index} onClick={(e:MouseEvent<HTMLButtonElement>) => dialogShowInfo!(e)}><BsInfoSquare/></button>
                             }
                         </div>
                     ))
@@ -159,16 +212,16 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
 };
 
 
-const SingleOrderInfo = ({ parent, name, price, quantity, rating, orderID, description, photo, transactionId, shippingType, status, message, createdAt}:SingleOrderInfoTypes) => {
+//const SingleOrderInfo = ({ parent, name, price, quantity, rating, orderID, description, photo, transactionId, shippingType, status, message, createdAt}:SingleOrderInfoTypes) => {
 
-    return(
-        <div className="single_order_cont" onClick={(e) => e.stopPropagation()}>
-            <div className="single_order_scrollable">
-                <SingleProductTemplate parent={parent} name={name} price={price} quantity={quantity} rating={rating} productID={orderID} description={description} photo={photo} transactionId={transactionId} shippingType={shippingType} status={status} message={message} createdAt={createdAt} />
-            </div>
-        </div>
-    )
-}
+//    return(
+//        <div className="single_order_cont" onClick={(e) => e.stopPropagation()}>
+//            <div className="single_order_scrollable">
+//                <SingleProductTemplate parent={parent} name={name} price={price} quantity={quantity} rating={rating} productID={orderID} description={description} photo={photo} transactionId={transactionId} shippingType={shippingType} status={status} message={message} createdAt={createdAt} />
+//            </div>
+//        </div>
+//    )
+//}
 
 export default Table;
 

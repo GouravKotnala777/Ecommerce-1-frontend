@@ -5,10 +5,10 @@ import Table from "../../components/Table";
 
 
 const productTableHeadings = [
-    {th:"Name", isEditable:false},
-    {th:"Rating", isEditable:false},
-    {th:"Price", isEditable:false},
-    {th:"Stock", isEditable:true}
+    {th:"name", isEditable:false},
+    {th:"rating", isEditable:false},
+    {th:"price", isEditable:false},
+    {th:"stock", isEditable:true}
 ];
 
 const OutStock = () => {

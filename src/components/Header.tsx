@@ -64,6 +64,7 @@ const Header = ({userName, userRole, wishlistNotification, cartNotification, use
                                 <>
                                     <NavLink className="navlinks" to="/chat-admin">Chats</NavLink>
                                     <NavLink className="navlinks" to="/product/new">Add Product</NavLink>
+                                    <NavLink className="navlinks" to="/admin/activities">Activities</NavLink>
                                     <NavLink className="navlinks" to="/admin/dashboard">Dashboard</NavLink>
                                 </>
                         }
