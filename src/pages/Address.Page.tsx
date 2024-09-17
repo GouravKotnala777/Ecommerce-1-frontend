@@ -8,6 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { CgClose } from "react-icons/cg";
 import { ProductTypes } from "../assets/demoData";
 import ProductsRecommendation from "../components/ProductsRecommendation";
+import { UserLocationTypes } from "./Login.Page";
 
 export interface AddressBodyTypes {
     house?:string;
@@ -25,7 +26,7 @@ const formFields = [
     {type:"text", name:"zip", placeHolder:"Zip Code"},
 ];
 
-const Address = () => {
+const Address = ({userLocation}:{ userLocation:UserLocationTypes;}) => {
     const [address, setAddress] = useState<AddressBodyTypes>();
     const [shippingType, setShippingType] = useState<string>("regular");
     const [updateMe] = useUpdateMeMutation();
@@ -46,7 +47,7 @@ const Address = () => {
 
     const buyHandler = async() => {
         try {
-            const res = await updateMe({...address});
+            const res = await updateMe({...address,  action:"profile_update", userLocation});
             const paymentIntendRes = await createPayment({
                 amount:shippingType === "express"?
                             location.amount+500

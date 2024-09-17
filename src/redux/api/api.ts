@@ -55,8 +55,8 @@ export interface UpdateMeBodyType {
     zip?:string;
 
 
-    action:string;
-    userLocation:UserLocationTypes;
+    action?:string;
+    userLocation?:UserLocationTypes;
 
     //ipAddress:string; userAgent:string; userLocation:string; platform:string; device:string; referrer:string; success:boolean; errorDetails?:string;
 }
@@ -116,13 +116,15 @@ const api = createApi({
             providesTags:["MyWishlistedProducts"]
         }),
         updateMe:builder.mutation({
-            query:({oldPassword, name, email, password, mobile, house, street, city, state, zip,           action, userLocation
+            query:({oldPassword, name, email, password, mobile, house, street, city, state, zip,           
+                action, userLocation
                 //device, errorDetails, ipAddress, platform, referrer, success, userAgent, userLocation
             }:UpdateMeBodyType) => ({
                 url:"/api/v1/user/update",
                 method:"PUT",
                 credentials:"include",
-                body:{oldPassword, name, email, password, mobile, house, street, city, state, zip,        action, userLocation
+                body:{oldPassword, name, email, password, mobile, house, street, city, state, zip,        
+                    action, userLocation
                     //device, errorDetails, ipAddress, platform, referrer, success, userAgent, userLocation
                 }
             })
