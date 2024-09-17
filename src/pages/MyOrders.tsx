@@ -100,7 +100,7 @@ const MyOrders = () => {
     return(
         <div className="my_orders_bg">
             {/*<pre>{JSON.stringify(transformedData, null, `\t`)}</pre>*/}
-            <div className="heading" style={{padding:"4px 4px", fontWeight:"bold"}}>My Orders</div>
+            <div className="heading" style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>My Orders</div>
 
             {
                 myOrders.isLoading ?

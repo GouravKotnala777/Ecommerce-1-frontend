@@ -65,26 +65,25 @@
                 //border: 2px solid green;
                 .heading_values{
                     //border: 2px solid yellow;
-                    //display: grid;
-                    //grid-template-columns: 90px auto;
-
                     display: flex;
                     justify-content: space-between;
                     gap: 30px;
-                    margin: 10px;
+                    margin: 10px 0;
                     span{
                         //border: 2px solid orange;
                     }
                     .info_heading{
+                        @include headingSm(#515151, 4px);
                         //border: 2px solid rgb(255, 0, 0);
-                        font-size: 0.8rem;
-                        color: #515151;
-                        font-weight: bold;
+                        //font-size: 0.8rem;
+                        //color: #515151;
+                        //font-weight: bold;
                     }
                     .info_value{
-                        font-size: 0.8rem;
+                        @include paraMed();
                         place-self: center;
                         text-align: justify;
+                        padding: 4px;
                         .star_icons{
                             color: $primary;
                         }

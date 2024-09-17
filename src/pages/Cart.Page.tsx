@@ -111,7 +111,7 @@ const Cart = ({cartData}:{cartData:{
         <div className="cart_bg">
             {/*<pre>{JSON.stringify(cartData.data?.message.products, null, `\t`)}</pre>*/}
             <DialogWrapper Element={<SummeryComponent data={summeryData} totalAmount={totalAmount} includedProducts={includedProducts} />} toggler={summeryDialogToggle} setToggler={setSummeryDialogToggle} />
-            <div className="heading" style={{padding:"4px 4px", fontWeight:"bold"}}>Cart</div>
+            <div className="heading" style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>Cart</div>
 
 
             <div className="access_bar_bg" style={{bottom:hideHeader?"-12%":"0%"}}>

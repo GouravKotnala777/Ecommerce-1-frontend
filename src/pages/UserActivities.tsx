@@ -62,7 +62,7 @@ const UserActivities = () => {
     return(
         <div className="user_activities bg">
             {/*<pre>{JSON.stringify(allActivities.data?.message, null, `\t`)}</pre>*/}
-            <p style={{margin:"0 auto", textAlign:"center"}}>User Activities</p>
+            <p style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>User Activities</p>
             <Table<(UserActivitiesTypes & {_id: string; [key: string]: string;})>
                 thead={activitiesTableHeadings}
                 data={allActivities.data?.message}

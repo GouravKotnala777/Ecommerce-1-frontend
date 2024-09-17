@@ -86,9 +86,8 @@
         margin-top: 10px;
         .main_heading{
             border: 1px solid $primary;
+            @include headingMed($primary);
             text-align:center;
-            font-weight: bold;
-            color: $primary;
             border-radius: 4px;
             //font-size: 0.8rem;
         }
@@ -119,9 +118,8 @@
         margin-top: 10px;
         .main_heading{
             border: 1px solid $primary;
+            @include headingMed($primary);
             text-align:center;
-            font-weight: bold;
-            color: $primary;
             border-radius: 4px;
         }
         .my_details{
@@ -131,16 +129,13 @@
             margin-top: 10px;
             .heading{
                 //border: 2px solid green;
-                font-size: 0.7rem;
-                font-weight: bold;
-                color: #515151;
-                
+                @include headingSm();                
             }
             .value{
                 //border: 2px solid violet;
                 display: flex;
                 align-items: center;
-                font-size: 0.7rem;
+                @include paraMed();
                 word-wrap: break-word;
                 input{
                     width: 40%;

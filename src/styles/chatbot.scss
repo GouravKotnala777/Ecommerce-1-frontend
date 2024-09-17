@@ -7,9 +7,8 @@
     //place-items: center;
     position: relative;
     .heading{
-        color: $primary;
-        font-size: 0.9rem;
-        font-weight: 500;
+        //border: 1px solid red;
+        @include headingMed(black);
         text-align: center;
     }
     .chatbot_form_cont{
@@ -83,19 +82,18 @@
             }
             .name{
                 //border: 2px solid blue;
-                font-size: 0.7rem;
-                color: #515151;
-                font-weight: 600;
+                @include headingSm(#515151);
+                //font-size: 0.7rem;
+                //color: #515151;
+                //font-weight: 600;
             }
             .socket_id{
                 //border: 2px solid green;
-                font-size: 0.7rem;
-                color: #919191;
+                @include paraMed(#919191);
             }
         }
     }
     .chatbot_cont{
-        border:1px solid $primary;
         width:320px;
         position:absolute;
         top:50%;
@@ -105,6 +103,7 @@
         box-sizing:border-box;
         background: linear-gradient(90deg, $secondary, $primary);
         border-radius: 8px;
+        box-shadow: 4px 8px 16px rgba(0,0,0,0.2);
 
         .upper_part{
             //border: 2px solid violet;
@@ -122,10 +121,10 @@
             }
             .customer_name{
                 .name{
-                    font-size: 1rem;
+                    @include headingLg(#515151, 0);
                 }
                 .post{
-                    font-size: 0.7rem;
+                    @include paraMed();
                 }
             }
             .like_dislike{

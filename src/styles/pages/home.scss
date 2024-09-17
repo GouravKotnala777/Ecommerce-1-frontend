@@ -81,10 +81,7 @@
         margin-top: 20px;
         .heading{
             //border: 2px solid orange;
-            font-size: 0.9rem;
-            padding: 4px 10px;
-            font-weight: bold;
-            color: white;
+            @include headingMed(white);
             //box-shadow: 1px 1px 10px 1px rgba(255, 75, 105, 0.3);            
             background: linear-gradient(270deg, $secondary, $primary);
             border-radius: 4px;

@@ -18,11 +18,9 @@
             //border: 2px solid violet;
             display: flex;
             justify-content: space-between;
-            font-size: 0.8rem;
             //background: linear-gradient(90deg, rgba(255, 156, 102, 0.5), rgba(255, 75, 105, 0.5));
             background: linear-gradient(90deg, $secondaryLow, $primaryLow);
-            color: #515151;
-            font-weight: bold;
+            @include headingMed();
             border-radius: 8px;
             padding: 0 10px;
             .th{
@@ -46,7 +44,8 @@
         }
         .tbody{
             //border: 2px solid blue;
-            font-size: 0.8rem;
+            //font-size: 0.8rem;
+            @include paraMed();
             .tr{
                 //border: 2px solid green;
                 display: flex;

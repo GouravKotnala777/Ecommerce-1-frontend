@@ -42,16 +42,13 @@
                 text-align: center;
             }
             .name{
-                font-size: 1rem;
-                font-weight: bold;
-                color: $primary;
+                @include headingLg($primary);
             }
             .price{
-                font-size: 0.9rem;
+                @include paraLg();
             }
             .rating{
-                font-size: 0.9rem;
-                color: $primary;
+                @include paraLg($primary);
             }
         }
         .lower_part{

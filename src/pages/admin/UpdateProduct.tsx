@@ -17,7 +17,7 @@ const UpdateProduct = () => {
 
     return(
         <>
-            <p style={{margin:"0 auto", textAlign:"center"}}>Restock Products</p>
+            <p style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>Restock Products</p>
             <Table list={productList} setList={setProductList} thead={productTableHeadings} data={data?.message} />
         </>
     )

@@ -20,20 +20,64 @@ $shadow:1px 1px 8px 1px #ff4b6941;
 
 
 
-@mixin headingSm(){
+@mixin headingSm($color:#515151, $padding:4px 10px){
+    font-size: 0.7rem;
+    padding: $padding;
+    font-weight: bold;
+    color: $color;
+}
+@mixin headingMed($color:#515151, $padding:4px 10px){
     font-size: 0.8rem;
+    padding: $padding;
     font-weight: bold;
-    color: #515151;
+    color: $color;
 }
-@mixin headingMed(){
+@mixin headingLg($color:#515151, $padding:4px 10px){
     font-size: 0.9rem;
+    padding: $padding;
     font-weight: bold;
-    color: #515151;
+    color: $color;
 }
-@mixin headingLg(){
+@mixin headingXl($color:#515151, $padding:4px 10px){
     font-size: 1rem;
+    padding: $padding;
     font-weight: bold;
-    color: #515151;
+    color: $color;
+}
+@mixin paraSm($color:black){
+    font-size: 0.6rem;
+    //padding: 4px 10px;
+    //font-weight: bold;
+    color: $color;
+}
+@mixin paraMed($color:black){
+    font-size: 0.7rem;
+    //padding: 4px 10px;
+    //font-weight: bold;
+    color: $color;
+}
+@mixin paraLg($color:black){
+    font-size: 0.8rem;
+    //padding: 4px 10px;
+    //font-weight: bold;
+    color: $color;
+}
+@mixin paraXl($color:black){
+    font-size: 0.9rem;
+    color: $color;
+}
+@mixin primaryBtn(){
+    @include headingLg(white, 10px);
+    background: $btnDefault;
+    margin: 10px 5px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(90deg, #64acff, #0163d4);
+    box-shadow: $shadow;
+    &:hover{
+        background: $btnHover;
+    }
 }
 
 

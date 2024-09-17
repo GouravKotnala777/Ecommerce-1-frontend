@@ -21,7 +21,7 @@ const IncompleteProducts = () => {
 
     return(
         <div className="fill_detailes_bg">
-            <p style={{margin:"0 auto", textAlign:"center"}}>Fill Detailes</p>
+            <p style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>Fill Detailes</p>
             <Table<(ProductTypes & {_id: string; [key: string]: string;})> thead={productTableHeadings} data={incompleteProducts.data?.message} list={list} setList={setList} />
         </div>
     )

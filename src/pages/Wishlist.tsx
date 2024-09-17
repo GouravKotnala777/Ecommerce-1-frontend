@@ -15,7 +15,7 @@ const Wishlist = ({wishlistData}:{wishlistData:{
 
     return(
         <div className="wishlist_bg">
-            <div className="heading" style={{padding:"4px 4px", fontWeight:"bold"}}>Wishlist</div>
+            <div className="heading" style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>Wishlist</div>
             {/*<pre>{JSON.stringify(data?.message, null, `\t`)}</pre>*/}
             {/*<button>fetch</button>*/}
             {

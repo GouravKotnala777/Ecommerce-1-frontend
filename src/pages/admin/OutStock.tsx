@@ -19,7 +19,7 @@ const OutStock = () => {
     return(
         <>
             {/*<pre>{JSON.stringify(outStockData.data?.message, null, `\t`)}</pre>*/}
-            <p style={{margin:"0 auto", textAlign:"center"}}>Restock Products</p>
+            <p style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>Restock Products</p>
             <Table<(ProductTypes & {_id: string; [key: string]: string;})> thead={productTableHeadings} data={outStockData.data?.message} list={list} setList={setList} />
         </>
     )
