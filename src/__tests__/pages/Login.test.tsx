@@ -10,7 +10,7 @@ beforeEach(() => {
     render(
         <Provider store={store}>
             <BrowserRouter>
-                <Login />
+                <Login userLocation={{city:"aa", country:"aa", ip:"aa", loc:"aa", org:"aa", postal:"aa", readme:"aa", region:"aa", timezone:"aa"}} />
             </BrowserRouter>
         </Provider>
     );
