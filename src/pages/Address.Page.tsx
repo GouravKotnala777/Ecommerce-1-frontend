@@ -26,7 +26,7 @@ const formFields = [
     {type:"text", name:"zip", placeHolder:"Zip Code"},
 ];
 
-const Address = ({userLocation}:{ userLocation:UserLocationTypes;}) => {
+const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) => {
     const [address, setAddress] = useState<AddressBodyTypes>();
     const [shippingType, setShippingType] = useState<string>("regular");
     const [updateMe] = useUpdateMeMutation();
