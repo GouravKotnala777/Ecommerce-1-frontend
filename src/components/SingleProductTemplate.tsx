@@ -13,8 +13,11 @@ import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import { MutationResTypes } from "../assets/demoData";
 import Spinner from "./Spinner";
 import { PRIMARY, SECONDARY } from "../styles/utils";
+import { UserLocationTypes } from "../pages/Login.Page";
 
 interface SingleProductTemplatePropTypes{
+    userLocation:UserLocationTypes;
+
     productID?:string;
     userWishlist?:string[];
     category?:string;
@@ -40,14 +43,14 @@ interface SingleProductTemplatePropTypes{
 }
 
 
-const SingleProductTemplate = ({productID, userWishlist, category, brand, name, price, quantity, rating, description, photo, parent, transactionId, shippingType, status, message, createdAt, setTotalAmount, includedProducts, setIncludedProducts}:SingleProductTemplatePropTypes) => {
+const SingleProductTemplate = ({userLocation, productID, userWishlist, category, brand, name, price, quantity, rating, description, photo, parent, transactionId, shippingType, status, message, createdAt, setTotalAmount, includedProducts, setIncludedProducts}:SingleProductTemplatePropTypes) => {
     const [addRemoveFromWishlist] = useAddRemoveFromWishlistMutation();
     const [addRemoveFromWishlistRes, setAddRemoveFromWishlistRes] = useState<MutationResTypes>();
 
     const addRemoveFromWishlistHandler = async() => {
         try {
             console.log("----- SingleProductTemplate addRemoveFromWishlistHandler");
-            const res = await addRemoveFromWishlist({productID:productID as string});
+            const res = await addRemoveFromWishlist({productID:productID as string, action:"update_wishlist", userLocation});
             setAddRemoveFromWishlistRes(res);
             console.log("----- SingleProductTemplate addRemoveFromWishlistHandler");
         } catch (error) {
@@ -136,34 +139,40 @@ const SingleProductTemplate = ({productID, userWishlist, category, brand, name, 
                                 {
                                     parent !== "orders" &&
                                         <div className="upper_part">
-                                            <div className="wishlist_cont">
-                                                {
-                                                    userWishlist?.includes(productID as string) ?
-                                                    <BiSolidHeart className="BiHeart" onClick={addRemoveFromWishlistHandler} />
+                                            {
+                                                parent==="cart" ?
+                                                    <div className="include_cont">
+                                                        {
+                                                            userWishlist?.includes(productID as string) ?
+                                                                <span>Include</span>
+                                                                :
+                                                                <span>Exclude</span>
+                                                        }
+                                                        {
+                                                            userWishlist?.includes(productID as string) ?
+                                                            <input type="checkbox" />
+                                                            :
+                                                            <input type="checkbox" name={`${productID}`} defaultChecked onChange={(e) => includeProductHandler(e)} />
+                                                        }
+                                                    </div>
                                                     :
-                                                    <BiHeart className="BiHeart" onClick={addRemoveFromWishlistHandler} />
-                                                }
-                                                {
-                                                    userWishlist?.includes(productID as string) ?
-                                                        <span>Remove from wishlist</span>
-                                                        :
-                                                        <span>Add to wishlist</span>
-                                                }
-                                            </div>
-                                            <div className="include_cont">
-                                                {
-                                                    userWishlist?.includes(productID as string) ?
-                                                    <input type="checkbox" />
-                                                    :
-                                                    <input type="checkbox" name={`${productID}`} defaultChecked onChange={(e) => includeProductHandler(e)} />
-                                                }
-                                                {
-                                                    userWishlist?.includes(productID as string) ?
-                                                        <span>Include</span>
-                                                        :
-                                                        <span>Exclude</span>
-                                                }
-                                            </div>
+                                                    <div className="wishlist_cont">
+                                                        {
+                                                            userWishlist?.includes(productID as string) ?
+                                                            <span>Remove from wishlist</span>
+                                                            :
+                                                            <span>Add to wishlist</span>
+                                                        }
+                                                        {
+                                                            userWishlist?.includes(productID as string) ?
+                                                            <BiSolidHeart className="BiHeart" onClick={addRemoveFromWishlistHandler} />
+                                                            :
+                                                            <BiHeart className="BiHeart" onClick={addRemoveFromWishlistHandler} />
+                                                        }
+                                                    </div>
+                                            }
+                                            
+                                            
                                         </div>
                                 }
                                 <div className="info_cont">
@@ -223,6 +232,7 @@ const SingleProductTemplate = ({productID, userWishlist, category, brand, name, 
                                 {
                                     parent !== "orders" &&
                                         <ProductBtnGroup
+                                            userLocation={userLocation}
                                             parent={parent}
                                             productID={productID as string}
                                             amount={price as number}

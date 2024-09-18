@@ -41,6 +41,8 @@ export interface CreateCouponBodyType {
     endDate:string;
     usageLimit:number;
     usedCount:number;
+    action:string;
+    userLocation:UserLocationTypes;
 }
 export interface UpdateMeBodyType {
     oldPassword?:string;
@@ -77,7 +79,7 @@ const api = createApi({
     baseQuery:fetchBaseQuery({
         baseUrl:import.meta.env.VITE_SERVER_URL
     }),
-    tagTypes:["MyWishlistedProducts", "MyCartProducts", "SingleProduct"],
+    tagTypes:["MyWishlistedProducts", "MyCartProducts", "SingleProduct", "MyProfile"],
     endpoints:(builder) => ({
         register:builder.mutation({
             query:(data) => ({
@@ -113,7 +115,7 @@ const api = createApi({
                 method:"GET",
                 credentials:"include"
             }),
-            providesTags:["MyWishlistedProducts"]
+            providesTags:["MyWishlistedProducts", "MyProfile"]
         }),
         updateMe:builder.mutation({
             query:({oldPassword, name, email, password, mobile, house, street, city, state, zip,           
@@ -138,12 +140,14 @@ const api = createApi({
             })
         }),
         removeAddress:builder.mutation({
-            query:({house, street, city, state, zip}:UpdateMeBodyType) => ({
+            query:({house, street, city, state, zip, action, userLocation}:UpdateMeBodyType) => ({
                 url:"/api/v1/user/update",
                 method:"DELETE",
                 credentials:"include",
-                body:{house, street, city, state, zip}
-            })
+                body:{house, street, city, state, zip, action, userLocation}
+            }),
+            invalidatesTags:["MyProfile"]
+
         }),
         logout:builder.mutation({
             query:({action, userLocation}:{action:string; userLocation:UserLocationTypes;}) => ({
@@ -210,7 +214,7 @@ const api = createApi({
             })
         }),
         addToCart:builder.mutation({
-            query:(data:{productID:string; price:number; quantity:number;}) => ({
+            query:(data:{productID:string; price:number; quantity:number; action:string; userLocation:UserLocationTypes;}) => ({
                 url:"/api/v1/cart/add",
                 method:"POST",
                 headers:{
@@ -222,7 +226,7 @@ const api = createApi({
             invalidatesTags:["MyCartProducts"]
         }),
         removeFromCart:builder.mutation({
-            query:(data:{productID:string; price:number; quantity:number;}) => ({
+            query:(data:{productID:string; price:number; quantity:number; action:string; userLocation:UserLocationTypes;}) => ({
                 url:"/api/v1/cart/remove",
                 method:"DELETE",
                 headers:{
@@ -245,28 +249,29 @@ const api = createApi({
             providesTags:["MyCartProducts"]
         }),
         createReview:builder.mutation({
-            query:({productID, rating, comment}:{productID:string; rating:number; comment:string;}) => ({
+            query:({productID, rating, comment, action, userLocation}:{productID:string; rating:number; comment:string; action:string; userLocation:UserLocationTypes;}) => ({
                 url:`/api/v1/review/${productID}/create`,
                 method:"POST",
                 credentials:"include",
-                body:{rating, comment}
+                body:{rating, comment, action, userLocation}
             }),
             invalidatesTags:["SingleProduct"]
         }),
         deleteReview:builder.mutation({
-            query:({productID}:{productID:string;}) => ({
+            query:({productID, action, userLocation}:{productID:string; action:string; userLocation:UserLocationTypes;}) => ({
                 url:`/api/v1/review/${productID}/remove`,
                 method:"DELETE",
-                credentials:"include"
+                credentials:"include",
+                body:{action, userLocation}
             }),
             invalidatesTags:["SingleProduct"]
         }),
         updateVote:builder.mutation({
-            query:({reviewID, voted}:{reviewID:string; voted:boolean|undefined}) => ({
+            query:({reviewID, voted, action, userLocation}:{reviewID:string; voted:boolean|undefined; action:string; userLocation:UserLocationTypes;}) => ({
                 url:"/api/v1/review/vote",
                 method:"PUT",
                 credentials:"include",
-                body:{reviewID, voted}
+                body:{reviewID, voted, action, userLocation}
             }),
             invalidatesTags:["SingleProduct"]
         }),
@@ -279,10 +284,11 @@ const api = createApi({
             providesTags:["MyWishlistedProducts"]
         }),
         addRemoveFromWishlist:builder.mutation({
-            query:({productID}:{productID:string;}) => ({
+            query:({productID, action, userLocation}:{productID:string; action:string; userLocation:UserLocationTypes;}) => ({
                 url:`/api/v1/user/${productID}/wishlist`,
                 method:"PUT",
-                credentials:"include"
+                credentials:"include",
+                body:{action, userLocation}
             }),
             invalidatesTags:["MyWishlistedProducts"]
         }),
@@ -359,19 +365,19 @@ const api = createApi({
             })
         }),
         createPayment:builder.mutation({
-            query:({amount, quantity, amountFormRecomm}:{amount:number; quantity:number; amountFormRecomm:number|0;}) => ({
+            query:({amount, quantity, amountFormRecomm, action, userLocation}:{amount:number; quantity:number; amountFormRecomm:number|0; action:string; userLocation:UserLocationTypes;}) => ({
                 url:"/api/v1/payment/new",
                 method:"POST",
                 credentials:"include",
-                body:{amount, quantity, amountFormRecomm}
+                body:{amount, quantity, amountFormRecomm, action, userLocation}
             })
         }),
         newOrder:builder.mutation({
-            query:({orderItems, totalPrice, coupon, transactionId, status, shippingType, message, parent}:{orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; transactionId:string; status:string; shippingType:string; message:string; parent:string;}) => ({
+            query:({orderItems, totalPrice, coupon, transactionId, status, shippingType, message, parent, action, userLocation}:{orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; transactionId:string; status:string; shippingType:string; message:string; parent:string; action:string; userLocation:UserLocationTypes;}) => ({
                 url:"/api/v1/order/new",
                 method:"POST",
                 credentials:"include",
-                body:{orderItems, totalPrice, coupon, transactionId, status, shippingType, message, parent}
+                body:{orderItems, totalPrice, coupon, transactionId, status, shippingType, message, parent, action, userLocation}
             }),
             invalidatesTags:["MyCartProducts"]
         }),

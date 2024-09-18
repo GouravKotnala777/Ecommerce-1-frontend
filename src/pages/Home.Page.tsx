@@ -12,9 +12,10 @@ import { SerializedError } from "@reduxjs/toolkit";
 import ItemNotFound from "../components/ItemNotFound.tsx";
 import { BiSearch } from "react-icons/bi";
 import Footer from "../components/Footer.tsx";
+import { UserLocationTypes } from "./Login.Page.tsx";
 
 
-const Home = () => {
+const Home = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const [skip, setSkip] = useState<number>(0);
     const allProducts:{
         isLoading:boolean;
@@ -139,7 +140,7 @@ const Home = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <Products products={allProducts.data?.message} />     
+                                    <Products userLocation={userLocation} products={allProducts.data?.message} />     
                                 </>
                             :
                             <ItemNotFound heading={"No Internet Connection!"} statusCode={523} />

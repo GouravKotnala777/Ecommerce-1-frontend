@@ -8,9 +8,11 @@ import { MutationResTypes } from "../assets/demoData";
 import HandleMutationRes from "./HandleMutationRes";
 import Spinner from "./Spinner";
 import { PRIMARY, SECONDARY } from "../styles/utils";
+import { UserLocationTypes } from "../pages/Login.Page";
 
 
 interface ProductBtnGroupPropTypes{
+    userLocation:UserLocationTypes;
     parent:string;
     productID:string;
     amount:number;
@@ -19,7 +21,7 @@ interface ProductBtnGroupPropTypes{
     setTotalAmount?:Dispatch<SetStateAction<number>>;
 }
 
-const ProductBtnGroup = ({parent, productID, amount, category, brand, setTotalAmount}:ProductBtnGroupPropTypes) => {
+const ProductBtnGroup = ({userLocation, parent, productID, amount, category, brand, setTotalAmount}:ProductBtnGroupPropTypes) => {
     const [addToCart] = useAddToCartMutation();
     const [removeFromCart] = useRemoveFromCartMutation();
     const [quantity, setQuantity] = useState<number>(1);
@@ -35,7 +37,7 @@ const ProductBtnGroup = ({parent, productID, amount, category, brand, setTotalAm
         try {
             setIsAddRemoveCartLoading(true);
             if (parent === "cart") {
-                const res = await removeFromCart({productID:productID!, price:amount, quantity});
+                const res = await removeFromCart({productID:productID!, price:amount, quantity, action:"remove_from_cart", userLocation});
                 setAddRemoveCartRes(res);
                 setIsAddRemoveCartLoading(false);
                 console.log("===================");
@@ -50,7 +52,7 @@ const ProductBtnGroup = ({parent, productID, amount, category, brand, setTotalAm
             else{
                 console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaa");
                 
-                const res = await addToCart({productID:productID!, price:amount, quantity});
+                const res = await addToCart({productID:productID!, price:amount, quantity, action:"add_to_cart", userLocation});
                 setAddRemoveCartRes(res);
                 setIsAddRemoveCartLoading(false);
             }

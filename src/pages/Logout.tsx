@@ -28,9 +28,9 @@ const Logout = ({userLocation}:{userLocation:UserLocationTypes}) => {
     };
     return(
         <div className="logout_bg">
-            <pre>
+            {/*<pre>
                 {JSON.stringify(logoutRes, null, `\t`)}
-            </pre>
+            </pre>*/}
             <HandleMutationRes res={logoutRes as {error:{data:{message:string}}}} />
             <div className="heading">
                 Logout

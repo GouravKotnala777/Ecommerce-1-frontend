@@ -6,9 +6,10 @@ import ProductBtnGroup from "./ProductBtnGroup";
 //import { SyntheticEvent } from "react";
 import unknownProductImg from "/unknownProduct.png";
 import ImageWithFallback from "./ImageWithFallback";
+import { UserLocationTypes } from "../pages/Login.Page";
 
 
-const Products = ({products}:{products:ProductTypes[]|undefined}) => {
+const Products = ({products, userLocation}:{products:ProductTypes[]|undefined; userLocation:UserLocationTypes;}) => {
 
     return(
         <div className="products_bg">
@@ -32,7 +33,7 @@ const Products = ({products}:{products:ProductTypes[]|undefined}) => {
                                 <div className="info rating"><RatingSystem rating={product.rating} /></div>
                             </div>
                             <div className="lower_part">
-                                <ProductBtnGroup parent="home" productID={product._id} amount={product.price} category={product.category} brand={product.brand} />
+                                <ProductBtnGroup userLocation={userLocation} parent="home" productID={product._id} amount={product.price} category={product.category} brand={product.brand} />
                             </div>
                         </div>
                     ))

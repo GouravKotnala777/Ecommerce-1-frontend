@@ -17,6 +17,7 @@ import ProductSlider from "../components/ProductSlider";
 import HandleMutationRes from "../components/HandleMutationRes";
 import { FaArrowAltCircleDown, FaArrowAltCircleUp } from "react-icons/fa";
 import { PRIMARY_LOW } from "../styles/utils";
+import { UserLocationTypes } from "./Login.Page";
 
 
 const formFields = [
@@ -24,7 +25,7 @@ const formFields = [
     {type:"text", name:"comment", placeHolder:"Comment"},
 ];
 
-const SingleProduct = () => {
+const SingleProduct = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const {productID} = useParams();
     const [formFieldData,setFormFieldData] = useState<{productID:string; rating:number; comment:string;}>({productID:"", rating:0, comment:""});
     const singleProduct:{data?:{success:boolean; message:ProductTypesPopulated;}; isLoading?:boolean; isSuccess:boolean;} = useGetSingleProductQuery(productID);
@@ -44,7 +45,7 @@ const SingleProduct = () => {
     };
     const postReviewHandler = async() => {
         try {
-            const res = await createReview({productID:productID as string, rating:Number(formFieldData.rating), comment:formFieldData.comment});
+            const res = await createReview({productID:productID as string, rating:Number(formFieldData.rating), comment:formFieldData.comment, action:"create_review", userLocation});
 
             console.log("------- SingleProduct.tsx onClickHandler");
             console.log({productID:productID as string, rating:Number(formFieldData.rating), comment:formFieldData.comment});
@@ -60,7 +61,7 @@ const SingleProduct = () => {
     };
     const updateReviewVoteHandler = async(reviewID:string, voted:boolean|undefined) => {
         try {
-            const updateVoteRes = await updateVote({reviewID, voted});
+            const updateVoteRes = await updateVote({reviewID, voted, action:"update_vote", userLocation});
 
             console.log("------ updateReviewVoteHandler  SingleProduct.tsx");
             console.log(updateVoteRes);
@@ -79,12 +80,13 @@ const SingleProduct = () => {
         <div className="single_product_bg">
             {/*<button onClick={yy}>Fetch</button>
             <pre>{JSON.stringify(singleProduct.data?.message, null, `\t`)}</pre>*/}
+            {/*<pre>{JSON.stringify(postReviewRes, null, `\t`)}</pre>*/}
             <HandleMutationRes res={postReviewRes} />
 
             <DialogWrapper toggler={isReviewDialogActive} setToggler={setIsReviewDialogActive} Element={<Form heading="Give Review" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={postReviewHandler} />} />
 
 
-            <SingleProductTemplate productID={productID} userWishlist={loginedUser?.message.wishlist} category={singleProduct.data?.message?.category} name={singleProduct.data?.message?.name} price={singleProduct.data?.message?.price} rating={singleProduct.data?.message?.rating} description={singleProduct.data?.message?.description} photo={singleProduct.data?.message.images[0] as string} parent="singleProduct" />
+            <SingleProductTemplate userLocation={userLocation} productID={productID} userWishlist={loginedUser?.message.wishlist} category={singleProduct.data?.message?.category} name={singleProduct.data?.message?.name} price={singleProduct.data?.message?.price} rating={singleProduct.data?.message?.rating} description={singleProduct.data?.message?.description} photo={singleProduct.data?.message.images[0] as string} parent="singleProduct" />
 
             
             
@@ -112,7 +114,7 @@ const SingleProduct = () => {
                             <div className="upper_part">
                                 <span className="date_heading">{review.updatedAt === review.createdAt ? "createdAt" : "updatedAt"} : </span>
                                 <span className="date_value">{review.updatedAt === review.createdAt ? review.createdAt.split("T")[0].split("-").reverse().join("-") : review?.updatedAt.split("T")[0].split("-").reverse().join("-")}</span>
-                                <MdDeleteForever className="MdDeleteForever" onClick={() => deleteReview({productID:productID as string})} />
+                                <MdDeleteForever className="MdDeleteForever" onClick={() => deleteReview({productID:productID as string, action:"delete_review", userLocation})} />
                             </div>
                             <div className="lower_part">
                                 <div className="left_part">

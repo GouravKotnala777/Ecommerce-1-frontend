@@ -1,5 +1,5 @@
 import "../styles/pages/address.scss";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import Form from "../components/Form";
 import { useCreatePaymentMutation, useProductRecommendationMutation, useRemoveAddressMutation, useUpdateMeMutation } from "../redux/api/api";
 import { loggedInUserInitialState } from "../redux/reducers/loggedInUserReducer";
@@ -35,6 +35,13 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
     //const [searchedProducts] = useSearchProductsMutation();
     const [productRecommendation] = useProductRecommendationMutation();
     const {user} = useSelector((state:{loggedInUserReducer:loggedInUserInitialState}) => state.loggedInUserReducer);
+
+
+
+
+
+
+
     const location:{amount:number; quantity:number; orderItems:{productID:string; quantity:number; category:string; brand:string;}[]; totalPrice:number; coupon:string; shippingType:string; parent:string;} = useLocation().state;
     const navigate = useNavigate();
     const [sameCategoryProduct, setSameCategoryProduct] = useState<Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[]>([]);
@@ -47,7 +54,7 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
 
     const buyHandler = async() => {
         try {
-            const res = await updateMe({...address,  action:"profile_update", userLocation});
+            const res = await updateMe({...address,  action:"add_address", userLocation});
             const paymentIntendRes = await createPayment({
                 amount:shippingType === "express"?
                             location.amount+500
@@ -57,7 +64,9 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
                                 :
                                 location.amount as number,
                 quantity:location.quantity,
-                amountFormRecomm:recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
+                amountFormRecomm:recommendationProducts.reduce((acc, iter) => acc+iter.price, 0),
+                action:"create_payment_intend",
+                userLocation:userLocation as UserLocationTypes
             });
 
 
@@ -103,7 +112,9 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
                                 :
                                 location.amount as number,
             quantity:location.quantity,
-            amountFormRecomm:recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
+            amountFormRecomm:recommendationProducts.reduce((acc, iter) => acc+iter.price, 0),
+            action:"create_payment_intend",
+            userLocation:userLocation as UserLocationTypes
         });
 
         if (paymentIntendRes.data.message) {
@@ -125,9 +136,10 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
         }
     };
 
-    const removeAddressTemplate = async({house, street, city, state, zip}:{house:string; street:string; city:string; state:string; zip:string;}) => {
+    const removeAddressTemplate = async(e:MouseEvent<SVGElement>, {house, street, city, state, zip}:{house:string; street:string; city:string; state:string; zip:string;}) => {
+        e.stopPropagation();
         try {
-            const res = await removeAddress({house, street, city, state, zip});
+            const res = await removeAddress({house, street, city, state, zip, action:"remove_address", userLocation});
 
             console.log("----- Addesss.Page.tsx  removeAddressTemplate");
             console.log(res);
@@ -256,7 +268,7 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
                     user?.address.map((address, index) => (
                         <div className="address_cont" key={index} onClick={() => setAddressFromTemplate(address)}>
                             <div className="remove_btn_cont">
-                                <CgClose className="CgClose" onClick={() => removeAddressTemplate(address)} />
+                                <CgClose className="CgClose" onClick={(e) => removeAddressTemplate(e, address)} />
                             </div>
                             <div className="detaile_cont">
                                 <div className="heading">House No.</div><div className="value">{address.house}</div>

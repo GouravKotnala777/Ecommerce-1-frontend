@@ -8,12 +8,13 @@ import { useCreatePaymentMutation, useNewOrderMutation, useProductRecommendation
 import Spinner from "../components/Spinner";
 import { ProductTypes } from "../assets/demoData";
 import ProductsRecommendation from "../components/ProductsRecommendation";
+import { UserLocationTypes } from "./Login.Page";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 
 
-const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPrice, coupon, shippingType, parent}:{clientSecret:string; userDetailes:{name:string; email:string; phone:string;}; address:AddressBodyTypes; orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; shippingType:string; parent?:string;}) => {
+const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPrice, coupon, shippingType, parent, userLocation}:{clientSecret:string; userDetailes:{name:string; email:string; phone:string;}; address:AddressBodyTypes; orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; shippingType:string; parent?:string; userLocation:UserLocationTypes;}) => {
     const stripe = useStripe();
     const elements = useElements();
     const [error, setError] = useState<string>();
@@ -66,7 +67,9 @@ const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPri
                     transactionId:"no transactionID",
                     shippingType, status:"cancelled",
                     message:error.message?error.message:"no message",
-                    parent:parent as string
+                    parent:parent as string,
+                    action:"new_order_fail",
+                    userLocation
                 });
 
                 console.log("---- Payment.tsx");
@@ -85,7 +88,9 @@ const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPri
                     transactionId:paymentIntent.id,
                     shippingType, status:paymentIntent.status,
                     message:"demo message",
-                    parent:parent as string
+                    parent:parent as string,
+                    action:"new_order",
+                    userLocation
                 });
 
                 console.log("---- Payment.tsx");
@@ -120,7 +125,7 @@ const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPri
 };
 
 
-const StripePayment = () => {
+const StripePayment = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const location:{
         clientSecret:string;
         userDetailes:{name:string; email:string; phone:string;};
@@ -167,7 +172,9 @@ const StripePayment = () => {
             const paymentIntendRes = await createPayment({
                 amount:location?.totalPrice as number,
                 quantity:1,
-                amountFormRecomm:recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
+                amountFormRecomm:recommendationProducts.reduce((acc, iter) => acc+iter.price, 0),
+                action:"create_payment_intend_again",
+                userLocation
             });
 
 
@@ -283,7 +290,8 @@ const StripePayment = () => {
                     }
                 coupon={location?.coupon as string}
                 shippingType={location?.shippingType as string}
-                parent={location?.parent as string} />
+                parent={location?.parent as string}
+                userLocation={userLocation} />
         </Elements>
     )
 };

@@ -9,12 +9,13 @@ import { SerializedError } from "@reduxjs/toolkit";
 import Spinner from "../components/Spinner";
 import ItemNotFound from "../components/ItemNotFound";
 import DialogWrapper from "../components/DialogWrapper";
+import { UserLocationTypes } from "./Login.Page";
 
-const Cart = ({cartData}:{cartData:{
+const Cart = ({cartData, userLocation}:{cartData:{
     isLoading:boolean;
     data?:{success:boolean; message:{products:{productID:ProductTypes; quantity:number;}[]; totalPrice:number;}};
     error?:FetchBaseQueryError|SerializedError;
-}}) => {
+}, userLocation:UserLocationTypes;}) => {
     //const cartData:{
         //    isLoading:boolean;
         //    data?:{success:boolean; message:{products:{productID:ProductTypes; quantity:number;}[]; totalPrice:number;}};
@@ -182,6 +183,7 @@ const Cart = ({cartData}:{cartData:{
                                 :
                                 cartData.data?.message?.products.map((product) => (
                                     <SingleProductTemplate key={product.productID._id}
+                                        userLocation={userLocation}
                                         productID={product.productID._id}
                                         category={product.productID.category}
                                         brand={product.productID.brand}

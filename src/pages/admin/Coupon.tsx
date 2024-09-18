@@ -4,6 +4,7 @@ import Form from "../../components/Form";
 import { CreateCouponBodyType, useCreateCouponsMutation, useGetAllCouponsQuery } from "../../redux/api/api";
 import { MutationResTypes } from "../../assets/demoData";
 import HandleMutationRes from "../../components/HandleMutationRes";
+import { UserLocationTypes } from "../Login.Page";
 //import Table from "../../components/Table";
 //import { CouponTypes } from "../../assets/demoData";
 
@@ -28,7 +29,7 @@ const formFields = [
     {type:"text", name:"usedCount", placeHolder:"Used Count"}
 ];
 
-const Coupons = () => {
+const Coupons = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const couponData:{data?:{message:[{_id:string; code:string; amount:number; discountType:string; minPerchaseAmount:number; usedCount:number; usageLimit:number; endDate:Date;}]}} = useGetAllCouponsQuery("");
     const [createCoupon] = useCreateCouponsMutation();
     const [formFieldsData, setFormFieldsData] = useState<CouponFormFielsTypes>();
@@ -43,7 +44,7 @@ const Coupons = () => {
         console.log(formFieldsData);
         
         try {
-            const res = await createCoupon(formFieldsData as CreateCouponBodyType);
+            const res = await createCoupon({...formFieldsData, action:"create_coupon", userLocation} as CreateCouponBodyType);
 
             console.log("------ Coupon.tsx  onCLickHandler");
             console.log(res);

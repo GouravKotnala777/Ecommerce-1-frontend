@@ -93,7 +93,7 @@ const App = () => {
             <DialogWrapper toggler={reportDialogToggle} setToggler={setReportDialogToggle} Element={<Chatbot USERID={myProfileData.data?.message._id} USERNAME={myProfileData.data?.message.name} />} />
             <Header userName={myProfileData.data?.message.name} userRole={myProfileData.data?.message.role} wishlistNotification={wishlistData.data?.message.length} cartNotification={cartData.data?.message.products.reduce((acc, iter) => acc+iter.quantity, 0) as number} userLocation={userLocation} />
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<Home userLocation={userLocation as UserLocationTypes} />} />
               <Route path="/tools/macro_calculator" element={<MacroCalculator />} />
               <Route path="/group/:query/:value" element={<ProductsOfSame />} />
 
@@ -108,7 +108,7 @@ const App = () => {
               {
                 myProfileData.data?.message._id &&
                   <>
-                    <Route path="/user/cart" element={<ProtectedRoute children={<Cart cartData={cartData} />} userRole={myProfileData.data?.message.role} />} />
+                    <Route path="/user/cart" element={<ProtectedRoute children={<Cart userLocation={userLocation as UserLocationTypes} cartData={cartData} />} userRole={myProfileData.data?.message.role} />} />
                     <Route path="/user/orders" element={<ProtectedRoute children={<MyOrders />} userRole={myProfileData.data?.message.role} />} />
                     <Route path="/user/wishlist" element={<ProtectedRoute children={<Wishlist wishlistData={wishlistData} />} userRole={myProfileData.data?.message.role} />} />
                     <Route path="/user/logout" element={<Logout userLocation={userLocation as UserLocationTypes} />} />
@@ -119,9 +119,9 @@ const App = () => {
               <Route path="/user/verifyemail" element={<VerifyEmail />} />
 
 
-              <Route path="/product/pay" element={<ProtectedRoute children={<StripePayment />} userRole={myProfileData.data?.message.role} />} />
+              <Route path="/product/pay" element={<ProtectedRoute children={<StripePayment userLocation={userLocation as UserLocationTypes} />} userRole={myProfileData.data?.message.role} />} />
               <Route path="/product/search/:searchQry" element={<SearchedProducts />} />
-              <Route path="/product/:productID" element={<SingleProduct />} />
+              <Route path="/product/:productID" element={<SingleProduct userLocation={userLocation as UserLocationTypes} />} />
 
 
               {
@@ -134,7 +134,7 @@ const App = () => {
                   <Route path="/admin/product/update" element={<ProtectedRoute accessibleFor="admin" children={<UpdateProduct />} userRole={myProfileData.data?.message.role} />} />
                   <Route path="/admin/product/incomplete" element={<ProtectedRoute accessibleFor="admin" children={<IncompleteProducts />} userRole={myProfileData.data?.message.role} />} />
                   <Route path="/admin/activities" element={<ProtectedRoute accessibleFor="admin" children={<UserActivities />} userRole={myProfileData.data?.message.role} />} />
-                  <Route path="/admin/coupon" element={<ProtectedRoute accessibleFor="admin" children={<Coupons />} userRole={myProfileData.data?.message.role} />} />
+                  <Route path="/admin/coupon" element={<ProtectedRoute accessibleFor="admin" children={<Coupons userLocation={userLocation as UserLocationTypes} />} userRole={myProfileData.data?.message.role} />} />
                 </>
               }
 

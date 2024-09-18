@@ -134,7 +134,7 @@ const MyProfileDialog = ({setIsMyProfileDialogOpen, userLocation}:{setIsMyProfil
     };
     const updateMeHandler = async() => {
         try {
-            const res = await updateMe({...updateFormData, action:"profile_update", userLocation});
+            const res = await updateMe({...updateFormData, action:"update_profile", userLocation});
 
             console.log("----- MyProfileDialog updateMeHandler");
             console.log(res);
