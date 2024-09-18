@@ -95,7 +95,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Home userLocation={userLocation as UserLocationTypes} />} />
               <Route path="/tools/macro_calculator" element={<MacroCalculator />} />
-              <Route path="/group/:query/:value" element={<ProductsOfSame />} />
+              <Route path="/group/:query/:value" element={<ProductsOfSame userLocation={userLocation as UserLocationTypes} />} />
 
 
               {
@@ -109,8 +109,8 @@ const App = () => {
                 myProfileData.data?.message._id &&
                   <>
                     <Route path="/user/cart" element={<ProtectedRoute children={<Cart userLocation={userLocation as UserLocationTypes} cartData={cartData} />} userRole={myProfileData.data?.message.role} />} />
-                    <Route path="/user/orders" element={<ProtectedRoute children={<MyOrders />} userRole={myProfileData.data?.message.role} />} />
-                    <Route path="/user/wishlist" element={<ProtectedRoute children={<Wishlist wishlistData={wishlistData} />} userRole={myProfileData.data?.message.role} />} />
+                    <Route path="/user/orders" element={<ProtectedRoute children={<MyOrders userLocation={userLocation as UserLocationTypes} />} userRole={myProfileData.data?.message.role} />} />
+                    <Route path="/user/wishlist" element={<ProtectedRoute children={<Wishlist userLocation={userLocation as UserLocationTypes} wishlistData={wishlistData} />} userRole={myProfileData.data?.message.role} />} />
                     <Route path="/user/logout" element={<Logout userLocation={userLocation as UserLocationTypes} />} />
                   </>
               }
@@ -120,7 +120,7 @@ const App = () => {
 
 
               <Route path="/product/pay" element={<ProtectedRoute children={<StripePayment userLocation={userLocation as UserLocationTypes} />} userRole={myProfileData.data?.message.role} />} />
-              <Route path="/product/search/:searchQry" element={<SearchedProducts />} />
+              <Route path="/product/search/:searchQry" element={<SearchedProducts userLocation={userLocation as UserLocationTypes} />} />
               <Route path="/product/:productID" element={<SingleProduct userLocation={userLocation as UserLocationTypes} />} />
 
 

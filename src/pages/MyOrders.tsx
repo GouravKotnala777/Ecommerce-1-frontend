@@ -6,6 +6,7 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { SerializedError } from "@reduxjs/toolkit";
 import Spinner from "../components/Spinner";
 import SingleProductTemplate from "../components/SingleProductTemplate";
+import { UserLocationTypes } from "./Login.Page";
 
 export interface OrderResponseType {
 	success: boolean;
@@ -49,6 +50,8 @@ export interface SingleOrderInfoTypes{
     status?:string;
     message?:string;
     createdAt?:string;
+
+    userLocation:UserLocationTypes;
 }
 
 
@@ -59,7 +62,7 @@ const productTableHeadings = [
     {th:"status", isEditable:false}
 ];
 
-const MyOrders = () => {
+const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const myOrders:{
         isLoading:boolean;
         data?:OrderResponseType;
@@ -123,7 +126,7 @@ const MyOrders = () => {
                                     thead={productTableHeadings}
                                     hideEditBtn={true}
 
-                                    DialogElement={<SingleOrderInfo parent="orders" orderID={transformedData?.[orderNumber]._id} name={transformedData?.[orderNumber].name as string} price={Number(transformedData?.[orderNumber].price)} quantity={1} rating={Number(transformedData?.[orderNumber].price)} description="aaaaaa" photo={""} transactionId={transformedData?.[orderNumber].transactionId as string} shippingType={transformedData?.[orderNumber].shippingType as string} status={transformedData?.[orderNumber].status as string} message={transformedData?.[orderNumber].message as string} createdAt={transformedData?.[orderNumber]?.createdAt?.toString()} />}
+                                    DialogElement={<SingleOrderInfo userLocation={userLocation} parent="orders" orderID={transformedData?.[orderNumber]._id} name={transformedData?.[orderNumber].name as string} price={Number(transformedData?.[orderNumber].price)} quantity={1} rating={Number(transformedData?.[orderNumber].price)} description="aaaaaa" photo={""} transactionId={transformedData?.[orderNumber].transactionId as string} shippingType={transformedData?.[orderNumber].shippingType as string} status={transformedData?.[orderNumber].status as string} message={transformedData?.[orderNumber].message as string} createdAt={transformedData?.[orderNumber]?.createdAt?.toString()} />}
                                     dialogShowInfo={(e:MouseEvent<HTMLButtonElement>) => showOrderInfo(e)}
                                     isOrderInfoDialogOpen={isOrderInfoDialogOpen as boolean}
                                     setIsOrderInfoDialogOpen={setIsOrderInfoDialogOpen as Dispatch<SetStateAction<boolean>>}
@@ -136,12 +139,12 @@ const MyOrders = () => {
     )
 };
 
-export const SingleOrderInfo = ({ parent, name, price, quantity, rating, orderID, description, photo, transactionId, shippingType, status, message, createdAt}:SingleOrderInfoTypes) => {
+export const SingleOrderInfo = ({userLocation, parent, name, price, quantity, rating, orderID, description, photo, transactionId, shippingType, status, message, createdAt}:SingleOrderInfoTypes) => {
 
     return(
         <div className="single_order_cont" onClick={(e) => e.stopPropagation()}>
             <div className="single_order_scrollable">
-                <SingleProductTemplate parent={parent} name={name} price={price} quantity={quantity} rating={rating} productID={orderID} description={description} photo={photo} transactionId={transactionId} shippingType={shippingType} status={status} message={message} createdAt={createdAt} />
+                <SingleProductTemplate userLocation={userLocation} parent={parent} name={name} price={price} quantity={quantity} rating={rating} productID={orderID} description={description} photo={photo} transactionId={transactionId} shippingType={shippingType} status={status} message={message} createdAt={createdAt} />
             </div>
         </div>
     )

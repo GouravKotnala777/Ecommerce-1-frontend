@@ -4,13 +4,15 @@ import SingleProductTemplate from "../components/SingleProductTemplate";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import ItemNotFound from "../components/ItemNotFound";
 import Spinner from "../components/Spinner";
+import { UserLocationTypes } from "./Login.Page";
 
 
-const Wishlist = ({wishlistData}:{wishlistData:{
+const Wishlist = ({wishlistData, userLocation}:{wishlistData:{
         isLoading:boolean;
         data?:{success:boolean; message:ProductTypes[]};
         error?:FetchBaseQueryError | SerializedError;
-    }}) => {
+    },
+    userLocation:UserLocationTypes;}) => {
 
 
     return(
@@ -35,6 +37,7 @@ const Wishlist = ({wishlistData}:{wishlistData:{
                                 :
                                 wishlistData.data?.message.map((product) => (
                                     <SingleProductTemplate key={product._id}
+                                        userLocation={userLocation}
                                         parent="wishlist"
                                         productID={product._id}
                                         category={product.category}

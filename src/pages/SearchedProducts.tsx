@@ -5,6 +5,7 @@ import { ProductTypes } from "../assets/demoData";
 import SingleProductTemplate from "../components/SingleProductTemplate";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Form, { FormFieldTypes } from "../components/Form";
+import { UserLocationTypes } from "./Login.Page";
 //import Spinner from "../components/Spinner";
 
 
@@ -80,7 +81,7 @@ const formFields:FormFieldTypes[] = [
 let skip:number = 0;
 
 
-const SearchedProducts = () => {
+const SearchedProducts = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const {searchQry} = useParams();
     const [searchedProducts] = useSearchProductsMutation();
     const [products, setProducts] = useState<ProductTypes[]>([]);
@@ -190,7 +191,7 @@ const SearchedProducts = () => {
             <div id="products_cont" className="products_cont">
                 {
                     products.map(({_id, name, price, category, description, rating, images}, index) => (
-                        <SingleProductTemplate key={index} parent="singleProduct" name={name} price={price} quantity={1} category={category} description={description} rating={rating} productID={_id} photo={images[0]} />
+                        <SingleProductTemplate key={index} userLocation={userLocation} parent="singleProduct" name={name} price={price} quantity={1} category={category} description={description} rating={rating} productID={_id} photo={images[0]} />
                     ))
                 }
                 {/*{isLoading && <h1>HHHHHHHHHHHHHHHHHH</h1>}*/}
