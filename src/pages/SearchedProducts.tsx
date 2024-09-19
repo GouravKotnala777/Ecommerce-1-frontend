@@ -111,7 +111,7 @@ const SearchedProducts = ({userLocation}:{userLocation:UserLocationTypes;}) => {
             //console.log(filter);
             console.log({searchQry:searchQry as string, skip:skip, limit:5, category:filter?.category, sub_category:filter?.sub_category, brand:filter?.brand, price:{minPrice:aa.minPrice, maxPrice:aa.maxPrice}});
             
-            const searchedProductsRes:{data?:{message:ProductTypes[];}} = await searchedProducts({searchQry:searchQry as string, skip:skip, limit:5, category:filter.category, sub_category:filter.sub_category, brand:filter.brand, price:{minPrice:aa.minPrice, maxPrice:aa.maxPrice}});
+            const searchedProductsRes:{data?:{message:ProductTypes[];}} = await searchedProducts({searchQry:searchQry as string, skip:skip, limit:5, category:filter.category, sub_category:filter.sub_category, brand:filter.brand, price:{minPrice:aa.minPrice, maxPrice:aa.maxPrice,}, action:"search_product", userLocation});
 
 
             if (runByFilter) {

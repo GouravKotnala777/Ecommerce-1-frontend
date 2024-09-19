@@ -10,6 +10,7 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { CHATBOT_ID, DEFAULT_ID } from "./assets/utiles";
 import { useCreateChatMutation, useUpdateChatsHelpfulnessMutation } from "./redux/api/api";
 import { IoIosSend } from "react-icons/io";
+import { UserLocationTypes } from "./pages/Login.Page";
 
 export interface MessageTypes {
     senderID: string;
@@ -20,7 +21,7 @@ export interface MessageTypes {
 
 
 let socket:Socket<DefaultEventsMap, DefaultEventsMap>;
-const Chatbot = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) => {
+const Chatbot = ({USERID, USERNAME, userLocation}:{USERID?:string; USERNAME?:string; userLocation:UserLocationTypes;}) => {
     const [isChatStarted, setIsChatStarted] = useState<boolean>(false);
     const [isHelpfulPageActive, setIsHelpfulPageActive] = useState<boolean>(false);
     const [isHelpful, setIsHelpful] = useState<boolean>();
@@ -38,7 +39,7 @@ const Chatbot = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) => {
             setIsHelpful((prev) => !prev?true:undefined);
             if (isHelpfulPageActive) {
                 try {
-                    const res = await updateIsHelpful({chatID:createChatRes.message, isHelpful:true});
+                    const res = await updateIsHelpful({chatID:createChatRes.message, isHelpful:true, action:"is_chat_helpful", userLocation});
                     console.log("------ likeHandler  updateIsHelpful1");
                     console.log(res);
                     console.log("------ likeHandler  updateIsHelpful1");
@@ -55,7 +56,7 @@ const Chatbot = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) => {
             setIsHelpful((prev) => (prev === undefined||prev === true)?false:undefined);
             if (isHelpfulPageActive) {
                 try {
-                    const res = await updateIsHelpful({chatID:createChatRes.message, isHelpful:false});
+                    const res = await updateIsHelpful({chatID:createChatRes.message, isHelpful:false, action:"is_chat_helpful", userLocation});
                     console.log("------ likeHandler  updateIsHelpful2");
                     console.log(res);
                     console.log("------ likeHandler  updateIsHelpful2");
@@ -84,7 +85,7 @@ const Chatbot = ({USERID, USERNAME}:{USERID?:string; USERNAME?:string;}) => {
         console.log("---------- (2)");
         try {
             console.log("---------- (3)");
-            const res = await createChat({adminID:adminInfo.adminID, chats:messages, isHelpful});
+            const res = await createChat({adminID:adminInfo.adminID, chats:messages, isHelpful, action:"new_chat", userLocation});
             console.log("---------- (3.1)");
             
             console.log("------- endChatConfirmedHandler createChat");

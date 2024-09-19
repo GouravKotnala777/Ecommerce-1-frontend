@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import toast, {Toaster} from "react-hot-toast";
 import { MutationResTypes } from "../assets/demoData";
+import { UserLocationTypes } from "./Login.Page";
 
 
-const VerifyEmail = () => {
+const VerifyEmail = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const [searchParams] = useSearchParams();
     const [verifyEmail] = useVerifyEmailMutation();
     const [verifyEmailRes, setVerifyEmailRes] = useState<MutationResTypes>();
@@ -20,7 +21,7 @@ const VerifyEmail = () => {
     const verifyEmailHandler = async() => {
         if (emailtype === "VERIFY") {
             try {
-                const res = await verifyEmail({verificationToken:token as string, emailType:emailtype as string});
+                const res = await verifyEmail({verificationToken:token as string, emailType:emailtype as string, action:"verify_email", userLocation});
                 console.log("------ VerifyEmail.tsx  verifyEmailHandler");
                 console.log(res);
                 setVerifyEmailRes(res);
@@ -66,7 +67,7 @@ const VerifyEmail = () => {
         if (emailtype === "RESET_PASSWORD" && newPassword) {
             console.log({newPassword});
             try {
-                const res = await verifyEmail({verificationToken:token as string, emailType:emailtype as string, newPassword});
+                const res = await verifyEmail({verificationToken:token as string, emailType:emailtype as string, newPassword, action:"verify_email", userLocation});
                 console.log("------ VerifyEmail.tsx  updatePasswordHandler");
                 console.log(res);
                 setVerifyEmailRes(res);

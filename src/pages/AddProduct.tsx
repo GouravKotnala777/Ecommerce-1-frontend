@@ -3,6 +3,7 @@ import Form, { FormFieldTypes } from "../components/Form";
 import { useAddProductMutation } from "../redux/api/api";
 import { MutationResTypes } from "../assets/demoData";
 import HandleMutationRes from "../components/HandleMutationRes";
+import { UserLocationTypes } from "./Login.Page";
 
 
 interface AddProductFormType {
@@ -106,7 +107,7 @@ const formFields:FormFieldTypes[] = [
     {type:"textArea", name:"description", placeHolder:"Description"}
 ];
 
-const AddProduct = () => {
+const AddProduct = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const [fieldData, setFieldData] = useState<AddProductFormType>();
     const [photo, setPhoto] = useState<File|undefined>();
     const [addProduct] = useAddProductMutation();
@@ -149,7 +150,7 @@ const AddProduct = () => {
         
         try {
             
-            const res = await addProduct(formData);
+            const res = await addProduct({...formData, action:"create_product", userLocation});
 
 
             console.log("------- AddProduct.tsx onClickHandler");

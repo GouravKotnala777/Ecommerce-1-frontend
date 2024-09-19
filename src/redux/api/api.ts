@@ -62,17 +62,13 @@ export interface UpdateMeBodyType {
 
     //ipAddress:string; userAgent:string; userLocation:string; platform:string; device:string; referrer:string; success:boolean; errorDetails?:string;
 }
-//export interface MessagesTypes {
-//    senderID: string;
-//    content: string;
-//    createdAt: string;
-//}
 export interface ChatTypes {
     adminID:string;
     chats:MessageTypes[];
     isHelpful?:boolean;
     createdAt?:string;
 }
+
 
 const api = createApi({
     reducerPath:"api",
@@ -102,11 +98,11 @@ const api = createApi({
             })
         }),
         verifyEmail:builder.mutation({
-            query:({verificationToken, emailType, newPassword}:{verificationToken:string; emailType:string; newPassword?:string;}) => ({
+            query:({verificationToken, emailType, newPassword, action, userLocation}:{verificationToken:string; emailType:string; newPassword?:string; action:string; userLocation:UserLocationTypes;}) => ({
                 url:"/api/v1/user/verifyemail",
                 method:"POST",
                 credentials:"include",
-                body:{verificationToken, emailType, newPassword}
+                body:{verificationToken, emailType, newPassword, action, userLocation}
             })
         }),
         myProfile:builder.query({
@@ -132,11 +128,11 @@ const api = createApi({
             })
         }),
         forgetPassword:builder.mutation({
-            query:({email}:{email:string}) => ({
+            query:({email, action, userLocation}:{email:string, action:string; userLocation:UserLocationTypes;}) => ({
                 url:"/api/v1/user/forgetPassword",
                 method:"PUT",
                 credentials:"include",
-                body:{email}
+                body:{email, action, userLocation}
             })
         }),
         removeAddress:builder.mutation({
@@ -168,9 +164,6 @@ const api = createApi({
             query:(data) => ({
                 url:"/api/v1/product/new",
                 method:"POST",
-                //headers:{
-                //    "Content-Type":"multipart/form-data"
-                //},
                 credentials:"include",
                 body:data
             })
@@ -198,11 +191,11 @@ const api = createApi({
             })
         }),
         searchProducts:builder.mutation({
-            query:({searchQry, limit, skip, category, sub_category, brand, price}:{searchQry:string; limit:number; skip:number; category:string; sub_category:string; brand:string; price:{minPrice:number; maxPrice:number;}}) => ({
+            query:({searchQry, limit, skip, category, sub_category, brand, price, action, userLocation}:{searchQry:string; limit:number; skip:number; category:string; sub_category:string; brand:string; price:{minPrice:number; maxPrice:number;}, action:string; userLocation:UserLocationTypes;}) => ({
                 url:`/api/v1/product/search/${searchQry}?skip=${skip}`,
                 method:"POST",
                 credentials:"include",
-                body:{category, sub_category, brand, price, limit}
+                body:{category, sub_category, brand, price, limit, action, userLocation}
             })
         }),
         productRecommendation:builder.mutation({
@@ -389,29 +382,21 @@ const api = createApi({
             })
         }),
         createChat:builder.mutation({
-            query:({adminID, chats, isHelpful}:ChatTypes) => ({
+            query:({adminID, chats, isHelpful, action, userLocation}:ChatTypes & {action:string; userLocation:UserLocationTypes;}) => ({
                 url:"/api/v1/chat/new",
                 method:"POST",
                 credentials:"include",
-                body:{adminID, chats, isHelpful}
+                body:{adminID, chats, isHelpful, action, userLocation}
             })
         }),
         updateChatsHelpfulness:builder.mutation({
-            query:({chatID, isHelpful}:{chatID:string; isHelpful:boolean;}) => ({
+            query:({chatID, isHelpful, action, userLocation}:{chatID:string; isHelpful:boolean; action:string; userLocation:UserLocationTypes;}) => ({
                 url:"/api/v1/chat/isHelpfull",
                 method:"PUT",
                 credentials:"include",
-                body:{chatID, isHelpful}
+                body:{chatID, isHelpful, action, userLocation}
             })
         }),
-        //newUserActivity:builder.mutation({
-        //    query:({}:{}) => ({
-        //        url:"/api/activity/new",
-        //        method:"POST",
-        //        credentials:"include",
-        //        body:{}
-        //    })
-        //})
     })
 })
 

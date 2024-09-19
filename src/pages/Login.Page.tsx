@@ -63,7 +63,7 @@ const Login = ({userLocation}:{userLocation:UserLocationTypes}) => {
 
     return(
         <div className="login_bg">
-            <DialogWrapper Element={<ForgetPasswordDialog email={email} setEmail={setEmail} setIsForgetPassDialogOpen={setIsForgetPassDialogOpen} />} toggler={isForgetPassDialogOpen} setToggler={setIsForgetPassDialogOpen} />
+            <DialogWrapper Element={<ForgetPasswordDialog email={email} setEmail={setEmail} setIsForgetPassDialogOpen={setIsForgetPassDialogOpen} userLocation={userLocation} />} toggler={isForgetPassDialogOpen} setToggler={setIsForgetPassDialogOpen} />
             <HandleMutationRes res={loginRes} />
             {/*<pre>{JSON.stringify(userLocation, null, `\t`)}</pre>*/}
             <Form heading="Login" formFields={loginFormFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler}  />
@@ -75,12 +75,12 @@ const Login = ({userLocation}:{userLocation:UserLocationTypes}) => {
     )
 };
 
-const ForgetPasswordDialog = ({email, setEmail, setIsForgetPassDialogOpen}:{email:string; setEmail:Dispatch<SetStateAction<string>>; setIsForgetPassDialogOpen:Dispatch<SetStateAction<boolean>>}) => {
+const ForgetPasswordDialog = ({email, setEmail, setIsForgetPassDialogOpen, userLocation}:{email:string; setEmail:Dispatch<SetStateAction<string>>; setIsForgetPassDialogOpen:Dispatch<SetStateAction<boolean>>; userLocation:UserLocationTypes;}) => {
     const [forgetPassword] = useForgetPasswordMutation();
 
     const forgetPasswordSendEmail = async() => {
         try {
-            const {data} = await forgetPassword({email});
+            const {data} = await forgetPassword({email, action:"forget_password", userLocation});
 
             console.log("------ ForgetPasswordDialog  forgetPasswordSendEmail");
             console.log(data);

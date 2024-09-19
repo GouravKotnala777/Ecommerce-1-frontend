@@ -32,7 +32,6 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
     const [updateMe] = useUpdateMeMutation();
     const [removeAddress] = useRemoveAddressMutation();
     const [createPayment] = useCreatePaymentMutation();
-    //const [searchedProducts] = useSearchProductsMutation();
     const [productRecommendation] = useProductRecommendationMutation();
     const {user} = useSelector((state:{loggedInUserReducer:loggedInUserInitialState}) => state.loggedInUserReducer);
 

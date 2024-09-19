@@ -90,7 +90,7 @@ const App = () => {
   return (
         <>
           <BrowserRouter>
-            <DialogWrapper toggler={reportDialogToggle} setToggler={setReportDialogToggle} Element={<Chatbot USERID={myProfileData.data?.message._id} USERNAME={myProfileData.data?.message.name} />} />
+            <DialogWrapper toggler={reportDialogToggle} setToggler={setReportDialogToggle} Element={<Chatbot USERID={myProfileData.data?.message._id} USERNAME={myProfileData.data?.message.name} userLocation={userLocation as UserLocationTypes} />} />
             <Header userName={myProfileData.data?.message.name} userRole={myProfileData.data?.message.role} wishlistNotification={wishlistData.data?.message.length} cartNotification={cartData.data?.message.products.reduce((acc, iter) => acc+iter.quantity, 0) as number} userLocation={userLocation} />
             <Routes>
               <Route path="/" element={<Home userLocation={userLocation as UserLocationTypes} />} />
@@ -116,7 +116,7 @@ const App = () => {
               }
               
               <Route path="/user/address" element={<ProtectedRoute children={<Address userLocation={userLocation} />} userRole={myProfileData.data?.message.role} />} />
-              <Route path="/user/verifyemail" element={<VerifyEmail />} />
+              <Route path="/user/verifyemail" element={<VerifyEmail userLocation={userLocation as UserLocationTypes} />} />
 
 
               <Route path="/product/pay" element={<ProtectedRoute children={<StripePayment userLocation={userLocation as UserLocationTypes} />} userRole={myProfileData.data?.message.role} />} />
@@ -128,7 +128,7 @@ const App = () => {
                 myProfileData.data?.message.role === "admin" &&
                 <>
                   <Route path="/chat-admin" element={<ChatbotAdmin USERID={myProfileData.data?.message._id} USERNAME={myProfileData.data?.message.name} />} />
-                  <Route path="/product/new" element={<ProtectedRoute accessibleFor="admin" children={<AddProduct />} userRole={myProfileData.data?.message.role} />} />
+                  <Route path="/product/new" element={<ProtectedRoute accessibleFor="admin" children={<AddProduct userLocation={userLocation as UserLocationTypes} />} userRole={myProfileData.data?.message.role} />} />
                   <Route path="/admin/dashboard" element={<ProtectedRoute accessibleFor="admin" children={<Dashboard />} userRole={myProfileData.data?.message.role} />} />
                   <Route path="/admin/outstock" element={<ProtectedRoute accessibleFor="admin" children={<OutStock />} userRole={myProfileData.data?.message.role} />} />
                   <Route path="/admin/product/update" element={<ProtectedRoute accessibleFor="admin" children={<UpdateProduct />} userRole={myProfileData.data?.message.role} />} />

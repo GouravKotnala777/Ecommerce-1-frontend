@@ -84,7 +84,9 @@ const Home = ({userLocation}:{userLocation:UserLocationTypes;}) => {
                 sub_category:"",
                 brand:"",
                 price:{minPrice:0, maxPrice:20000},
-                limit:0
+                limit:0,
+                action:"search_product",
+                userLocation
             });
             const croppedData = dddd.data?.message
             .map((item) => ({name:item.name.toLowerCase()}))

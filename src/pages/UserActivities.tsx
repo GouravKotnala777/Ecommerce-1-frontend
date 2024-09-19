@@ -12,7 +12,8 @@ export interface UserActivitiesTypes {
     platform: string; // e.g., 'web', 'mobile', 'desktop'
     device: string; // e.g., 'iPhone', 'Android', 'Windows', etc.
     referrer: string; // Source from where the user accessed (e.g., Google, Direct)
-    success: boolean; // Indicate if the action was successful or not
+    status:"pending"|"succeeded"|"failed";
+    message:string;
     errorDetails: string; // Store any error details if the action failed
     timestamp: Date;
 }
@@ -25,7 +26,8 @@ export interface UpdateActivityBodyType {
     platform?: string;
     device?: string;
     referrer?: string;
-    success?: boolean;
+    status?:"pending"|"succeeded"|"failed";
+    message?:string;
     errorDetails?: string;
     timestamp?: Date;
 }
@@ -79,7 +81,9 @@ const UserActivities = () => {
                                     errorDetails={allActivities.data?.message[orderNumber].errorDetails as string}
                                     platform={allActivities.data?.message[orderNumber].platform as string}
                                     referrer={allActivities.data?.message[orderNumber].referrer as string}
-                                    success={true} timestamp={allActivities.data?.message[orderNumber].timestamp as Date}
+                                    status={allActivities.data?.message[orderNumber].status as "pending"|"succeeded"|"failed"}
+                                    message={allActivities.data?.message[orderNumber].message as string}
+                                    timestamp={allActivities.data?.message[orderNumber].timestamp as Date}
                                     userAgent={allActivities.data?.message[orderNumber].userAgent as string}
                                     userLocation={{city:allActivities.data?.message[orderNumber].userLocation.city as string,
                                         country:allActivities.data?.message[orderNumber].userLocation.country as string,
@@ -100,7 +104,7 @@ const UserActivities = () => {
 };
 
 
-export const SingleActivityInfo = ({userID, action, device, ipAddress,errorDetails,platform,referrer,success,timestamp,userAgent,userLocation}:UserActivitiesTypes) => {
+export const SingleActivityInfo = ({userID, action, device, ipAddress,errorDetails,platform,referrer,status,message,timestamp,userAgent,userLocation}:UserActivitiesTypes) => {
 
     return(
         <div className="single_activity_cont" onClick={(e) => e.stopPropagation()}>
@@ -127,7 +131,10 @@ export const SingleActivityInfo = ({userID, action, device, ipAddress,errorDetai
                     <span className="single_activity_heading">Referrer</span><span className="single_activity_value">{referrer}</span>
                 </div>
                 <div className="headings_values">
-                    <span className="single_activity_heading">Success</span><span className="single_activity_value">{success.toString()}</span>
+                    <span className="single_activity_heading">Status</span><span className="single_activity_value">{status}</span>
+                </div>
+                <div className="headings_values">
+                    <span className="single_activity_heading">Message</span><span className="single_activity_value">{message}</span>
                 </div>
                 <div className="headings_values">
                     <span className="single_activity_heading">Time Stamp</span><span className="single_activity_value">{timestamp?.toString()}</span>
