@@ -189,7 +189,7 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
                                     <div className="td" key={item.th}><input type="text" name={item.th} placeholder={product[item.th.toString().toLowerCase()] as string} onChange={(e) => onChangeHandler(e, product._id)} /></div>
                                     :
                                     item.th === "userID" ?
-                                        <div className="td" key={item.th}>{product[item.th].slice(13, 24)}</div>
+                                        <div className="td" key={item.th}>{product[item.th]?.slice(13, 24)}</div>
                                         :
                                         <div className="td" key={item.th}>{product[item.th]}</div>
                                 ))
