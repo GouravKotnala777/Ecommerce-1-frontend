@@ -1,3 +1,4 @@
+import "../../styles/admin/order_charts.scss";
 import { useEffect, useRef, useState } from "react";
 import { useAllOrdersQuery } from "../../redux/api/api";
 import { OrderResponseType } from "../MyOrders";
@@ -38,8 +39,8 @@ const formatDate = (dateString:string) => {
 };
 
 const aggregateData = (data:OrderTypes[]) => {
-    const dataT = data?.flatMap((item) => item.orderItems.map((order) => ({createdAt:item.createdAt, category:order.productID?.category, price:order.productID?.price})));
-    const aggregated:{[agg:string]:{[cate:string]:number}} = {};
+    const dataT = data?.flatMap((item) => item.orderItems.map((order) => ({createdAt:item.createdAt, category:order.productID?.category, price:order.productID?.price, count:0})));
+    const aggregated:{[agg:string]:{[cate:string]:{price:number; count:number}}} = {};
     
     dataT?.forEach((item) => {
       const date = item.createdAt.toString().split("T")[0];
@@ -50,10 +51,11 @@ const aggregateData = (data:OrderTypes[]) => {
       }
       
       if (!aggregated[date][category]) {
-        aggregated[date][category] = 0;
+        aggregated[date][category] = {count:0, price:0};
       }
       
-      aggregated[date][category] += item.price as number;
+      aggregated[date][category].price += item.price as number;
+      aggregated[date][category].count += 1;
     });
   
     return aggregated;
@@ -62,7 +64,7 @@ const aggregateData = (data:OrderTypes[]) => {
 
 const OrderChart = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const [tooltip, setTooltip] = useState<{ x?:number; y?: number; width?: number; height?: number; category?:string; price?:number;}|null>(null);
+    const [tooltip, setTooltip] = useState<{ x?:number; y?: number; width?: number; height?: number; category?:string; price?:number; count?:number;}|null>(null);
     const {data}:{
         isLoading:boolean;
         data?:OrderResponseType;
@@ -102,7 +104,7 @@ const OrderChart = () => {
             
                 // Calculate max total price per date for Y-axis scaling
                 const maxTotalPrice = Math.max(...dates.map(date => {
-                  return Object.values(aggregatedData[date]).reduce((a, b) => a + b, 0);
+                  return Object.values(aggregatedData[date]).reduce((a, b) => a + b.price, 0);
                 }));
             
                 // Color mapping for categories
@@ -152,18 +154,19 @@ const OrderChart = () => {
             
                 // Draw stacked bars
 
-                const barPositions:{ x:number; y: number; width: number; height: number; category:string; price:number;}[] = [{x:0, y:0, height:0, width:0, category:"", price:0}];
+                const barPositions:{ x:number; y: number; width: number; height: number; category:string; price:number; count:number;}[] = [{x:0, y:0, height:0, width:0, category:"", price:0, count:0}];
                 dates.forEach((date, index) => {
                   let barStartY = chartHeight + 20; // Start from bottom of the chart
                   const x = paddingLeft + (index * (chartWidth / dates.length)) + 10;
                   const barWidth = 30;
             
                   categories.forEach((category) => {
-                    const price = aggregatedData[date][category as string] || 0;
+                    const price = aggregatedData[date][category as string]?.price || 0;
+                    const count = aggregatedData[date][category as string]?.count || 0;
                     const barHeight = (price / maxTotalPrice) * chartHeight;
                     ctx.fillStyle = categoryColors[category as CategoryColorType];
                     ctx.fillRect(x, barStartY - barHeight, barWidth, barHeight);
-                    barPositions.push({ x, y: barStartY - barHeight, width: barWidth, height: barHeight, category:category as string, price });
+                    barPositions.push({ x, y: barStartY - barHeight, width: barWidth, height: barHeight, category:category as string, price, count});
                     barStartY -= barHeight; // Stack next bar on top
                   });
                 });
@@ -181,7 +184,7 @@ const OrderChart = () => {
                     });
             
                     if (hoveredBar) {
-                        setTooltip({ category: hoveredBar.category, price: hoveredBar.price, x: mouseX, y: mouseY });
+                        setTooltip({ category: hoveredBar.category, price: hoveredBar.price, count:hoveredBar.count, x: mouseX, y: mouseY });
                     } else {
                         setTooltip(null);
                     }
@@ -197,29 +200,30 @@ const OrderChart = () => {
       }, [data]);
 
       return(
-        <>
-            <div>
-                Order Charts
-            </div>
+        <div className="order_chart_bg">
+            <div className="heading" style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>Orders Chart</div>
             {/*<pre>{JSON.stringify(arrayOfOrdersCategory, null, `\t`)}</pre>*/}
             {/*<pre>{JSON.stringify(data?.message, null, `\t`)}</pre>*/}
-            <canvas ref={canvasRef}></canvas>
-            {tooltip && (
-                <div style={{
-                position: 'absolute',
-                left: tooltip.x?tooltip.x+10:0,
-                top: tooltip.y?tooltip.y+40:0,
-                background: '#fff',
-                border: '1px solid #ccc',
-                padding: '5px',
-                borderRadius: '3px',
-                pointerEvents: 'none',
-                transition:"1s"
-                }}>
-                <strong>{tooltip.category}</strong>: ₹{tooltip.price}
-                </div>
-            )}
-        </>
+            <div className="scrollable_part">
+                <canvas className="orders_revenue_canvas" ref={canvasRef}></canvas>
+                {tooltip && (
+                    <div style={{
+                    position: 'absolute',
+                    left: tooltip.x?tooltip.x+10:0,
+                    top: tooltip.y?tooltip.y+40:0,
+                    background: '#fff',
+                    border: '1px solid #ccc',
+                    padding: '5px',
+                    borderRadius: '3px',
+                    pointerEvents: 'none',
+                    transition:"1s"
+                    }}>
+                    <strong>{tooltip.category}</strong>: ₹{tooltip.price}<br />
+                    <strong>Count</strong>: {tooltip.count}
+                    </div>
+                )}
+            </div>
+        </div>
     )
 
 };

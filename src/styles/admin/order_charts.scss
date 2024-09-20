@@ -1,0 +1,16 @@
+
+.order_chart_bg{
+    //border: 2px solid red;
+    
+    .scrollable_part{
+        //border: 2px solid green;
+        //overflow-x: scroll;
+        margin-top: 10px;
+        padding: 10px;
+        .orders_revenue_canvas{
+            //border: 2px solid blue;
+            background: white;
+        }
+    }
+
+}
