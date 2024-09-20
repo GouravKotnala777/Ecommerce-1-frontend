@@ -381,6 +381,13 @@ const api = createApi({
                 credentials:"include"
             })
         }),
+        allOrders:builder.query({
+            query:() => ({
+                url:"/api/v1/order/all",
+                method:"GET",
+                credentials:"include"
+            })
+        }),
         createChat:builder.mutation({
             query:({adminID, chats, isHelpful, action, userLocation}:ChatTypes & {action:string; userLocation:UserLocationTypes;}) => ({
                 url:"/api/v1/chat/new",
@@ -408,6 +415,6 @@ export const {useRegisterMutation, useLoginMutation, useVerifyEmailMutation, use
     useOutStockProductsQuery, useIncompleteProductsQuery, useUpdateProductMutation,
     useCreateCouponsMutation, useGetAllCouponsQuery, useGetSingleCouponMutation,
     useCreatePaymentMutation,
-    useNewOrderMutation, useMyOrdersQuery,
+    useNewOrderMutation, useMyOrdersQuery, useAllOrdersQuery,
     useCreateChatMutation, useUpdateChatsHelpfulnessMutation
 } = api;

@@ -25,6 +25,7 @@ export interface OrderResponseType {
                     name?:string;
                     price?:number;
                     images?:string[];
+                    category?:string;
                 },
                 quantity:number;
                 _id:string;

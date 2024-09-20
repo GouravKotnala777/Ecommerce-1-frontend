@@ -36,6 +36,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import PageNotFound from './pages/PageNotFound'
 import MacroCalculator from './pages/MacroCalculator'
 import UserActivities from './pages/UserActivities'
+import OrderChart from './pages/charts/OrderCharts'
 
 
 
@@ -135,6 +136,7 @@ const App = () => {
                   <Route path="/admin/product/incomplete" element={<ProtectedRoute accessibleFor="admin" children={<IncompleteProducts />} userRole={myProfileData.data?.message.role} />} />
                   <Route path="/admin/activities" element={<ProtectedRoute accessibleFor="admin" children={<UserActivities />} userRole={myProfileData.data?.message.role} />} />
                   <Route path="/admin/coupon" element={<ProtectedRoute accessibleFor="admin" children={<Coupons userLocation={userLocation as UserLocationTypes} />} userRole={myProfileData.data?.message.role} />} />
+                  <Route path="/admin/chart/order" element={<ProtectedRoute accessibleFor="admin" children={<OrderChart />} userRole={myProfileData.data?.message.role} />} />
                 </>
               }
 
