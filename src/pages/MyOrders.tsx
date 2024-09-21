@@ -13,7 +13,7 @@ export interface OrderResponseType {
 	message:{
         paymentInfo?: {
             transactionId:string;
-            status:string;
+            paymentStatus:string;
             shippingType:string;
             message:string;
         },
@@ -30,6 +30,7 @@ export interface OrderResponseType {
                 quantity:number;
                 _id:string;
         }[];
+        orderStatus:"pending"|"confirmed"|"processing"|"shipped"|"dispatched"|"delivered"|"cancelled"|"failed"|"returned"|"refunded";
         totalPrice:number;
         createdAt:Date;
 	}[];
@@ -48,7 +49,8 @@ export interface SingleOrderInfoTypes{
     orderID?:string;
     transactionId?:string;
     shippingType:string;
-    status?:string;
+    paymentStatus?:string;
+    orderStatus?:string;
     message?:string;
     createdAt?:string;
 
@@ -127,7 +129,7 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
                                     thead={productTableHeadings}
                                     hideEditBtn={true}
 
-                                    DialogElement={<SingleOrderInfo userLocation={userLocation} parent="orders" orderID={transformedData?.[orderNumber]._id} name={transformedData?.[orderNumber].name as string} price={Number(transformedData?.[orderNumber].price)} quantity={1} rating={Number(transformedData?.[orderNumber].price)} description="aaaaaa" photo={""} transactionId={transformedData?.[orderNumber].transactionId as string} shippingType={transformedData?.[orderNumber].shippingType as string} status={transformedData?.[orderNumber].status as string} message={transformedData?.[orderNumber].message as string} createdAt={transformedData?.[orderNumber]?.createdAt?.toString()} />}
+                                    DialogElement={<SingleOrderInfo userLocation={userLocation} parent="orders" orderID={transformedData?.[orderNumber]._id} name={transformedData?.[orderNumber].name as string} price={Number(transformedData?.[orderNumber].price)} quantity={1} rating={Number(transformedData?.[orderNumber].price)} description="aaaaaa" photo={""} transactionId={transformedData?.[orderNumber].transactionId as string} shippingType={transformedData?.[orderNumber].shippingType as string} paymentStatus={transformedData?.[orderNumber].paymentStatus as string} orderStatus={transformedData?.[orderNumber].orderStatus as string} message={transformedData?.[orderNumber].message as string} createdAt={transformedData?.[orderNumber]?.createdAt?.toString()} />}
                                     dialogShowInfo={(e:MouseEvent<HTMLButtonElement>) => showOrderInfo(e)}
                                     isOrderInfoDialogOpen={isOrderInfoDialogOpen as boolean}
                                     setIsOrderInfoDialogOpen={setIsOrderInfoDialogOpen as Dispatch<SetStateAction<boolean>>}
@@ -140,12 +142,12 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     )
 };
 
-export const SingleOrderInfo = ({userLocation, parent, name, price, quantity, rating, orderID, description, photo, transactionId, shippingType, status, message, createdAt}:SingleOrderInfoTypes) => {
+export const SingleOrderInfo = ({userLocation, parent, name, price, quantity, rating, orderID, description, photo, transactionId, shippingType, paymentStatus, orderStatus, message, createdAt}:SingleOrderInfoTypes) => {
 
     return(
         <div className="single_order_cont" onClick={(e) => e.stopPropagation()}>
             <div className="single_order_scrollable">
-                <SingleProductTemplate userLocation={userLocation} parent={parent} name={name} price={price} quantity={quantity} rating={rating} productID={orderID} description={description} photo={photo} transactionId={transactionId} shippingType={shippingType} status={status} message={message} createdAt={createdAt} />
+                <SingleProductTemplate userLocation={userLocation} parent={parent} name={name} price={price} quantity={quantity} rating={rating} productID={orderID} description={description} photo={photo} transactionId={transactionId} shippingType={shippingType} paymentStatus={paymentStatus} orderStatus={orderStatus} message={message} createdAt={createdAt} />
             </div>
         </div>
     )

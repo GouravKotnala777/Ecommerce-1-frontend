@@ -10,7 +10,7 @@ type CategoryColorType = "protein"|"eaas"|"weight-management"|"pre-workout"|"Per
 interface OrderTypes {
     paymentInfo?: {
         transactionId:string;
-        status:string;
+        paymentStatus:string;
         shippingType:string;
         message:string;
     },
@@ -27,6 +27,7 @@ interface OrderTypes {
         quantity:number;
         _id:string;
     }[];
+    orderStatus:"pending"|"confirmed"|"processing"|"shipped"|"dispatched"|"delivered"|"cancelled"|"failed"|"returned"|"refunded";
     totalPrice:number;
     createdAt:Date;
 }

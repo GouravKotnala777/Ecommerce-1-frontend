@@ -27,7 +27,8 @@ export interface UpdateProductBodyType {
 
 
     transactionId?:string;
-    status?:string;
+    paymentStatus?:string;
+    orderStatus?:string;
     message?:string;
 
     shippingType?:string;
@@ -366,11 +367,11 @@ const api = createApi({
             })
         }),
         newOrder:builder.mutation({
-            query:({orderItems, totalPrice, coupon, transactionId, status, shippingType, message, parent, action, userLocation}:{orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; transactionId:string; status:string; shippingType:string; message:string; parent:string; action:string; userLocation:UserLocationTypes;}) => ({
+            query:({orderItems, totalPrice, coupon, transactionId, paymentStatus, orderStatus, shippingType, message, parent, action, userLocation}:{orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; transactionId:string; paymentStatus:string; orderStatus:"pending"|"confirmed"|"processing"|"shipped"|"dispatched"|"delivered"|"cancelled"|"failed"|"returned"|"refunded"; shippingType:string; message:string; parent:string; action:string; userLocation:UserLocationTypes;}) => ({
                 url:"/api/v1/order/new",
                 method:"POST",
                 credentials:"include",
-                body:{orderItems, totalPrice, coupon, transactionId, status, shippingType, message, parent, action, userLocation}
+                body:{orderItems, totalPrice, coupon, transactionId, paymentStatus, orderStatus, shippingType, message, parent, action, userLocation}
             }),
             invalidatesTags:["MyCartProducts"]
         }),

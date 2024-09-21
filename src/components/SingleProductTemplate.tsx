@@ -33,7 +33,8 @@ interface SingleProductTemplatePropTypes{
 
     transactionId?:string;
     shippingType?:string;
-    status?:string;
+    paymentStatus?:string;
+    orderStatus?:string;
     message?:string;
     createdAt?:string;
 
@@ -43,7 +44,7 @@ interface SingleProductTemplatePropTypes{
 }
 
 
-const SingleProductTemplate = ({userLocation, productID, userWishlist, category, brand, name, price, quantity, rating, description, photo, parent, transactionId, shippingType, status, message, createdAt, setTotalAmount, includedProducts, setIncludedProducts}:SingleProductTemplatePropTypes) => {
+const SingleProductTemplate = ({userLocation, productID, userWishlist, category, brand, name, price, quantity, rating, description, photo, parent, transactionId, shippingType, paymentStatus, orderStatus, message, createdAt, setTotalAmount, includedProducts, setIncludedProducts}:SingleProductTemplatePropTypes) => {
     const [addRemoveFromWishlist] = useAddRemoveFromWishlistMutation();
     const [addRemoveFromWishlistRes, setAddRemoveFromWishlistRes] = useState<MutationResTypes>();
 
@@ -211,7 +212,10 @@ const SingleProductTemplate = ({userLocation, productID, userWishlist, category,
                                                     <span className="info_heading">TransactionID</span><span className="info_value">{transactionId?.split("").splice(10,22).join("")}</span>
                                                 </div>
                                                 <div className="heading_values">
-                                                    <span className="info_heading">Status</span><span className="info_value">{status}</span>
+                                                    <span className="info_heading">Payment Status</span><span className="info_value">{paymentStatus}</span>
+                                                </div>
+                                                <div className="heading_values">
+                                                    <span className="info_heading">Order Status</span><span className="info_value">{orderStatus}</span>
                                                 </div>
                                                 <div className="heading_values">
                                                     <span className="info_heading">Shipping Type</span><span className="info_value">{shippingType}</span>
