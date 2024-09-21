@@ -8,32 +8,50 @@ import Spinner from "../components/Spinner";
 import SingleProductTemplate from "../components/SingleProductTemplate";
 import { UserLocationTypes } from "./Login.Page";
 
-export interface OrderResponseType {
+export interface SingleOrderTypes {
+    paymentInfo?: {
+        transactionId:string;
+        paymentStatus:string;
+        shippingType:string;
+        message:string;
+    },
+    _id:string;
+    userID:string;
+    orderItems:{
+            productID?: {
+                _id:string;
+                name?:string;
+                price?:number;
+                images?:string[];
+                category?:string;
+            },
+            quantity:number;
+            _id:string;
+    }[];
+    orderStatus:"pending"|"confirmed"|"processing"|"shipped"|"dispatched"|"delivered"|"cancelled"|"failed"|"returned"|"refunded";
+    totalPrice:number;
+    createdAt:Date;
+}
+
+
+export interface AllOrdersResponseType {
 	success: boolean;
 	message:{
-        paymentInfo?: {
-            transactionId:string;
-            paymentStatus:string;
-            shippingType:string;
-            message:string;
-        },
-        _id:string;
-        userID:string;
-        orderItems:{
-                productID?: {
-                    _id:string;
-                    name?:string;
-                    price?:number;
-                    images?:string[];
-                    category?:string;
-                },
-                quantity:number;
-                _id:string;
-        }[];
-        orderStatus:"pending"|"confirmed"|"processing"|"shipped"|"dispatched"|"delivered"|"cancelled"|"failed"|"returned"|"refunded";
-        totalPrice:number;
-        createdAt:Date;
-	}[];
+        allPendingOrders:SingleOrderTypes[],
+        allConfirmedOrders:SingleOrderTypes[],
+        allProcessingOrders:SingleOrderTypes[],
+        allDispatchedOrders:SingleOrderTypes[],
+        allShippedOrders:SingleOrderTypes[],
+        allDeliveredOrders:SingleOrderTypes[],
+        allCancelledOrders:SingleOrderTypes[],
+        allFailedOrders:SingleOrderTypes[],
+        allReturnedOrders:SingleOrderTypes[],
+        allRefundedOrders:SingleOrderTypes[]
+    };
+}
+export interface MyOrderResponseType {
+	success: boolean;
+	message:SingleOrderTypes[];
 }
 export interface SingleOrderInfoTypes{
     productID?:string;
@@ -68,7 +86,7 @@ const productTableHeadings = [
 const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const myOrders:{
         isLoading:boolean;
-        data?:OrderResponseType;
+        data?:MyOrderResponseType;
         error?:FetchBaseQueryError | SerializedError;
     } = useMyOrdersQuery("");
     const [list, setList] = useState<{ [key: string]:UpdateProductBodyType;}>({});

@@ -1,7 +1,7 @@
 import "../../styles/admin/order_charts.scss";
 import { useEffect, useRef, useState } from "react";
 import { useAllOrdersQuery } from "../../redux/api/api";
-import { OrderResponseType } from "../MyOrders";
+import { AllOrdersResponseType } from "../MyOrders";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { SerializedError } from "@reduxjs/toolkit";
 
@@ -64,14 +64,65 @@ const aggregateData = (data:OrderTypes[]) => {
 
 
 const OrderChart = () => {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    const [tooltip, setTooltip] = useState<{ x?:number; y?: number; width?: number; height?: number; category?:string; price?:number; count?:number;}|null>(null);
     const {data}:{
         isLoading:boolean;
-        data?:OrderResponseType;
+        data?:AllOrdersResponseType;
         error?:FetchBaseQueryError | SerializedError;} = useAllOrdersQuery("");
 
-    
+      return(
+        <div className="order_chart_bg">
+            {/*<pre>{JSON.stringify(arrayOfOrdersCategory, null, `\t`)}</pre>*/}
+            {/*<pre>{JSON.stringify(data?.message.allFailedOrders, null, `\t`)}</pre>*/}
+            {
+                data?.message.allPendingOrders.length !== 0&&
+                    <BarChart heading="Pending Orders" data={data?.message.allPendingOrders as OrderTypes[]} />
+            }
+            {
+                data?.message.allFailedOrders.length !== 0&&
+                    <BarChart heading="Confirmed Orders" data={data?.message.allFailedOrders as OrderTypes[]} />
+            }
+            {
+            data?.message.allProcessingOrders.length !== 0&&
+                <BarChart heading="Processing Orders" data={data?.message.allProcessingOrders as OrderTypes[]} />
+            }
+            {
+            data?.message.allDispatchedOrders.length !== 0&&
+                <BarChart heading="Dispatched Orders" data={data?.message.allDispatchedOrders as OrderTypes[]} />
+            }
+            {
+            data?.message.allShippedOrders.length !== 0&&
+                <BarChart heading="Shipped Orders" data={data?.message.allShippedOrders as OrderTypes[]} />
+            }
+            {
+            data?.message.allDeliveredOrders.length !== 0&&
+                <BarChart heading="Delivered Orders" data={data?.message.allDeliveredOrders as OrderTypes[]} />
+            }
+            {
+            data?.message.allCancelledOrders.length !== 0&&
+                <BarChart heading="Cancelled Orders" data={data?.message.allCancelledOrders as OrderTypes[]} />
+            }
+            {
+            data?.message.allConfirmedOrders.length !== 0&&
+                <BarChart heading="Failed Orders" data={data?.message.allConfirmedOrders as OrderTypes[]} />
+            }
+            {
+            data?.message.allReturnedOrders.length !== 0&&
+                <BarChart heading="Returned Orders" data={data?.message.allReturnedOrders as OrderTypes[]} />
+            }
+            {
+            data?.message.allRefundedOrders.length !== 0&&
+                <BarChart heading="Refunded Orders" data={data?.message.allRefundedOrders as OrderTypes[]} />
+            }
+
+        </div>
+    )
+
+};
+
+const BarChart = ({heading, data}:{heading:string; data:OrderTypes[];}) => {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const [tooltip, setTooltip] = useState<{ x?:number; y?: number; width?: number; height?: number; category?:string; price?:number; count?:number;}|null>(null);
+
     useEffect(() => {
         const canvas = canvasRef.current;
         if (canvas) {
@@ -81,17 +132,17 @@ const OrderChart = () => {
             if (ctx) {
                 
                 // Aggregate data by date and category
-                const aggregatedData = aggregateData(data?.message as OrderTypes[]);
+                const aggregatedData = aggregateData(data as OrderTypes[]);
                 
                 //console.log({aggregatedData});
                 
                 // Extract unique dates and categories
                 const dates = Object.keys(aggregatedData);
 
-                console.log({aggregatedData});
+                //console.log({aggregatedData});
                 //console.log({dates});
                 
-                const categories = [...new Set(data?.message.flatMap(item => item.orderItems.map((order) => order.productID?.category)))];
+                const categories = [...new Set(data?.flatMap(item => item.orderItems.map((order) => order.productID?.category)))];
             
                 // Canvas setup
                 const canvasWidth = 500;
@@ -198,35 +249,31 @@ const OrderChart = () => {
             }
         
         }
-      }, [data]);
+    }, [data]);
 
-      return(
-        <div className="order_chart_bg">
-            <div className="heading" style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>Orders Chart</div>
-            {/*<pre>{JSON.stringify(arrayOfOrdersCategory, null, `\t`)}</pre>*/}
-            {/*<pre>{JSON.stringify(data?.message, null, `\t`)}</pre>*/}
-            <div className="scrollable_part">
-                <canvas className="orders_revenue_canvas" ref={canvasRef}></canvas>
-                {tooltip && (
-                    <div style={{
-                    position: 'absolute',
-                    left: tooltip.x?tooltip.x+10:0,
-                    top: tooltip.y?tooltip.y+40:0,
-                    background: '#fff',
-                    border: '1px solid #ccc',
-                    padding: '5px',
-                    borderRadius: '3px',
-                    pointerEvents: 'none',
-                    transition:"1s"
-                    }}>
+    return(
+        <div className="scrollable_part">
+            <div className="heading" style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>{heading}</div>
+            <canvas className="orders_revenue_canvas" ref={canvasRef}></canvas>
+            {tooltip && (
+                <div style={{
+                position: 'absolute',
+                left: tooltip.x?tooltip.x+10:0,
+                top: tooltip.y?tooltip.y+40:0,
+                background: '#fff',
+                border: '1px solid #ccc',
+                padding: '5px',
+                borderRadius: '3px',
+                pointerEvents: 'none',
+                transition:"1s"
+                }}>
                     <strong>{tooltip.category}</strong>: ₹{tooltip.price}<br />
                     <strong>Count</strong>: {tooltip.count}
-                    </div>
-                )}
-            </div>
+                </div>
+            )}
         </div>
     )
+}
 
-};
 
 export default OrderChart;
