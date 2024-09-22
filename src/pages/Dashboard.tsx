@@ -10,6 +10,7 @@ const Dashboard = () => {
             <Link to="/admin/product/update">Update Products Detailes</Link><hr></hr>
             <Link to="/admin/coupon">Create Coupon</Link><hr></hr>
             <Link to="/admin/chart/orders">All Orders Chart</Link><hr></hr>
+            <Link to="/admin/order/all">All Orders</Link><hr></hr>
         </div>
     )
 };

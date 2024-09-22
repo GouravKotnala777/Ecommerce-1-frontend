@@ -51,10 +51,10 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                box-shadow: $shadow;
                 margin: 10px 0;
                 border-radius: 8px;
                 padding: 0 10px;
+                background: white;
                 &:hover{
                     background: linear-gradient(90deg, $secondaryHover, $primaryHover);
                 }
@@ -90,7 +90,7 @@
                     border: 1px solid $primaryLow;
                     width: 37px;
                     border-radius: 8px;
-                    background: rgba(255, 75, 105, 0.1);
+                    background: linear-gradient(135deg, white, rgba(255, 75, 105, 0.4));
                     cursor: pointer;
                     &:hover{
                         background: $primaryLow;

@@ -80,7 +80,7 @@ const productTableHeadings = [
     {th:"name", isEditable:false},
     {th:"price", isEditable:false},
     {th:"transactionId", isEditable:false},
-    {th:"status", isEditable:false}
+    {th:"orderStatus", isEditable:false}
 ];
 
 const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
@@ -98,6 +98,8 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const showOrderInfo = (e:MouseEvent<HTMLButtonElement>) => {
         setOrderNumber(Number(e.currentTarget.value));
         setIsOrderInfoDialogOpen(true);
+        console.log({transformedData});
+        
     }
     
 
@@ -109,7 +111,8 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
                     _id: item2?.productID?._id,
                     name: item2?.productID?.name,
                     price: item2?.productID?.price,
-                    images: (item2?.productID?.images as string[])[0],
+                    images: (item2?.productID?.images as string[]),
+                    orderStatus:item.orderStatus,
                     createdAt: item.createdAt,
                     ...vv,
                 };
@@ -146,8 +149,9 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
                                     setList={setList}
                                     thead={productTableHeadings}
                                     hideEditBtn={true}
+                                    //hideImg={false}
 
-                                    DialogElement={<SingleOrderInfo userLocation={userLocation} parent="orders" orderID={transformedData?.[orderNumber]._id} name={transformedData?.[orderNumber].name as string} price={Number(transformedData?.[orderNumber].price)} quantity={1} rating={Number(transformedData?.[orderNumber].price)} description="aaaaaa" photo={""} transactionId={transformedData?.[orderNumber].transactionId as string} shippingType={transformedData?.[orderNumber].shippingType as string} paymentStatus={transformedData?.[orderNumber].paymentStatus as string} orderStatus={transformedData?.[orderNumber].orderStatus as string} message={transformedData?.[orderNumber].message as string} createdAt={transformedData?.[orderNumber]?.createdAt?.toString()} />}
+                                    DialogElement={<SingleOrderInfo userLocation={userLocation} parent="orders" orderID={transformedData?.[orderNumber]?._id} name={transformedData?.[orderNumber]?.name as string} price={Number(transformedData?.[orderNumber]?.price)} quantity={1} rating={Number(transformedData?.[orderNumber]?.rating)} description="aaaaaa" photo={""} transactionId={transformedData?.[orderNumber]?.transactionId as string} shippingType={transformedData?.[orderNumber]?.shippingType as string} paymentStatus={transformedData?.[orderNumber]?.paymentStatus as string} orderStatus={transformedData?.[orderNumber]?.orderStatus as string} message={transformedData?.[orderNumber]?.message as string} createdAt={transformedData?.[orderNumber]?.createdAt?.toString()} />}
                                     dialogShowInfo={(e:MouseEvent<HTMLButtonElement>) => showOrderInfo(e)}
                                     isOrderInfoDialogOpen={isOrderInfoDialogOpen as boolean}
                                     setIsOrderInfoDialogOpen={setIsOrderInfoDialogOpen as Dispatch<SetStateAction<boolean>>}

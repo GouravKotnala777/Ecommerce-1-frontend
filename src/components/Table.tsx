@@ -1,14 +1,15 @@
 import "../styles/components/table.scss";
 import { RiStockLine } from "react-icons/ri";
 import photo from "/vite.svg";
-import { ChangeEvent, Dispatch, MouseEvent, ReactElement, SetStateAction, useState } from "react";
-import { useUpdateProductMutation } from "../redux/api/api";
-import { MutationResTypes } from "../assets/demoData";
-import HandleMutationRes from "./HandleMutationRes";
+import { ChangeEvent, Dispatch, MouseEvent, ReactElement, SetStateAction, useEffect } from "react";
+//import { useUpdateProductMutation } from "../redux/api/api";
+//import { MutationResTypes } from "../assets/demoData";
+//import HandleMutationRes from "./HandleMutationRes";
 import { BsInfoSquare } from "react-icons/bs";
 import DialogWrapper from "./DialogWrapper";
 //import SingleProductTemplate from "./SingleProductTemplate";
 import { UserLocationTypes } from "../pages/Login.Page";
+import { MutationResTypes } from "../assets/demoData";
 //import { SingleOrderInfoTypes } from "../pages/MyOrders";
 //import { SingleOrderInfo } from "../pages/MyOrders";
 //import { FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta, MutationDefinition } from "@reduxjs/toolkit/query";
@@ -46,6 +47,7 @@ interface TablePropTypes<T1>{
             success?: boolean;
             errorDetails?: string;
             timestamp?: Date;
+            orderStatus?:"pending"|"confirmed"|"processing"|"shipped"|"dispatched"|"delivered"|"cancelled"|"failed"|"returned"|"refunded";
         };
     };
     setList:Dispatch<React.SetStateAction<{
@@ -76,6 +78,8 @@ interface TablePropTypes<T1>{
             success?: boolean;
             errorDetails?: string;
             timestamp?: Date;
+
+            orderStatus?:"pending"|"confirmed"|"processing"|"shipped"|"dispatched"|"delivered"|"cancelled"|"failed"|"returned"|"refunded";
         };
     }>>,
     hideEditBtn?:boolean;
@@ -85,6 +89,9 @@ interface TablePropTypes<T1>{
     dialogShowInfo?:(e:MouseEvent<HTMLButtonElement>) => void;
     isOrderInfoDialogOpen?:boolean;
     setIsOrderInfoDialogOpen?:Dispatch<SetStateAction<boolean>>
+
+    onEditClickHandler?:(e:MouseEvent<HTMLButtonElement>) => Promise<void>;
+    outStockRes?:MutationResTypes | undefined
 }
 //interface SingleOrderInfoTypes{
 //    productID?:string;
@@ -107,41 +114,44 @@ interface TablePropTypes<T1>{
 
 
 
-const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, data, list, setList, hideEditBtn, hideImg,                          DialogElement, dialogShowInfo, isOrderInfoDialogOpen, setIsOrderInfoDialogOpen}:TablePropTypes<T1>) => {
-    const [updateProduct] = useUpdateProductMutation();
-    const [outStockRes, setOutStockRes] = useState<MutationResTypes>();
+const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, data, list, setList, hideEditBtn, hideImg,                          DialogElement, dialogShowInfo, isOrderInfoDialogOpen, setIsOrderInfoDialogOpen,  onEditClickHandler}:TablePropTypes<T1>) => {
+    //const [updateProduct] = useUpdateProductMutation();
+    //const [outStockRes, setOutStockRes] = useState<MutationResTypes>();
     //const [isOrderInfoDialogOpen, setIsOrderInfoDialogOpen] = useState<boolean>(false);
     //const [orderNumber, setOrderNumber] = useState<number>(0);
 
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement>, productID:string) => {
-        setList({...list, [productID]:{...list[productID], [e.target.name.toLowerCase()]:e.target.value}})
+        setList({...list, [productID]:{...list[productID], [e.target.name]:e.target.value}})
     };
 
-    const onClickHandler = async(productID:string) => {
-        try {            
-            if (list && list[productID]) {
-                console.log({[productID]:list[productID]});
-                console.log(list);
-                const res = await updateProduct({productID, name:list[productID].name, price:list[productID].price, rating:list[productID].rating, stock:list[productID].stock, total_servings:list[productID].total_servings, diet_type:list[productID].diet_type, flavour:list[productID].flavour, age_range:list[productID].age_range, about:list[productID].about, ingredient:list[productID].ingredient});
-                console.log("::::::::::::::::::");
-                console.log(res);
-                setOutStockRes(res);
-                console.log("::::::::::::::::::");
-            }
-            else{
-                console.log("list me productID nahi hai");
-            }
+    //const onClickHandler = async(productID:string) => {
+    //    try {            
+    //        if (list && list[productID]) {
+    //            console.log({[productID]:list[productID]});
+    //            console.log(list);
+    //            const res = await updateProduct({productID, name:list[productID].name, price:list[productID].price, rating:list[productID].rating, stock:list[productID].stock, total_servings:list[productID].total_servings, diet_type:list[productID].diet_type, flavour:list[productID].flavour, age_range:list[productID].age_range, about:list[productID].about, ingredient:list[productID].ingredient});
+    //            console.log("::::::::::::::::::");
+    //            console.log(res);
+    //            setOutStockRes(res);
+    //            console.log("::::::::::::::::::");
+    //        }
+    //        else{
+    //            console.log("list me productID nahi hai");
+    //        }
 
-        } catch (error) {
-            console.log("::::::::::::::::::");
-            console.log(error);            
-            console.log("::::::::::::::::::");
-        }
-    };
-    //const showOrderInfo = (e:MouseEvent<HTMLButtonElement>) => {
-    //    setOrderNumber(Number(e.currentTarget.value));
-    //    setIsOrderInfoDialogOpen(true);
-    //}
+    //    } catch (error) {
+    //        console.log("::::::::::::::::::");
+    //        console.log(error);            
+    //        console.log("::::::::::::::::::");
+    //    }
+    //};
+
+    useEffect(() => {
+        console.log("PPPPPPPPPPPPPPPPPPPP");
+        console.log(data);
+        console.log("PPPPPPPPPPPPPPPPPPPP");
+        
+    }, []);
 
     return(
         <div className="table_bg">
@@ -150,7 +160,7 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
                 DialogElement &&
                     <DialogWrapper Element={DialogElement as ReactElement} toggler={isOrderInfoDialogOpen as boolean} setToggler={setIsOrderInfoDialogOpen as Dispatch<SetStateAction<boolean>>} />
             }
-            <HandleMutationRes res={outStockRes} />
+            {/*<HandleMutationRes res={outStockRes} />*/}
             <div className="table">
                 {/*<pre>{JSON.stringify(data, null, `\t`)}</pre>*/}
                 <div className="thead">
@@ -176,8 +186,12 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
                 <div className="tbody">
                 {
                     data&&data?.map((product, index) => (
-                        <div className="tr" key={product._id+index}>
-                            {/*<pre>{JSON.stringify(product, null, `\t`)}</pre>*/}
+                        <div className="tr" key={product._id+index} style={{
+                            background:product?.["orderStatus"] === "failed" ? "#ff000020" : "",
+                            color:product?.["orderStatus"] === "failed" ? "red" : "black",
+                            fontWeight:product?.["orderStatus"] === "failed" ? "500" : "400",
+                            boxShadow:product?.["orderStatus"] === "failed" ? "" : "1px 1px 8px 1px #ff4b6941"
+                        }}>
                             {
                                 product?.images&&product.images[0] &&
                                     <div className="td photo_cell"><img src={product.images[0]} alt={photo} /></div>
@@ -186,7 +200,7 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
                             {
                                 thead.map((item) => (
                                     item.isEditable ? 
-                                    <div className="td" key={item.th}><input type="text" name={item.th} placeholder={product[item.th.toString().toLowerCase()] as string} onChange={(e) => onChangeHandler(e, product._id)} /></div>
+                                    <div className="td" key={item.th}><input type="text" name={item.th} placeholder={product[item.th.toString()] as string} onChange={(e) => onChangeHandler(e, product._id)} /></div>
                                     :
                                     item.th === "userID" ?
                                         <div className="td" key={item.th}>{product[item.th]?.slice(13, 24)}</div>
@@ -195,8 +209,8 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
                                 ))
                             }
                             {
-                                !hideEditBtn &&
-                                    <button className="td update_btn" onClick={() => onClickHandler(product._id)}><RiStockLine /></button>
+                                !hideEditBtn && onEditClickHandler &&
+                                    <button className="td update_btn" value={product._id} onClick={(e) => onEditClickHandler(e)}><RiStockLine /></button>
                             }
                             {
                                 hideEditBtn &&

@@ -13,7 +13,7 @@ export interface UpdateProductBodyType {
 
     total_servings?:number; diet_type?:string; flavour?:string; age_range?:string; about?:string[]; ingredient?:string;
 
-    images?:string;
+    images?:string[];
     rating?:number;
     sku?:string;
     discount?:number;
@@ -28,7 +28,7 @@ export interface UpdateProductBodyType {
 
     transactionId?:string;
     paymentStatus?:string;
-    orderStatus?:string;
+    orderStatus?:"pending"|"confirmed"|"processing"|"shipped"|"dispatched"|"delivered"|"cancelled"|"failed"|"returned"|"refunded";
     message?:string;
 
     shippingType?:string;
@@ -389,6 +389,14 @@ const api = createApi({
                 credentials:"include"
             })
         }),
+        updateOrder:builder.mutation({
+            query:({orderID, orderStatus}:{orderID:string; orderStatus:"pending"|"confirmed"|"processing"|"shipped"|"dispatched"|"delivered"|"cancelled"|"failed"|"returned"|"refunded";}) => ({
+                url:"/api/v1/order/all",
+                method:"PUT",
+                credentials:"include",
+                body:{orderID, orderStatus}
+            })
+        }),
         createChat:builder.mutation({
             query:({adminID, chats, isHelpful, action, userLocation}:ChatTypes & {action:string; userLocation:UserLocationTypes;}) => ({
                 url:"/api/v1/chat/new",
@@ -416,6 +424,6 @@ export const {useRegisterMutation, useLoginMutation, useVerifyEmailMutation, use
     useOutStockProductsQuery, useIncompleteProductsQuery, useUpdateProductMutation,
     useCreateCouponsMutation, useGetAllCouponsQuery, useGetSingleCouponMutation,
     useCreatePaymentMutation,
-    useNewOrderMutation, useMyOrdersQuery, useAllOrdersQuery,
+    useNewOrderMutation, useMyOrdersQuery, useAllOrdersQuery, useUpdateOrderMutation,
     useCreateChatMutation, useUpdateChatsHelpfulnessMutation
 } = api;
