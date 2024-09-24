@@ -1,7 +1,11 @@
 import { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
-import { useGetAllUsersActivitiesQuery } from "../redux/api/api";
+import { useGetAllUsersActivitiesMutation } from "../redux/api/api";
 import Table from "../components/Table";
 import { UserLocationTypes } from "./Login.Page";
+import Spinner from "../components/Spinner";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import { SerializedError } from "@reduxjs/toolkit";
+import ItemNotFound from "../components/ItemNotFound";
 
 export interface UserActivitiesTypes {
     userID: string;
@@ -42,63 +46,124 @@ const activitiesTableHeadings = [
 ];
 
 const UserActivities = () => {
-    const allActivities:{data?:{success:boolean; message:(UserActivitiesTypes&{_id:string; [key:string]:string})[]}} = useGetAllUsersActivitiesQuery("");
+    const [skip, setSkip] = useState<number>(1);
+    const [allActivities] = useGetAllUsersActivitiesMutation();
     //const outStockData:{data?:{success:boolean; message:(ProductTypes&{_id:string; [key:string]:string})[]}} = useOutStockProductsQuery("");
     const [list, setList] = useState<{ [key: string]:UpdateActivityBodyType;
     }>({});
     const [orderNumber, setOrderNumber] = useState<number>(0);
     const [isRowInfoDialogOpen, setIsRowInfoDialogOpen] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isError, setIsError] = useState<unknown>({});
+    const [allActivitiesJoint, setAllActivitiesJoint] = useState<UserActivitiesTypes[]>([]);
+    const [activityCount, setActivityCount] = useState<number>(0);
 
     const showRowInfo = (e:MouseEvent<HTMLButtonElement>) => {
         setOrderNumber(Number(e.currentTarget.value));
         setIsRowInfoDialogOpen(true);
     }
 
+    const fetchActivities = async() => {
+        setIsLoading(true);
+        try {
+            const res:{
+                data?:{success:boolean; message:{activity:(UserActivitiesTypes&{_id:string; [key:string]:string})[]; activityCount:number;}};
+                error?:FetchBaseQueryError | SerializedError;
+            } = await allActivities({skip});
+
+            console.log("-------- fetchActivities UserActivities");
+            console.log(res);
+
+            if (res.data?.message.activity.length !== 0) {
+                setAllActivitiesJoint((prev) => [...prev, ...res.data?.message.activity as UserActivitiesTypes[]]);
+                setActivityCount(res.data?.message.activityCount as number);
+            }
+            if (res.error) {
+                setIsError(res.error);
+            }
+            console.log("-------- fetchActivities UserActivities");
+            setIsLoading(false);
+        } catch (error) {
+            console.log("-------- fetchActivities UserActivities error");
+            console.log(error);
+            console.log("-------- fetchActivities UserActivities error");
+            setIsLoading(false);
+        }
+    };
+
 
 
 
     useEffect(() => {
-        
-    }, []);
+        fetchActivities();
+    }, [skip]);
 
     return(
         <div className="user_activities bg">
             {/*<pre>{JSON.stringify(allActivities.data?.message, null, `\t`)}</pre>*/}
-            <p style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>User Activities</p>
-            <Table<(UserActivitiesTypes & {_id: string; [key: string]: string;})>
-                thead={activitiesTableHeadings}
-                data={allActivities.data?.message}
-                list={list} setList={setList}
-                hideEditBtn={true}
-                hideImg={true}
+            <div className="heading" style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>My Activities</div>
 
 
-                DialogElement={<SingleActivityInfo 
-                                    userID={allActivities.data?.message[orderNumber].userID as string}
-                                    action={allActivities.data?.message[orderNumber].action as string}
-                                    device={allActivities.data?.message[orderNumber].device as string}
-                                    ipAddress={allActivities.data?.message[orderNumber].ipAddress as string}
-                                    errorDetails={allActivities.data?.message[orderNumber].errorDetails as string}
-                                    platform={allActivities.data?.message[orderNumber].platform as string}
-                                    referrer={allActivities.data?.message[orderNumber].referrer as string}
-                                    status={allActivities.data?.message[orderNumber].status as "pending"|"succeeded"|"failed"}
-                                    message={allActivities.data?.message[orderNumber].message as string}
-                                    timestamp={allActivities.data?.message[orderNumber].timestamp as Date}
-                                    userAgent={allActivities.data?.message[orderNumber].userAgent as string}
-                                    userLocation={{city:allActivities.data?.message[orderNumber].userLocation.city as string,
-                                        country:allActivities.data?.message[orderNumber].userLocation.country as string,
-                                        ip:allActivities.data?.message[orderNumber].userLocation.ip as string,
-                                        loc:allActivities.data?.message[orderNumber].userLocation.loc as string,
-                                        org:allActivities.data?.message[orderNumber].userLocation.org as string,
-                                        postal:allActivities.data?.message[orderNumber].userLocation.postal as string,
-                                        readme:allActivities.data?.message[orderNumber].userLocation.readme as string,
-                                        region:allActivities.data?.message[orderNumber].userLocation.region as string,
-                                        timezone:allActivities.data?.message[orderNumber].userLocation.timezone as string
-                                    }} />}
-                dialogShowInfo={(e:MouseEvent<HTMLButtonElement>) => showRowInfo(e)}
-                isOrderInfoDialogOpen={isRowInfoDialogOpen as boolean}
-                setIsOrderInfoDialogOpen={setIsRowInfoDialogOpen as Dispatch<SetStateAction<boolean>>}
-            />
+            {
+                    allActivitiesJoint === undefined ?
+                        <Spinner type={1} heading="Loading..." width={100} thickness={6} />
+                        :
+                        isError &&
+                            typeof isError === "object" &&
+                            "data" in isError &&
+                            isError.data &&
+                            typeof isError.data === "object" &&
+                            "message" in isError.data ?
+                                <ItemNotFound heading={isError.data.message as string} statusCode={204} />
+                                :
+                            //    <pre>{JSON.stringify(isError, null, `\t`)}</pre>
+                            //:
+                                allActivitiesJoint.length === 0 ?
+                                    <ItemNotFound heading={"You have not ordered anything yet!"} statusCode={204} />
+                                    :
+                                    <>
+                                        <Table<(UserActivitiesTypes & {_id: string; [key: string]: string;})>
+                                            thead={activitiesTableHeadings}
+                                            data={allActivitiesJoint as (UserActivitiesTypes&{_id:string; [key:string]:string})[]}
+                                            list={list} setList={setList}
+                                            hideEditBtn={true}
+                                            hideImg={true}
+                                            DialogElement={<SingleActivityInfo 
+                                                                userID={allActivitiesJoint[orderNumber]?.userID as string}
+                                                                action={allActivitiesJoint[orderNumber]?.action as string}
+                                                                device={allActivitiesJoint[orderNumber]?.device as string}
+                                                                ipAddress={allActivitiesJoint[orderNumber]?.ipAddress as string}
+                                                                errorDetails={allActivitiesJoint[orderNumber]?.errorDetails as string}
+                                                                platform={allActivitiesJoint[orderNumber]?.platform as string}
+                                                                referrer={allActivitiesJoint[orderNumber]?.referrer as string}
+                                                                status={allActivitiesJoint[orderNumber]?.status as "pending"|"succeeded"|"failed"}
+                                                                message={allActivitiesJoint[orderNumber]?.message as string}
+                                                                timestamp={allActivitiesJoint[orderNumber]?.timestamp as Date}
+                                                                userAgent={allActivitiesJoint[orderNumber]?.userAgent as string}
+                                                                userLocation={{city:allActivitiesJoint[orderNumber]?.userLocation.city as string,
+                                                                    country:allActivitiesJoint[orderNumber]?.userLocation.country as string,
+                                                                    ip:allActivitiesJoint[orderNumber]?.userLocation.ip as string,
+                                                                    loc:allActivitiesJoint[orderNumber]?.userLocation.loc as string,
+                                                                    org:allActivitiesJoint[orderNumber]?.userLocation.org as string,
+                                                                    postal:allActivitiesJoint[orderNumber]?.userLocation.postal as string,
+                                                                    readme:allActivitiesJoint[orderNumber]?.userLocation.readme as string,
+                                                                    region:allActivitiesJoint[orderNumber]?.userLocation.region as string,
+                                                                    timezone:allActivitiesJoint[orderNumber]?.userLocation.timezone as string
+                                                                }} />}
+                                            dialogShowInfo={(e:MouseEvent<HTMLButtonElement>) => showRowInfo(e)}
+                                            isOrderInfoDialogOpen={isRowInfoDialogOpen as boolean}
+                                            setIsOrderInfoDialogOpen={setIsRowInfoDialogOpen as Dispatch<SetStateAction<boolean>>}
+                                        />
+                                        {
+                                            isLoading ?
+                                            <Spinner type={1} heading="Loading..." width={30} thickness={1} />
+                                            :
+                                            activityCount > skip+1 &&
+                                                <button className="show_more_btn" onClick={() => setSkip(skip+1)}>Next : {skip} / {activityCount}</button>
+                                        }
+                                    </>
+            }
+
         </div>
     )
 };

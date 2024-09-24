@@ -154,11 +154,12 @@ const api = createApi({
                 body:{action, userLocation}
             })
         }),
-        getAllUsersActivities:builder.query({
-            query:() => ({
+        getAllUsersActivities:builder.mutation({
+            query:({skip}:{skip:number}) => ({
                 url:"/api/v1/user/activities",
-                method:"GET",
-                credentials:"include"
+                method:"POST",
+                credentials:"include",
+                body:{skip}
             })
         }),
         addProduct:builder.mutation({
@@ -418,7 +419,7 @@ const api = createApi({
 })
 
 export default api;
-export const {useRegisterMutation, useLoginMutation, useVerifyEmailMutation, useMyProfileQuery, useForgetPasswordMutation, useUpdateMeMutation, useRemoveAddressMutation, useLogoutMutation, useGetAllUsersActivitiesQuery,
+export const {useRegisterMutation, useLoginMutation, useVerifyEmailMutation, useMyProfileQuery, useForgetPasswordMutation, useUpdateMeMutation, useRemoveAddressMutation, useLogoutMutation, useGetAllUsersActivitiesMutation,
     useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useGetProductsOfSameQuery, useFindAllFieldsQuery, useSearchProductsMutation, useProductRecommendationMutation,
     useAddToCartMutation, useFetchMyCartQuery,  useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation, useUpdateVoteMutation,
     useMyWhishlistQuery, useAddRemoveFromWishlistMutation,
