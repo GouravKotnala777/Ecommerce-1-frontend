@@ -1,6 +1,6 @@
-import { Dispatch, MouseEvent, SetStateAction, useCallback, useEffect, useState } from "react";
+import { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
 import Table from "../components/Table";
-import { UpdateProductBodyType, useMyOrdersQuery } from "../redux/api/api";
+import { UpdateProductBodyType, useMyOrdersMutation } from "../redux/api/api";
 import ItemNotFound from "../components/ItemNotFound";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { SerializedError } from "@reduxjs/toolkit";
@@ -51,7 +51,7 @@ export interface AllOrdersResponseType {
 }
 export interface MyOrderResponseType {
 	success: boolean;
-	message:SingleOrderTypes[];
+	message:{orders:SingleOrderTypes[]; ordersCount:number;};
 }
 export interface SingleOrderInfoTypes{
     productID?:string;
@@ -84,82 +84,151 @@ const productTableHeadings = [
 ];
 
 const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
-    const myOrders:{
-        isLoading:boolean;
-        data?:MyOrderResponseType;
-        error?:FetchBaseQueryError | SerializedError;
-    } = useMyOrdersQuery("");
+    const [skip, setSkip] = useState<number>(1);
+    const [aaaaa] = useMyOrdersMutation();
     const [list, setList] = useState<{ [key: string]:UpdateProductBodyType;}>({});
     const [transformedData, setTransformedData] = useState<UpdateProductBodyType[]>([]);
     const [orderNumber, setOrderNumber] = useState<number>(0);
+    const [ordersCount, setOrdersCount] = useState<number>(0);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isOrderInfoDialogOpen, setIsOrderInfoDialogOpen] = useState<boolean>(false);
+    const [myOrdersData, setMyOrdersData] = useState<{
+            data?:MyOrderResponseType;
+            error?:FetchBaseQueryError | SerializedError;
+        }>();
 
 
     const showOrderInfo = (e:MouseEvent<HTMLButtonElement>) => {
         setOrderNumber(Number(e.currentTarget.value));
         setIsOrderInfoDialogOpen(true);
         console.log({transformedData});
-        
     }
-    
 
-    const dataTransformer = useCallback((): UpdateProductBodyType[] | undefined => {
-        return myOrders.data?.message.flatMap((item) => {
+    const dataTransformer = (myOrders:{
+        data?:MyOrderResponseType;
+        error?:FetchBaseQueryError | SerializedError;
+    }) => {
+        myOrders?.data?.message.orders.flatMap((item) => {
             const vv = item?.paymentInfo;
-            return item.orderItems.map((item2) => {
-                return {
-                    _id: item2?.productID?._id,
-                    name: item2?.productID?.name,
+            item.orderItems?.map((item2) => {
+
+                setTransformedData((prev) => [...prev, {
+                    _id: item2?.productID?._id as string,
+                    name: item2?.productID?.name as string,
                     price: item2?.productID?.price,
                     images: (item2?.productID?.images as string[]),
                     orderStatus:item.orderStatus,
                     createdAt: item.createdAt,
                     ...vv,
-                };
+                }]);
             });
         });
-    }, [myOrders.data]);
+    };
+
+    const fetchFirstTime = async() => {
+        setIsLoading(true);
+        try {
+            const myOrders:{
+                    data?:MyOrderResponseType;
+                    error?:FetchBaseQueryError | SerializedError;
+                } = await aaaaa({skip});
+
+            
+            console.log("--------- fetchFirstTime MyOrders");
+            console.log(myOrders.data?.message.orders);
+            console.log({ordersCount, skip});
+
+
+            setMyOrdersData(myOrders);            
+            
+            if (myOrders.data?.message.orders !== undefined) {
+                dataTransformer(myOrders);
+                setOrdersCount(myOrders.data.message.ordersCount);
+            }
+            //setJointData(myOrders.data.message.orders);
+            //dataTransformer(myOrders.data.message.orders);
+            console.log("--------- fetchFirstTime MyOrders");
+            setIsLoading(false);
+        } catch (error) {
+            console.log("--------- fetchFirstTime MyOrders");
+            console.log(error);
+            console.log("--------- fetchFirstTime MyOrders");
+            setIsLoading(false);
+        }
+    }
+    //const fetchAgain = async() => {
+    //    try {
+    //        const myOrders = await aaaaa({skip});
+
+            
+    //        console.log("--------- fetchAgain MyOrders");
+    //        console.log(myOrders);
+    //        setJointData(myOrders.data.message.orders);
+    //        setTransformedData(myOrders.data.message.orders);
+    //        console.log("--------- fetchAgain MyOrders");
+    //    } catch (error) {
+    //        console.log("--------- fetchAgain MyOrders");
+    //        console.log(error);
+    //        console.log("--------- fetchAgain MyOrders");
+    //    }
+    //}
+
+
+
+    //useEffect(() => {
+    //    dataTransformer();
+    //}, []);
 
     useEffect(() => {
-        setTransformedData(dataTransformer() as UpdateProductBodyType[])
-    }, [dataTransformer]);
+        if (skip !== undefined) {
+            fetchFirstTime();
+        }
+    }, [skip]);
 
     return(
         <div className="my_orders_bg">
-            {/*<pre>{JSON.stringify(transformedData, null, `\t`)}</pre>*/}
+            {/*<pre>{JSON.stringify(jointData, null, `\t`)}</pre>*/}
+            {/*<pre>{JSON.stringify(firstTime, null, `\t`)}</pre>*/}
             <div className="heading" style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>My Orders</div>
-
-            {
-                myOrders.isLoading ?
-                <Spinner type={1} heading="Loading..." width={100} thickness={6} />
-                    :
-                    myOrders.error &&
-                    "data" in myOrders.error &&
-                    myOrders.error.data &&
-                    typeof myOrders.error.data === "object" &&
-                    "message" in myOrders.error.data ?
-                        <ItemNotFound heading={myOrders.error?.data.message as string} statusCode={myOrders.error.status as number} />
+                {
+                    myOrdersData === undefined ?
+                        <Spinner type={1} heading="Loading..." width={100} thickness={6} />
                         :
-                        myOrders.data?.message ?
-                            myOrders.data?.message.length === 0 ?
+                        myOrdersData?.error ?
+                            myOrdersData.error &&
+                            "data" in myOrdersData.error &&
+                            myOrdersData.error.data &&
+                            typeof myOrdersData.error.data === "object" &&
+                            "message" in myOrdersData.error.data ?
+                                <ItemNotFound heading={myOrdersData.error.data.message as string} statusCode={204} />
+                                :
+                                <h1>Hello Guys</h1>
+                            :
+                            !myOrdersData.data?.success ?
                                 <ItemNotFound heading={"You have not ordered anything yet!"} statusCode={204} />
                                 :
-                                <Table data={transformedData as { [key: string]: string|string[]; _id: string; }[]}
-                                    list={list}
-                                    setList={setList}
-                                    thead={productTableHeadings}
-                                    hideEditBtn={true}
-                                    //hideImg={false}
+                                <>
+                                    <Table data={transformedData as { [key: string]: string|string[]; _id: string; }[]}
+                                        list={list}
+                                        setList={setList}
+                                        thead={productTableHeadings}
+                                        hideEditBtn={true}
+                                        //hideImg={false}
 
-                                    DialogElement={<SingleOrderInfo userLocation={userLocation} parent="orders" orderID={transformedData?.[orderNumber]?._id} name={transformedData?.[orderNumber]?.name as string} price={Number(transformedData?.[orderNumber]?.price)} quantity={1} rating={Number(transformedData?.[orderNumber]?.rating)} description="aaaaaa" photo={""} transactionId={transformedData?.[orderNumber]?.transactionId as string} shippingType={transformedData?.[orderNumber]?.shippingType as string} paymentStatus={transformedData?.[orderNumber]?.paymentStatus as string} orderStatus={transformedData?.[orderNumber]?.orderStatus as string} message={transformedData?.[orderNumber]?.message as string} createdAt={transformedData?.[orderNumber]?.createdAt?.toString()} />}
-                                    dialogShowInfo={(e:MouseEvent<HTMLButtonElement>) => showOrderInfo(e)}
-                                    isOrderInfoDialogOpen={isOrderInfoDialogOpen as boolean}
-                                    setIsOrderInfoDialogOpen={setIsOrderInfoDialogOpen as Dispatch<SetStateAction<boolean>>}
-                                />
-                            :
-                            <ItemNotFound heading={"No Internet Connection!"} statusCode={523} />
-
-            }
+                                        DialogElement={<SingleOrderInfo userLocation={userLocation} parent="orders" orderID={transformedData?.[orderNumber]?._id} name={transformedData?.[orderNumber]?.name as string} price={Number(transformedData?.[orderNumber]?.price)} quantity={1} rating={Number(transformedData?.[orderNumber]?.rating)} description="aaaaaa" photo={""} transactionId={transformedData?.[orderNumber]?.transactionId as string} shippingType={transformedData?.[orderNumber]?.shippingType as string} paymentStatus={transformedData?.[orderNumber]?.paymentStatus as string} orderStatus={transformedData?.[orderNumber]?.orderStatus as string} message={transformedData?.[orderNumber]?.message as string} createdAt={transformedData?.[orderNumber]?.createdAt?.toString()} />}
+                                        dialogShowInfo={(e:MouseEvent<HTMLButtonElement>) => showOrderInfo(e)}
+                                        isOrderInfoDialogOpen={isOrderInfoDialogOpen as boolean}
+                                        setIsOrderInfoDialogOpen={setIsOrderInfoDialogOpen as Dispatch<SetStateAction<boolean>>}
+                                    />
+                                    {
+                                        isLoading ?
+                                        <Spinner type={1} heading="Loading..." width={30} thickness={1} />
+                                        :
+                                        ordersCount > skip+1 &&
+                                            <button className="show_more_btn" onClick={() => setSkip(skip+1)}>Next : {skip} / {ordersCount}</button>
+                                    }
+                                </>
+                }
         </div>
     )
 };

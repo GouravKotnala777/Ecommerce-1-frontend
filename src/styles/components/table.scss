@@ -157,3 +157,17 @@
         }
     }
 }
+
+.show_more_btn{
+    margin:0px auto;
+    display:block;
+    background:"linear";
+    border: none;
+    background: linear-gradient(90deg, $primary, $secondary);
+    padding: 8px;
+    color: white;
+    border-radius: 4px;
+    &:hover{
+        background: linear-gradient(90deg, $primaryLow, $secondaryLow);
+    }
+}

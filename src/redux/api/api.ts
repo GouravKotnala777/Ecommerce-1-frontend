@@ -375,11 +375,12 @@ const api = createApi({
             }),
             invalidatesTags:["MyCartProducts"]
         }),
-        myOrders:builder.query({
-            query:() => ({
+        myOrders:builder.mutation({
+            query:({skip}:{skip:number}) => ({
                 url:"/api/v1/order/myOrders",
-                method:"GET",
-                credentials:"include"
+                method:"POST",
+                credentials:"include",
+                body:{skip}
             })
         }),
         allOrders:builder.query({
@@ -424,6 +425,6 @@ export const {useRegisterMutation, useLoginMutation, useVerifyEmailMutation, use
     useOutStockProductsQuery, useIncompleteProductsQuery, useUpdateProductMutation,
     useCreateCouponsMutation, useGetAllCouponsQuery, useGetSingleCouponMutation,
     useCreatePaymentMutation,
-    useNewOrderMutation, useMyOrdersQuery, useAllOrdersQuery, useUpdateOrderMutation,
+    useNewOrderMutation, useMyOrdersMutation, useAllOrdersQuery, useUpdateOrderMutation,
     useCreateChatMutation, useUpdateChatsHelpfulnessMutation
 } = api;
