@@ -66,10 +66,10 @@ $shadow:1px 1px 8px 1px #ff4b6941;
     font-size: 0.9rem;
     color: $color;
 }
-@mixin primaryBtn(){
+@mixin primaryBtn($margin:10px 5px){
     @include headingLg(white, 10px);
     background: $btnDefault;
-    margin: 10px 5px;
+    margin: $margin;
     border-radius: 8px;
     border: none;
     cursor: pointer;

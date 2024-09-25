@@ -2,7 +2,7 @@ import "../styles/components/payment.scss";
 import { CardElement, Elements, useElements, useStripe } from "@stripe/react-stripe-js";
 import { loadStripe, StripeCardElement } from "@stripe/stripe-js";
 import { FormEvent, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AddressBodyTypes } from "./Address.Page";
 import { useCreatePaymentMutation, useNewOrderMutation, useProductRecommendationMutation } from "../redux/api/api";
 import Spinner from "../components/Spinner";
@@ -21,6 +21,7 @@ const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPri
     const [paymentSuccess, setPaymentSuccess] = useState(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [newOrder] = useNewOrderMutation();
+    const navigate = useNavigate();
 
     const handleSubmit = async(e:FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -118,8 +119,20 @@ const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPri
             }, null, `\t`)}</pre>*/}
             <CardElement className="card_element" />
             <button type="submit" disabled={!stripe}>{isLoading ? <Spinner type={2} color="white" width={16} /> : `${totalPrice}₹ Pay`}</button>
-            {error && <div>{error}</div>}
-            {paymentSuccess && <div>Payment Successfull</div>}
+            {
+                error && 
+                <>
+                    <div>{error}</div>
+                    <button className="navigate_btn" onClick={() => navigate("/payment_failure", {state:"Payment Fail"})}>Go Home</button>
+                </>
+            }
+            {
+                paymentSuccess && 
+                    <>
+                        <div>Payment Successfull</div>
+                        <button className="navigate_btn" onClick={() => navigate("/")}>Go Home</button>
+                    </>
+            }
         </form>
     )
 };

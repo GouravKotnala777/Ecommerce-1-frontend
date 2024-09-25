@@ -30,13 +30,11 @@ form{
     button{
         //border: 2px solid red;
         width: 100%;
-        font-size: 0.9rem;
-        padding: 10px;
-        font-weight: bold;
-        color: white;
-        background: $btnDefault;
-        border: none;
-        margin-top: 30px;
-        border-radius: 4px;
+        @include primaryBtn(10px 0);
+    }
+    .navigate_btn{
+        //border: 2px solid red;
+        width: 100px;
+        background: linear-gradient(90deg, $primary, $secondary);
     }
 }
