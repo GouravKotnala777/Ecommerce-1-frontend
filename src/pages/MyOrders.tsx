@@ -85,7 +85,7 @@ const productTableHeadings = [
 
 const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const [skip, setSkip] = useState<number>(0);
-    const [aaaaa] = useMyOrdersMutation();
+    const [myOrdersMethod] = useMyOrdersMutation();
     const [list, setList] = useState<{ [key: string]:UpdateProductBodyType;}>({});
     const [transformedData, setTransformedData] = useState<UpdateProductBodyType[]>([]);
     const [orderNumber, setOrderNumber] = useState<number>(0);
@@ -131,7 +131,7 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
             const myOrders:{
                     data?:MyOrderResponseType;
                     error?:FetchBaseQueryError | SerializedError;
-                } = await aaaaa({skip});
+                } = await myOrdersMethod({skip});
 
             
             console.log("--------- fetchFirstTime MyOrders");
