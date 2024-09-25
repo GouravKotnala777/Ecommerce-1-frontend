@@ -28,6 +28,10 @@ const AllOrders = () => {
     const [updateOrder] = useUpdateOrderMutation();
 
 
+    //console.log(data?.message.allConfirmedOrders);
+    
+
+
     const onClickHandler = async(e:MouseEvent<HTMLButtonElement>) => {
         try {
             if (list && list[e?.currentTarget?.value as string]) {
@@ -59,7 +63,7 @@ const AllOrders = () => {
                     name: item2?.productID?.name,
                     orderStatus: item.orderStatus,
                     price: item2?.productID?.price,
-                    images: (item2?.productID?.images as string[]),
+                    images: item2?.productID?.images,
                     createdAt: item.createdAt,
                     ...vv,
                 };
@@ -68,7 +72,7 @@ const AllOrders = () => {
     }, [data, ordersChartType]);
 
     useEffect(() => {
-        setTransformedData(dataTransformer() as UpdateProductBodyType[])
+        setTransformedData(dataTransformer() as UpdateProductBodyType[]);
     }, [dataTransformer, ordersChartType]);
 
 

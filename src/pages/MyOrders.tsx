@@ -116,7 +116,7 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
                     _id: item2?.productID?._id as string,
                     name: item2?.productID?.name as string,
                     price: item2?.productID?.price,
-                    images: (item2?.productID?.images as string[]),
+                    images: item2?.productID?.images,
                     orderStatus:item.orderStatus,
                     createdAt: item.createdAt,
                     ...vv,
@@ -156,28 +156,6 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
             setIsLoading(false);
         }
     }
-    //const fetchAgain = async() => {
-    //    try {
-    //        const myOrders = await aaaaa({skip});
-
-            
-    //        console.log("--------- fetchAgain MyOrders");
-    //        console.log(myOrders);
-    //        setJointData(myOrders.data.message.orders);
-    //        setTransformedData(myOrders.data.message.orders);
-    //        console.log("--------- fetchAgain MyOrders");
-    //    } catch (error) {
-    //        console.log("--------- fetchAgain MyOrders");
-    //        console.log(error);
-    //        console.log("--------- fetchAgain MyOrders");
-    //    }
-    //}
-
-
-
-    //useEffect(() => {
-    //    dataTransformer();
-    //}, []);
 
     useEffect(() => {
         if (skip !== undefined) {
@@ -188,7 +166,7 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     return(
         <div className="my_orders_bg">
             {/*<pre>{JSON.stringify(jointData, null, `\t`)}</pre>*/}
-            {/*<pre>{JSON.stringify(firstTime, null, `\t`)}</pre>*/}
+            {/*<pre>{JSON.stringify(transformedData, null, `\t`)}</pre>*/}
             <div className="heading" style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>My Orders</div>
                 {
                     myOrdersData === undefined ?
@@ -215,7 +193,7 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
                                         hideEditBtn={true}
                                         //hideImg={false}
 
-                                        DialogElement={<SingleOrderInfo userLocation={userLocation} parent="orders" orderID={transformedData?.[orderNumber]?._id} name={transformedData?.[orderNumber]?.name as string} price={Number(transformedData?.[orderNumber]?.price)} quantity={1} rating={Number(transformedData?.[orderNumber]?.rating)} description="aaaaaa" photo={""} transactionId={transformedData?.[orderNumber]?.transactionId as string} shippingType={transformedData?.[orderNumber]?.shippingType as string} paymentStatus={transformedData?.[orderNumber]?.paymentStatus as string} orderStatus={transformedData?.[orderNumber]?.orderStatus as string} message={transformedData?.[orderNumber]?.message as string} createdAt={transformedData?.[orderNumber]?.createdAt?.toString()} />}
+                                        DialogElement={<SingleOrderInfo userLocation={userLocation} parent="orders" orderID={transformedData?.[orderNumber]?._id} name={transformedData?.[orderNumber]?.name as string} price={Number(transformedData?.[orderNumber]?.price)} quantity={1} rating={Number(transformedData?.[orderNumber]?.rating)} description="aaaaaa" photo={transformedData[orderNumber]?.images?.[0] as string} transactionId={transformedData?.[orderNumber]?.transactionId as string} shippingType={transformedData?.[orderNumber]?.shippingType as string} paymentStatus={transformedData?.[orderNumber]?.paymentStatus as string} orderStatus={transformedData?.[orderNumber]?.orderStatus as string} message={transformedData?.[orderNumber]?.message as string} createdAt={transformedData?.[orderNumber]?.createdAt?.toString()} />}
                                         dialogShowInfo={(e:MouseEvent<HTMLButtonElement>) => showOrderInfo(e)}
                                         isOrderInfoDialogOpen={isOrderInfoDialogOpen as boolean}
                                         setIsOrderInfoDialogOpen={setIsOrderInfoDialogOpen as Dispatch<SetStateAction<boolean>>}
