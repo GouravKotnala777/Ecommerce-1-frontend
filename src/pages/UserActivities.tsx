@@ -46,7 +46,7 @@ const activitiesTableHeadings = [
 ];
 
 const UserActivities = () => {
-    const [skip, setSkip] = useState<number>(1);
+    const [skip, setSkip] = useState<number>(0);
     const [allActivities] = useGetAllUsersActivitiesMutation();
     //const outStockData:{data?:{success:boolean; message:(ProductTypes&{_id:string; [key:string]:string})[]}} = useOutStockProductsQuery("");
     const [list, setList] = useState<{ [key: string]:UpdateActivityBodyType;

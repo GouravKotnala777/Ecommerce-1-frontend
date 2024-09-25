@@ -84,7 +84,7 @@ const productTableHeadings = [
 ];
 
 const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
-    const [skip, setSkip] = useState<number>(1);
+    const [skip, setSkip] = useState<number>(0);
     const [aaaaa] = useMyOrdersMutation();
     const [list, setList] = useState<{ [key: string]:UpdateProductBodyType;}>({});
     const [transformedData, setTransformedData] = useState<UpdateProductBodyType[]>([]);
