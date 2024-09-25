@@ -10,6 +10,8 @@ import DialogWrapper from "./DialogWrapper";
 //import SingleProductTemplate from "./SingleProductTemplate";
 import { UserLocationTypes } from "../pages/Login.Page";
 import { MutationResTypes } from "../assets/demoData";
+import ImageWithFallback from "./ImageWithFallback";
+import unknownProductImg from "../../public/unknownProduct.png";
 //import { SingleOrderInfoTypes } from "../pages/MyOrders";
 //import { SingleOrderInfo } from "../pages/MyOrders";
 //import { FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta, MutationDefinition } from "@reduxjs/toolkit/query";
@@ -93,26 +95,6 @@ interface TablePropTypes<T1>{
     onEditClickHandler?:(e:MouseEvent<HTMLButtonElement>) => Promise<void>;
     outStockRes?:MutationResTypes | undefined
 }
-//interface SingleOrderInfoTypes{
-//    productID?:string;
-//    category?:string;
-//    name?:string;
-//    price?:number;
-//    quantity?:number;
-//    rating?:number;
-//    description?:string;
-//    photo:string;
-//    parent:string;
-
-//    orderID?:string;
-//    transactionId?:string;
-//    shippingType:string;
-//    status?:string;
-//    message?:string;
-//    createdAt?:string;
-//}
-
-
 
 const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, data, list, setList, hideEditBtn, hideImg,                          DialogElement, dialogShowInfo, isOrderInfoDialogOpen, setIsOrderInfoDialogOpen,  onEditClickHandler}:TablePropTypes<T1>) => {
     //const [updateProduct] = useUpdateProductMutation();
@@ -171,7 +153,7 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
                     <div className="th id_cell">ID</div>
                     {
                         thead.map((item) => (
-                            <div className="th" key={item.th}>{item.th}</div>
+                            <div className="th" key={Math.random()}>{item.th}</div>
                         ))
                     }
                     {
@@ -194,18 +176,21 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
                         }}>
                             {
                                 product?.images&&product.images[0] &&
-                                    <div className="td photo_cell"><img src={product.images[0]} alt={photo} /></div>
+                                    <div className="td photo_cell">
+                                        <ImageWithFallback src={product.images[0].split("/upload")[0]+"/upload/w_100,h_80"+product.images[0].split("/upload")[1]} alt={photo} fallbackSrc={unknownProductImg} />
+                                        {/*<img src={product.images[0]} alt={photo} />*/}
+                                    </div>
                             }
                             <div className="td id_cell">{product._id.split("").splice(14,10)}</div>
                             {
-                                thead.map((item) => (
+                                thead.map((item, index) => (
                                     item.isEditable ? 
-                                    <div className="td" key={item.th}><input type="text" name={item.th} placeholder={product[item.th.toString()] as string} onChange={(e) => onChangeHandler(e, product._id)} /></div>
+                                    <div className="td" key={item.th+index}><input type="text" name={item.th} placeholder={product[item.th.toString()] as string} onChange={(e) => onChangeHandler(e, product._id)} /></div>
                                     :
                                     item.th === "userID" ?
-                                        <div className="td" key={item.th}>{product[item.th]?.slice(13, 24)}</div>
+                                        <div className="td" key={item.th+index}>{product[item.th]?.slice(13, 24)}</div>
                                         :
-                                        <div className="td" key={item.th}>{product[item.th]}</div>
+                                        <div className="td" key={item.th+index}>{product[item.th]}</div>
                                 ))
                             }
                             {
@@ -224,18 +209,6 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
         </div>
     )
 };
-
-
-//const SingleOrderInfo = ({ parent, name, price, quantity, rating, orderID, description, photo, transactionId, shippingType, status, message, createdAt}:SingleOrderInfoTypes) => {
-
-//    return(
-//        <div className="single_order_cont" onClick={(e) => e.stopPropagation()}>
-//            <div className="single_order_scrollable">
-//                <SingleProductTemplate parent={parent} name={name} price={price} quantity={quantity} rating={rating} productID={orderID} description={description} photo={photo} transactionId={transactionId} shippingType={shippingType} status={status} message={message} createdAt={createdAt} />
-//            </div>
-//        </div>
-//    )
-//}
 
 export default Table;
 
