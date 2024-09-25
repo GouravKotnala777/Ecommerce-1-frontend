@@ -55,7 +55,7 @@ const UserActivities = () => {
     const [isRowInfoDialogOpen, setIsRowInfoDialogOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isError, setIsError] = useState<unknown>({});
-    const [allActivitiesJoint, setAllActivitiesJoint] = useState<UserActivitiesTypes[]>([]);
+    const [allActivitiesJoint, setAllActivitiesJoint] = useState<UserActivitiesTypes[]>();
     const [activityCount, setActivityCount] = useState<number>(0);
 
     const showRowInfo = (e:MouseEvent<HTMLButtonElement>) => {
@@ -74,10 +74,21 @@ const UserActivities = () => {
             console.log("-------- fetchActivities UserActivities");
             console.log(res);
 
-            if (res.data?.message.activity.length !== 0) {
-                setAllActivitiesJoint((prev) => [...prev, ...res.data?.message.activity as UserActivitiesTypes[]]);
+            //if (res.data?.message.activity.length === 0) {
+            //    setAllActivitiesJoint([]);
+            //    //setAllActivitiesJoint((prev) => [...prev, ...res.data?.message.activity as UserActivitiesTypes[]]);
+            //    setActivityCount(res.data?.message.activityCount as number);
+            //}
+            if (res.data?.message.activity) {
+                if (allActivitiesJoint) {
+                    setAllActivitiesJoint((prev) => [...(prev as []), ...res.data?.message.activity as UserActivitiesTypes[]]);
+                }
+                else {
+                    setAllActivitiesJoint([...res.data?.message.activity as UserActivitiesTypes[]]);
+                }
                 setActivityCount(res.data?.message.activityCount as number);
             }
+            
             if (res.error) {
                 setIsError(res.error);
             }
