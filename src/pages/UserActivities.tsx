@@ -55,7 +55,7 @@ const UserActivities = () => {
     const [isRowInfoDialogOpen, setIsRowInfoDialogOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isError, setIsError] = useState<unknown>({});
-    const [allActivitiesJoint, setAllActivitiesJoint] = useState<UserActivitiesTypes[]>();
+    const [allActivitiesJoint, setAllActivitiesJoint] = useState<UserActivitiesTypes[]>([]);
     const [activityCount, setActivityCount] = useState<number>(0);
 
     const showRowInfo = (e:MouseEvent<HTMLButtonElement>) => {
@@ -111,7 +111,7 @@ const UserActivities = () => {
 
     return(
         <div className="user_activities bg">
-            {/*<pre>{JSON.stringify(allActivities.data?.message, null, `\t`)}</pre>*/}
+            {/*<pre>{JSON.stringify(isError, null, `\t`)}</pre>*/}
             <div className="heading" style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>My Activities</div>
 
 
@@ -127,8 +127,6 @@ const UserActivities = () => {
                             "message" in isError.data ?
                                 <ItemNotFound heading={isError.data.message as string} statusCode={204} />
                                 :
-                            //    <pre>{JSON.stringify(isError, null, `\t`)}</pre>
-                            //:
                                 allActivitiesJoint.length === 0 ?
                                     <ItemNotFound heading={"You have not ordered anything yet!"} statusCode={204} />
                                     :
