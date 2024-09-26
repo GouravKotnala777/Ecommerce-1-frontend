@@ -5,7 +5,6 @@
     display: flex;
     border-radius: 8px;
     justify-content: space-between;
-    //align-items: center;
     width: 98%;
     margin: 10px 0;
     position: fixed;
@@ -37,9 +36,9 @@
             display: flex;
             justify-content: right;
             align-items: center;
-            gap:6%;
+            gap:4%;
             margin: 0 1%;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             .navlinks{
                 text-decoration: none;
                 color: white;
@@ -180,8 +179,8 @@
         .right_part{
             .nav_section{
                 //border: 2px solid blue;
-                font-size: 0.8rem;
-                gap:4%;
+                font-size: 0.7rem;
+                gap:3%;
                 .navlinks{
                 }
             }
