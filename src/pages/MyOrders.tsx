@@ -198,12 +198,14 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
                                         isOrderInfoDialogOpen={isOrderInfoDialogOpen as boolean}
                                         setIsOrderInfoDialogOpen={setIsOrderInfoDialogOpen as Dispatch<SetStateAction<boolean>>}
                                     />
+
+                                    <span>Isse Thik Karna hai</span>
                                     {
                                         isLoading ?
                                         <Spinner type={1} heading="Loading..." width={30} thickness={1} />
                                         :
                                         ordersCount > skip+1 &&
-                                            <button className="show_more_btn" onClick={() => setSkip(skip+1)}>Next : {skip} / {ordersCount}</button>
+                                            <button className="show_more_btn" onClick={() => setSkip(skip+5)}>Next : {skip+5} / {ordersCount}</button>
                                     }
                                 </>
                 }

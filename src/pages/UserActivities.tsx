@@ -168,7 +168,7 @@ const UserActivities = () => {
                                             <Spinner type={1} heading="Loading..." width={30} thickness={1} />
                                             :
                                             activityCount > skip+1 &&
-                                                <button className="show_more_btn" onClick={() => setSkip(skip+1)}>Next : {skip} / {activityCount}</button>
+                                                <button className="show_more_btn" onClick={() => setSkip(skip+5)}>Next : {skip+5} / {activityCount}</button>
                                         }
                                     </>
             }
