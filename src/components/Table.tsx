@@ -1,22 +1,13 @@
 import "../styles/components/table.scss";
 import { RiStockLine } from "react-icons/ri";
 import photo from "/vite.svg";
-import { ChangeEvent, Dispatch, MouseEvent, ReactElement, SetStateAction, useEffect } from "react";
-//import { useUpdateProductMutation } from "../redux/api/api";
-//import { MutationResTypes } from "../assets/demoData";
-//import HandleMutationRes from "./HandleMutationRes";
+import { ChangeEvent, Dispatch, MouseEvent, ReactElement, SetStateAction } from "react";
 import { BsInfoSquare } from "react-icons/bs";
 import DialogWrapper from "./DialogWrapper";
-//import SingleProductTemplate from "./SingleProductTemplate";
 import { UserLocationTypes } from "../pages/Login.Page";
 import { MutationResTypes } from "../assets/demoData";
 import ImageWithFallback from "./ImageWithFallback";
 import unknownProductImg from "../../public/unknownProduct.png";
-//import { SingleOrderInfoTypes } from "../pages/MyOrders";
-//import { SingleOrderInfo } from "../pages/MyOrders";
-//import { FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta, MutationDefinition } from "@reduxjs/toolkit/query";
-//import { BaseQueryFn } from "@reduxjs/toolkit/query";
-
 
 
 interface TablePropTypes<T1>{
@@ -97,43 +88,9 @@ interface TablePropTypes<T1>{
 }
 
 const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, data, list, setList, hideEditBtn, hideImg,                          DialogElement, dialogShowInfo, isOrderInfoDialogOpen, setIsOrderInfoDialogOpen,  onEditClickHandler}:TablePropTypes<T1>) => {
-    //const [updateProduct] = useUpdateProductMutation();
-    //const [outStockRes, setOutStockRes] = useState<MutationResTypes>();
-    //const [isOrderInfoDialogOpen, setIsOrderInfoDialogOpen] = useState<boolean>(false);
-    //const [orderNumber, setOrderNumber] = useState<number>(0);
-
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement>, productID:string) => {
         setList({...list, [productID]:{...list[productID], [e.target.name]:e.target.value}})
     };
-
-    //const onClickHandler = async(productID:string) => {
-    //    try {            
-    //        if (list && list[productID]) {
-    //            console.log({[productID]:list[productID]});
-    //            console.log(list);
-    //            const res = await updateProduct({productID, name:list[productID].name, price:list[productID].price, rating:list[productID].rating, stock:list[productID].stock, total_servings:list[productID].total_servings, diet_type:list[productID].diet_type, flavour:list[productID].flavour, age_range:list[productID].age_range, about:list[productID].about, ingredient:list[productID].ingredient});
-    //            console.log("::::::::::::::::::");
-    //            console.log(res);
-    //            setOutStockRes(res);
-    //            console.log("::::::::::::::::::");
-    //        }
-    //        else{
-    //            console.log("list me productID nahi hai");
-    //        }
-
-    //    } catch (error) {
-    //        console.log("::::::::::::::::::");
-    //        console.log(error);            
-    //        console.log("::::::::::::::::::");
-    //    }
-    //};
-
-    useEffect(() => {
-        console.log("PPPPPPPPPPPPPPPPPPPP");
-        console.log(data);
-        console.log("PPPPPPPPPPPPPPPPPPPP");
-        
-    }, []);
 
     return(
         <div className="table_bg">
@@ -144,7 +101,6 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
             }
             {/*<HandleMutationRes res={outStockRes} />*/}
             <div className="table">
-                {/*<pre>{JSON.stringify(data, null, `\t`)}</pre>*/}
                 <div className="thead">
                     {
                         !hideImg &&
@@ -190,7 +146,28 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
                                     item.th === "userID" ?
                                         <div className="td" key={item.th+index}>{product[item.th]?.slice(13, 24)}</div>
                                         :
-                                        <div className="td" key={item.th+index}>{product[item.th]}</div>
+                                        item.th === "orderStatus" ?
+                                            <div className="td" key={item.th+index} style={{borderRadius:"8px", color:"white", fontWeight:"bold",
+                                                background:product[item.th] === "cancelled"||product[item.th] === "failed" ? 
+                                                                "#ff4b69c0"
+                                                                :
+                                                                product[item.th] === "confirmed" ?
+                                                                    "#00ee00b0"
+                                                                    :
+                                                                    product[item.th] === "returned" || product[item.th] === "refunded" ?
+                                                                        "#80808095"
+                                                                        :
+                                                                        product[item.th] === "dispatched" ?
+                                                                            "#0000ff93"
+                                                                            :
+                                                                            product[item.th] === "shipped" ?
+                                                                                "#00bfff"
+                                                                                :
+                                                                                "#008000c1"
+
+                                            }}>{product[item.th]}</div>
+                                            :
+                                            <div className="td" key={item.th+index}>{product[item.th]}</div>
                                 ))
                             }
                             {
