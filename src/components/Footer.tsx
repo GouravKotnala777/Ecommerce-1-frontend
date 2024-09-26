@@ -13,12 +13,12 @@ const FooterLinkFields = [
         {linkUrl:"fitness-tools-calculator", placeHolder:"Fitness Tools and Calculator"}
     ]},
     {heading:"INFORMATIONS", links:[
-        {linkUrl:"privacy", placeHolder:"Privacy Policy"},
-        {linkUrl:"return-and-refund", placeHolder:"Return and Refund Policy"},
-        {linkUrl:"shipping", placeHolder:"Shipping Policy"},
-        {linkUrl:"terms-and-conditions", placeHolder:"Terms and Conditions"},
-        {linkUrl:"insider-program", placeHolder:"Insider Program"},
-        {linkUrl:"insider-membership-terms-of-use", placeHolder:"Insider Membership Terms of Use"}
+        {linkUrl:"policy/privacy", placeHolder:"Privacy Policy"},
+        {linkUrl:"policy/return-and-refund", placeHolder:"Return and Refund Policy"},
+        {linkUrl:"policy/shipping", placeHolder:"Shipping Policy"},
+        {linkUrl:"policy/terms-and-conditions", placeHolder:"Terms and Conditions"},
+        {linkUrl:"policy/insider-program", placeHolder:"Insider Program"},
+        {linkUrl:"policy/insider-membership-terms-of-use", placeHolder:"Insider Membership Terms of Use"}
     ]},
     {heading:"ABOUT", links:[
         {linkUrl:"authenticity", placeHolder:"Authenticity"},

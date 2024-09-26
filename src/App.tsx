@@ -38,6 +38,7 @@ import MacroCalculator from './pages/MacroCalculator'
 import UserActivities from './pages/UserActivities'
 import OrderChart from './pages/charts/OrderCharts'
 import AllOrders from './pages/admin/AllOrders'
+import Policies from './pages/static/Policies'
 
 
 
@@ -142,6 +143,7 @@ const App = () => {
                 </>
               }
 
+              <Route path="/policy/:policyType" element={<Policies />} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
 
