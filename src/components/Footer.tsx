@@ -37,7 +37,7 @@ const FooterLinkFields = [
         {linkUrl:"all-brands", placeHolder:"View all"},
     ]},
     {heading:"REGISTERED ADDRESS", links:[
-        {linkUrl:"aaa", placeHolder:"Best Nutrition"},
+        {linkUrl:"aaa", placeHolder:"Ecommerce-GG"},
         {linkUrl:"aaa", placeHolder:"#71, New Bhoor Colony, Faridabad, Haryana, 121002"},
         {linkUrl:"aaa", placeHolder:"+91-8882732859"},
         {linkUrl:"aaa", placeHolder:"gouravkotnala777@gmail.com"}
