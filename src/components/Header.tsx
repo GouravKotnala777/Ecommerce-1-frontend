@@ -1,4 +1,3 @@
-import logo from "/public/vite.svg";
 import logo2 from "../../public/logo2.jpg";
 import "../styles/components/header.scss";
 import { NavLink } from "react-router-dom";
@@ -46,7 +45,7 @@ const Header = ({userName, userRole, wishlistNotification, cartNotification, use
             <DialogWrapper Element={<MyProfileDialog setIsMyProfileDialogOpen={setIsMyProfileDialogOpen} userLocation={userLocation as UserLocationTypes} />} toggler={isMyProfileDialogOpen} setToggler={setIsMyProfileDialogOpen} />
             <div className="header_bg" style={{top:hideHeader?"-13%":"-1.5%"}}>
                 <div className="left_part">
-                    <img src={logo} alt={logo} />
+                    <img src={logo2} alt={logo2} />
                 </div>
                 <nav className="right_part">
                     <div className="nav_section">
