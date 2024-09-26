@@ -1,10 +1,11 @@
 import { SerializedError } from "@reduxjs/toolkit";
-import { ProductTypes } from "../assets/demoData";
+import { ProductTypes, UserTypes } from "../assets/demoData";
 import SingleProductTemplate from "../components/SingleProductTemplate";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import ItemNotFound from "../components/ItemNotFound";
 import Spinner from "../components/Spinner";
 import { UserLocationTypes } from "./Login.Page";
+import { useMyProfileQuery } from "../redux/api/api";
 
 
 const Wishlist = ({wishlistData, userLocation}:{wishlistData:{
@@ -13,6 +14,8 @@ const Wishlist = ({wishlistData, userLocation}:{wishlistData:{
         error?:FetchBaseQueryError | SerializedError;
     },
     userLocation:UserLocationTypes;}) => {
+    
+        const loginedUser:{success:boolean; message:UserTypes} = useMyProfileQuery("").data;
 
 
     return(
@@ -40,6 +43,7 @@ const Wishlist = ({wishlistData, userLocation}:{wishlistData:{
                                         userLocation={userLocation}
                                         parent="wishlist"
                                         productID={product._id}
+                                        userWishlist={loginedUser.message.wishlist}
                                         category={product.category}
                                         brand={product.brand}
                                         name={product.name}
