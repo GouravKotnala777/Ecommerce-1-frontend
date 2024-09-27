@@ -14,18 +14,20 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 
 
-const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPrice, coupon, shippingType, parent, userLocation}:{clientSecret:string; userDetailes:{name:string; email:string; phone:string;}; address:AddressBodyTypes; orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; shippingType:string; parent?:string; userLocation:UserLocationTypes;}) => {
+const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPrice, coupon, shippingType, parent, userLocation, newOrder}:{clientSecret:string; userDetailes:{name:string; email:string; phone:string;}; address:AddressBodyTypes; orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; shippingType:string; parent?:string; userLocation:UserLocationTypes; newOrder:ReturnType<typeof useNewOrderMutation>[0]}) => {
     const stripe = useStripe();
     const elements = useElements();
     const [error, setError] = useState<string>();
     const [paymentSuccess, setPaymentSuccess] = useState(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [newOrder] = useNewOrderMutation();
+    //const [newOrder] = useNew     OrderMutation();
     const navigate = useNavigate();
 
     const handleSubmit = async(e:FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsLoading(true);
+        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        
 
         try {
             if (!stripe || !elements) {
@@ -110,30 +112,103 @@ const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPri
     };
 
     return(
-        <form onSubmit={(e) => handleSubmit(e)}>
-            {/*<pre>{JSON.stringify({
+        <>
+            <form onSubmit={(e) => handleSubmit(e)}>
+                {/*<pre>{JSON.stringify({
+                    orderItems,
+                    totalPrice,
+                    coupon,
+                    shippingType
+                }, null, `\t`)}</pre>*/}
+                <CardElement className="card_element" />
+                <button type="submit" disabled={!stripe}>{isLoading ? <Spinner type={2} color="white" width={16} /> : `${totalPrice}₹ Pay`}</button>
+            </form>
+            
+                {
+                    error && 
+                        <div className="flash_message">
+                            <div>{error}</div>
+                            <button className="navigate_btn" onClick={() => navigate("/payment_failure", {state:"Payment Fail"})}>Go Home</button>
+                        </div>
+                }
+                {
+                    paymentSuccess && 
+                        <div className="flash_message">
+                            <div>Payment Successfull</div>
+                            <button className="navigate_btn" onClick={() => navigate("/")}>Go Home</button>
+                        </div>
+                }
+        </>
+    )
+};
+
+const CashOnDelivery = ({orderItems, totalPrice, coupon, shippingType, parent, userLocation, newOrder}:{orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; shippingType:string; parent?:string; userLocation:UserLocationTypes; newOrder:ReturnType<typeof useNewOrderMutation>[0];}) => {
+    const [error, setError] = useState<string|null>(null);
+    const [orderPlaced, setOrderPlaced] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const navigate = useNavigate();
+
+    const orderOnCashHandler = async(e:FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setIsLoading(true);
+        console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+        
+        try {
+            //const [newOrder] = useNewOrderMutation();
+            console.log("------- CashOnDelivery Payment");
+            const newOrderRes = await newOrder({
                 orderItems,
                 totalPrice,
                 coupon,
-                shippingType
-            }, null, `\t`)}</pre>*/}
-            <CardElement className="card_element" />
-            <button type="submit" disabled={!stripe}>{isLoading ? <Spinner type={2} color="white" width={16} /> : `${totalPrice}₹ Pay`}</button>
-            {
-                error && 
-                <>
-                    <div>{error}</div>
-                    <button className="navigate_btn" onClick={() => navigate("/payment_failure", {state:"Payment Fail"})}>Go Home</button>
-                </>
-            }
-            {
-                paymentSuccess && 
-                    <>
-                        <div>Payment Successfull</div>
-                        <button className="navigate_btn" onClick={() => navigate("/")}>Go Home</button>
-                    </>
-            }
-        </form>
+                transactionId:"cash",
+                shippingType, paymentStatus:"cash_on_delivery", orderStatus:"pending",
+                message:"demo message",
+                parent:parent as string,
+                action:"new_order",
+                userLocation
+            });
+            console.log(newOrderRes);
+            
+            console.log("cash on delivery");
+            console.log("------- CashOnDelivery Payment");
+            setIsLoading(false);
+            setOrderPlaced(true);
+            setError(null);
+        } catch (error) {
+            console.log("------- CashOnDelivery Payment error");
+            console.log(error);
+            console.log("------- CashOnDelivery Payment error");
+            setIsLoading(false);
+            setError("Error aa gaya!");
+        }
+    };
+
+
+    return(
+        <>
+            <form className="cash_on_delivery" onSubmit={(e) => orderOnCashHandler(e)}>
+
+
+
+                <button type="submit" disabled={isLoading}>{isLoading ? <Spinner type={2} color="white" width={16} /> : `${totalPrice}₹ cash on delivery`}</button>
+            </form>
+            
+                {
+                    error && 
+                        <div className="flash_message">
+                            <div>{error}</div>
+                            <button className="navigate_btn" onClick={() => navigate("/payment_failure", {state:"Payment Fail"})}>Go Home</button>
+                        </div>
+                }
+                {
+                    orderPlaced && 
+                        <div className="flash_message">
+                            <div>Order Placed Successfully</div>
+                            <button className="navigate_btn" onClick={() => navigate("/")}>Go Home</button>
+                        </div>
+                }
+            
+        </>
     )
 };
 
@@ -156,12 +231,10 @@ const StripePayment = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const [recommendationProducts, setRecommendationProducts] = useState<{productID:string; name:string; price:number; quantity:number;}[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [hideGetClientSecretAgain, setHideGetClientSecretAgain] = useState<boolean>(false);
-
-    //????????????????????????????????????
-
-
+    const [newOrder] = useNewOrderMutation();
     const [clientSecret, setClientSecret] = useState<string>("");
 
+    
     const getProductRecommendation = async() => {
         try {
             const sameCategoryProductRes:{data?:{message:Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[];}} = await productRecommendation({category:location?.orderItems.map((iter) => (iter.category)), brand:location?.orderItems.map((iter) => (iter.brand))});
@@ -304,7 +377,30 @@ const StripePayment = ({userLocation}:{userLocation:UserLocationTypes;}) => {
                 coupon={location?.coupon as string}
                 shippingType={location?.shippingType as string}
                 parent={location?.parent as string}
-                userLocation={userLocation} />
+                userLocation={userLocation}
+                newOrder={newOrder} />
+
+            <CashOnDelivery
+                orderItems={[
+                    ...location?.orderItems as {productID:string; quantity:number;}[],
+                    ...recommendationProducts
+                ]}
+                totalPrice=
+                    {
+                        location?.shippingType === "express"?
+                            location.totalPrice + 500 + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
+                            :
+                            location?.shippingType === "standared"?
+                                location.totalPrice + 300 + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
+                                :
+                                (location?.totalPrice as number) + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
+
+                    }
+                coupon={location?.coupon as string}
+                shippingType={location?.shippingType as string}
+                parent={location?.parent as string}
+                userLocation={userLocation}
+                newOrder={newOrder} />
         </Elements>
     )
 };
