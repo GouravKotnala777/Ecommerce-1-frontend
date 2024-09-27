@@ -116,7 +116,7 @@ const UserActivities = () => {
 
 
             {
-                    allActivitiesJoint === undefined ?
+                    allActivitiesJoint.length === 0 ?
                         <Spinner type={1} heading="Loading..." width={100} thickness={6} />
                         :
                         isError &&
@@ -127,9 +127,6 @@ const UserActivities = () => {
                             "message" in isError.data ?
                                 <ItemNotFound heading={isError.data.message as string} statusCode={204} />
                                 :
-                                allActivitiesJoint.length === 0 ?
-                                    <ItemNotFound heading={"You have not ordered anything yet!"} statusCode={204} />
-                                    :
                                     <>
                                         <Table<(UserActivitiesTypes & {_id: string; [key: string]: string;})>
                                             thead={activitiesTableHeadings}

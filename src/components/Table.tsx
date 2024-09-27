@@ -163,7 +163,10 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
                                                                             product[item.th] === "shipped" ?
                                                                                 "#00bfff"
                                                                                 :
-                                                                                "#008000c1"
+                                                                                product[item.th] === "pending" ?
+                                                                                    "#e1e100eb"
+                                                                                    :
+                                                                                    "#008000c1"
 
                                             }}>{product[item.th]}</div>
                                             :
