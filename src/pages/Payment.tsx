@@ -9,6 +9,7 @@ import Spinner from "../components/Spinner";
 import { ProductTypes } from "../assets/demoData";
 import ProductsRecommendation from "../components/ProductsRecommendation";
 import { UserLocationTypes } from "./Login.Page";
+import Tab from "../components/Tab";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -355,52 +356,62 @@ const StripePayment = ({userLocation}:{userLocation:UserLocationTypes;}) => {
                     </form>
             }
 
-            <CheckoutForm 
-                clientSecret={clientSecret ? clientSecret : location?.clientSecret as string}
-                userDetailes={location?.userDetailes as {name:string; email:string; phone:string;}}
-                address={location?.address as AddressBodyTypes}
-                orderItems={[
-                    ...location?.orderItems as {productID:string; quantity:number;}[],
-                    ...recommendationProducts
-                ]}
-                totalPrice=
-                    {
-                        location?.shippingType === "express"?
-                            location.totalPrice + 500 + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
-                            :
-                            location?.shippingType === "standared"?
-                                location.totalPrice + 300 + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
+
+            <Tab panelsArray={[
+                {
+                    name:"CreditCard", children:<CheckoutForm 
+                    clientSecret={clientSecret ? clientSecret : location?.clientSecret as string}
+                    userDetailes={location?.userDetailes as {name:string; email:string; phone:string;}}
+                    address={location?.address as AddressBodyTypes}
+                    orderItems={[
+                        ...location?.orderItems as {productID:string; quantity:number;}[],
+                        ...recommendationProducts
+                    ]}
+                    totalPrice=
+                        {
+                            location?.shippingType === "express"?
+                                location.totalPrice + 500 + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
                                 :
-                                (location?.totalPrice as number) + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
-
-                    }
-                coupon={location?.coupon as string}
-                shippingType={location?.shippingType as string}
-                parent={location?.parent as string}
-                userLocation={userLocation}
-                newOrder={newOrder} />
-
-            <CashOnDelivery
-                orderItems={[
-                    ...location?.orderItems as {productID:string; quantity:number;}[],
-                    ...recommendationProducts
-                ]}
-                totalPrice=
-                    {
-                        location?.shippingType === "express"?
-                            location.totalPrice + 500 + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
-                            :
-                            location?.shippingType === "standared"?
-                                location.totalPrice + 300 + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
+                                location?.shippingType === "standared"?
+                                    location.totalPrice + 300 + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
+                                    :
+                                    (location?.totalPrice as number) + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
+    
+                        }
+                    coupon={location?.coupon as string}
+                    shippingType={location?.shippingType as string}
+                    parent={location?.parent as string}
+                    userLocation={userLocation}
+                    newOrder={newOrder} />
+                },
+                {
+                    name:"CashOnDelivery", children:<CashOnDelivery
+                    orderItems={[
+                        ...location?.orderItems as {productID:string; quantity:number;}[],
+                        ...recommendationProducts
+                    ]}
+                    totalPrice=
+                        {
+                            location?.shippingType === "express"?
+                                location.totalPrice + 500 + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
                                 :
-                                (location?.totalPrice as number) + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
+                                location?.shippingType === "standared"?
+                                    location.totalPrice + 300 + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
+                                    :
+                                    (location?.totalPrice as number) + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
+    
+                        }
+                    coupon={location?.coupon as string}
+                    shippingType={location?.shippingType as string}
+                    parent={location?.parent as string}
+                    userLocation={userLocation}
+                    newOrder={newOrder} />
 
-                    }
-                coupon={location?.coupon as string}
-                shippingType={location?.shippingType as string}
-                parent={location?.parent as string}
-                userLocation={userLocation}
-                newOrder={newOrder} />
+                }
+            ]} />
+            
+
+            
         </Elements>
     )
 };
