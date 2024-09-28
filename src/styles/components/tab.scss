@@ -1,0 +1,24 @@
+@import "../utils";
+
+.tab_panel{
+    //border: 2px solid red;
+    width: 400px;
+    margin: 20px auto;
+    .tabs_cont{
+        //border: 2px solid violet;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        .tab{
+            padding: 10px;
+            //border: 1px solid $secondary;
+            border: none;
+            border-radius: 8px;
+            width: 25%;
+            cursor: pointer;
+        }
+    }
+    .panel_cont{
+        //border: 2px solid green;
+    }
+}
