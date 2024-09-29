@@ -74,18 +74,16 @@ const UserActivities = () => {
             console.log("-------- fetchActivities UserActivities");
             console.log(res);
 
-            //if (res.data?.message.activity.length === 0) {
-            //    setAllActivitiesJoint([]);
-            //    //setAllActivitiesJoint((prev) => [...prev, ...res.data?.message.activity as UserActivitiesTypes[]]);
-            //    setActivityCount(res.data?.message.activityCount as number);
-            //}
             if (res.data?.message.activity) {
                 if (allActivitiesJoint) {
                     setAllActivitiesJoint((prev) => [...(prev as []), ...res.data?.message.activity as UserActivitiesTypes[]]);
+                    
+                    setSkip(skip+res.data.message.activity.length);
                 }
-                else {
-                    setAllActivitiesJoint([...res.data?.message.activity as UserActivitiesTypes[]]);
-                }
+                //else {
+                //    setAllActivitiesJoint([...res.data?.message.activity as UserActivitiesTypes[]]);
+                //    console.log("bbbbbbbbbbbbbbbb");
+                //}
                 setActivityCount(res.data?.message.activityCount as number);
             }
             
@@ -107,7 +105,7 @@ const UserActivities = () => {
 
     useEffect(() => {
         fetchActivities();
-    }, [skip]);
+    }, []);
 
     return(
         <div className="user_activities bg">
@@ -164,8 +162,8 @@ const UserActivities = () => {
                                             isLoading ?
                                             <Spinner type={1} heading="Loading..." width={30} thickness={1} />
                                             :
-                                            activityCount > skip+1 &&
-                                                <button className="show_more_btn" onClick={() => setSkip(skip+5)}>Next : {skip+5} / {activityCount}</button>
+                                            activityCount > skip &&
+                                                <button className="show_more_btn" onClick={() => fetchActivities()}>Next : {skip} / {activityCount}</button>
                                         }
                                     </>
             }

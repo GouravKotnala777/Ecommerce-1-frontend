@@ -144,6 +144,7 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
             if (myOrders.data?.message.orders !== undefined) {
                 dataTransformer(myOrders);
                 setOrdersCount(myOrders.data.message.ordersCount);
+                setSkip(skip+(myOrders.data.message.orders.length as number));
             }
             //setJointData(myOrders.data.message.orders);
             //dataTransformer(myOrders.data.message.orders);
@@ -161,7 +162,7 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
         if (skip !== undefined) {
             fetchFirstTime();
         }
-    }, [skip]);
+    }, []);
 
     return(
         <div className="my_orders_bg">
@@ -204,8 +205,8 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
                                         isLoading ?
                                         <Spinner type={1} heading="Loading..." width={30} thickness={1} />
                                         :
-                                        ordersCount > skip+1 &&
-                                            <button className="show_more_btn" onClick={() => setSkip(skip+5)}>Next : {skip+5} / {ordersCount}</button>
+                                        ordersCount > skip &&
+                                            <button className="show_more_btn" onClick={() => fetchFirstTime()}>Next : {skip} / {ordersCount}</button>
                                     }
                                 </>
                 }
