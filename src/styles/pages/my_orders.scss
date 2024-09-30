@@ -1,0 +1,49 @@
+@import "../utils";
+//@import url("../../../public/cloud_bottom.png");
+
+.delete_row_warning_cont{
+    //border:2px solid red;
+    //background:white;
+    max-width: 500px;
+    height: 75vh;
+    margin: 10px auto;
+    text-align: center;
+    padding: 2px;
+    border-radius:8px;
+    overflow-y: scroll;
+    background: rgb(255, 255, 255);
+    .scrollable_part{
+
+        .heading{
+            //border: 1px solid red;
+            @include headingLg(white);
+            border-radius: 4px;
+            background: linear-gradient(90deg, $primary, $secondary)
+            //text-align: center;
+        }
+        .para{
+            //text-align: center;
+            @include paraMed();
+    
+        }
+        .cancellation_reason{
+            width: 80%;
+            margin: 15px auto;
+            //display: block;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        .buttons{
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            .ok_btn{
+                @include primaryBtn;
+                
+            }
+            .declien_btn{
+                @include primaryBtn(10px 5px, $primary, $primaryLow);
+            }
+        }
+    }
+}

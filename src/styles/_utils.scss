@@ -66,14 +66,14 @@ $shadow:1px 1px 8px 1px #ff4b6941;
     font-size: 0.9rem;
     color: $color;
 }
-@mixin primaryBtn($margin:10px 5px){
+@mixin primaryBtn($margin:10px 5px, $gradient1:#64acff, $gradient2:#0163d4){
     @include headingLg(white, 10px);
     background: $btnDefault;
     margin: $margin;
     border-radius: 8px;
     border: none;
     cursor: pointer;
-    background: linear-gradient(90deg, #64acff, #0163d4);
+    background: linear-gradient(90deg, $gradient1, $gradient2);
     box-shadow: $shadow;
     &:hover{
         background: $btnHover;

@@ -8,6 +8,7 @@ import { UserLocationTypes } from "../pages/Login.Page";
 import { MutationResTypes } from "../assets/demoData";
 import ImageWithFallback from "./ImageWithFallback";
 import unknownProductImg from "../../public/unknownProduct.png";
+import { MdDeleteForever } from "react-icons/md";
 
 
 interface TablePropTypes<T1>{
@@ -81,16 +82,28 @@ interface TablePropTypes<T1>{
     DialogElement?:ReactElement;
     dialogShowInfo?:(e:MouseEvent<HTMLButtonElement>) => void;
     isOrderInfoDialogOpen?:boolean;
-    setIsOrderInfoDialogOpen?:Dispatch<SetStateAction<boolean>>
+    setIsOrderInfoDialogOpen?:Dispatch<SetStateAction<boolean>>;
+    
+    DeleteRowDialog?:ReactElement;
+    isDeleteRowDialogOpen?:boolean;
+    setIsDeleteRowDialogOpen?:Dispatch<SetStateAction<boolean>>;
 
     onEditClickHandler?:(e:MouseEvent<HTMLButtonElement>) => Promise<void>;
     outStockRes?:MutationResTypes | undefined
 }
 
-const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, data, list, setList, hideEditBtn, hideImg,                          DialogElement, dialogShowInfo, isOrderInfoDialogOpen, setIsOrderInfoDialogOpen,  onEditClickHandler}:TablePropTypes<T1>) => {
+const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, data, list, setList, hideEditBtn, hideImg, 
+        DialogElement, dialogShowInfo, isOrderInfoDialogOpen, setIsOrderInfoDialogOpen,  onEditClickHandler,
+        isDeleteRowDialogOpen, setIsDeleteRowDialogOpen, DeleteRowDialog
+    }:TablePropTypes<T1>) => {
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement>, productID:string) => {
         setList({...list, [productID]:{...list[productID], [e.target.name]:e.target.value}})
     };
+
+    //const showDeleteWarningHandler = (e:MouseEvent<HTMLButtonElement>) => {
+    //    (dialogShowInfo as (e:MouseEvent<HTMLButtonElement>) => void)(e);
+    //    (setIsDeleteRowDialogOpen as Dispatch<SetStateAction<boolean>>)(true);
+    //}
 
     return(
         <div className="table_bg">
@@ -99,6 +112,13 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
                 DialogElement &&
                     <DialogWrapper Element={DialogElement as ReactElement} toggler={isOrderInfoDialogOpen as boolean} setToggler={setIsOrderInfoDialogOpen as Dispatch<SetStateAction<boolean>>} />
             }
+
+            {
+                DeleteRowDialog &&
+                    <DialogWrapper Element={DeleteRowDialog as ReactElement} toggler={isDeleteRowDialogOpen as boolean} setToggler={setIsDeleteRowDialogOpen as Dispatch<SetStateAction<boolean>>} />
+
+            }
+
             {/*<HandleMutationRes res={outStockRes} />*/}
             <div className="table">
                 <div className="thead">
@@ -170,7 +190,10 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
 
                                             }}>{product[item.th]}</div>
                                             :
-                                            <div className="td" key={item.th+index}>{product[item.th]}</div>
+                                            item.th === "cancel" ?
+                                                <button className="td update_btn" value={product._id} style={{fontSize:"15px", width:"100px"}} onClick={(e) => {dialogShowInfo!(e); setIsDeleteRowDialogOpen!(true);}}><MdDeleteForever /></button>
+                                                :    
+                                                <div className="td" key={item.th+index}>{product[item.th]}</div>
                                 ))
                             }
                             {
@@ -179,7 +202,7 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
                             }
                             {
                                 hideEditBtn &&
-                                    <button className="td update_btn" value={index} onClick={(e:MouseEvent<HTMLButtonElement>) => dialogShowInfo!(e)}><BsInfoSquare/></button>
+                                    <button className="td update_btn" value={index} onClick={(e:MouseEvent<HTMLButtonElement>) => {dialogShowInfo!(e); setIsOrderInfoDialogOpen!(true);}}><BsInfoSquare/></button>
                             }
                         </div>
                     ))
@@ -189,6 +212,10 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
         </div>
     )
 };
+
+
+
+
 
 export default Table;
 

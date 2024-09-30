@@ -201,7 +201,7 @@ const Policies = () => {
 };
 
 
-const Note = ({heading, para}:{heading:string; para:string;}) => {
+export const Note = ({heading, para}:{heading:string; para:string;}) => {
     return(
         <div style={{fontSize:"0.8rem", marginTop:"10px"}}>
             <span style={{fontWeight:"bold"}}>{heading}: </span>
@@ -209,18 +209,18 @@ const Note = ({heading, para}:{heading:string; para:string;}) => {
         </div>
     )
 };
-const Para = ({para}:{para:string;}) => {
+export const Para = ({para}:{para:string;}) => {
     return(
         <p style={{fontSize:"0.8rem", marginTop:"10px", textAlign:"justify"}}>{para}</p>
     )
 };
-const Heading = ({heading, fontSize}:{heading:string; fontSize:string;}) => {
+export const Heading = ({heading, fontSize}:{heading:string; fontSize:string;}) => {
     return(
         <div style={{fontSize, fontWeight:"bold", marginTop:"20px"}}>{heading}</div>
     )
 };
 
-const List = ({listArray}:{listArray:string[];}) => {
+export const List = ({listArray}:{listArray:string[];}) => {
 
     return(
         <div style={{fontSize:"0.8rem"}}>

@@ -1,3 +1,4 @@
+import "../styles/pages/my_orders.scss";
 import { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
 import Table from "../components/Table";
 import { UpdateProductBodyType, useMyOrdersMutation } from "../redux/api/api";
@@ -7,6 +8,7 @@ import { SerializedError } from "@reduxjs/toolkit";
 import Spinner from "../components/Spinner";
 import SingleProductTemplate from "../components/SingleProductTemplate";
 import { UserLocationTypes } from "./Login.Page";
+import { Note } from "./static/Policies";
 
 export interface SingleOrderTypes {
     paymentInfo?: {
@@ -80,7 +82,8 @@ const productTableHeadings = [
     {th:"name", isEditable:false},
     {th:"price", isEditable:false},
     {th:"transactionId", isEditable:false},
-    {th:"orderStatus", isEditable:false}
+    {th:"orderStatus", isEditable:false},
+    {th:"cancel", isEditable:false},
 ];
 
 const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
@@ -89,9 +92,11 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const [list, setList] = useState<{ [key: string]:UpdateProductBodyType;}>({});
     const [transformedData, setTransformedData] = useState<UpdateProductBodyType[]>([]);
     const [orderNumber, setOrderNumber] = useState<number>(0);
+    const [orderID, setOrderID] = useState<string>("");
     const [ordersCount, setOrdersCount] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isOrderInfoDialogOpen, setIsOrderInfoDialogOpen] = useState<boolean>(false);
+    const [isDeleteRowDialog, setIsDeleteRowDialog] = useState<boolean>(false);
     const [myOrdersData, setMyOrdersData] = useState<{
             data?:MyOrderResponseType;
             error?:FetchBaseQueryError | SerializedError;
@@ -100,8 +105,8 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
 
     const showOrderInfo = (e:MouseEvent<HTMLButtonElement>) => {
         setOrderNumber(Number(e.currentTarget.value));
-        setIsOrderInfoDialogOpen(true);
-        console.log({transformedData});
+        setOrderID(e.currentTarget.value);
+        console.log({e:e.currentTarget.value});
     }
 
     const dataTransformer = (myOrders:{
@@ -167,7 +172,7 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     return(
         <div className="my_orders_bg">
             {/*<pre>{JSON.stringify(jointData, null, `\t`)}</pre>*/}
-            {/*<pre>{JSON.stringify(transformedData, null, `\t`)}</pre>*/}
+            {/*<pre>{JSON.stringify(orderNumber, null, `\t`)}</pre>*/}
             <div className="heading" style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>My Orders</div>
                 {
                     myOrdersData === undefined ?
@@ -198,6 +203,10 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
                                         dialogShowInfo={(e:MouseEvent<HTMLButtonElement>) => showOrderInfo(e)}
                                         isOrderInfoDialogOpen={isOrderInfoDialogOpen as boolean}
                                         setIsOrderInfoDialogOpen={setIsOrderInfoDialogOpen as Dispatch<SetStateAction<boolean>>}
+
+                                        DeleteRowDialog={<DeleteRowWarning orderID={orderID} />}
+                                        isDeleteRowDialogOpen={isDeleteRowDialog}
+                                        setIsDeleteRowDialogOpen={setIsDeleteRowDialog}
                                     />
 
                                     <span>Isse Thik Karna hai</span>
@@ -224,5 +233,24 @@ export const SingleOrderInfo = ({userLocation, parent, name, price, quantity, ra
         </div>
     )
 }
+
+export const DeleteRowWarning = ({orderID}:{orderID:string;}) => {
+
+    return(
+        <div className="delete_row_warning_cont" onClick={(e) => e.stopPropagation()}>
+            <div className="scrollable_part">
+                <h1 className="heading">Hay Wait!!</h1>
+                <p className="para">Are you sure , you want to cancel this order?</p>
+                <p className="para">Order Id : {orderID}</p>
+                <textarea className="cancellation_reason" rows={10} placeholder="Why do you want to cancel this order?"></textarea>
+                <Note heading="Notice" para="Your request will be solved in 24hours" />
+                <div className="buttons">
+                    <button className="ok_btn">Yes, Cancel this order</button>
+                    <button className="declien_btn">No, go back</button>
+                </div>
+            </div>
+        </div>
+    )
+};
 
 export default MyOrders;
