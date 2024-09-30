@@ -97,6 +97,13 @@
                         color: white;
                     }
                 }
+                .update_btn_disabled{
+                    border: 1px solid $primaryLow;
+                    width: 37px;
+                    border-radius: 8px;
+                    background: linear-gradient(135deg, white, rgba(255, 75, 105, 0.4));
+                    cursor: pointer;
+                }
             }
         }
     }

@@ -26,6 +26,8 @@ export interface UpdateProductBodyType {
 
 
 
+    orderID?:string;
+    quantity?:number;
     transactionId?:string;
     paymentStatus?:string;
     orderStatus?:"pending"|"confirmed"|"processing"|"shipped"|"dispatched"|"delivered"|"cancelled"|"failed"|"returned"|"refunded";
@@ -384,6 +386,14 @@ const api = createApi({
                 body:{skip}
             })
         }),
+        removeProductFromOrder:builder.mutation({
+            query:({orderID, productID, removingProductPrice, removingProductQuantity}:{orderID:string; productID:string; removingProductPrice:number; removingProductQuantity:number;}) => ({
+                url:"/api/v1/order/myOrders",
+                method:"PUT",
+                credentials:"include",
+                body:{orderID, productID, removingProductPrice, removingProductQuantity}
+            })
+        }),
         allOrders:builder.query({
             query:() => ({
                 url:"/api/v1/order/all",
@@ -426,6 +436,6 @@ export const {useRegisterMutation, useLoginMutation, useVerifyEmailMutation, use
     useOutStockProductsQuery, useIncompleteProductsQuery, useUpdateProductMutation,
     useCreateCouponsMutation, useGetAllCouponsQuery, useGetSingleCouponMutation,
     useCreatePaymentMutation,
-    useNewOrderMutation, useMyOrdersMutation, useAllOrdersQuery, useUpdateOrderMutation,
+    useNewOrderMutation, useMyOrdersMutation, useAllOrdersQuery, useRemoveProductFromOrderMutation, useUpdateOrderMutation,
     useCreateChatMutation, useUpdateChatsHelpfulnessMutation
 } = api;

@@ -1,7 +1,7 @@
 import "../styles/pages/my_orders.scss";
 import { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
 import Table from "../components/Table";
-import { UpdateProductBodyType, useMyOrdersMutation } from "../redux/api/api";
+import { UpdateProductBodyType, useMyOrdersMutation, useRemoveProductFromOrderMutation } from "../redux/api/api";
 import ItemNotFound from "../components/ItemNotFound";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { SerializedError } from "@reduxjs/toolkit";
@@ -93,6 +93,9 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const [transformedData, setTransformedData] = useState<UpdateProductBodyType[]>([]);
     const [orderNumber, setOrderNumber] = useState<number>(0);
     const [orderID, setOrderID] = useState<string>("");
+    const [productID, setProductID] = useState<string>("");
+    const [removingProductPrice, setRemovingProductPrice] = useState<number>(0);
+    const [removingProductQuantity, setRemovingProductQuantity] = useState<number>(0);
     const [ordersCount, setOrdersCount] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isOrderInfoDialogOpen, setIsOrderInfoDialogOpen] = useState<boolean>(false);
@@ -101,12 +104,19 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
             data?:MyOrderResponseType;
             error?:FetchBaseQueryError | SerializedError;
         }>();
+    const [removeProductFromOrder] = useRemoveProductFromOrderMutation();
+
 
 
     const showOrderInfo = (e:MouseEvent<HTMLButtonElement>) => {
         setOrderNumber(Number(e.currentTarget.value));
-        setOrderID(e.currentTarget.value);
+        setOrderID(e.currentTarget.value.split("-")[0]);
+        setProductID(e.currentTarget.value.split("-")[1]);
+        setRemovingProductPrice(Number(e.currentTarget.value.split("-")[2]));
+        setRemovingProductQuantity(Number(e.currentTarget.value.split("-")[3]));
+
         console.log({e:e.currentTarget.value});
+        console.log({eNum:Number(e.currentTarget.value.split("-")[2])*Number(e.currentTarget.value.split("-")[3])});
     }
 
     const dataTransformer = (myOrders:{
@@ -119,8 +129,10 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
 
                 setTransformedData((prev) => [...prev, {
                     _id: item2?.productID?._id as string,
+                    orderID:item._id,
                     name: item2?.productID?.name as string,
                     price: item2?.productID?.price,
+                    quantity:item2?.quantity,
                     images: item2?.productID?.images,
                     orderStatus:item.orderStatus,
                     createdAt: item.createdAt,
@@ -163,6 +175,20 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
         }
     }
 
+    const removeProductFromOrderHandler = async() => {
+        try {
+            const res = await removeProductFromOrder({orderID, productID, removingProductPrice:(Number(removingProductPrice)), removingProductQuantity:Number(removingProductQuantity)});
+
+            console.log("---------  removeProductFromOrder MyOrders");
+            console.log(res); 
+            console.log("---------  removeProductFromOrder MyOrders");
+        } catch (error) {
+            console.log("---------  removeProductFromOrder MyOrders error");
+            console.log(error);
+            console.log("---------  removeProductFromOrder MyOrders error");
+        }
+    };
+
     useEffect(() => {
         if (skip !== undefined) {
             fetchFirstTime();
@@ -172,7 +198,7 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     return(
         <div className="my_orders_bg">
             {/*<pre>{JSON.stringify(jointData, null, `\t`)}</pre>*/}
-            {/*<pre>{JSON.stringify(orderNumber, null, `\t`)}</pre>*/}
+            {/*<pre>{JSON.stringify(transformedData, null, `\t`)}</pre>*/}
             <div className="heading" style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>My Orders</div>
                 {
                     myOrdersData === undefined ?
@@ -204,7 +230,7 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
                                         isOrderInfoDialogOpen={isOrderInfoDialogOpen as boolean}
                                         setIsOrderInfoDialogOpen={setIsOrderInfoDialogOpen as Dispatch<SetStateAction<boolean>>}
 
-                                        DeleteRowDialog={<DeleteRowWarning orderID={orderID} />}
+                                        DeleteRowDialog={<DeleteRowWarning orderID={orderID} productID={productID} removeProductFromOrderHandler={removeProductFromOrderHandler} />}
                                         isDeleteRowDialogOpen={isDeleteRowDialog}
                                         setIsDeleteRowDialogOpen={setIsDeleteRowDialog}
                                     />
@@ -234,7 +260,7 @@ export const SingleOrderInfo = ({userLocation, parent, name, price, quantity, ra
     )
 }
 
-export const DeleteRowWarning = ({orderID}:{orderID:string;}) => {
+export const DeleteRowWarning = ({orderID, productID, removeProductFromOrderHandler}:{orderID:string; productID:string; removeProductFromOrderHandler:() => Promise<void>}) => {
 
     return(
         <div className="delete_row_warning_cont" onClick={(e) => e.stopPropagation()}>
@@ -242,10 +268,11 @@ export const DeleteRowWarning = ({orderID}:{orderID:string;}) => {
                 <h1 className="heading">Hay Wait!!</h1>
                 <p className="para">Are you sure , you want to cancel this order?</p>
                 <p className="para">Order Id : {orderID}</p>
+                <p className="para">Product Id : {productID}</p>
                 <textarea className="cancellation_reason" rows={10} placeholder="Why do you want to cancel this order?"></textarea>
                 <Note heading="Notice" para="Your request will be solved in 24hours" />
                 <div className="buttons">
-                    <button className="ok_btn">Yes, Cancel this order</button>
+                    <button className="ok_btn" onClick={removeProductFromOrderHandler}>Yes, Cancel this order</button>
                     <button className="declien_btn">No, go back</button>
                 </div>
             </div>

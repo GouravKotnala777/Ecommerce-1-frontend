@@ -191,7 +191,10 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
                                             }}>{product[item.th]}</div>
                                             :
                                             item.th === "cancel" ?
-                                                <button className="td update_btn" value={product._id} style={{fontSize:"15px", width:"100px"}} onClick={(e) => {dialogShowInfo!(e); setIsDeleteRowDialogOpen!(true);}}><MdDeleteForever /></button>
+                                                product["orderStatus"] === "confirmed" || product["orderStatus"] === "dispatched" || product["orderStatus"] === "shipped" || product["orderStatus"] === "pending" ?
+                                                    <button className="td update_btn" value={`${product.orderID}-${product._id}-${product.price}-${product.quantity}`} style={{fontSize:"15px", width:"100px"}} onClick={(e) => {dialogShowInfo!(e); setIsDeleteRowDialogOpen!(true);}}><MdDeleteForever /></button>
+                                                    :
+                                                    <button className="td update_btn_disabled" disabled style={{fontSize:"15px", width:"100px"}}><MdDeleteForever /></button>
                                                 :    
                                                 <div className="td" key={item.th+index}>{product[item.th]}</div>
                                 ))
