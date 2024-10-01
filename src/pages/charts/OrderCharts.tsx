@@ -79,7 +79,7 @@ const OrderChart = () => {
             }
             {
                 data?.message.allFailedOrders.length !== 0&&
-                    <BarChart heading="Confirmed Orders" data={data?.message.allFailedOrders as OrderTypes[]} />
+                    <BarChart heading="Failed Orders" data={data?.message.allFailedOrders as OrderTypes[]} />
             }
             {
             data?.message.allProcessingOrders.length !== 0&&
@@ -103,7 +103,7 @@ const OrderChart = () => {
             }
             {
             data?.message.allConfirmedOrders.length !== 0&&
-                <BarChart heading="Failed Orders" data={data?.message.allConfirmedOrders as OrderTypes[]} />
+                <BarChart heading="Confirmed Orders" data={data?.message.allConfirmedOrders as OrderTypes[]} />
             }
             {
             data?.message.allReturnedOrders.length !== 0&&
