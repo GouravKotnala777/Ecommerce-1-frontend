@@ -78,7 +78,7 @@ const api = createApi({
     baseQuery:fetchBaseQuery({
         baseUrl:import.meta.env.VITE_SERVER_URL
     }),
-    tagTypes:["MyWishlistedProducts", "MyCartProducts", "SingleProduct", "MyProfile"],
+    tagTypes:["MyWishlistedProducts", "MyCartProducts", "SingleProduct", "MyProfile", "NewCoupon"],
     endpoints:(builder) => ({
         register:builder.mutation({
             query:(data) => ({
@@ -343,7 +343,8 @@ const api = createApi({
                 url:"/api/v1/coupon/all",
                 method:"GET",
                 credentials:"include"
-            })
+            }),
+            providesTags:["NewCoupon"]
         }),
         createCoupons:builder.mutation({
             query:(data:CreateCouponBodyType) => ({
@@ -351,7 +352,8 @@ const api = createApi({
                 method:"POST",
                 credentials:"include",
                 body:data
-            })
+            }),
+            invalidatesTags:["NewCoupon"]
         }),
         getSingleCoupon:builder.mutation({
             query:({code, totalAmount}:{code:string; totalAmount:number;}) => ({
