@@ -58,7 +58,7 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
                 amount:shippingType === "express"?
                             location.amount+500
                             :
-                            shippingType === "standared"?
+                            shippingType === "standard"?
                                 location.amount + 300
                                 :
                                 location.amount as number,
@@ -106,7 +106,7 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
             amount:shippingType === "express"?
                             location.amount + 500
                             :
-                            shippingType === "standared"?
+                            shippingType === "standard"?
                                 location.amount + 300
                                 :
                                 location.amount as number,
@@ -196,8 +196,8 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
                             <p>Express Shipping (1-3 days) : ₹500/-</p>
                         </label>
                         <label>
-                            <input type="radio" name="shippingType" value="standared" onChange={(e) => setShippingType(e.target.value)} />
-                            <p>Standered Shipping (3-5 days) : ₹300/-</p>
+                            <input type="radio" name="shippingType" value="standard" onChange={(e) => setShippingType(e.target.value)} />
+                            <p>Standard Shipping (3-5 days) : ₹300/-</p>
                         </label>
                         <label>
                             <input type="radio" name="shippingType" defaultChecked value="regular" onChange={(e) => setShippingType(e.target.value)} />
@@ -211,7 +211,7 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
                             shippingType === "express"?
                                 "₹500"
                                 :
-                                shippingType === "standared"?
+                                shippingType === "standard"?
                                     "₹300"
                                     :
                                     "₹0"
@@ -221,7 +221,7 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
                             shippingType === "express"?
                                 ` ₹${location.totalPrice + 500 + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)}/-`
                                 :
-                                shippingType === "standared"?
+                                shippingType === "standard"?
                                     ` ₹${location.totalPrice + 300 + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)}/-`
                                     :
                                     ` ₹${location.totalPrice + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)}/-`

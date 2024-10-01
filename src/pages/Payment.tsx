@@ -372,7 +372,7 @@ const StripePayment = ({userLocation}:{userLocation:UserLocationTypes;}) => {
                             location?.shippingType === "express"?
                                 location.totalPrice + 500 + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
                                 :
-                                location?.shippingType === "standared"?
+                                location?.shippingType === "standard"?
                                     location.totalPrice + 300 + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
                                     :
                                     (location?.totalPrice as number) + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
@@ -395,7 +395,7 @@ const StripePayment = ({userLocation}:{userLocation:UserLocationTypes;}) => {
                             location?.shippingType === "express"?
                                 location.totalPrice + 500 + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
                                 :
-                                location?.shippingType === "standared"?
+                                location?.shippingType === "standard"?
                                     location.totalPrice + 300 + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
                                     :
                                     (location?.totalPrice as number) + recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
