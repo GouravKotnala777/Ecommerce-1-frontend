@@ -49,7 +49,10 @@ const Form = ({heading, formFields, onChangeHandler, onClickHandler, aa, setAa}:
                                 field.type === "text" || field.type === "number" ?
                                     <input key={index} type={field.type} name={field.name} placeholder={field.placeHolder} onChange={onChangeHandler} />
                                     :
-                                    <></>
+                                    field.type === "date" ?
+                                        <input key={index} type={field.type} name={field.name} placeholder={field.placeHolder} onChange={onChangeHandler} />
+                                        :
+                                        <></>
                     ))
                 }
                 {
