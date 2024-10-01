@@ -9,6 +9,7 @@ import { MutationResTypes } from "../assets/demoData";
 import ImageWithFallback from "./ImageWithFallback";
 import unknownProductImg from "../../public/unknownProduct.png";
 import { MdDeleteForever } from "react-icons/md";
+import { GiReturnArrow } from "react-icons/gi";
 
 
 interface TablePropTypes<T1>{
@@ -192,11 +193,17 @@ const Table = <T1 extends {_id:string; [key:string]:string|string[];}>({thead, d
                                             :
                                             item.th === "cancel" ?
                                                 product["orderStatus"] === "confirmed" || product["orderStatus"] === "dispatched" || product["orderStatus"] === "shipped" || product["orderStatus"] === "pending" ?
-                                                    <button className="td update_btn" value={`${product.orderID}-${product._id}-${product.price}-${product.quantity}`} style={{fontSize:"15px", width:"100px"}} onClick={(e) => {dialogShowInfo!(e); setIsDeleteRowDialogOpen!(true);}}><MdDeleteForever /></button>
+                                                    <button className="td update_btn" value={`${product.orderID}-${product._id}-${product.price}-${product.quantity}-cancelled`} style={{fontSize:"15px", width:"100px"}} onClick={(e) => {dialogShowInfo!(e); setIsDeleteRowDialogOpen!(true);}}><MdDeleteForever /></button>
                                                     :
                                                     <button className="td update_btn_disabled" disabled style={{fontSize:"15px", width:"100px"}}><MdDeleteForever /></button>
-                                                :    
-                                                <div className="td" key={item.th+index}>{product[item.th]}</div>
+                                                    :
+                                                item.th === "return" ?
+                                                    product["orderStatus"] === "delivered" ?
+                                                        <button className="td update_btn" value={`${product.orderID}-${product._id}-${product.price}-${product.quantity}-returned`} style={{fontSize:"15px", width:"100px"}} onClick={(e) => {dialogShowInfo!(e); setIsDeleteRowDialogOpen!(true);}}><GiReturnArrow /></button>
+                                                        :
+                                                        <button className="td update_btn_disabled" disabled style={{fontSize:"15px", width:"100px"}}><GiReturnArrow /></button>
+                                                        :
+                                                        <div className="td" key={item.th+index}>{product[item.th]}</div>
                                 ))
                             }
                             {

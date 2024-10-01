@@ -84,6 +84,7 @@ const productTableHeadings = [
     {th:"transactionId", isEditable:false},
     {th:"orderStatus", isEditable:false},
     {th:"cancel", isEditable:false},
+    {th:"return", isEditable:false}
 ];
 
 const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
@@ -96,6 +97,7 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const [productID, setProductID] = useState<string>("");
     const [removingProductPrice, setRemovingProductPrice] = useState<number>(0);
     const [removingProductQuantity, setRemovingProductQuantity] = useState<number>(0);
+    const [updatedOrderState, setUpdatedOrderState] = useState<"cancelled"|"returned">("cancelled");
     const [ordersCount, setOrdersCount] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isOrderInfoDialogOpen, setIsOrderInfoDialogOpen] = useState<boolean>(false);
@@ -114,6 +116,7 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
         setProductID(e.currentTarget.value.split("-")[1]);
         setRemovingProductPrice(Number(e.currentTarget.value.split("-")[2]));
         setRemovingProductQuantity(Number(e.currentTarget.value.split("-")[3]));
+        setUpdatedOrderState(e.currentTarget.value.split("-")[4] as "cancelled"|"returned");
 
         console.log({e:e.currentTarget.value});
         console.log({eNum:Number(e.currentTarget.value.split("-")[2])*Number(e.currentTarget.value.split("-")[3])});
@@ -177,7 +180,7 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
 
     const removeProductFromOrderHandler = async() => {
         try {
-            const res = await removeProductFromOrder({orderID, productID, removingProductPrice:(Number(removingProductPrice)), removingProductQuantity:Number(removingProductQuantity)});
+            const res = await removeProductFromOrder({orderID, productID, removingProductPrice:(Number(removingProductPrice)), removingProductQuantity:Number(removingProductQuantity), updatedOrderState});
 
             console.log("---------  removeProductFromOrder MyOrders");
             console.log(res); 
