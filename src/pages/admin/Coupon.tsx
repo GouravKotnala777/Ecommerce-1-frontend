@@ -64,7 +64,7 @@ const Coupons = ({userLocation}:{userLocation:UserLocationTypes;}) => {
             <HandleMutationRes res={createCouponRes} />
             {/*<pre>{JSON.stringify(data, null, `\t`)}</pre>*/}
             <div className="left_part">
-                <p style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>All Coupons</p>
+                <p style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>All Coupons ({couponData.data?.message?.length})</p>
                 <div className="coupon_table_scroller">
                     {
                         couponData.data?.message.map((coupon) => (
