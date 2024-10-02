@@ -5,6 +5,7 @@ import { SerializedError } from "@reduxjs/toolkit";
 import { MouseEvent, useCallback, useEffect, useState } from "react";
 import Table from "../../components/Table";
 import { MutationResTypes } from "../../assets/demoData";
+import { UserLocationTypes } from "../Login.Page";
 
 type AllOrdersChartType = "allPendingOrders"|"allConfirmedOrders"|"allProcessingOrders"|"allDispatchedOrders"|"allShippedOrders"|"allDeliveredOrders"|"allCancelledOrders"|"allFailedOrders"|"allReturnedOrders"|"allRefundedOrders";
 
@@ -16,7 +17,7 @@ const productTableHeadings = [
     {th:"orderStatus", isEditable:false}
 ];
 
-const AllOrders = () => {
+const AllOrders = ({userLocation}:{userLocation:UserLocationTypes}) => {
     const {data}:{
         isLoading:boolean;
         data?:AllOrdersResponseType;
@@ -35,7 +36,7 @@ const AllOrders = () => {
     const onClickHandler = async(e:MouseEvent<HTMLButtonElement>) => {
         try {
             if (list && list[e?.currentTarget?.value as string]) {
-                const res = await updateOrder({orderID:e?.currentTarget?.value as string, orderStatus:list[e?.currentTarget?.value as string]?.orderStatus as "pending"|"confirmed"|"processing"|"shipped"|"dispatched"|"delivered"|"cancelled"|"failed"|"returned"|"refunded"});
+                const res = await updateOrder({orderID:e?.currentTarget?.value as string, orderStatus:list[e?.currentTarget?.value as string]?.orderStatus as "pending"|"confirmed"|"processing"|"shipped"|"dispatched"|"delivered"|"cancelled"|"failed"|"returned"|"refunded", action:"update_order", userLocation});
                 console.log("::::::::::::::::::");
                 setOutStockRes(res);
                 console.log(res);

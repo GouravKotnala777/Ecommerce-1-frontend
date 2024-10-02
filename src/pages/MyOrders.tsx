@@ -180,7 +180,7 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
 
     const removeProductFromOrderHandler = async() => {
         try {
-            const res = await removeProductFromOrder({orderID, productID, removingProductPrice:(Number(removingProductPrice)), removingProductQuantity:Number(removingProductQuantity), updatedOrderState});
+            const res = await removeProductFromOrder({orderID, productID, removingProductPrice:(Number(removingProductPrice)), removingProductQuantity:Number(removingProductQuantity), updatedOrderState, action:"remove_product_from_order", userLocation});
 
             console.log("---------  removeProductFromOrder MyOrders");
             console.log(res); 

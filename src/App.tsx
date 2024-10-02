@@ -139,7 +139,7 @@ const App = () => {
                   <Route path="/admin/activities" element={<ProtectedRoute accessibleFor="admin" children={<UserActivities />} userRole={myProfileData.data?.message.role} />} />
                   <Route path="/admin/coupon" element={<ProtectedRoute accessibleFor="admin" children={<Coupons userLocation={userLocation as UserLocationTypes} />} userRole={myProfileData.data?.message.role} />} />
                   <Route path="/admin/chart/orders" element={<ProtectedRoute accessibleFor="admin" children={<OrderChart />} userRole={myProfileData.data?.message.role} />} />
-                  <Route path="/admin/order/all" element={<ProtectedRoute accessibleFor="admin" children={<AllOrders />} userRole={myProfileData.data?.message.role} />} />
+                  <Route path="/admin/order/all" element={<ProtectedRoute accessibleFor="admin" children={<AllOrders userLocation={userLocation as UserLocationTypes} />} userRole={myProfileData.data?.message.role} />} />
                 </>
               }
 

@@ -389,11 +389,11 @@ const api = createApi({
             })
         }),
         removeProductFromOrder:builder.mutation({
-            query:({orderID, productID, removingProductPrice, removingProductQuantity, updatedOrderState}:{orderID:string; productID:string; removingProductPrice:number; removingProductQuantity:number; updatedOrderState:"cancelled"|"returned"}) => ({
+            query:({orderID, productID, removingProductPrice, removingProductQuantity, updatedOrderState, action, userLocation}:{orderID:string; productID:string; removingProductPrice:number; removingProductQuantity:number; updatedOrderState:"cancelled"|"returned"; action:string; userLocation:UserLocationTypes;}) => ({
                 url:"/api/v1/order/myOrders",
-                method:"PUT",
+                method:"DELETE",
                 credentials:"include",
-                body:{orderID, productID, removingProductPrice, removingProductQuantity, updatedOrderState}
+                body:{orderID, productID, removingProductPrice, removingProductQuantity, updatedOrderState, action, userLocation}
             })
         }),
         allOrders:builder.query({
@@ -404,11 +404,11 @@ const api = createApi({
             })
         }),
         updateOrder:builder.mutation({
-            query:({orderID, orderStatus}:{orderID:string; orderStatus:"pending"|"confirmed"|"processing"|"shipped"|"dispatched"|"delivered"|"cancelled"|"failed"|"returned"|"refunded";}) => ({
+            query:({orderID, orderStatus, action, userLocation}:{orderID:string; orderStatus:"pending"|"confirmed"|"processing"|"shipped"|"dispatched"|"delivered"|"cancelled"|"failed"|"returned"|"refunded"; action:string; userLocation:UserLocationTypes;}) => ({
                 url:"/api/v1/order/all",
                 method:"PUT",
                 credentials:"include",
-                body:{orderID, orderStatus}
+                body:{orderID, orderStatus, action, userLocation}
             })
         }),
         createChat:builder.mutation({
