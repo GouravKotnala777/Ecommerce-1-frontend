@@ -15,7 +15,7 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 
 
-const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPrice, coupon, shippingType, parent, userLocation, newOrder}:{clientSecret:string; userDetailes:{name:string; email:string; phone:string;}; address:AddressBodyTypes; orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; shippingType:string; parent?:string; userLocation:UserLocationTypes; newOrder:ReturnType<typeof useNewOrderMutation>[0]}) => {
+const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPrice, coupon, shippingType, parent, userLocation, newOrder,  recommendationProductsAmount}:{clientSecret:string; userDetailes:{name:string; email:string; phone:string;}; address:AddressBodyTypes; orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; shippingType:string; parent?:string; userLocation:UserLocationTypes; newOrder:ReturnType<typeof useNewOrderMutation>[0];     recommendationProductsAmount:number;}) => {
     const stripe = useStripe();
     const elements = useElements();
     const [error, setError] = useState<string>();
@@ -94,7 +94,11 @@ const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPri
                     message:"demo message",
                     parent:parent as string,
                     action:"new_order",
-                    userLocation
+                    userLocation,
+
+
+
+                    recommendationProductsAmount:recommendationProductsAmount
                 });
 
                 console.log("---- Payment.tsx");
@@ -143,7 +147,7 @@ const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPri
     )
 };
 
-const CashOnDelivery = ({orderItems, totalPrice, coupon, shippingType, parent, userLocation, newOrder}:{orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; shippingType:string; parent?:string; userLocation:UserLocationTypes; newOrder:ReturnType<typeof useNewOrderMutation>[0];}) => {
+const CashOnDelivery = ({orderItems, totalPrice, coupon, shippingType, parent, userLocation, newOrder, recommendationProductsAmount}:{orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; shippingType:string; parent?:string; userLocation:UserLocationTypes; newOrder:ReturnType<typeof useNewOrderMutation>[0];    recommendationProductsAmount:number;}) => {
     const [error, setError] = useState<string|null>(null);
     const [orderPlaced, setOrderPlaced] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -166,9 +170,14 @@ const CashOnDelivery = ({orderItems, totalPrice, coupon, shippingType, parent, u
                 message:"demo message",
                 parent:parent as string,
                 action:"new_order",
-                userLocation
+                userLocation,
+
+
+                recommendationProductsAmount:recommendationProductsAmount
+
             });
             console.log(newOrderRes);
+            console.log({recommendationProductsAmount});
             
             console.log("cash on delivery");
             console.log("------- CashOnDelivery Payment");
@@ -224,6 +233,8 @@ const StripePayment = ({userLocation}:{userLocation:UserLocationTypes;}) => {
         shippingType:string;
         coupon:string;
         parent?:string;
+
+        recommendationProductsAmount:number;
     }|undefined = useLocation().state;
     const [productRecommendation] = useProductRecommendationMutation();
     const [createPayment] = useCreatePaymentMutation();
@@ -234,6 +245,7 @@ const StripePayment = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const [hideGetClientSecretAgain, setHideGetClientSecretAgain] = useState<boolean>(false);
     const [newOrder] = useNewOrderMutation();
     const [clientSecret, setClientSecret] = useState<string>("");
+
 
     
     const getProductRecommendation = async() => {
@@ -257,7 +269,7 @@ const StripePayment = ({userLocation}:{userLocation:UserLocationTypes;}) => {
         setIsLoading(true);
         try {
             const paymentIntendRes = await createPayment({
-                amount:location?.totalPrice as number,
+                amount:(location?.totalPrice as number)+(location?.recommendationProductsAmount as number),
                 quantity:1,
                 amountFormRecomm:recommendationProducts.reduce((acc, iter) => acc+iter.price, 0),
                 action:"create_payment_intend_again",
@@ -270,6 +282,8 @@ const StripePayment = ({userLocation}:{userLocation:UserLocationTypes;}) => {
             console.log("----- Payment.tsx requestForClientSecretAgain");
             console.log({amount:location?.totalPrice as number});
             console.log({quantity:1});
+            console.log({recommendationProductsAmount1:location?.recommendationProductsAmount});
+            console.log({recommendationProductsAmount2:recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)});
             console.log({amountFormRecomm:recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)});
             console.log("----- Payment.tsx requestForClientSecretAgain");
 
@@ -305,6 +319,14 @@ const StripePayment = ({userLocation}:{userLocation:UserLocationTypes;}) => {
         <Elements stripe={stripePromise}>
             {/*<pre>{JSON.stringify(recommendationProducts, null, `\t`)}</pre>
             <pre>{JSON.stringify(clientSecret, null, `\t`)}</pre>*/}
+            <pre>{JSON.stringify({
+                orderItems:location?.orderItems,
+                totalPrice:location?.totalPrice,
+                coupon:location?.coupon,
+                shippingType:location?.shippingType,
+                parent:location?.parent,
+                recommendationProductsAmount:(location?.recommendationProductsAmount as number)+recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
+            }, null, `\t`)}</pre>
             {
                 sameCategoryProduct.length >= 4 &&
                     <ProductsRecommendation
@@ -382,7 +404,11 @@ const StripePayment = ({userLocation}:{userLocation:UserLocationTypes;}) => {
                     shippingType={location?.shippingType as string}
                     parent={location?.parent as string}
                     userLocation={userLocation}
-                    newOrder={newOrder} />
+                    newOrder={newOrder}
+
+                    recommendationProductsAmount={(location?.recommendationProductsAmount as number)+recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)}
+                    
+                    />
                 },
                 {
                     name:"CashOnDelivery", children:<CashOnDelivery
@@ -405,7 +431,11 @@ const StripePayment = ({userLocation}:{userLocation:UserLocationTypes;}) => {
                     shippingType={location?.shippingType as string}
                     parent={location?.parent as string}
                     userLocation={userLocation}
-                    newOrder={newOrder} />
+                    newOrder={newOrder}
+                    
+                    recommendationProductsAmount={(location?.recommendationProductsAmount as number)+recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)}
+                    
+                    />
 
                 }
             ]} />

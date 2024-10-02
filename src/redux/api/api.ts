@@ -372,11 +372,11 @@ const api = createApi({
             })
         }),
         newOrder:builder.mutation({
-            query:({orderItems, totalPrice, coupon, transactionId, paymentStatus, orderStatus, shippingType, message, parent, action, userLocation}:{orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; transactionId:string; paymentStatus:string; orderStatus:"pending"|"confirmed"|"processing"|"shipped"|"dispatched"|"delivered"|"cancelled"|"failed"|"returned"|"refunded"; shippingType:string; message:string; parent:string; action:string; userLocation:UserLocationTypes;}) => ({
+            query:({orderItems, totalPrice, coupon, transactionId, paymentStatus, orderStatus, shippingType, message, parent, action, userLocation, recommendationProductsAmount}:{orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; transactionId:string; paymentStatus:string; orderStatus:"pending"|"confirmed"|"processing"|"shipped"|"dispatched"|"delivered"|"cancelled"|"failed"|"returned"|"refunded"; shippingType:string; message:string; parent:string; action:string; userLocation:UserLocationTypes;    recommendationProductsAmount?:number;}) => ({
                 url:"/api/v1/order/new",
                 method:"POST",
                 credentials:"include",
-                body:{orderItems, totalPrice, coupon, transactionId, paymentStatus, orderStatus, shippingType, message, parent, action, userLocation}
+                body:{orderItems, totalPrice, coupon, transactionId, paymentStatus, orderStatus, shippingType, message, parent, action, userLocation,     recommendationProductsAmount}
             }),
             invalidatesTags:["MyCartProducts"]
         }),

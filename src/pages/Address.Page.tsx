@@ -84,10 +84,13 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
                     amount:location.amount,
                     quantity:location.quantity,
                     orderItems:[...location.orderItems, ...recommendationProducts],
-                    totalPrice:location.totalPrice+recommendationProducts.reduce((acc, iter) => acc+iter.price, 0),
+                    totalPrice:location.totalPrice,
                     coupon:location.coupon,
                     shippingType:shippingType,
-                    parent:location.parent
+                    parent:location.parent,
+
+
+                    recommendationProductsAmount:recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
                 }});
             }
             if (paymentIntendRes.error) {
@@ -127,7 +130,10 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
                 totalPrice:location.totalPrice+recommendationProducts.reduce((acc, iter) => acc+iter.price, 0),
                 coupon:location.coupon,
                 shippingType:shippingType,
-                parent:location.parent
+                parent:location.parent,
+
+
+                recommendationProductsAmount:recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
             }});
         }
         if (paymentIntendRes.error) {
@@ -174,15 +180,16 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
     return(
         <div className="address_bg">
             {/*<pre>{JSON.stringify(recommendationProducts, null, `\t`)}</pre>*/}
-            {/*<pre>{JSON.stringify({
+            <pre>{JSON.stringify({
                 amount:location.amount,
                 quantity:location.quantity,
                 orderItems:location.orderItems,
                 totalPrice:location.totalPrice,
                 coupon:location.coupon,
                 shippingType:location.shippingType,
-                parent:location.parent
-            }, null, `\t`)}</pre>*/}
+                parent:location.parent,
+                recommendationProductsAmount:recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
+            }, null, `\t`)}</pre>
             <div className="shipping_type_cont">
                 <div className="upper_cont">
                     <div className="heading">subtotal:</div>
