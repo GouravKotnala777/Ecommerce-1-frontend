@@ -76,7 +76,7 @@ $shadow:1px 1px 8px 1px #ff4b6941;
     background: linear-gradient(90deg, $gradient1, $gradient2);
     box-shadow: $shadow;
     &:hover{
-        background: $btnHover;
+        opacity: 0.6;
     }
 }
 
