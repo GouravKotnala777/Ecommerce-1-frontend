@@ -102,11 +102,13 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isOrderInfoDialogOpen, setIsOrderInfoDialogOpen] = useState<boolean>(false);
     const [isDeleteRowDialog, setIsDeleteRowDialog] = useState<boolean>(false);
+    const [orderCancelReason, setOrderCancelReason] = useState<string>("");
     const [myOrdersData, setMyOrdersData] = useState<{
             data?:MyOrderResponseType;
             error?:FetchBaseQueryError | SerializedError;
         }>();
     const [removeProductFromOrder] = useRemoveProductFromOrderMutation();
+
 
 
 
@@ -179,16 +181,21 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     }
 
     const removeProductFromOrderHandler = async() => {
+        setIsLoading(true);
         try {
-            const res = await removeProductFromOrder({orderID, productID, removingProductPrice:(Number(removingProductPrice)), removingProductQuantity:Number(removingProductQuantity), updatedOrderState, action:"remove_product_from_order", userLocation});
+            const res = await removeProductFromOrder({orderID, productID, removingProductPrice:(Number(removingProductPrice)), removingProductQuantity:Number(removingProductQuantity), updatedOrderState, action:"remove_product_from_order", userLocation, orderCancelReason});
 
             console.log("---------  removeProductFromOrder MyOrders");
             console.log(res); 
             console.log("---------  removeProductFromOrder MyOrders");
+            setIsLoading(false);
+            setIsDeleteRowDialog(false);
+            
         } catch (error) {
             console.log("---------  removeProductFromOrder MyOrders error");
             console.log(error);
             console.log("---------  removeProductFromOrder MyOrders error");
+            setIsLoading(false);
         }
     };
 
@@ -233,7 +240,7 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
                                         isOrderInfoDialogOpen={isOrderInfoDialogOpen as boolean}
                                         setIsOrderInfoDialogOpen={setIsOrderInfoDialogOpen as Dispatch<SetStateAction<boolean>>}
 
-                                        DeleteRowDialog={<DeleteRowWarning orderID={orderID} productID={productID} removeProductFromOrderHandler={removeProductFromOrderHandler} />}
+                                        DeleteRowDialog={<DeleteRowWarning orderID={orderID} productID={productID} removeProductFromOrderHandler={removeProductFromOrderHandler} setIsDeleteRowDialog={setIsDeleteRowDialog} setOrderCancelReason={setOrderCancelReason} isLoading={isLoading} />}
                                         isDeleteRowDialogOpen={isDeleteRowDialog}
                                         setIsDeleteRowDialogOpen={setIsDeleteRowDialog}
                                     />
@@ -263,7 +270,7 @@ export const SingleOrderInfo = ({userLocation, parent, name, price, quantity, ra
     )
 }
 
-export const DeleteRowWarning = ({orderID, productID, removeProductFromOrderHandler}:{orderID:string; productID:string; removeProductFromOrderHandler:() => Promise<void>}) => {
+export const DeleteRowWarning = ({orderID, productID, removeProductFromOrderHandler, setIsDeleteRowDialog, setOrderCancelReason, isLoading}:{orderID:string; productID:string; removeProductFromOrderHandler:() => Promise<void>; setIsDeleteRowDialog:Dispatch<SetStateAction<boolean>>; setOrderCancelReason:Dispatch<SetStateAction<string>>; isLoading:boolean;}) => {
 
     return(
         <div className="delete_row_warning_cont" onClick={(e) => e.stopPropagation()}>
@@ -272,11 +279,11 @@ export const DeleteRowWarning = ({orderID, productID, removeProductFromOrderHand
                 <p className="para">Are you sure , you want to cancel this order?</p>
                 <p className="para">Order Id : {orderID}</p>
                 <p className="para">Product Id : {productID}</p>
-                <textarea className="cancellation_reason" rows={10} placeholder="Why do you want to cancel this order?"></textarea>
+                <textarea className="cancellation_reason" rows={10} placeholder="Why do you want to cancel this order?" onChange={(e) => setOrderCancelReason(e.target.value)}></textarea>
                 <Note heading="Notice" para="Your request will be solved in 24hours" />
                 <div className="buttons">
-                    <button className="ok_btn" onClick={removeProductFromOrderHandler}>Yes, Cancel this order</button>
-                    <button className="declien_btn">No, go back</button>
+                    <button className="ok_btn" onClick={removeProductFromOrderHandler}>{isLoading ? <Spinner type={2} width={20} thickness={2} color="white" /> : "Yes, Cancel this order"}</button>
+                    <button className="declien_btn" onClick={() => setIsDeleteRowDialog(false)}>No, go back</button>
                 </div>
             </div>
         </div>

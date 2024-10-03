@@ -18,7 +18,7 @@ import UpdateProduct from './pages/admin/UpdateProduct'
 import Coupons from './pages/admin/Coupon'
 import StripePayment from './pages/Payment'
 import Address from './pages/Address.Page'
-import { useFetchMyCartQuery, useMyProfileQuery, useMyWhishlistQuery } from './redux/api/api'
+import { useFetchMyCartQuery, useMyProfileQuery, useMyWhishlistQuery, useOutStockProductsQuery } from './redux/api/api'
 import { ProductTypes, UserTypes } from './assets/demoData'
 import { setLoggedInUser } from './redux/reducers/loggedInUserReducer'
 import IncompleteProducts from './pages/admin/IncompleteProducts'
@@ -55,6 +55,9 @@ const App = () => {
     data?:{success:boolean; message:ProductTypes[]};
     error?:FetchBaseQueryError | SerializedError;
   } = useMyWhishlistQuery("");
+  const outStockData:{
+    data?:{success:boolean; message:(ProductTypes&{_id:string; [key:string]:string})[]}
+  } = useOutStockProductsQuery("")
   const [userLocation, setUserLocation] = useState<UserLocationTypes>();
   const dispatch = useDispatch();
 
@@ -132,8 +135,8 @@ const App = () => {
                 <>
                   <Route path="/chat-admin" element={<ChatbotAdmin USERID={myProfileData.data?.message._id} USERNAME={myProfileData.data?.message.name} />} />
                   <Route path="/product/new" element={<ProtectedRoute accessibleFor="admin" children={<AddProduct userLocation={userLocation as UserLocationTypes} />} userRole={myProfileData.data?.message.role} />} />
-                  <Route path="/admin/dashboard" element={<ProtectedRoute accessibleFor="admin" children={<Dashboard />} userRole={myProfileData.data?.message.role} />} />
-                  <Route path="/admin/outstock" element={<ProtectedRoute accessibleFor="admin" children={<OutStock />} userRole={myProfileData.data?.message.role} />} />
+                  <Route path="/admin/dashboard" element={<ProtectedRoute accessibleFor="admin" children={<Dashboard outStockProductsNotification={outStockData} />} userRole={myProfileData.data?.message.role} />} />
+                  <Route path="/admin/outstock" element={<ProtectedRoute accessibleFor="admin" children={<OutStock outStockProductsNotification={outStockData} />} userRole={myProfileData.data?.message.role} />} />
                   <Route path="/admin/product/update" element={<ProtectedRoute accessibleFor="admin" children={<UpdateProduct />} userRole={myProfileData.data?.message.role} />} />
                   <Route path="/admin/product/incomplete" element={<ProtectedRoute accessibleFor="admin" children={<IncompleteProducts />} userRole={myProfileData.data?.message.role} />} />
                   <Route path="/admin/activities" element={<ProtectedRoute accessibleFor="admin" children={<UserActivities />} userRole={myProfileData.data?.message.role} />} />

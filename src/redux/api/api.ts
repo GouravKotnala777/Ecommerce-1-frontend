@@ -389,11 +389,11 @@ const api = createApi({
             })
         }),
         removeProductFromOrder:builder.mutation({
-            query:({orderID, productID, removingProductPrice, removingProductQuantity, updatedOrderState, action, userLocation}:{orderID:string; productID:string; removingProductPrice:number; removingProductQuantity:number; updatedOrderState:"cancelled"|"returned"; action:string; userLocation:UserLocationTypes;}) => ({
+            query:({orderID, productID, removingProductPrice, removingProductQuantity, updatedOrderState, action, userLocation, orderCancelReason}:{orderID:string; productID:string; removingProductPrice:number; removingProductQuantity:number; updatedOrderState:"cancelled"|"returned"; action:string; userLocation:UserLocationTypes; orderCancelReason:string;}) => ({
                 url:"/api/v1/order/myOrders",
                 method:"DELETE",
                 credentials:"include",
-                body:{orderID, productID, removingProductPrice, removingProductQuantity, updatedOrderState, action, userLocation}
+                body:{orderID, productID, removingProductPrice, removingProductQuantity, updatedOrderState, action, userLocation, orderCancelReason}
             })
         }),
         allOrders:builder.query({

@@ -1,5 +1,5 @@
 import { MutationResTypes, ProductTypes } from "../../assets/demoData";
-import { UpdateProductBodyType, useOutStockProductsQuery, useUpdateProductMutation } from "../../redux/api/api";
+import { UpdateProductBodyType, useUpdateProductMutation } from "../../redux/api/api";
 import { MouseEvent, useState } from "react";
 import Table from "../../components/Table";
 
@@ -11,8 +11,7 @@ const productTableHeadings = [
     {th:"stock", isEditable:true}
 ];
 
-const OutStock = () => {
-    const outStockData:{data?:{success:boolean; message:(ProductTypes&{_id:string; [key:string]:string})[]}} = useOutStockProductsQuery("");
+const OutStock = ({outStockProductsNotification}:{outStockProductsNotification:{data?:{success:boolean; message:(ProductTypes&{_id:string; [key:string]:string})[]}}}) => {
     const [list, setList] = useState<{ [key: string]:UpdateProductBodyType;
     }>({});
     const [updateProduct] = useUpdateProductMutation();
@@ -49,7 +48,7 @@ const OutStock = () => {
             <p style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>Restock Products</p>
             <Table<(ProductTypes & {_id: string; [key: string]: string;})>
                 thead={productTableHeadings}
-                data={outStockData.data?.message}
+                data={outStockProductsNotification.data?.message}
                 list={list}
                 setList={setList}
                 onEditClickHandler={(e:MouseEvent<HTMLButtonElement>) => onClickHandler(e)}
