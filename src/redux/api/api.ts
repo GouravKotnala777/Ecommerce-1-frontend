@@ -78,7 +78,7 @@ const api = createApi({
     baseQuery:fetchBaseQuery({
         baseUrl:import.meta.env.VITE_SERVER_URL
     }),
-    tagTypes:["MyWishlistedProducts", "MyCartProducts", "SingleProduct", "MyProfile", "NewCoupon"],
+    tagTypes:["MyWishlistedProducts", "MyCartProducts", "SingleProduct", "MyProfile", "NewCoupon", "Orders"],
     endpoints:(builder) => ({
         register:builder.mutation({
             query:(data) => ({
@@ -401,7 +401,8 @@ const api = createApi({
                 url:"/api/v1/order/all",
                 method:"GET",
                 credentials:"include"
-            })
+            }),
+            providesTags:["Orders"]
         }),
         updateOrder:builder.mutation({
             query:({orderID, orderStatus, action, userLocation}:{orderID:string; orderStatus:"pending"|"confirmed"|"processing"|"shipped"|"dispatched"|"delivered"|"cancelled"|"failed"|"returned"|"refunded"; action:string; userLocation:UserLocationTypes;}) => ({
@@ -409,7 +410,8 @@ const api = createApi({
                 method:"PUT",
                 credentials:"include",
                 body:{orderID, orderStatus, action, userLocation}
-            })
+            }),
+            invalidatesTags:["Orders"]
         }),
         createChat:builder.mutation({
             query:({adminID, chats, isHelpful, action, userLocation}:ChatTypes & {action:string; userLocation:UserLocationTypes;}) => ({

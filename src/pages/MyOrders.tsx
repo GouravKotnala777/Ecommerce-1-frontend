@@ -122,6 +122,18 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
 
         console.log({e:e.currentTarget.value});
         console.log({eNum:Number(e.currentTarget.value.split("-")[2])*Number(e.currentTarget.value.split("-")[3])});
+        console.log({productID:e.currentTarget.value.split("-")[1], orderID:e.currentTarget.value.split("-")[0]});
+        
+        //setTransformedData([
+        //    ...transformedData.filter((item) => {
+        //        if (item._id === e.currentTarget.value.split("-")[1]&&item.orderID === e.currentTarget.value.split("-")[0]) {
+        //            return item;
+        //        }
+        //        else{
+        //            return item;
+        //        }  
+        //    })
+        //]);
     }
 
     const dataTransformer = (myOrders:{
@@ -186,10 +198,26 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
             const res = await removeProductFromOrder({orderID, productID, removingProductPrice:(Number(removingProductPrice)), removingProductQuantity:Number(removingProductQuantity), updatedOrderState, action:"remove_product_from_order", userLocation, orderCancelReason});
 
             console.log("---------  removeProductFromOrder MyOrders");
-            console.log(res); 
+            console.log(res.data.message);
             console.log("---------  removeProductFromOrder MyOrders");
             setIsLoading(false);
             setIsDeleteRowDialog(false);
+            setTransformedData((prev) => [
+                ...prev.map((item) => {
+                    if (item._id === productID&&item.orderID === orderID) {
+                        console.log("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+                        console.log({"item._id":item._id, productID, "item.orderID":item.orderID, orderID});
+                        
+                        console.log("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+                        
+                        return res.data.message;
+                    }
+                    else{
+                        return item;
+                    }  
+                })
+            ]);
+
             
         } catch (error) {
             console.log("---------  removeProductFromOrder MyOrders error");
@@ -198,6 +226,10 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
             setIsLoading(false);
         }
     };
+
+    //const gg = () => {
+    //    setTransformedData((prev) => [...prev.filter((item) => item._id === productID&&item.orderID === orderID)]);
+    //}
 
     useEffect(() => {
         if (skip !== undefined) {
