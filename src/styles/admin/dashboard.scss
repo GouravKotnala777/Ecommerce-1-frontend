@@ -1,0 +1,52 @@
+@import "../utils";
+
+.dashboard_bg{
+    //border: 2px solid red;
+    .dashboard_links{
+        //border: 2px solid green;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-top: 20px;
+        .dashboad_link{
+            //border: 2px solid blue;
+            position: relative;
+            border-radius: 8px;
+            background: white;
+            border: 1px solid $primary;
+            text-decoration: none;
+            color: #515151;
+
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 10px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            &:hover{
+                background: $primaryHover;
+            }
+            .dashboard_icon{
+                font-size: 0.9rem;
+            }
+            .notification{
+                //border: 2px solid violet;
+                position: absolute;
+                top: -8px;
+                right: -8px;
+                width: 20px;
+                height: 20px;
+                //padding: 10px;
+                font-size: 0.7rem;
+                display: grid;
+                place-items: center;
+                //padding-bottom: 15px;
+                border-radius:50%;
+                background: linear-gradient(90deg, $primary, $secondary);
+                color: white;
+            }
+        }
+    }
+}
