@@ -11,6 +11,15 @@ import { BiEdit, BiRightArrowAlt } from "react-icons/bi";
 import { CgClose } from "react-icons/cg";
 import { useUpdateMeMutation } from "../redux/api/api";
 import { UserLocationTypes } from "../pages/Login.Page";
+import ShareButton from "./ShareButton";
+import { RxActivityLog } from "react-icons/rx";
+import { RiChatSmile3Line } from "react-icons/ri";
+import { FiShoppingCart } from "react-icons/fi";
+import { FaRegAddressCard } from "react-icons/fa";
+import { IoHomeOutline, IoLogInOutline, IoLogOutOutline, IoScaleOutline } from "react-icons/io5";
+//import { LuLayoutDashboard } from "react-icons/lu";
+//import { IoBagAddOutline } from "react-icons/io5";
+//import { BsBookmarkHeart } from "react-icons/bs";
 
 
 const Header = ({userName, userRole, wishlistNotification, cartNotification, userLocation}:{userName?:string; userRole:string|undefined; wishlistNotification?:number; cartNotification:number; userLocation:UserLocationTypes|undefined;}) => {
@@ -49,36 +58,39 @@ const Header = ({userName, userRole, wishlistNotification, cartNotification, use
                 </div>
                 <nav className="right_part">
                     <div className="nav_section">
-                        <NavLink className="navlinks" to="/">Home</NavLink>
-                        <NavLink className="navlinks" to="/tools/macro_calculator">Tools</NavLink>
+                        <NavLink className="navlinks" to="/"><IoHomeOutline className="header_icon" /></NavLink>
+                        <NavLink className="navlinks" to="/tools/macro_calculator"><IoScaleOutline className="header_icon" /></NavLink>
                         {
                             !userName &&
                                 <>
                                     <NavLink className="navlinks" to="/user/register">Register</NavLink>
-                                    <NavLink className="navlinks" to="/user/login">Login</NavLink>
+                                    <NavLink className="navlinks" to="/user/login"><IoLogInOutline className="header_icon" /></NavLink>
                                 </>
                         }
                         {
                             userRole === "admin" &&
                                 <>
-                                    <NavLink className="navlinks" to="/chat-admin">Chats</NavLink>
+                                    <NavLink className="navlinks" to="/chat-admin"><RiChatSmile3Line className="header_icon" /></NavLink>
                                     <NavLink className="navlinks" to="/product/new">Add Product</NavLink>
-                                    <NavLink className="navlinks" to="/admin/activities">Activities</NavLink>
+                                    <NavLink className="navlinks" to="/admin/activities"><RxActivityLog className="header_icon" /></NavLink>
                                     <NavLink className="navlinks" to="/admin/dashboard">Dashboard</NavLink>
                                 </>
                         }
                         {
                             userName &&
                                 <>
-                                    <div className="navlinks" style={{cursor:"pointer"}} onClick={() => setIsMyProfileDialogOpen(true)}>My Profile</div>
+                                    <div className="navlinks" style={{cursor:"pointer"}} onClick={() => setIsMyProfileDialogOpen(true)}><FaRegAddressCard className="header_icon" /></div>
                                     <NavLink className="navlinks cart_navlinks" to="/user/wishlist">
-                                        {wishlistNotification !== 0 && wishlistNotification !== undefined && <div className="notification">{wishlistNotification}</div>} Wishlist
+                                        {wishlistNotification !== 0 && wishlistNotification !== undefined && <div className="notification">{wishlistNotification}</div>} Whislist
                                     </NavLink>
                                     <NavLink className="navlinks" to="/user/orders">Orders</NavLink>
                                     <NavLink className="navlinks cart_navlinks" to="/user/cart">
-                                        {cartNotification !== 0 && cartNotification !== undefined && <div className="notification">{cartNotification}</div>} Cart
+                                        {cartNotification !== 0 && cartNotification !== undefined && <div className="notification">{cartNotification}</div>} <FiShoppingCart className="header_icon" />
                                     </NavLink>
-                                    <NavLink className="navlinks" to="/user/logout">Logout</NavLink>
+
+                                    <ShareButton title="this is title" text="this is text" url="https://ecommerce-1-frontend.vercel.app" />
+
+                                    <NavLink className="navlinks" to="/user/logout"><IoLogOutOutline className="header_icon" /></NavLink>
                                 </>
                         }
                     </div>

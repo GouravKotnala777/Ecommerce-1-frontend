@@ -42,6 +42,25 @@
             .navlinks{
                 text-decoration: none;
                 color: white;
+                padding: 2px;
+                border-radius: 4px;
+                &:hover{
+                    background:white;
+                    color: black;
+                }
+                .header_icon{
+                    font-size: 1.1rem;
+                }
+            }
+            .share_btn{
+                color: white;
+                border-radius: 4px;
+                &:hover{
+                    background:white;
+                    color: black;
+                }
+                .MdOutlineShare{
+                }
             }
             .cart_navlinks{
                 position: relative;
@@ -224,6 +243,7 @@
             display: flex;
             align-items: center;
             .username{
+                margin: 0 2px;
                 font-size: 0.8rem;
                 color: white;
                 font-weight: 500;

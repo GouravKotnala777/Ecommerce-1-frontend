@@ -2,6 +2,7 @@ import "../styles/components/sidebar.scss";
 import { NavLink } from "react-router-dom";
 import { CgClose } from "react-icons/cg";
 import { Dispatch, SetStateAction } from "react";
+import ShareButton from "./ShareButton";
 
 
 const Sidebar = ({userName, userRole, wishlistNotification, cartNotification, isHamActive, setIsHamActive, setIsMyProfileDialogOpen}:{userName:string|undefined; userRole:string|undefined; isHamActive:boolean; wishlistNotification?:number; cartNotification:number; setIsHamActive:Dispatch<SetStateAction<boolean>>; setIsMyProfileDialogOpen:Dispatch<SetStateAction<boolean>>;}) => {
@@ -43,6 +44,9 @@ const Sidebar = ({userName, userRole, wishlistNotification, cartNotification, is
                                     {cartNotification !== 0 && cartNotification !== undefined && <div className="notification">{cartNotification}</div>} Cart
                                 </NavLink>
                                 <div className="sidebar_navlink" style={{cursor:"pointer"}} onClick={() => {setIsMyProfileDialogOpen(true); closeSidebarHandler();}}>My Profile</div>
+                                
+                                <ShareButton placeHolder="Share" title="This is title" text="this is text" url="https://ecommerce-1-frontend.vercel.app" />
+                                
                                 <NavLink className="sidebar_navlink" to="/user/logout" onClick={closeSidebarHandler}>Logout</NavLink>
                             </>
                     }

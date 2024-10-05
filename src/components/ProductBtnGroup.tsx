@@ -9,6 +9,7 @@ import HandleMutationRes from "./HandleMutationRes";
 import Spinner from "./Spinner";
 import { PRIMARY, SECONDARY } from "../styles/utils";
 import { UserLocationTypes } from "../pages/Login.Page";
+import ShareButton from "./ShareButton";
 
 
 interface ProductBtnGroupPropTypes{
@@ -105,6 +106,7 @@ const ProductBtnGroup = ({userLocation, parent, productID, amount, category, bra
             {
                 parent === "singleProduct" &&
                     <div className="lower_btns">
+                        <ShareButton title="this is title" text="this is text" url="https://ecommerce-1-frontend.vercel.app" />
                         <button className="review_btn" onClick={(e) => reviewToggleHandler(e)}>Review</button>
                     </div>
             }
