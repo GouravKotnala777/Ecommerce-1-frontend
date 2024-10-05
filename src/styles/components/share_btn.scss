@@ -1,0 +1,13 @@
+@import "../utils";
+
+.share_btn{
+    //border:1px solid red;
+    background: transparent;
+    border: none;
+    gap: 5px;
+    align-items: center;
+    .MdOutlineShare{
+        //border: 1px solid blue;
+        font-size: 1.1rem;
+    }
+}
