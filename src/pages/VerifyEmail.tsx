@@ -17,11 +17,12 @@ const VerifyEmail = ({userLocation}:{userLocation:UserLocationTypes;}) => {
 
     const token = searchParams.get('token');
     const emailtype = searchParams.get('emailtype');
+    const referedUserID = searchParams.get('referedUserID');
 
     const verifyEmailHandler = async() => {
         if (emailtype === "VERIFY") {
             try {
-                const res = await verifyEmail({verificationToken:token as string, emailType:emailtype as string, action:"verify_email", userLocation});
+                const res = await verifyEmail({verificationToken:token as string, emailType:emailtype as string, action:"verify_email", userLocation,  referedUserID});
                 console.log("------ VerifyEmail.tsx  verifyEmailHandler");
                 console.log(res);
                 setVerifyEmailRes(res);
@@ -117,6 +118,7 @@ const VerifyEmail = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     return(
         <div className="verify_email" style={{width:"60%", margin:"20px auto", padding:"20px", borderRadius:"8px", textAlign:"center", boxShadow:"0.1px 0.1px 4px 0.5px #ff4b69"}}>
             <Toaster />
+            <h1>referedUserID : {referedUserID}</h1>
             <div className="heading" style={{textAlign:"center", fontWeight:"bold", margin:"10px auto"}}>{emailtype === "VERIFY" ? "Verify Email" : "Reset Password"}</div>
             {
                 emailtype === "RESET_PASSWORD" &&

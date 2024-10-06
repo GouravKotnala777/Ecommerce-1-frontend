@@ -81,12 +81,12 @@ const api = createApi({
     tagTypes:["MyWishlistedProducts", "MyCartProducts", "SingleProduct", "MyProfile", "NewCoupon", "Orders"],
     endpoints:(builder) => ({
         register:builder.mutation({
-            query:(data) => ({
+            query:({name, email, mobile, password, c_password, referrerUserID}:{name?:string; email?:string; mobile?:string; password?:string; c_password?:string; referrerUserID?:string|null;}) => ({
                 url:"/api/v1/user/new",
                 method:"POST",
                 headers:{"Content-Type":"application/json"},
                 credentials:"include",
-                body:data
+                body:{name, email, mobile, password, c_password,  referrerUserID}
             })
         }),
         login:builder.mutation({
@@ -101,11 +101,11 @@ const api = createApi({
             })
         }),
         verifyEmail:builder.mutation({
-            query:({verificationToken, emailType, newPassword, action, userLocation}:{verificationToken:string; emailType:string; newPassword?:string; action:string; userLocation:UserLocationTypes;}) => ({
+            query:({verificationToken, emailType, newPassword, action, userLocation,   referedUserID}:{verificationToken:string; emailType:string; newPassword?:string; action:string; userLocation:UserLocationTypes;    referedUserID?:string|null;}) => ({
                 url:"/api/v1/user/verifyemail",
                 method:"POST",
                 credentials:"include",
-                body:{verificationToken, emailType, newPassword, action, userLocation}
+                body:{verificationToken, emailType, newPassword, action, userLocation,   referedUserID}
             })
         }),
         myProfile:builder.query({
