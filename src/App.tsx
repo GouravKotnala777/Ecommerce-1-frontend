@@ -122,7 +122,7 @@ const App = () => {
               }
               
               <Route path="/user/address" element={<ProtectedRoute children={<Address userLocation={userLocation} />} userRole={myProfileData.data?.message.role} />} />
-              <Route path="/user/verifyemail" element={<VerifyEmail userLocation={userLocation as UserLocationTypes} />} />
+              <Route path="/user/verifyemail" element={<VerifyEmail />} />
 
 
               <Route path="/product/pay" element={<ProtectedRoute children={<StripePayment userLocation={userLocation as UserLocationTypes} />} userRole={myProfileData.data?.message.role} />} />

@@ -101,11 +101,11 @@ const api = createApi({
             })
         }),
         verifyEmail:builder.mutation({
-            query:({verificationToken, emailType, newPassword, action, userLocation,   referedUserID}:{verificationToken:string; emailType:string; newPassword?:string; action:string; userLocation:UserLocationTypes;    referedUserID?:string|null;}) => ({
+            query:({verificationToken, emailType, newPassword, action, userLocation,   referrerUserID}:{verificationToken:string; emailType:string; newPassword?:string; action:string; userLocation:UserLocationTypes;    referrerUserID?:string|null;}) => ({
                 url:"/api/v1/user/verifyemail",
                 method:"POST",
                 credentials:"include",
-                body:{verificationToken, emailType, newPassword, action, userLocation,   referedUserID}
+                body:{verificationToken, emailType, newPassword, action, userLocation,   referrerUserID}
             })
         }),
         myProfile:builder.query({

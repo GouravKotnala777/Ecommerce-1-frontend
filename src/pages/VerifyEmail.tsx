@@ -7,7 +7,7 @@ import { MutationResTypes } from "../assets/demoData";
 import { UserLocationTypes } from "./Login.Page";
 
 
-const VerifyEmail = ({userLocation}:{userLocation:UserLocationTypes;}) => {
+const VerifyEmail = () => {
     const [searchParams] = useSearchParams();
     const [verifyEmail] = useVerifyEmailMutation();
     const [verifyEmailRes, setVerifyEmailRes] = useState<MutationResTypes>();
@@ -15,14 +15,54 @@ const VerifyEmail = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const navigate = useNavigate();
 
 
+    
+    
+
     const token = searchParams.get('token');
     const emailtype = searchParams.get('emailtype');
-    const referedUserID = searchParams.get('referedUserID');
+    const referrerUserID = searchParams.get('referrerUserID');
+
+
+
+    const getUserLocationData = async() => {
+        try {
+            const resIP = await fetch(`https://ipinfo.io/json`, {
+                method:"GET"
+            });
+    
+            if (resIP.ok) {
+              const dataIP:UserLocationTypes = await resIP.json();
+              console.log("--------- Home.Page.tsx  getUserLocationData Ok");
+              console.log(dataIP);
+              console.log("--------- Home.Page.tsx  getUserLocationData Ok");
+              return dataIP;
+            }
+            else{
+              console.log("--------- Home.Page.tsx  getUserLocationData NotOk");
+              return null;
+            }
+    
+        } catch (error) {
+            console.log("--------- Home.Page.tsx  getUserLocationData error");
+            console.log(error);
+            console.log("--------- Home.Page.tsx  getUserLocationData error");
+            return null;
+        }
+    };
+
+
+
 
     const verifyEmailHandler = async() => {
+        const userLocation = await getUserLocationData();
+
+        console.log("----- from VerifyEmail verify");
+        console.log({userLocation});
+        console.log("----- from VerifyEmail verify");
+
         if (emailtype === "VERIFY") {
             try {
-                const res = await verifyEmail({verificationToken:token as string, emailType:emailtype as string, action:"verify_email", userLocation,  referedUserID});
+                const res = await verifyEmail({verificationToken:token as string, emailType:emailtype as string, action:"verify_email", userLocation:userLocation as UserLocationTypes,  referrerUserID});
                 console.log("------ VerifyEmail.tsx  verifyEmailHandler");
                 console.log(res);
                 setVerifyEmailRes(res);
@@ -67,8 +107,13 @@ const VerifyEmail = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const updatePasswordHandler = async() => {
         if (emailtype === "RESET_PASSWORD" && newPassword) {
             console.log({newPassword});
+            const userLocation = await getUserLocationData();
+
+            console.log("----- from VerifyEmail resetPassword");
+            console.log({userLocation});
+            console.log("----- from VerifyEmail resetPassword");
             try {
-                const res = await verifyEmail({verificationToken:token as string, emailType:emailtype as string, newPassword, action:"verify_email", userLocation});
+                const res = await verifyEmail({verificationToken:token as string, emailType:emailtype as string, newPassword, action:"verify_email", userLocation:userLocation as UserLocationTypes});
                 console.log("------ VerifyEmail.tsx  updatePasswordHandler");
                 console.log(res);
                 setVerifyEmailRes(res);
@@ -118,7 +163,7 @@ const VerifyEmail = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     return(
         <div className="verify_email" style={{width:"60%", margin:"20px auto", padding:"20px", borderRadius:"8px", textAlign:"center", boxShadow:"0.1px 0.1px 4px 0.5px #ff4b69"}}>
             <Toaster />
-            <h1>referedUserID : {referedUserID}</h1>
+            <h1>referedUserID : {referrerUserID}</h1>
             <div className="heading" style={{textAlign:"center", fontWeight:"bold", margin:"10px auto"}}>{emailtype === "VERIFY" ? "Verify Email" : "Reset Password"}</div>
             {
                 emailtype === "RESET_PASSWORD" &&
