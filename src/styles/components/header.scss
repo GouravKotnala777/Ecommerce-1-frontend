@@ -41,12 +41,20 @@
             font-size: 0.8rem;
             .navlinks{
                 text-decoration: none;
+                font-size: 0.8rem;
+                padding: 10px;
+                border-radius: 8px;
                 color: white;
-                padding: 2px;
-                border-radius: 4px;
+                display: grid;
+                place-items: center;
+                position: relative;
                 &:hover{
-                    background:white;
-                    color: black;
+                    background: white;
+                    color:black;
+                    :first-child{
+                        background: black;
+                        color:white;
+                    }
                 }
                 .header_icon{
                     font-size: 1.1rem;
@@ -55,10 +63,10 @@
             .share_btn{
                 color: white;
                 border-radius: 4px;
-                &:hover{
-                    background:white;
-                    color: black;
-                }
+                //&:hover{
+                //    background:white;
+                //    color: black;
+                //}
                 .MdOutlineShare{
                 }
             }
@@ -66,16 +74,16 @@
                 position: relative;
                 .notification{
                     position: absolute;
-                    top: -10px;
-                    right: -10px;
-                    background: white;
-                    color:$primary;
+                    top:1px;
+                    right:1px;
                     width: 16px;
                     height: 16px;
-                    display: grid;
-                    place-items:center;
-                    border-radius: 50%;
                     font-size: 0.5rem;
+                    background: white;
+                    color: $primary;
+                    border-radius: 50%;
+                    display: grid;
+                    place-items: center;
                 }
             }
         }
@@ -88,6 +96,53 @@
     .right_part_mobile{
         //border: 2px solid indigo;
         display: none;
+    }
+}
+
+.bottom_header_bg{
+    //border: 1px solid blue;
+    height: 2.8rem;
+    .bottom_nav{
+        //border: 1px solid green;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .bottom_nav_navlinks{
+            //border: 1px solid yellow;
+            font-size: 1.1rem;
+            padding: 10px;
+            border-radius: 8px;
+            color: white;
+            display: grid;
+            place-items: center;
+            position: relative;
+            .notification{
+                position: absolute;
+                top:1px;
+                right:1px;
+                width: 16px;
+                height: 16px;
+                font-size: 0.5rem;
+                background: white;
+                color: $primary;
+                border-radius: 50%;
+                display: grid;
+                place-items: center;
+                //&:hover{
+                //    background: black;
+                //    color:white;
+                //}
+            }
+            &:hover{
+                background: white;
+                color:black;
+                :first-child{
+                    background: black;
+                    color:white;
+                }
+            }
+        }
     }
 }
 

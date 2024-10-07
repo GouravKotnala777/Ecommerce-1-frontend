@@ -13,16 +13,18 @@ import { useUpdateMeMutation } from "../redux/api/api";
 import { UserLocationTypes } from "../pages/Login.Page";
 import ShareButton from "./ShareButton";
 import { RxActivityLog } from "react-icons/rx";
-import { RiChatSmile3Line } from "react-icons/ri";
+import { RiChatSmile3Line, RiCoupon3Line } from "react-icons/ri";
 import { FiShoppingCart } from "react-icons/fi";
 import { FaRegAddressCard } from "react-icons/fa";
 import { IoHomeOutline, IoLogInOutline, IoLogOutOutline, IoScaleOutline } from "react-icons/io5";
+import { BsCalendar2Event } from "react-icons/bs";
+import { TfiGift } from "react-icons/tfi";
 //import { LuLayoutDashboard } from "react-icons/lu";
 //import { IoBagAddOutline } from "react-icons/io5";
 //import { BsBookmarkHeart } from "react-icons/bs";
 
 
-const Header = ({userName, userRole, wishlistNotification, cartNotification, userLocation}:{userName?:string; userRole:string|undefined; wishlistNotification?:number; cartNotification:number; userLocation:UserLocationTypes|undefined;}) => {
+const Header = ({userName, userRole, wishlistNotification, cartNotification, couponNotification, userLocation}:{userName?:string; userRole:string|undefined; wishlistNotification?:number; cartNotification:number; couponNotification:number; userLocation:UserLocationTypes|undefined;}) => {
     const [hideHeader, setHideHeader] = useState<boolean>(false);
     const previousScrollPos = useRef<number>(0);
     const [isHamActive, setIsHamActive] = useState<boolean>(false);
@@ -106,6 +108,18 @@ const Header = ({userName, userRole, wishlistNotification, cartNotification, use
                     <img src={logo2} alt={logo2} />
                 </div>
                 <Sidebar userName={userName} userRole={userRole} wishlistNotification={wishlistNotification} cartNotification={cartNotification} isHamActive={isHamActive} setIsHamActive={setIsHamActive} setIsMyProfileDialogOpen={setIsMyProfileDialogOpen} />
+            </div>
+            <div className="bottom_header_bg header_bg" style={{top:hideHeader?"100%":"88.5%"}}>
+                <nav className="bottom_nav">
+                    <NavLink className="bottom_nav_navlinks" to="/"><RiCoupon3Line className="header_icon" /></NavLink>
+                    <NavLink className="bottom_nav_navlinks" to="/user/coupons">
+                        {couponNotification !== 0 && couponNotification !== undefined && <div className="notification">{couponNotification}</div>} <BsCalendar2Event className="header_icon" />
+                    </NavLink>
+                    <NavLink className="bottom_nav_navlinks" to="/user/gifts">
+                        {couponNotification !== 0 && couponNotification !== undefined && <div className="notification">{couponNotification}</div>} <TfiGift className="header_icon" />
+                    </NavLink>
+                    <NavLink className="bottom_nav_navlinks" to="/"><RiCoupon3Line className="header_icon" /></NavLink>
+                </nav>
             </div>
         </>
     )
