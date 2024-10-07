@@ -14,6 +14,10 @@ import { MutationResTypes } from "../assets/demoData";
 import Spinner from "./Spinner";
 import { PRIMARY, SECONDARY } from "../styles/utils";
 import { UserLocationTypes } from "../pages/Login.Page";
+import { SelectedGiftReducerInitialState, setGiftReducer } from "../redux/reducers/selectedGiftReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { BsInfo } from "react-icons/bs";
+import { Heading, Note, Para } from "../pages/static/Policies";
 
 interface SingleProductTemplatePropTypes{
     userLocation:UserLocationTypes;
@@ -47,6 +51,9 @@ interface SingleProductTemplatePropTypes{
 const SingleProductTemplate = ({userLocation, productID, userWishlist, category, brand, name, price, quantity, rating, description, photo, parent, transactionId, shippingType, paymentStatus, orderStatus, message, createdAt, setTotalAmount, includedProducts, setIncludedProducts}:SingleProductTemplatePropTypes) => {
     const [addRemoveFromWishlist] = useAddRemoveFromWishlistMutation();
     const [addRemoveFromWishlistRes, setAddRemoveFromWishlistRes] = useState<MutationResTypes>();
+    const {gift} = useSelector((state:{selectedGiftReducer:SelectedGiftReducerInitialState}) => state.selectedGiftReducer);
+    const [isSelectedGiftInfoDialogActive, setIsSelectedGiftInfoDialogActive] = useState<boolean>(false);
+    const dispatch = useDispatch();
 
     const addRemoveFromWishlistHandler = async() => {
         try {
@@ -76,7 +83,17 @@ const SingleProductTemplate = ({userLocation, productID, userWishlist, category,
     return(
         <>
             <HandleMutationRes res={addRemoveFromWishlistRes} />
-            <div className="single_product_template_bg">
+            <dialog className="selected_coupon_dialog" open={isSelectedGiftInfoDialogActive}>
+                <Heading heading="You have selected a Gift Card" fontSize="0.9rem" />
+                <Para para={gift?.coupon._id as string} />
+                <Note heading="Note" para="You can unselect this Gift Card, If you want" />
+                <div className="btns_cont">
+                    <button className="unselect_gift_btn" onClick={() => {setIsSelectedGiftInfoDialogActive(false); dispatch(setGiftReducer({isLoading:true, gift:null, isError:false}))}}>Unselect Gift Card</button>
+                    <button className="keep_selected_gift_btn" onClick={() => setIsSelectedGiftInfoDialogActive(false)}>No, Keep Selected</button>
+                </div>
+
+            </dialog>
+            <div className="single_product_template_bg" onClick={() => setIsSelectedGiftInfoDialogActive(false)}>
                 {
                     !category&&!name&&!price&&!rating ?
                         <div className="product_cont">
@@ -187,7 +204,23 @@ const SingleProductTemplate = ({userLocation, productID, userWishlist, category,
                                         <span className="info_heading">Name</span><span className="info_value">{name}</span>
                                     </div>
                                     <div className="heading_values">
-                                        <span className="info_heading">Price</span><span className="info_value">{price}</span>
+                                        <span className="info_heading">Price</span><span className="info_value">
+                                        {
+                                            parent === "singleProduct" ?
+                                                gift?.status === "pending" ? 
+                                                    <>
+                                                        <BsInfo style={{borderRadius:"50%", background:`linear-gradient(90deg, ${PRIMARY}, ${SECONDARY})`, fontSize:"0.9rem", color:"white"}} onClick={(e) => {e.stopPropagation(); setIsSelectedGiftInfoDialogActive(true)}} /> <s>{price} ₹</s><br/>
+        
+                                                        <span style={{color:"#00dd00", fontWeight:"600", fontSize:"0.9rem"}}>{(price as number)-gift.coupon.amount} ₹</span>
+                                                    </>
+                                                    :
+                                                    price
+                                                
+                                                :
+                                                price
+                                                
+                                        }
+                                        </span>
                                     </div>
                                     <div className="heading_values">
                                         <span className="info_heading">Rating</span><span className="info_value"><RatingSystem rating={rating} /></span>
@@ -234,16 +267,34 @@ const SingleProductTemplate = ({userLocation, productID, userWishlist, category,
                                 </div>
 
                                 {
-                                    parent !== "orders" &&
-                                        <ProductBtnGroup
-                                            userLocation={userLocation}
-                                            parent={parent}
-                                            productID={productID as string}
-                                            amount={price as number}
-                                            brand={brand as string}
-                                            category={category as string}
-                                            setTotalAmount={setTotalAmount}
-                                            />
+                                    parent === "orders" ?
+                                        ""
+                                        :
+                                        parent === "singleProduct" ?
+                                            <ProductBtnGroup
+                                                userLocation={userLocation}
+                                                parent={parent}
+                                                productID={productID as string}
+                                                amount={
+                                                    gift && gift.status === "pending" ?
+                                                        (price as number)-(gift?.coupon.amount as number)
+                                                        :
+                                                        price as number
+                                                }
+                                                brand={brand as string}
+                                                category={category as string}
+                                                setTotalAmount={setTotalAmount}
+                                                />
+                                                :
+                                                <ProductBtnGroup
+                                                    userLocation={userLocation}
+                                                    parent={parent}
+                                                    productID={productID as string}
+                                                    amount={price as number}
+                                                    brand={brand as string}
+                                                    category={category as string}
+                                                    setTotalAmount={setTotalAmount}
+                                                    />
                                 }
                             </div>
                         </div>

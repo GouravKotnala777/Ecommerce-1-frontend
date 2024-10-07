@@ -98,6 +98,34 @@
         }
     }
 }
+.selected_coupon_dialog{
+    //border: 1px solid red;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0px 0px 3px 0.1px $primary;
+    border: none;
+    .btns_cont{
+        display: flex;
+        justify-content: space-between;
+        .unselect_gift_btn{
+            border: none;
+            padding: 8px 10px;
+            color: white;
+            background: linear-gradient(90deg, #64acff, #0163d4);
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+        .keep_selected_gift_btn{
+            border: none;
+            padding: 8px 10px;
+            color: white;
+            background: linear-gradient(90deg, $primary, $secondary);
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+
+    }
+}
 
 @media screen and (width <= 570px) {
     .single_product_template_bg{

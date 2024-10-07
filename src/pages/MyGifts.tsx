@@ -3,7 +3,8 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { CouponTypes } from "../assets/demoData";
 import { SerializedError } from "@reduxjs/toolkit";
 import { FaGift } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { SelectedGiftReducerInitialState, setGiftReducer } from "../redux/reducers/selectedGiftReducer";
 
 
 
@@ -12,11 +13,13 @@ const MyGifts = ({myReferralGifts}:{myReferralGifts:{
     data?:{success:boolean; message:{userID:{name:string; email:string;}; coupon:CouponTypes; status:"pending"|"completed"}[];};
     error?:FetchBaseQueryError|SerializedError;
 }}) => {
-    const navigate = useNavigate();
+    const {gift} = useSelector((state:{selectedGiftReducer:SelectedGiftReducerInitialState}) => state.selectedGiftReducer);
+    const dispatch = useDispatch();
 
     return(
         <div className="my_coupons_bg">
             {/*<pre>{JSON.stringify(myReferralGifts.data?.message, null, `\t`)}</pre>*/}
+            <pre>{JSON.stringify(gift, null, `\t`)}</pre>
             <div className="heading" style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>My Gifts</div>
             {
                 myReferralGifts.data?.message.map((gift, index) => (
@@ -39,7 +42,7 @@ const MyGifts = ({myReferralGifts}:{myReferralGifts:{
                             </div>
                             <div className="right_part">
                                 {/*<button onClick={() => navigate(`/?couponID=${gift.coupon._id}`)}>Use Now</button>*/}
-                                <button onClick={() => navigate(`/`, {state:{couponID:gift.coupon._id}})}>Use Now</button>
+                                <button onClick={() => dispatch(setGiftReducer({isLoading:false, gift, isError:false}))}>Use Now</button>
                             </div>
                         </div>
                     </div>

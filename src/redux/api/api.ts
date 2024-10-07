@@ -123,6 +123,14 @@ const api = createApi({
                 credentials:"include"
             })
         }),
+        applyMyCoupon:builder.mutation({
+            query:({couponID}:{couponID:string;}) => ({
+                url:"/api/v1/user/referee",
+                method:"POST",
+                credentials:"include",
+                body:{couponID}
+            })
+        }),
         updateMe:builder.mutation({
             query:({oldPassword, name, email, password, mobile, house, street, city, state, zip,           
                 action, userLocation
@@ -448,7 +456,7 @@ const api = createApi({
 })
 
 export default api;
-export const {useRegisterMutation, useLoginMutation, useVerifyEmailMutation, useMyProfileQuery, useMyReferralGiftsQuery, useForgetPasswordMutation, useUpdateMeMutation, useRemoveAddressMutation, useLogoutMutation, useGetAllUsersActivitiesMutation,
+export const {useRegisterMutation, useLoginMutation, useVerifyEmailMutation, useMyProfileQuery, useMyReferralGiftsQuery, useApplyMyCouponMutation, useForgetPasswordMutation, useUpdateMeMutation, useRemoveAddressMutation, useLogoutMutation, useGetAllUsersActivitiesMutation,
     useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useGetProductsOfSameQuery, useFindAllFieldsQuery, useSearchProductsMutation, useProductRecommendationMutation,
     useAddToCartMutation, useFetchMyCartQuery,  useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation, useUpdateVoteMutation,
     useMyWhishlistQuery, useAddRemoveFromWishlistMutation,

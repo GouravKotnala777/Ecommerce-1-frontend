@@ -4,12 +4,14 @@ import { loadStripe, StripeCardElement } from "@stripe/stripe-js";
 import { FormEvent, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AddressBodyTypes } from "./Address.Page";
-import { useCreatePaymentMutation, useNewOrderMutation, useProductRecommendationMutation } from "../redux/api/api";
+import { useApplyMyCouponMutation, useCreatePaymentMutation, useNewOrderMutation, useProductRecommendationMutation } from "../redux/api/api";
 import Spinner from "../components/Spinner";
 import { ProductTypes } from "../assets/demoData";
 import ProductsRecommendation from "../components/ProductsRecommendation";
 import { UserLocationTypes } from "./Login.Page";
 import Tab from "../components/Tab";
+import { SelectedGiftReducerInitialState, setGiftReducer } from "../redux/reducers/selectedGiftReducer";
+import { useDispatch, useSelector } from "react-redux";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -23,6 +25,9 @@ const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPri
     const [isLoading, setIsLoading] = useState<boolean>(false);
     //const [newOrder] = useNew     OrderMutation();
     const navigate = useNavigate();
+    const [applyMyCoupon] = useApplyMyCouponMutation();
+    const {gift} = useSelector((state:{selectedGiftReducer:SelectedGiftReducerInitialState}) => state.selectedGiftReducer);
+    const dispatch = useDispatch();
 
     const handleSubmit = async(e:FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -106,7 +111,26 @@ const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPri
                 console.log("---- Payment.tsx");
                 
             }
+            if (gift && gift.status === "pending") {
+                const applyMyCouponRes = await applyMyCoupon({couponID:gift.coupon._id});
+
+                
+                if (applyMyCouponRes.data) {
+                    console.log("----- applyMyCoupon");
+                    console.log(applyMyCouponRes);
+                    console.log("----- applyMyCoupon");
+                    dispatch(setGiftReducer({isLoading:true, gift:null, isError:false}));
+                }
+                if (applyMyCouponRes.error) {
+                    console.log("----- applyMyCoupon error");
+                    console.log(applyMyCouponRes.error);
+                    console.log("----- applyMyCoupon error");
+                }
+                
+                
+            }
             setIsLoading(false);
+
         } catch (error) {
             console.log("---- error from Payment.tsx");
             console.log(error);
@@ -152,6 +176,9 @@ const CashOnDelivery = ({orderItems, totalPrice, coupon, shippingType, parent, u
     const [orderPlaced, setOrderPlaced] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const navigate = useNavigate();
+    const [applyMyCoupon] = useApplyMyCouponMutation();
+    const {gift} = useSelector((state:{selectedGiftReducer:SelectedGiftReducerInitialState}) => state.selectedGiftReducer);
+    const dispatch = useDispatch();
 
     const orderOnCashHandler = async(e:FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -181,6 +208,23 @@ const CashOnDelivery = ({orderItems, totalPrice, coupon, shippingType, parent, u
             
             console.log("cash on delivery");
             console.log("------- CashOnDelivery Payment");
+            
+            if (gift && gift.status === "pending") {
+                const applyMyCouponRes = await applyMyCoupon({couponID:gift.coupon._id});
+
+                if (applyMyCouponRes.data) {
+                    console.log("----- applyMyCoupon");
+                    console.log(applyMyCouponRes);
+                    console.log("----- applyMyCoupon");
+                    dispatch(setGiftReducer({isLoading:true, gift:null, isError:false}));
+                }
+                if (applyMyCouponRes.error) {
+                    console.log("----- applyMyCoupon error");
+                    console.log(applyMyCouponRes.error);
+                    console.log("----- applyMyCoupon error");
+                }
+                
+            }
             setIsLoading(false);
             setOrderPlaced(true);
             setError(null);
@@ -245,6 +289,8 @@ const StripePayment = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const [hideGetClientSecretAgain, setHideGetClientSecretAgain] = useState<boolean>(false);
     const [newOrder] = useNewOrderMutation();
     const [clientSecret, setClientSecret] = useState<string>("");
+    //const {gift} = useSelector((state:{selectedGiftReducer:SelectedGiftReducerInitialState}) => state.selectedGiftReducer);
+
 
 
     
@@ -319,14 +365,17 @@ const StripePayment = ({userLocation}:{userLocation:UserLocationTypes;}) => {
         <Elements stripe={stripePromise}>
             {/*<pre>{JSON.stringify(recommendationProducts, null, `\t`)}</pre>
             <pre>{JSON.stringify(clientSecret, null, `\t`)}</pre>*/}
-            <pre>{JSON.stringify({
+
+
+            {/*<pre>{JSON.stringify(gift, null, `\t`)}</pre>*/}
+            {/*<pre>{JSON.stringify({
                 orderItems:location?.orderItems,
                 totalPrice:location?.totalPrice,
                 coupon:location?.coupon,
                 shippingType:location?.shippingType,
                 parent:location?.parent,
                 recommendationProductsAmount:(location?.recommendationProductsAmount as number)+recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
-            }, null, `\t`)}</pre>
+            }, null, `\t`)}</pre>*/}
             {
                 sameCategoryProduct.length >= 4 &&
                     <ProductsRecommendation
