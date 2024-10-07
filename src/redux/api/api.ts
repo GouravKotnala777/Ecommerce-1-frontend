@@ -346,6 +346,14 @@ const api = createApi({
             }),
             providesTags:["NewCoupon"]
         }),
+        myCoupons:builder.query({
+            query:() => ({
+                url:"/api/v1/coupon/myCoupons",
+                method:"GET",
+                credentials:"include"
+            }),
+            providesTags:["NewCoupon"]
+        }),
         createCoupons:builder.mutation({
             query:(data:CreateCouponBodyType) => ({
                 url:"/api/v1/coupon/new",
@@ -438,7 +446,7 @@ export const {useRegisterMutation, useLoginMutation, useVerifyEmailMutation, use
     useAddToCartMutation, useFetchMyCartQuery,  useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation, useUpdateVoteMutation,
     useMyWhishlistQuery, useAddRemoveFromWishlistMutation,
     useOutStockProductsQuery, useIncompleteProductsQuery, useUpdateProductMutation,
-    useCreateCouponsMutation, useGetAllCouponsQuery, useGetSingleCouponMutation,
+    useCreateCouponsMutation, useGetAllCouponsQuery, useMyCouponsQuery, useGetSingleCouponMutation,
     useCreatePaymentMutation,
     useNewOrderMutation, useMyOrdersMutation, useAllOrdersQuery, useRemoveProductFromOrderMutation, useUpdateOrderMutation,
     useCreateChatMutation, useUpdateChatsHelpfulnessMutation
