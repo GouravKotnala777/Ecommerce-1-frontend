@@ -16,8 +16,8 @@ const MyCoupons = ({myCoupons}:{myCoupons:{
             {/*<pre>{JSON.stringify(myCoupons.data?.message, null, `\t`)}</pre>*/}
             <div className="heading" style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>My Coupons</div>
             {
-                myCoupons.data?.message.map((coupon) => (
-                    <div className="coupon_cont">
+                myCoupons.data?.message.map((coupon, index) => (
+                    <div className="coupon_cont" key={index}>
                         <div className="upper_part">
                             <div className="image_cont">
                                 <img src={logo} alt={logo} />
@@ -33,7 +33,11 @@ const MyCoupons = ({myCoupons}:{myCoupons:{
                                 <div className="t_and_c"><a href="/policy">terms & conditions</a></div>
                             </div>
                             <div className="right_part">
-                                <button>{coupon.amount}</button>
+                                <div className="your_coupon_code">
+                                    Your coupon code
+                                </div>
+                                {/*<button onClick={() => navigate(`/user/cart?couponID=${coupon._id}`)}>{coupon.amount}</button>*/}
+                                <div className="coupon_code">{coupon.code}</div>
                             </div>
                         </div>
                     </div>
