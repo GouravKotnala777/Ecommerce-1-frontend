@@ -44,6 +44,12 @@ $shadow:1px 1px 8px 1px #ff4b6941;
     font-weight: bold;
     color: $color;
 }
+@mixin headingXXl($color:#515151, $padding:14px 10px){
+    font-size: 1.8rem;
+    padding: $padding;
+    font-weight: bold;
+    color: $color;
+}
 @mixin paraSm($color:black){
     font-size: 0.6rem;
     //padding: 4px 10px;

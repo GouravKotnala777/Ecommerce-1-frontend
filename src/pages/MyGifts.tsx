@@ -1,0 +1,52 @@
+import "../styles/pages/my_coupon.scss";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import { CouponTypes } from "../assets/demoData";
+import { SerializedError } from "@reduxjs/toolkit";
+import { FaGift } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+
+
+
+const MyGifts = ({myReferralGifts}:{myReferralGifts:{
+    isLoading:boolean;
+    data?:{success:boolean; message:{userID:{name:string; email:string;}; coupon:CouponTypes; status:"pending"|"completed"}[];};
+    error?:FetchBaseQueryError|SerializedError;
+}}) => {
+    const navigate = useNavigate();
+
+    return(
+        <div className="my_coupons_bg">
+            {/*<pre>{JSON.stringify(myReferralGifts.data?.message, null, `\t`)}</pre>*/}
+            <div className="heading" style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>My Gifts</div>
+            {
+                myReferralGifts.data?.message.map((gift, index) => (
+                    <div className="gift_cont" key={index}>
+                        <div className="upper_part">
+                            <div className="image_cont">
+                                <FaGift className="FaGift" />
+                            </div>
+                            <div className="heading_cont">
+                                <div className="gift_for_you">Surprise Gift for you</div>
+                                <div className="referee_name">for refering {gift.userID.name}</div>
+                                <div className="amount">{gift.coupon.amount}₹ OFF</div>
+                            </div>
+                        </div>
+                        <div className="lower_part">
+                            <div className="left_part">
+                                <div className="expires">expires</div>
+                                <div className="date">{gift.coupon.endDate.toString().split("T")[0].split("-").reverse().join("-")}</div>
+                                <div className="t_and_c"><a href="/policy">terms & conditions</a></div>
+                            </div>
+                            <div className="right_part">
+                                {/*<button onClick={() => navigate(`/?couponID=${gift.coupon._id}`)}>Use Now</button>*/}
+                                <button onClick={() => navigate(`/`, {state:{couponID:gift.coupon._id}})}>Use Now</button>
+                            </div>
+                        </div>
+                    </div>
+                ))
+            }
+        </div>
+    )
+};
+
+export default MyGifts;

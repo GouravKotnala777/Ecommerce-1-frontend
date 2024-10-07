@@ -18,7 +18,7 @@ import UpdateProduct from './pages/admin/UpdateProduct'
 import Coupons from './pages/admin/Coupon'
 import StripePayment from './pages/Payment'
 import Address from './pages/Address.Page'
-import { useFetchMyCartQuery, useMyCouponsQuery, useMyProfileQuery, useMyWhishlistQuery, useOutStockProductsQuery } from './redux/api/api'
+import { useFetchMyCartQuery, useMyCouponsQuery, useMyProfileQuery, useMyReferralGiftsQuery, useMyWhishlistQuery, useOutStockProductsQuery } from './redux/api/api'
 import { CouponTypes, ProductTypes, UserTypes } from './assets/demoData'
 import { setLoggedInUser } from './redux/reducers/loggedInUserReducer'
 import IncompleteProducts from './pages/admin/IncompleteProducts'
@@ -65,6 +65,11 @@ const App = () => {
     data?:{success:boolean; message:CouponTypes[]};
     error?:FetchBaseQueryError | SerializedError;
   } = useMyCouponsQuery("");
+  const myReferralGifts:{
+    isLoading:boolean;
+    data?:{success:boolean; message:{userID:{name:string; email:string;}; coupon:CouponTypes; status:"pending"|"completed"}[];};
+    error?:FetchBaseQueryError | SerializedError;
+  } = useMyReferralGiftsQuery("");
   const [userLocation, setUserLocation] = useState<UserLocationTypes>();
   const dispatch = useDispatch();
 
@@ -104,7 +109,7 @@ const App = () => {
         <>
           <BrowserRouter>
             <DialogWrapper toggler={reportDialogToggle} setToggler={setReportDialogToggle} Element={<Chatbot USERID={myProfileData.data?.message._id} USERNAME={myProfileData.data?.message.name} userLocation={userLocation as UserLocationTypes} />} />
-            <Header userName={myProfileData.data?.message.name} userRole={myProfileData.data?.message.role} wishlistNotification={wishlistData.data?.message.length} cartNotification={cartData.data?.message.products.reduce((acc, iter) => acc+iter.quantity, 0) as number} couponNotification={myCoupons.data?.message.length as number} userLocation={userLocation} />
+            <Header userName={myProfileData.data?.message.name} userRole={myProfileData.data?.message.role} wishlistNotification={wishlistData.data?.message.length} cartNotification={cartData.data?.message.products.reduce((acc, iter) => acc+iter.quantity, 0) as number} couponNotification={myCoupons.data?.message.length as number} myReferralGiftsNotification={myReferralGifts.data?.message.length as number} userLocation={userLocation} />
             <Routes>
               <Route path="/" element={<Home userLocation={userLocation as UserLocationTypes} />} />
               <Route path="/tools/macro_calculator" element={<MacroCalculator />} />
@@ -122,7 +127,7 @@ const App = () => {
                 myProfileData.data?.message._id &&
                   <>
                     <Route path="/user/coupons" element={<ProtectedRoute children={<MyCoupons myCoupons={myCoupons} />} userRole={myProfileData.data?.message.role} />} />
-                    <Route path="/user/gifts" element={<ProtectedRoute children={<MyGifts myCoupons={myCoupons} />} userRole={myProfileData.data?.message.role} />} />
+                    <Route path="/user/gifts" element={<ProtectedRoute children={<MyGifts myReferralGifts={myReferralGifts} />} userRole={myProfileData.data?.message.role} />} />
                     <Route path="/user/cart" element={<ProtectedRoute children={<Cart userLocation={userLocation as UserLocationTypes} cartData={cartData} />} userRole={myProfileData.data?.message.role} />} />
                     <Route path="/user/orders" element={<ProtectedRoute children={<MyOrders userLocation={userLocation as UserLocationTypes} />} userRole={myProfileData.data?.message.role} />} />
                     <Route path="/user/wishlist" element={<ProtectedRoute children={<Wishlist userLocation={userLocation as UserLocationTypes} wishlistData={wishlistData} />} userRole={myProfileData.data?.message.role} />} />

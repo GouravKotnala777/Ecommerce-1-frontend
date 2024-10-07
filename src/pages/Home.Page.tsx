@@ -3,7 +3,7 @@ import Products from "../components/Products.tsx";
 import GroupedProducts from "../components/GoupedProducts.tsx";
 import { useFindAllFieldsQuery, useGetAllProductsQuery, useSearchProductsMutation } from "../redux/api/api.ts";
 import { ProductTypes } from "../assets/demoData.ts";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ChangeEvent, FocusEvent, MouseEvent, useEffect, useState } from "react";
 import Pagination from "../components/Pagination.tsx";
 import Spinner from "../components/Spinner.tsx";
@@ -28,6 +28,7 @@ const Home = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const [searchedProducts] = useSearchProductsMutation();
     const navigate = useNavigate();
     const [suggession, setSuggession] = useState<{name:string;}[]>();
+    const location = useLocation();
 
 
     const searchClickHandler = () => {
@@ -102,6 +103,7 @@ const Home = ({userLocation}:{userLocation:UserLocationTypes;}) => {
 
     return(
         <>
+            <pre>{JSON.stringify(location.state, null, `\t`)}</pre>
             <div id="home_bg" className="home_bg" onClick={(e) => {onClickOverlay(e)}}>
             {
                 allProducts.isLoading ?

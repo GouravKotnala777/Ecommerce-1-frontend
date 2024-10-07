@@ -116,6 +116,13 @@ const api = createApi({
             }),
             providesTags:["MyWishlistedProducts", "MyProfile"]
         }),
+        myReferralGifts:builder.query({
+            query:() => ({
+                url:"/api/v1/user/referee",
+                method:"GET",
+                credentials:"include"
+            })
+        }),
         updateMe:builder.mutation({
             query:({oldPassword, name, email, password, mobile, house, street, city, state, zip,           
                 action, userLocation
@@ -441,7 +448,7 @@ const api = createApi({
 })
 
 export default api;
-export const {useRegisterMutation, useLoginMutation, useVerifyEmailMutation, useMyProfileQuery, useForgetPasswordMutation, useUpdateMeMutation, useRemoveAddressMutation, useLogoutMutation, useGetAllUsersActivitiesMutation,
+export const {useRegisterMutation, useLoginMutation, useVerifyEmailMutation, useMyProfileQuery, useMyReferralGiftsQuery, useForgetPasswordMutation, useUpdateMeMutation, useRemoveAddressMutation, useLogoutMutation, useGetAllUsersActivitiesMutation,
     useAddProductMutation, useGetAllProductsQuery, useGetSingleProductQuery, useGetProductsOfSameQuery, useFindAllFieldsQuery, useSearchProductsMutation, useProductRecommendationMutation,
     useAddToCartMutation, useFetchMyCartQuery,  useRemoveFromCartMutation, useCreateReviewMutation, useDeleteReviewMutation, useUpdateVoteMutation,
     useMyWhishlistQuery, useAddRemoveFromWishlistMutation,

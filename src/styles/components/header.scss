@@ -52,8 +52,8 @@
                     background: white;
                     color:black;
                     :first-child{
-                        background: black;
-                        color:white;
+                        //background: red;
+                        color:black;
                     }
                 }
                 .header_icon{
@@ -84,6 +84,14 @@
                     border-radius: 50%;
                     display: grid;
                     place-items: center;
+                    
+                }
+                &:hover{
+                    :first-child{
+                        //background: red;
+                        color:white;
+                        background: black;
+                    }
                 }
             }
         }

@@ -24,7 +24,7 @@ import { TfiGift } from "react-icons/tfi";
 //import { BsBookmarkHeart } from "react-icons/bs";
 
 
-const Header = ({userName, userRole, wishlistNotification, cartNotification, couponNotification, userLocation}:{userName?:string; userRole:string|undefined; wishlistNotification?:number; cartNotification:number; couponNotification:number; userLocation:UserLocationTypes|undefined;}) => {
+const Header = ({userName, userRole, wishlistNotification, cartNotification, couponNotification, myReferralGiftsNotification, userLocation}:{userName?:string; userRole:string|undefined; wishlistNotification?:number; cartNotification:number; couponNotification:number; myReferralGiftsNotification:number; userLocation:UserLocationTypes|undefined;}) => {
     const [hideHeader, setHideHeader] = useState<boolean>(false);
     const previousScrollPos = useRef<number>(0);
     const [isHamActive, setIsHamActive] = useState<boolean>(false);
@@ -116,7 +116,7 @@ const Header = ({userName, userRole, wishlistNotification, cartNotification, cou
                         {couponNotification !== 0 && couponNotification !== undefined && <div className="notification">{couponNotification}</div>} <BsCalendar2Event className="header_icon" />
                     </NavLink>
                     <NavLink className="bottom_nav_navlinks" to="/user/gifts">
-                        {couponNotification !== 0 && couponNotification !== undefined && <div className="notification">{couponNotification}</div>} <TfiGift className="header_icon" />
+                        {myReferralGiftsNotification !== 0 && myReferralGiftsNotification !== undefined && <div className="notification">{myReferralGiftsNotification}</div>} <TfiGift className="header_icon" />
                     </NavLink>
                     <NavLink className="bottom_nav_navlinks" to="/"><RiCoupon3Line className="header_icon" /></NavLink>
                 </nav>
