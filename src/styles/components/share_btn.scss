@@ -1,11 +1,24 @@
 @import "../utils";
 
 .share_btn{
-    //border:1px solid red;
-    background: transparent;
     border: none;
-    gap: 5px;
-    align-items: center;
+    text-decoration: none;
+    font-size: 0.8rem;
+    padding: 10px;
+    border-radius: 8px;
+    color: white;
+    display: grid;
+    place-items: center;
+    background: transparent;
+    cursor: pointer;
+    &:hover{
+        > :first-child{
+            background: white;
+            color: black;
+        }
+        background: white;
+        color: black;
+    }
     .MdOutlineShare{
         //border: 1px solid blue;
         font-size: 1.1rem;
