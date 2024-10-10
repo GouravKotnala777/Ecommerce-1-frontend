@@ -4,6 +4,7 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { CouponTypes } from "../assets/demoData";
 import { SerializedError } from "@reduxjs/toolkit";
 import toast, { Toaster } from "react-hot-toast";
+import { FaRegCopy } from "react-icons/fa";
 
 
 const MyCoupons = ({myCoupons}:{myCoupons:{
@@ -50,14 +51,14 @@ const MyCoupons = ({myCoupons}:{myCoupons:{
                             <div className="left_part">
                                 <div className="expires">expires</div>
                                 <div className="date">{coupon.endDate.toString().split("T")[0].split("-").reverse().join("-")}</div>
-                                <div className="t_and_c"><a href="/policy">terms & conditions</a></div>
+                                <div className="t_and_c"><a href="/policy/terms-and-conditions">terms & conditions</a></div>
                             </div>
                             <div className="right_part">
                                 <div className="your_coupon_code">
                                     Your coupon code
                                 </div>
                                 {/*<button onClick={() => navigate(`/user/cart?couponID=${coupon._id}`)}>{coupon.amount}</button>*/}
-                                <div className="coupon_code" onClick={() => copyToClipboard(coupon.code)}>{coupon.code}</div>
+                                <div className="coupon_code" onClick={() => copyToClipboard(coupon.code)}>{coupon.code}<FaRegCopy className="FaRegCopy" /></div>
                             </div>
                         </div>
                     </div>

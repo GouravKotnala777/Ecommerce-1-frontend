@@ -48,7 +48,7 @@ const MyGifts = ({myReferralGifts}:{myReferralGifts:{
                             <div className="left_part">
                                 <div className="expires">expires</div>
                                 <div className="date">{gift.coupon.endDate.toString().split("T")[0].split("-").reverse().join("-")}</div>
-                                <div className="t_and_c"><a href="/policy">terms & conditions</a></div>
+                                <div className="t_and_c"><a href="/policy/terms-and-conditions">terms & conditions</a></div>
                             </div>
                             <div className="right_part">
                                 {/*<button onClick={() => navigate(`/?couponID=${gift.coupon._id}`)}>Use Now</button>*/}

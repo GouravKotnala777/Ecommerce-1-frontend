@@ -194,6 +194,27 @@ const Policies = () => {
                     <Para para="No, currently we are delivering only Pan India and we do not deliver internationally." />
                 </div>
             }
+            {
+                policyType === "terms-and-conditions" &&
+                    <div className="return_refund_policy_bg" style={{padding:"10px", textAlign:"justify"}}>
+                        <Heading fontSize="1rem" heading="How to use Coupons" />
+                        <List listArray={[
+                            "First go to coupon page by bottom navigation bar.",
+                            "If there is any coupon, click on the coupon code for copy it to clipboard.",
+                            "Go to the cart, there should be a arrow pointing towards top-right at the bottom-left of the screen, click on it.",
+                            "Coupon input filed will be appear, paste coupon code in it, and press add button.",
+                            "now click on the buy all button on right side of same component.",
+                            "then do further processing for order, in a common way."                            
+                        ]} />
+                        <Heading fontSize="1rem" heading="How to use Gift Cards" />
+                        <List listArray={[
+                            "First go to gift cards page by bottom navigation bar.",
+                            "If there is any gift card, click on the use now button.",
+                            "Now any product you will buy it autometically cost you after reducing gift card amout.",
+                            "Always check product price first if selected gift amount has been substracted from product actual price or not."
+                        ]} />
+                    </div>
+            }
         </div>
         
 
