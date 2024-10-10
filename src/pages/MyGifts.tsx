@@ -5,7 +5,7 @@ import { SerializedError } from "@reduxjs/toolkit";
 import { FaGift } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { SelectedGiftReducerInitialState, setGiftReducer } from "../redux/reducers/selectedGiftReducer";
-
+import toast, {Toaster} from "react-hot-toast";
 
 
 const MyGifts = ({myReferralGifts}:{myReferralGifts:{
@@ -16,11 +16,21 @@ const MyGifts = ({myReferralGifts}:{myReferralGifts:{
     const {gift} = useSelector((state:{selectedGiftReducer:SelectedGiftReducerInitialState}) => state.selectedGiftReducer);
     const dispatch = useDispatch();
 
+    const giftCardHandler = (giftCardAmount:number) => {
+        dispatch(setGiftReducer({isLoading:false, gift, isError:false}));
+        toast.success(`Gift card has been selected, Now your order will have ${giftCardAmount}₹ off`, {
+            position:"bottom-center",
+            duration:5000
+        });
+    };
+
+
     return(
         <div className="my_coupons_bg">
             {/*<pre>{JSON.stringify(myReferralGifts.data?.message, null, `\t`)}</pre>*/}
-            <pre>{JSON.stringify(gift, null, `\t`)}</pre>
+            {/*<pre>{JSON.stringify(gift, null, `\t`)}</pre>*/}
             <div className="heading" style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>My Gifts</div>
+            <Toaster />
             {
                 myReferralGifts.data?.message.map((gift, index) => (
                     <div className="gift_cont" key={index}>
@@ -42,7 +52,7 @@ const MyGifts = ({myReferralGifts}:{myReferralGifts:{
                             </div>
                             <div className="right_part">
                                 {/*<button onClick={() => navigate(`/?couponID=${gift.coupon._id}`)}>Use Now</button>*/}
-                                <button onClick={() => dispatch(setGiftReducer({isLoading:false, gift, isError:false}))}>Use Now</button>
+                                <button onClick={() => giftCardHandler(gift.coupon.amount)}>Use Now</button>
                             </div>
                         </div>
                     </div>
