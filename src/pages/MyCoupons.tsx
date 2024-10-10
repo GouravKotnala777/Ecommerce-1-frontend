@@ -3,6 +3,7 @@ import logo from "../../public/logo1.jpg";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { CouponTypes } from "../assets/demoData";
 import { SerializedError } from "@reduxjs/toolkit";
+import toast, { Toaster } from "react-hot-toast";
 
 
 const MyCoupons = ({myCoupons}:{myCoupons:{
@@ -11,10 +12,29 @@ const MyCoupons = ({myCoupons}:{myCoupons:{
     error?:FetchBaseQueryError|SerializedError;
 }}) => {
 
+    const copyToClipboard = (text:string) => {
+        try {
+            navigator.clipboard.writeText(text);
+            //alert("Code copied");
+            toast.success("Code copied", {
+                position:"bottom-center",
+                duration:1800,
+            });
+            
+            
+        } catch (error) {
+            toast.error("Failed to copy coupon code, try again!", {
+                position:"bottom-center",
+                duration:1800,
+            });
+        }
+    };
+
     return(
         <div className="my_coupons_bg">
             {/*<pre>{JSON.stringify(myCoupons.data?.message, null, `\t`)}</pre>*/}
             <div className="heading" style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>My Coupons</div>
+            <Toaster />
             {
                 myCoupons.data?.message.map((coupon, index) => (
                     <div className="coupon_cont" key={index}>
@@ -37,7 +57,7 @@ const MyCoupons = ({myCoupons}:{myCoupons:{
                                     Your coupon code
                                 </div>
                                 {/*<button onClick={() => navigate(`/user/cart?couponID=${coupon._id}`)}>{coupon.amount}</button>*/}
-                                <div className="coupon_code">{coupon.code}</div>
+                                <div className="coupon_code" onClick={() => copyToClipboard(coupon.code)}>{coupon.code}</div>
                             </div>
                         </div>
                     </div>
