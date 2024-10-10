@@ -10,8 +10,11 @@ import Spinner from "../components/Spinner";
 import ItemNotFound from "../components/ItemNotFound";
 import DialogWrapper from "../components/DialogWrapper";
 import { UserLocationTypes } from "./Login.Page";
+import { BsArrowDownLeftSquareFill } from "react-icons/bs";
+import { PRIMARY, SECONDARY } from "../styles/utils";
+import { GoChecklist } from "react-icons/go";
 
-const Cart = ({cartData, userLocation}:{cartData:{
+const Cart = ({cartData, userLocation, currentParent}:{currentParent?:string; cartData:{
     isLoading:boolean;
     data?:{success:boolean; message:{products:{productID:ProductTypes; quantity:number;}[]; totalPrice:number;}};
     error?:FetchBaseQueryError|SerializedError;
@@ -34,6 +37,13 @@ const Cart = ({cartData, userLocation}:{cartData:{
     const [totalAmount, setTotalAmount] = useState<number>(0);
     const [oneTimeRefresh, setOneTimeRefresh] = useState<number>(0);
     //const [refresh, setRefresh] = useState<boolean>(false);
+
+    const [isCartAccessBarActive, setIsCartAccessBarActive] = useState(false);
+    //const [isCartAccessBarBtnActive, setIsCartAccessBarBtnActive] = useState(true);
+
+
+
+
     
     let num = 0;
 
@@ -102,55 +112,74 @@ const Cart = ({cartData, userLocation}:{cartData:{
         const handleScroll = () => {
             const currentScrollPos = window.pageYOffset;
             setHideHeader(currentScrollPos >= previousScrollPos.current);      
-            previousScrollPos.current = currentScrollPos
+            previousScrollPos.current = currentScrollPos;
         };
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
-      }, []);    
+      }, []);
     
     return(
         <div className="cart_bg">
-            {/*<pre>{JSON.stringify(cartData.data?.message.products, null, `\t`)}</pre>*/}
+            <pre>{JSON.stringify(currentParent, null, `\t`)}</pre>
             <DialogWrapper Element={<SummeryComponent data={summeryData} totalAmount={totalAmount} includedProducts={includedProducts} />} toggler={summeryDialogToggle} setToggler={setSummeryDialogToggle} />
             <div className="heading" style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>Cart</div>
 
 
-            <div className="access_bar_bg" style={{bottom:hideHeader?"-12%":"0%"}}>
-                <div className="left_part">
-                    <div className="feedback">
-                        <button>feedback</button>
-                    </div>
-                </div>
-                <nav className="right_part">
-                    <div className="input_cont">
-                        <input type="text" placeholder="Coupon" onChange={(e) => setCode(e.target.value)} />
-                        <button onClick={applyCouponHandler}>add</button>
-                    </div>
-                    <div className="total_price_cont">
-                        <div className="see_list" onClick={() => setSummeryDialogToggle(true)}>see</div>
-                        <div className="detailes">
-                            <div className="heading">Total Price</div>
-                            <div className="value">{singleCoupon?.discountType === "percentage"?
-                                                        totalAmount - ((singleCoupon.amount*totalAmount)/100)
-                                                        :
-                                                        singleCoupon?.discountType === "fixed"?
-                                                            totalAmount - singleCoupon?.amount
-                                                            :
-                                                            totalAmount
-                                                    }/- ₹</div>
-                        </div>
-                    </div>
-                    <div className="buy_all">
-                        <button onClick={() => buyAllHandler({amount:singleCoupon?.discountType === "percentage"?
-                                                        totalAmount - ((singleCoupon.amount*totalAmount)/100)
-                                                        :
-                                                        singleCoupon?.discountType === "fixed"?
-                                                            totalAmount - singleCoupon?.amount
-                                                            :
-                                                            totalAmount
-                                                    })}>Buy All</button>
-                    </div>
-                </nav>
+            {/*<div className="access_bar_bg" style={{bottom:hideHeader?"-12%":"0%"}}>*/}
+            <div className="access_bar_bg" style={{bottom:hideHeader?"-12%":"40px", width:isCartAccessBarActive?"98.1%":"39px",  height:isCartAccessBarActive?"80px":"38px", background:isCartAccessBarActive ? `linear-gradient(90deg, ${PRIMARY}, ${SECONDARY})`:"rgba(0,0,0,0.1))"}}>
+                
+                    <>
+                        {
+                            isCartAccessBarActive &&
+                                <div className="left_part">
+                                    <div className="input_cont">
+                                        <input type="text" placeholder="Coupon" onChange={(e) => setCode(e.target.value)} />
+                                        <button onClick={applyCouponHandler}>add</button>
+                                    </div>
+                                    <div className="total_price_cont">
+                                        <div className="detailes">
+                                            <div className="heading">Total Price</div>
+                                            <div className="value">{singleCoupon?.discountType === "percentage"?
+                                                                        totalAmount - ((singleCoupon.amount*totalAmount)/100)
+                                                                        :
+                                                                        singleCoupon?.discountType === "fixed"?
+                                                                            totalAmount - singleCoupon?.amount
+                                                                            :
+                                                                            totalAmount
+                                                                    }/- ₹</div>
+                                        </div>
+                                        <div className="see_list" onClick={() => setSummeryDialogToggle(true)}><GoChecklist className="GoChecklist" /></div>
+                                    </div>
+                                </div>
+                        }
+                            <nav className="right_part" style={{background:isCartAccessBarActive?"white":`linear-gradient(90deg, ${PRIMARY}, ${SECONDARY})`}}>
+                                <button className="access_bar_bg_toggler" onClick={() => setIsCartAccessBarActive(!isCartAccessBarActive)}>
+                                    {
+                                        //isCartAccessBarActive &&
+                                            <BsArrowDownLeftSquareFill style={{transform:isCartAccessBarActive?"rotate(0deg)":"rotate(-180deg)", background:isCartAccessBarActive?"black":"unset", color:isCartAccessBarActive?"rgb(240, 240, 240)":"white"}} className="toggler_icon"  />
+                                            //:
+                                            //<BsArrowUpRightSquareFill className="toggler_icon" />
+                                    }
+                                </button>
+                                {
+                                    isCartAccessBarActive &&
+                                        <div className="buy_all">
+                                            <button onClick={() => buyAllHandler({amount:singleCoupon?.discountType === "percentage"?
+                                                                            totalAmount - ((singleCoupon.amount*totalAmount)/100)
+                                                                            :
+                                                                            singleCoupon?.discountType === "fixed"?
+                                                                                totalAmount - singleCoupon?.amount
+                                                                                :
+                                                                                totalAmount
+                                                                        })}>Buy All</button>
+                                        </div>
+                                }
+                            </nav>
+                    
+                        </>
+                
+                
+                
             </div>
 
 
