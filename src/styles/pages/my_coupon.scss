@@ -100,7 +100,13 @@
         margin: 20px auto;
         border-radius: 8px;
         padding: 10px;
-        background: white;
+        //background: white;
+        background-image:url("../../../public/cloud_bottom.png"), url("../../../public/cloud_top_left.png"), url("../../../public/cloud_top_right.png");
+        background-size:cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color:rgba(252, 192, 192, 0.602);
+
         box-shadow: 0px 0px 4px 0.3px $primary;
         .upper_part{
             //border: 1px solid #4b0082;
