@@ -126,7 +126,7 @@ const Cart = ({cartData, userLocation, currentParent}:{currentParent?:string; ca
 
 
             {/*<div className="access_bar_bg" style={{bottom:hideHeader?"-12%":"0%"}}>*/}
-            <div className="access_bar_bg" style={{bottom:hideHeader?"-12%":"40px", width:isCartAccessBarActive?"98.1%":"39px",  height:isCartAccessBarActive?"80px":"38px", background:isCartAccessBarActive ? `linear-gradient(90deg, ${PRIMARY}, ${SECONDARY})`:"rgba(0,0,0,0.1))"}}>
+            <div className="access_bar_bg" style={{bottom:hideHeader?"-12%":"40px", padding:isCartAccessBarActive?"4px":"0", width:isCartAccessBarActive?"98.1%":"33px",  height:isCartAccessBarActive?"80px":"33px", background:isCartAccessBarActive ? `linear-gradient(90deg, ${PRIMARY}, ${SECONDARY})`:"rgba(0,0,0,0.1))"}}>
                 
                     <>
                         {

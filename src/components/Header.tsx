@@ -109,7 +109,7 @@ const Header = ({userName, userRole, wishlistNotification, cartNotification, cou
                 </div>
                 <Sidebar userName={userName} userRole={userRole} wishlistNotification={wishlistNotification} cartNotification={cartNotification} isHamActive={isHamActive} setIsHamActive={setIsHamActive} setIsMyProfileDialogOpen={setIsMyProfileDialogOpen} />
             </div>
-            <div className="bottom_header_bg header_bg" style={{top:hideHeader?"100%":"88.5%"}}>
+            <div className="bottom_header_bg header_bg" style={{top:hideHeader?"100%":"90.5%"}}>
                 <nav className="bottom_nav">
                     <NavLink className="bottom_nav_navlinks" to="/"><RiCoupon3Line className="header_icon" /></NavLink>
                     <NavLink className="bottom_nav_navlinks" to="/user/coupons">
