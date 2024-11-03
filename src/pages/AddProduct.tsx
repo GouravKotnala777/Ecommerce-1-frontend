@@ -112,6 +112,8 @@ const AddProduct = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const [photo, setPhoto] = useState<File|undefined>();
     const [addProduct] = useAddProductMutation();
     const [addProductRes, setAddProductRes] = useState<MutationResTypes>();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    
 
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
         if (e.target.type === "file") {
@@ -124,6 +126,7 @@ const AddProduct = ({userLocation}:{userLocation:UserLocationTypes;}) => {
         }
     };
     const onClickHandler = async() => {
+        setIsLoading(true);
         console.log(fieldData);
         
         
@@ -164,12 +167,14 @@ const AddProduct = ({userLocation}:{userLocation:UserLocationTypes;}) => {
             
             
         }
+
+        setIsLoading(false);
     };
 
     return(
         <div className="add_product_bg">
             <HandleMutationRes res={addProductRes} />
-            <Form heading="Add Product" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler} />
+            <Form isLoading={isLoading} heading="Add Product" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler} />
         </div>
     )
 }

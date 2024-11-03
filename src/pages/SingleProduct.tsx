@@ -36,6 +36,7 @@ const SingleProduct = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const [createReview] = useCreateReviewMutation();
     const [deleteReview] = useDeleteReviewMutation();
     const [updateVote] = useUpdateVoteMutation();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     
 
     //const getSameProducts:{data?:{success:boolean; message:ProductTypesPopulated[];}} = useGetProductsOfSameQuery({query:"brand", value:"labrada"});
@@ -44,6 +45,7 @@ const SingleProduct = ({userLocation}:{userLocation:UserLocationTypes;}) => {
         setFormFieldData({...formFieldData, [e.target.name]:e.target.value});
     };
     const postReviewHandler = async() => {
+        setIsLoading(true);
         try {
             const res = await createReview({productID:productID as string, rating:Number(formFieldData.rating), comment:formFieldData.comment, action:"create_review", userLocation});
 
@@ -58,6 +60,7 @@ const SingleProduct = ({userLocation}:{userLocation:UserLocationTypes;}) => {
             console.log(error);
             console.log("------- SingleProduct.tsx onClickHandler");
         }
+        setIsLoading(false);
     };
     const updateReviewVoteHandler = async(reviewID:string, voted:boolean|undefined) => {
         try {
@@ -83,7 +86,7 @@ const SingleProduct = ({userLocation}:{userLocation:UserLocationTypes;}) => {
             {/*<pre>{JSON.stringify(postReviewRes, null, `\t`)}</pre>*/}
             <HandleMutationRes res={postReviewRes} />
 
-            <DialogWrapper toggler={isReviewDialogActive} setToggler={setIsReviewDialogActive} Element={<Form heading="Give Review" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={postReviewHandler} />} />
+            <DialogWrapper toggler={isReviewDialogActive} setToggler={setIsReviewDialogActive} Element={<Form isLoading={isLoading} heading="Give Review" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={postReviewHandler} />} />
 
 
             <SingleProductTemplate userLocation={userLocation} productID={productID} userWishlist={loginedUser?.message.wishlist} category={singleProduct.data?.message?.category} name={singleProduct.data?.message?.name} price={singleProduct.data?.message?.price} rating={singleProduct.data?.message?.rating} description={singleProduct.data?.message?.description} photo={singleProduct.data?.message.images[0] as string} parent="singleProduct" />

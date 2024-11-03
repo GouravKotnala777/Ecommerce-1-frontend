@@ -89,7 +89,7 @@ const SearchedProducts = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const [filter, setFilter] = useState<{category:string; sub_category:string; brand:string; price:{minPrice?:number; maxPrice?:number;}}>({category:"", sub_category:"", brand:"", price:{minPrice:0, maxPrice:10000}});
     const searchedProductsBg = useRef<HTMLDivElement>(null);
     const fetchAgainRef = useRef<boolean>(true);
-
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const filterChangeHandler = (e:ChangeEvent<HTMLSelectElement|HTMLInputElement|HTMLTextAreaElement>) => {
         setFilter({...(filter as {
@@ -104,6 +104,7 @@ const SearchedProducts = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     };
 
     const firstTimeFetching = async(runByFilter?:boolean) => {
+        setIsLoading(true);
         try {
             if (runByFilter) {
                 skip = 0;
@@ -149,7 +150,7 @@ const SearchedProducts = ({userLocation}:{userLocation:UserLocationTypes;}) => {
             console.log("------- firstTimeFetching error");
             
         }
-
+        setIsLoading(false);
     };
 
     useEffect(() => {
@@ -185,7 +186,7 @@ const SearchedProducts = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     return (
         <div ref={searchedProductsBg} id="searched_products_bg" className="searched_products_bg">
             <div className="filters_cont">
-                <Form heading="Filter" formFields={formFields} onChangeHandler={(e) => filterChangeHandler(e)} onClickHandler={() => firstTimeFetching(true)} aa={aa} setAa={setAa} />
+                <Form isLoading={isLoading} heading="Filter" formFields={formFields} onChangeHandler={(e) => filterChangeHandler(e)} onClickHandler={() => firstTimeFetching(true)} aa={aa} setAa={setAa} />
                 <button onClick={() => firstTimeFetching()}>Filter</button>
             </div>
             <div id="products_cont" className="products_cont">

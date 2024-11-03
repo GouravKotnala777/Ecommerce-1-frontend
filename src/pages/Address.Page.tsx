@@ -34,7 +34,7 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
     const [createPayment] = useCreatePaymentMutation();
     const [productRecommendation] = useProductRecommendationMutation();
     const {user} = useSelector((state:{loggedInUserReducer:loggedInUserInitialState}) => state.loggedInUserReducer);
-
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
 
 
@@ -52,6 +52,7 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
     };
 
     const buyHandler = async() => {
+        setIsLoading(true);
         try {
             const res = await updateMe({...address,  action:"add_address", userLocation});
             const paymentIntendRes = await createPayment({
@@ -102,6 +103,7 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
             console.log(error);
             console.log("----- Address.Page.tsx buyHandler");
         }
+        setIsLoading(false);
     };
     
     const setAddressFromTemplate = async(templateData:AddressBodyTypes) => {
@@ -288,7 +290,7 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
                 }
             </div>
 
-            <Form heading="Address" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e as ChangeEvent<HTMLInputElement>)} onClickHandler={buyHandler} />
+            <Form isLoading={isLoading} heading="Address" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e as ChangeEvent<HTMLInputElement>)} onClickHandler={buyHandler} />
         </div>
     )
 };

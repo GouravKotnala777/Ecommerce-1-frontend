@@ -34,6 +34,7 @@ const Coupons = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const [createCoupon] = useCreateCouponsMutation();
     const [formFieldsData, setFormFieldsData] = useState<CouponFormFielsTypes>();
     const [createCouponRes, setCreateCouponRes] = useState<MutationResTypes>();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const parent = "admin";
 
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement>) => {
@@ -41,8 +42,8 @@ const Coupons = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     };
 
     const onClickHandler = async() => {
+        setIsLoading(true);
         console.log(formFieldsData);
-        
         try {
             const res = await createCoupon({...formFieldsData, action:"create_coupon", userLocation} as CreateCouponBodyType);
 
@@ -56,6 +57,7 @@ const Coupons = ({userLocation}:{userLocation:UserLocationTypes;}) => {
             console.log(error);
             console.log("------ Coupon.tsx  onCLickHandler");
         }
+        setIsLoading(false);
     };
     
 
@@ -97,7 +99,7 @@ const Coupons = ({userLocation}:{userLocation:UserLocationTypes;}) => {
 
             </div>
             <div className="right_part">
-                <Form heading="Create Coupon" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e as ChangeEvent<HTMLInputElement>)} onClickHandler={onClickHandler} />
+                <Form isLoading={isLoading} heading="Create Coupon" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e as ChangeEvent<HTMLInputElement>)} onClickHandler={onClickHandler} />
             </div>
         </div>
     )

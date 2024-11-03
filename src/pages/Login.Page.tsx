@@ -66,7 +66,7 @@ const Login = ({userLocation}:{userLocation:UserLocationTypes}) => {
     return(
         <div className="login_bg">
             <DialogWrapper Element={<ForgetPasswordDialog email={email} setEmail={setEmail} setIsForgetPassDialogOpen={setIsForgetPassDialogOpen} userLocation={userLocation} />} toggler={isForgetPassDialogOpen} setToggler={setIsForgetPassDialogOpen} />
-            <HandleMutationRes res={loginRes} />
+            <HandleMutationRes duration={6000} res={loginRes} />
             {/*<pre>{JSON.stringify(userLocation, null, `\t`)}</pre>*/}
             <Form isLoading={isLoading} heading="Login" formFields={loginFormFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler}  />
             <div className="lower_part">
