@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 
 
-const HandleMutationRes = memo(({res, redirect}:{res:MutationResTypes|{error:{data:{message:string}}}|undefined; redirect?:string;}) => {
+const HandleMutationRes = memo(({res, redirect, duration}:{res:MutationResTypes|{error:{data:{message:string}}}|undefined; redirect?:string; duration?:number;}) => {
     const navigate = useNavigate();
 
 
@@ -18,7 +18,7 @@ const HandleMutationRes = memo(({res, redirect}:{res:MutationResTypes|{error:{da
                 console.log(res?.error);
                 toast.error(error.data.message as string, {
                     position:"bottom-center",
-                    duration:2000
+                    duration:duration?duration:2000
                 })
             }
         }
@@ -26,7 +26,7 @@ const HandleMutationRes = memo(({res, redirect}:{res:MutationResTypes|{error:{da
             if (res?.data.success) {
                 toast.success(res?.data.message, {
                     position:"bottom-center",
-                    duration:2000
+                    duration:duration?duration:2000
                 });
     
                 if (redirect) {
@@ -38,7 +38,7 @@ const HandleMutationRes = memo(({res, redirect}:{res:MutationResTypes|{error:{da
             else{
                 toast.error(res.data.message, {
                     position:"bottom-center",
-                    duration:2000,
+                    duration:duration?duration:2000,
                 })
             }
         }

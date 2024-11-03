@@ -1,6 +1,7 @@
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import "../styles/components/form.scss";
 import Range from "./Range";
+import Spinner from "./Spinner";
 
 export interface FormFieldTypes{
     type:string;
@@ -17,10 +18,11 @@ interface FormPropTypes{
     onChangeHandler:(e:ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => void;
     onClickHandler:() => void;
     aa?:{minPrice:number; maxPrice:number;};
-    setAa?:Dispatch<SetStateAction<{minPrice:number; maxPrice:number;}>>
+    setAa?:Dispatch<SetStateAction<{minPrice:number; maxPrice:number;}>>;
+    isLoading:boolean;
 }
 
-const Form = ({heading, formFields, onChangeHandler, onClickHandler, aa, setAa}:FormPropTypes) => {
+const Form = ({heading, formFields, onChangeHandler, onClickHandler, aa, setAa, isLoading}:FormPropTypes) => {
 
     return(
         <div className="form_cont" onClick={(e) => {e.stopPropagation()}}>
@@ -60,7 +62,7 @@ const Form = ({heading, formFields, onChangeHandler, onClickHandler, aa, setAa}:
                         <Range aa={aa} setAa={setAa as Dispatch<SetStateAction<{minPrice:number; maxPrice:number;}>>} />
                 }
 
-                <button onClick={onClickHandler}>{heading}</button>
+                <button disabled={isLoading} onClick={onClickHandler}>{isLoading ? <Spinner type={2} color="white" width={17.5} /> : heading}</button>
             </div>
         </div>
     )

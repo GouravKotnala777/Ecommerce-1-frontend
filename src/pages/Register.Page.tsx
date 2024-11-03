@@ -19,6 +19,8 @@ const Register = () => {
     const [register] = useRegisterMutation();
     const [registerRes, setResgisterRes] = useState<MutationResTypes>();
     const [searchParams] = useSearchParams();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
 
     
 
@@ -27,6 +29,7 @@ const Register = () => {
         setFormData({...formData, [e.target.name]:e.target.value});
     };
     const onClickHandler = async() => {
+        setIsLoading(true);
         console.log({...formData, referrerUserID:searchParams.get("referrerUserID")});
         
         try {
@@ -40,6 +43,7 @@ const Register = () => {
             console.log(error);
             console.log("----- Register.Page.tsx onClickHandler");
         }        
+        setIsLoading(false);
     };
 
     useEffect(() => {
@@ -49,8 +53,8 @@ const Register = () => {
 
     return(
         <div className="login_bg">
-            <HandleMutationRes res={registerRes} />
-            <Form heading="Register" formFields={registerFormFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler} />
+            <HandleMutationRes duration={6000} res={registerRes} />
+            <Form isLoading={isLoading} heading="Register" formFields={registerFormFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler} />
             <div className="lower_part">
                 <button></button>
                 <div className="dont_have_acc"> already have account <Link to="/user/login"> Login</Link></div>

@@ -30,6 +30,7 @@ const Login = ({userLocation}:{userLocation:UserLocationTypes}) => {
     const [loginRes, setLoginRes] = useState<MutationResTypes>();
     const [isForgetPassDialogOpen, setIsForgetPassDialogOpen] = useState<boolean>(false);
     const [email, setEmail] = useState<string>("");
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     //const [userLocation, setUserLocation] = useState<UserLocationTypes>({city:"", country:"", ip:"", loc:"", org:"", postal:"", readme:"", region:"", timezone:""});
 
 
@@ -38,6 +39,7 @@ const Login = ({userLocation}:{userLocation:UserLocationTypes}) => {
         setFormData({...formData, [e.target.name]:e.target.value});
     };
     const onClickHandler = async() => {
+        setIsLoading(true);
         try {
             const loginRes = await login({...formData, action:"signin", userLocation
                 //ipAddress:"1210002", userAgent:"chrome", userLocation:"faridabad", platform:"web", device:"windows", referrer:"google", success:false
@@ -58,7 +60,7 @@ const Login = ({userLocation}:{userLocation:UserLocationTypes}) => {
             console.log(error);
             console.log("----- Login.Page.tsx onClickHandler error");
         }
-
+        setIsLoading(false);
     };
 
     return(
@@ -66,7 +68,7 @@ const Login = ({userLocation}:{userLocation:UserLocationTypes}) => {
             <DialogWrapper Element={<ForgetPasswordDialog email={email} setEmail={setEmail} setIsForgetPassDialogOpen={setIsForgetPassDialogOpen} userLocation={userLocation} />} toggler={isForgetPassDialogOpen} setToggler={setIsForgetPassDialogOpen} />
             <HandleMutationRes res={loginRes} />
             {/*<pre>{JSON.stringify(userLocation, null, `\t`)}</pre>*/}
-            <Form heading="Login" formFields={loginFormFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler}  />
+            <Form isLoading={isLoading} heading="Login" formFields={loginFormFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler}  />
             <div className="lower_part">
                 <button onClick={() => setIsForgetPassDialogOpen(true)}>Forget Password</button>
                 <div className="dont_have_acc"> don't have account <Link to="/user/register"> Register</Link></div>
