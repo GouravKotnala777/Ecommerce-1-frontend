@@ -14,9 +14,9 @@ const Tab = ({panelsArray}:{panelsArray:PaneslArrayTypes[]}) => {
         <div className="tab_panel">
             <div className="tabs_cont">
                 {
-                    panelsArray.map((item) => (
+                    panelsArray.map((item, index) => (
                             
-                        <button className="tab" value={item.name} style={{
+                        <button className="tab" key={index} value={item.name} style={{
                             background:item.name === selectedTab ? `linear-gradient(90deg, ${PRIMARY}, ${SECONDARY})` : "white",
                             color:item.name === selectedTab ? "white" : "#515151",
                             boxShadow:item.name === selectedTab ? "0px 0px 3px 1px rgba(0,0,0,0.3) inset" : "0px 0px 5px 1px rgba(0,0,0,0.1)"
@@ -27,11 +27,11 @@ const Tab = ({panelsArray}:{panelsArray:PaneslArrayTypes[]}) => {
             </div>
             <div className="panel_cont">
                 {
-                    panelsArray.map((item) => (
+                    panelsArray.map((item, index) => (
                         item.name === selectedTab &&
-                        <>
+                        <span key={index}>
                             {item.children}
-                        </>
+                        </span>
                     ))
                 }
             </div>

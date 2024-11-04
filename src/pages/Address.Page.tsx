@@ -182,7 +182,7 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
     return(
         <div className="address_bg">
             {/*<pre>{JSON.stringify(recommendationProducts, null, `\t`)}</pre>*/}
-            <pre>{JSON.stringify({
+            {/*<pre>{JSON.stringify({
                 amount:location.amount,
                 quantity:location.quantity,
                 orderItems:location.orderItems,
@@ -191,7 +191,7 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
                 shippingType:location.shippingType,
                 parent:location.parent,
                 recommendationProductsAmount:recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
-            }, null, `\t`)}</pre>
+            }, null, `\t`)}</pre>*/}
             <div className="shipping_type_cont">
                 <div className="upper_cont">
                     <div className="heading">subtotal:</div>
