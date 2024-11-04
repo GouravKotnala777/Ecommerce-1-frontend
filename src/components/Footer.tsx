@@ -8,9 +8,9 @@ const FooterLinkFields = [
         {linkUrl:"faqs", placeHolder:"FAQs"},
         {linkUrl:"train-with-us", placeHolder:"Train with us"},
         {linkUrl:"track-your-order", placeHolder:"Track Your Order"},
-        {linkUrl:"bmi-calculator", placeHolder:"BMI Calculator"},
-        {linkUrl:"macro-calculator", placeHolder:"Macro Calculator"},
-        {linkUrl:"fitness-tools-calculator", placeHolder:"Fitness Tools and Calculator"}
+        {linkUrl:"tools/macro_calculator", placeHolder:"BMI Calculator"},
+        {linkUrl:"tools/macro_calculator", placeHolder:"Macro Calculator"},
+        {linkUrl:"tools/macro_calculator", placeHolder:"Fitness Tools and Calculator"}
     ]},
     {heading:"INFORMATIONS", links:[
         {linkUrl:"policy/privacy", placeHolder:"Privacy Policy"},
