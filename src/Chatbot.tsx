@@ -74,6 +74,8 @@ const Chatbot = ({USERID, USERNAME, userLocation}:{USERID?:string; USERNAME?:str
     const startChatHandler = (socket?: Socket<DefaultEventsMap, DefaultEventsMap>) => {
         socket?.emit("registerUser", {userID:USERID as string, userName:USERNAME as string});
         setIsChatStarted(true);
+        console.log("aaaaaaaaaaaaaaaaaaaa");
+        
     };
     const endChatWarningHandler = () => {
         setMessages((prev) => [...prev, {senderID:CHATBOT_ID, senderName:"Chatbot", content:"Do you want to left chat, all your chats will be removed!", createdAt:"22-08-2024"}]);
