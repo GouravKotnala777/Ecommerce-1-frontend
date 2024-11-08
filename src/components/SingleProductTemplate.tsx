@@ -3,14 +3,12 @@ import { BiHeart, BiSolidHeart } from "react-icons/bi";
 import RatingSystem from "./RatingSystem";
 import Skeleton from "./Skeleton";
 import ProductBtnGroup from "./ProductBtnGroup";
-import { useAddRemoveFromWishlistMutation } from "../redux/api/api";
 import { NavLink } from "react-router-dom";
 import unknownProductImg from "/public/unknownProduct.png";
 import ImageWithFallback from "./ImageWithFallback";
 //import {Toaster} from "react-hot-toast";
 import HandleMutationRes from "./HandleMutationRes";
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
-import { MutationResTypes } from "../assets/demoData";
 import Spinner from "./Spinner";
 import { PRIMARY, SECONDARY } from "../styles/utils";
 import { UserLocationTypes } from "../pages/Login.Page";
@@ -18,6 +16,7 @@ import { SelectedGiftReducerInitialState, setGiftReducer } from "../redux/reduce
 import { useDispatch, useSelector } from "react-redux";
 import { BsInfo } from "react-icons/bs";
 import { Heading, Note, Para } from "../pages/static/Policies";
+import { addRemoveFromWishlist, ResponseType } from "../redux/api/api";
 
 interface SingleProductTemplatePropTypes{
     userLocation:UserLocationTypes;
@@ -49,8 +48,7 @@ interface SingleProductTemplatePropTypes{
 
 
 const SingleProductTemplate = ({userLocation, productID, userWishlist, category, brand, name, price, quantity, rating, description, photo, parent, transactionId, shippingType, paymentStatus, orderStatus, message, createdAt, setTotalAmount, includedProducts, setIncludedProducts}:SingleProductTemplatePropTypes) => {
-    const [addRemoveFromWishlist] = useAddRemoveFromWishlistMutation();
-    const [addRemoveFromWishlistRes, setAddRemoveFromWishlistRes] = useState<MutationResTypes>();
+    const [addRemoveFromWishlistRes, setAddRemoveFromWishlistRes] = useState<ResponseType<string|Error>>({success:false, message:""});
     const {gift} = useSelector((state:{selectedGiftReducer:SelectedGiftReducerInitialState}) => state.selectedGiftReducer);
     const [isSelectedGiftInfoDialogActive, setIsSelectedGiftInfoDialogActive] = useState<boolean>(false);
     const dispatch = useDispatch();

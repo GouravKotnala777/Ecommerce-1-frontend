@@ -1,31 +1,20 @@
 import "../styles/pages/cart.scss";
 import { CouponTypes, ProductTypes } from "../assets/demoData";
 import SingleProductTemplate from "../components/SingleProductTemplate";
-import { useGetSingleCouponMutation } from "../redux/api/api";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import { SerializedError } from "@reduxjs/toolkit";
-import Spinner from "../components/Spinner";
-import ItemNotFound from "../components/ItemNotFound";
 import DialogWrapper from "../components/DialogWrapper";
 import { UserLocationTypes } from "./Login.Page";
 import { BsArrowDownLeftSquareFill } from "react-icons/bs";
 import { PRIMARY, SECONDARY } from "../styles/utils";
 import { GoChecklist } from "react-icons/go";
+import { getSingleCoupon } from "../redux/api/api";
 
-const Cart = ({cartData, userLocation, currentParent}:{currentParent?:string; cartData:{
-    isLoading:boolean;
-    data?:{success:boolean; message:{products:{productID:ProductTypes; quantity:number;}[]; totalPrice:number;}};
-    error?:FetchBaseQueryError|SerializedError;
-}, userLocation:UserLocationTypes;}) => {
-    //const cartData:{
-        //    isLoading:boolean;
-        //    data?:{success:boolean; message:{products:{productID:ProductTypes; quantity:number;}[]; totalPrice:number;}};
-        //    error?:FetchBaseQueryError|SerializedError;
-        //} = useFetchMyCartQuery("");
+const Cart = ({cartData, userLocation, currentParent}:{currentParent?:string; 
+    cartData:{
+    products:{productID:ProductTypes; quantity:number;}[]; totalPrice:number;
+}|undefined; userLocation:UserLocationTypes;}) => {
     const [includedProducts, setIncludedProducts] = useState<{[key:string]:boolean;}>({});
-    const [getSingleCoupon] = useGetSingleCouponMutation();
     const [hideHeader, setHideHeader] = useState<boolean>(false);
     const [code, setCode] = useState<string>("");
     const [singleCoupon, setSingleCoupon] = useState<CouponTypes>();
@@ -51,11 +40,11 @@ const Cart = ({cartData, userLocation, currentParent}:{currentParent?:string; ca
 
     const applyCouponHandler = async() => {
         try {
-            const couponRes:{data?:{message:CouponTypes}} = await getSingleCoupon({code, totalAmount});
+            const couponRes = await getSingleCoupon({code, totalAmount});
 
             console.log("-----  Cart.Page.tsx applyCouponHandler");
             console.log(couponRes);
-            setSingleCoupon(couponRes.data?.message);
+            setSingleCoupon(couponRes.message as CouponTypes);
             console.log("-----  Cart.Page.tsx applyCouponHandler");
         } catch (error) {
             console.log("-----  Cart.Page.tsx applyCouponHandler");
@@ -69,7 +58,7 @@ const Cart = ({cartData, userLocation, currentParent}:{currentParent?:string; ca
             navigate("/user/address", {state:{
                 amount:amount,
                 quantity:1,
-                orderItems:cartData.data?.message.products.filter((item) => includedProducts[item.productID._id]).map((item) => ({
+                orderItems:cartData?.products.filter((item) => includedProducts[item.productID._id]).map((item) => ({
                     productID:item.productID._id,
                     quantity:item.quantity,
                     category:item.productID.category,
@@ -87,7 +76,7 @@ const Cart = ({cartData, userLocation, currentParent}:{currentParent?:string; ca
 
     useEffect(() => {
         if (oneTimeRefresh < 3) {
-            cartData.data?.message.products.forEach((item) => {
+            cartData?.products.forEach((item) => {
                 setIncludedProducts((prev) => ({...prev, [item.productID._id]:true}))
             })
             setOneTimeRefresh((prev) => prev+1);
@@ -95,15 +84,15 @@ const Cart = ({cartData, userLocation, currentParent}:{currentParent?:string; ca
     }, [totalAmount]);
     useEffect(() => {
         if (num < 1) {
-            cartData.data?.message.products.forEach((item) => {
+            cartData?.products.forEach((item) => {
                 setTotalAmount((prev) => prev+(item.productID.price * item.quantity));
             });
         }
         num += 1;
-    }, [cartData.data]);
+    }, [cartData]);
         
     useEffect(() => {
-        const summeryDataLoc = cartData.data?.message.products.map((item1) => {
+        const summeryDataLoc = cartData?.products.map((item1) => {
                 return {_id:item1.productID._id, name:item1.productID.name, quantity:item1.quantity, price:item1.productID.price}
             })
         setSummeryData(summeryDataLoc as {_id:string; name:string; quantity:number; price:number;}[]);
@@ -196,21 +185,21 @@ const Cart = ({cartData, userLocation, currentParent}:{currentParent?:string; ca
 
 
             {
-                cartData.isLoading ?
-                    <Spinner type={1} heading="Loading..." width={100} thickness={6} />
-                    :
-                    cartData.error &&
-                    "data" in cartData.error &&
-                    cartData.error.data &&
-                    typeof cartData.error.data === "object" &&
-                    "message" in cartData.error.data ?
-                        <ItemNotFound heading={cartData.error?.data.message as string} statusCode={cartData.error.status as number} />
-                        :
-                        cartData.data?.message?.products ?
-                            cartData.data?.message.products.length === 0 ?
-                                <ItemNotFound heading={"Cart is empty"} statusCode={204} />
-                                :
-                                cartData.data?.message?.products.map((product) => (
+                //cartData.isLoading ?
+                //    <Spinner type={1} heading="Loading..." width={100} thickness={6} />
+                //    :
+                //    cartData.error &&
+                //    "data" in cartData.error &&
+                //    cartData.error.data &&
+                //    typeof cartData.error.data === "object" &&
+                //    "message" in cartData.error.data ?
+                //        <ItemNotFound heading={cartData.error?.data.message as string} statusCode={cartData.error.status as number} />
+                //        :
+                        //cartData.data?.message?.products ?
+                        //    cartData.data?.message.products.length === 0 ?
+                        //        <ItemNotFound heading={"Cart is empty"} statusCode={204} />
+                        //        :
+                                cartData?.products?.map((product) => (
                                     <SingleProductTemplate key={product.productID._id}
                                         userLocation={userLocation}
                                         productID={product.productID._id}
@@ -228,8 +217,8 @@ const Cart = ({cartData, userLocation, currentParent}:{currentParent?:string; ca
                                         setIncludedProducts={setIncludedProducts}
                                     />
                                 ))
-                            :
-                            <ItemNotFound heading={"No Internet Connection!"} statusCode={523} />
+                            //:
+                            //<ItemNotFound heading={"No Internet Connection!"} statusCode={523} />
 
             }
         </div>

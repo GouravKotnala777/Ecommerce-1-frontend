@@ -1,12 +1,10 @@
 import "../../styles/admin/coupon.scss";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import Form from "../../components/Form";
-import { CreateCouponBodyType, useCreateCouponsMutation, useGetAllCouponsQuery } from "../../redux/api/api";
-import { MutationResTypes } from "../../assets/demoData";
+import { CreateCouponBodyType, createCoupons, getAllCoupons, ResponseType } from "../../redux/api/api";
 import HandleMutationRes from "../../components/HandleMutationRes";
 import { UserLocationTypes } from "../Login.Page";
-//import Table from "../../components/Table";
-//import { CouponTypes } from "../../assets/demoData";
+import { CouponTypes } from "../../assets/demoData";
 
 
 interface CouponFormFielsTypes{
@@ -30,11 +28,11 @@ const formFields = [
 ];
 
 const Coupons = ({userLocation}:{userLocation:UserLocationTypes;}) => {
-    const couponData:{data?:{message:[{_id:string; code:string; amount:number; discountType:string; minPerchaseAmount:number; usedCount:number; usageLimit:number; endDate:Date;}]}} = useGetAllCouponsQuery("");
-    const [createCoupon] = useCreateCouponsMutation();
+    //const [createCoupon] = useCreateCouponsMutation();
     const [formFieldsData, setFormFieldsData] = useState<CouponFormFielsTypes>();
-    const [createCouponRes, setCreateCouponRes] = useState<MutationResTypes>();
+    const [createCouponRes, setCreateCouponRes] = useState<ResponseType<string|Error>>({success:false, message:""});
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [couponsArray, setCouponsArray] = useState<{_id:string; code:string; amount:number; discountType:string; minPerchaseAmount:number; usedCount:number; usageLimit:number; endDate:Date;}[]>([]);
     const parent = "admin";
 
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement>) => {
@@ -45,7 +43,7 @@ const Coupons = ({userLocation}:{userLocation:UserLocationTypes;}) => {
         setIsLoading(true);
         console.log(formFieldsData);
         try {
-            const res = await createCoupon({...formFieldsData, action:"create_coupon", userLocation} as CreateCouponBodyType);
+            const res = await createCoupons({...formFieldsData, action:"create_coupon", userLocation} as CreateCouponBodyType);
 
             console.log("------ Coupon.tsx  onCLickHandler");
             console.log(res);
@@ -59,17 +57,25 @@ const Coupons = ({userLocation}:{userLocation:UserLocationTypes;}) => {
         }
         setIsLoading(false);
     };
-    
 
+
+    useEffect(() => {
+        const couponDataRes = getAllCoupons();
+        couponDataRes.then((resolvedData) => {
+            setCouponsArray(resolvedData.message as CouponTypes[]);
+        }).catch((err) => {
+            console.log(err);
+        })
+    }, []);
     return(
         <div className="coupon_bg">
             <HandleMutationRes res={createCouponRes} />
             {/*<pre>{JSON.stringify(data, null, `\t`)}</pre>*/}
             <div className="left_part">
-                <p style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>All Coupons ({couponData.data?.message?.length})</p>
+                <p style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>All Coupons ({couponsArray.length})</p>
                 <div className="coupon_table_scroller">
                     {
-                        couponData.data?.message.map((coupon) => (
+                        couponsArray.map((coupon) => (
                             <div className="coupon" key={coupon._id}>
                                 <div className="left_part">
                                     <div className="used_coun">{coupon.usedCount}/{coupon.usageLimit}</div>

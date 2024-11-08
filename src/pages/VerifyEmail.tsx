@@ -1,23 +1,16 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useVerifyEmailMutation } from "../redux/api/api";
+import { ResponseType, verifyEmail } from "../redux/api/api";
 import { useEffect, useState } from "react";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import toast, {Toaster} from "react-hot-toast";
-import { MutationResTypes } from "../assets/demoData";
 import { UserLocationTypes } from "./Login.Page";
+import { UserTypes } from "../assets/demoData";
 
 
 const VerifyEmail = () => {
     const [searchParams] = useSearchParams();
-    const [verifyEmail] = useVerifyEmailMutation();
-    const [verifyEmailRes, setVerifyEmailRes] = useState<MutationResTypes>();
+    const [verifyEmailRes, setVerifyEmailRes] = useState<ResponseType<UserTypes|Error>>();
     const [newPassword, setNewPassword] = useState<string>("");
     const navigate = useNavigate();
-
-
-    
-    
-
     const token = searchParams.get('token');
     const emailtype = searchParams.get('emailtype');
     const referrerUserID = searchParams.get('referrerUserID');
@@ -66,34 +59,22 @@ const VerifyEmail = () => {
                 console.log("------ VerifyEmail.tsx  verifyEmailHandler");
                 console.log(res);
                 setVerifyEmailRes(res);
-                if (res?.error) {
-                    const error = res?.error as FetchBaseQueryError;
-                    if (error.data && typeof error.data === "object" && "message" in error.data) {
-                        //console.log(res?.error);
-                        toast.error(error.data.message as string, {
-                            position:"bottom-center",
-                            duration:2000
-                        })
-                    }
+                if (res.success === false) {
+                    const error = res.message as unknown;
+                    toast.error(error as string, {
+                        position:"bottom-center",
+                        duration:2000
+                    });
                 }
-                else if (res?.data) {
-                    if (res?.data.success) {
-                        toast.success(res?.data.message, {
-                            position:"bottom-center",
-                            duration:2000
-                        });
-            
-                        setTimeout(() => {
-                            navigate("/");
-                        }, 1500);
-                        
-                    }
-                    else{
-                        toast.error(res.data.message, {
-                            position:"bottom-center",
-                            duration:2000,
-                        })
-                    }
+                else if (res.success === true) {
+                    toast.success("Verification successful", {
+                        position:"bottom-center",
+                        duration:2000
+                    });
+        
+                    setTimeout(() => {
+                        navigate("/");
+                    }, 1500);
                 }
                 console.log("------ VerifyEmail.tsx  verifyEmailHandler");
             } catch (error) {
@@ -117,34 +98,22 @@ const VerifyEmail = () => {
                 console.log("------ VerifyEmail.tsx  updatePasswordHandler");
                 console.log(res);
                 setVerifyEmailRes(res);
-                if (res?.error) {
-                    const error = res?.error as FetchBaseQueryError;
-                    if (error.data && typeof error.data === "object" && "message" in error.data) {
-                        //console.log(res?.error);
-                        toast.error(error.data.message as string, {
-                            position:"bottom-center",
-                            duration:2000
-                        })
-                    }
+                if (res.success === false) {
+                    const error = res.message as Error;
+                    toast.error(error.message as string, {
+                        position:"bottom-center",
+                        duration:2000
+                    });
                 }
-                else if (res?.data) {
-                    if (res?.data.success) {
-                        toast.success(res?.data.message, {
-                            position:"bottom-center",
-                            duration:2000
-                        });
-            
-                        setTimeout(() => {
-                            navigate("/");
-                        }, 1500);
-                        
-                    }
-                    else{
-                        toast.error(res.data.message, {
-                            position:"bottom-center",
-                            duration:2000,
-                        })
-                    }
+                else if (res.success === true) {
+                    toast.success("Password updated", {
+                        position:"bottom-center",
+                        duration:2000
+                    });
+        
+                    setTimeout(() => {
+                        navigate("/");
+                    }, 1500);
                 }
                 console.log("------ VerifyEmail.tsx  updatePasswordHandler");
             } catch (error) {
@@ -173,20 +142,15 @@ const VerifyEmail = () => {
                     </>
             }
             {
-                verifyEmailRes?.error &&
-                "data" in verifyEmailRes.error &&
-                verifyEmailRes?.error.data &&
-                typeof verifyEmailRes?.error.data === "object" &&
-                "message" in verifyEmailRes.error.data &&
-                verifyEmailRes?.error.data.message ?
+                verifyEmailRes?.success === false ?
                 <>
-                    <h1 style={{color:"#ff4b69"}}>{verifyEmailRes.error.status}</h1>
-                    <p style={{color:"#919191", fontSize:"0.8rem"}}>{verifyEmailRes.error.data.message as string}</p>
+                    <h1 style={{color:"#ff4b69"}}>{verifyEmailRes.success}</h1>
+                    <p style={{color:"#919191", fontSize:"0.8rem"}}>{JSON.stringify(verifyEmailRes.message) as string}</p>
                 </>
                 :
                 <>
                     <h1 style={{color:"#ff4b69"}}>200</h1>
-                    <p style={{color:"#919191", fontSize:"0.8rem"}}>{verifyEmailRes?.data?.message}</p>
+                    <p style={{color:"#919191", fontSize:"0.8rem"}}>{verifyEmailRes?.message.name}</p>
                 </>
             }
             {/*<pre>{JSON.stringify(verifyEmailRes?.error.data.message, null, `\t`)}</pre>*/}

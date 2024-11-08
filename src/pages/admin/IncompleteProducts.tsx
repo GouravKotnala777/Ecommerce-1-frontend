@@ -1,6 +1,6 @@
-import { MouseEvent, useState } from "react";
-import { MutationResTypes, ProductTypes } from "../../assets/demoData";
-import { UpdateProductBodyType, useIncompleteProductsQuery, useUpdateProductMutation } from "../../redux/api/api";
+import { MouseEvent, useEffect, useState } from "react";
+import { ProductTypes } from "../../assets/demoData";
+import { incompleteProducts, ResponseType, updateProduct, UpdateProductBodyType } from "../../redux/api/api";
 import Table from "../../components/Table";
 
 
@@ -15,11 +15,11 @@ const productTableHeadings = [
 ];
 
 const IncompleteProducts = () => {
-    const incompleteProducts:{data?:{success:boolean; message:(ProductTypes&{_id:string; [key:string]:string})[]}} = useIncompleteProductsQuery("");
     const [list, setList] = useState<{ [key: string]:UpdateProductBodyType;
     }>({});
-    const [updateProduct] = useUpdateProductMutation();
-    const [outStockRes, setOutStockRes] = useState<MutationResTypes>();
+    const [outStockRes, setOutStockRes] = useState<ResponseType<string|Error>>();
+    const [incompleteProductsArray, setIncompleteProductsArray] = useState<(ProductTypes&{_id:string; [key:string]:string})[]>([]);
+
 
     const onClickHandler = async(e:MouseEvent<HTMLButtonElement>) => {
         try {
@@ -43,12 +43,26 @@ const IncompleteProducts = () => {
         }
     };
 
+    useEffect(() => {
+        const res = incompleteProducts();
+        res.then((resolved) => {
+            setIncompleteProductsArray(resolved.message as (ProductTypes&{_id:string; [key:string]:string})[])
+        }).catch((err) => {
+            console.log(err);
+        })
+        // (ProductTypes&{_id:string; [key:string]:string})[]
+
+    }, []);
+
     return(
         <div className="fill_detailes_bg">
             <p style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>Fill Detailes</p>
             <Table<(ProductTypes & {_id: string; [key: string]: string;})> 
                 thead={productTableHeadings}
-                data={incompleteProducts.data?.message}
+                data={incompleteProductsArray as (ProductTypes & {
+                    [key: string]: string;
+                    _id: string;
+                })[]}
                 list={list}
                 setList={setList}
                 onEditClickHandler={(e:MouseEvent<HTMLButtonElement>) => onClickHandler(e)}

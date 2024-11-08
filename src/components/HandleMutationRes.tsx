@@ -1,45 +1,32 @@
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { memo, useEffect } from "react";
 import toast, {Toaster} from "react-hot-toast";
-import { MutationResTypes } from "../assets/demoData";
 import { useNavigate } from "react-router-dom";
+import { ResponseType } from "../redux/api/api";
 
 
 
-const HandleMutationRes = memo(({res, redirect, duration}:{res:MutationResTypes|{error:{data:{message:string}}}|undefined; redirect?:string; duration?:number;}) => {
+const HandleMutationRes = memo(({res, redirect, duration}:{res:ResponseType<string|Error>; redirect?:string; duration?:number;}) => {
     const navigate = useNavigate();
 
 
 
     useEffect(() => {        
-        if (res?.error) {
-            const error = res?.error as FetchBaseQueryError;
-            if (error.data && typeof error.data === "object" && "message" in error.data) {
-                console.log(res?.error);
-                toast.error(error.data.message as string, {
-                    position:"bottom-center",
-                    duration:duration?duration:2000
-                })
-            }
+        if (res?.success === false) {
+            toast.error(res.message as string, {
+                position:"bottom-center",
+                duration:duration?duration:2000
+            })
         }
-        else if (res?.data) {
-            if (res?.data.success) {
-                toast.success(res?.data.message, {
-                    position:"bottom-center",
-                    duration:duration?duration:2000
-                });
-    
-                if (redirect) {
-                    setTimeout(() => {
-                        navigate(redirect);
-                    }, 1500);
-                }
-            }
-            else{
-                toast.error(res.data.message, {
-                    position:"bottom-center",
-                    duration:duration?duration:2000,
-                })
+        else if (res?.success === true) {
+            toast.success(res.message as string, {
+                position:"bottom-center",
+                duration:duration?duration:2000
+            });
+
+            if (redirect) {
+                setTimeout(() => {
+                    navigate(redirect);
+                }, 1500);
             }
         }
     }, [res]);

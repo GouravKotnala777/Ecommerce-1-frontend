@@ -13,6 +13,7 @@ const Products = ({products, userLocation}:{products:ProductTypes[]|undefined; u
 
     return(
         <div className="products_bg">
+            {/*<pre>{JSON.stringify(products, null, `\t`)}</pre>*/}
             {
                 products?.length === 0 ? 
                 (
@@ -38,6 +39,10 @@ const Products = ({products, userLocation}:{products:ProductTypes[]|undefined; u
                         </div>
                     ))
                 )
+
+                //<h1>hello</h1>
+                //:
+                //<h1>Konnichwa</h1>
             }
         </div>
     )

@@ -1,9 +1,8 @@
 import "../styles/pages/login.scss";
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import Form from "../components/Form";
-import { useForgetPasswordMutation, useLoginMutation } from "../redux/api/api";
+import { forgetPassword, login, ResponseType } from "../redux/api/api";
 import HandleMutationRes from "../components/HandleMutationRes";
-import { MutationResTypes } from "../assets/demoData";
 import DialogWrapper from "../components/DialogWrapper";
 import { Link } from "react-router-dom";
 
@@ -25,9 +24,9 @@ export const loginFormFields = [
 ];
 
 const Login = ({userLocation}:{userLocation:UserLocationTypes}) => {
-    const [formData, setFormData] = useState<{email?:string; password?:string;}>();
-    const [login] = useLoginMutation();
-    const [loginRes, setLoginRes] = useState<MutationResTypes>();
+    const [formData, setFormData] = useState<{email:string; password:string;}>({email:"", password:""});
+    //const [login] = useLoginMutation();
+    const [loginRes, setLoginRes] = useState<ResponseType<string|Error>>();
     const [isForgetPassDialogOpen, setIsForgetPassDialogOpen] = useState<boolean>(false);
     const [email, setEmail] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -49,7 +48,7 @@ const Login = ({userLocation}:{userLocation:UserLocationTypes}) => {
             console.log(loginRes);
             setLoginRes(loginRes);
 
-            if (loginRes.data) {
+            if (loginRes.success) {
                 setTimeout(() => {
                     window.location.href = "/";
                 }, 2000);
@@ -78,16 +77,18 @@ const Login = ({userLocation}:{userLocation:UserLocationTypes}) => {
 };
 
 const ForgetPasswordDialog = ({email, setEmail, setIsForgetPassDialogOpen, userLocation}:{email:string; setEmail:Dispatch<SetStateAction<string>>; setIsForgetPassDialogOpen:Dispatch<SetStateAction<boolean>>; userLocation:UserLocationTypes;}) => {
-    const [forgetPassword] = useForgetPasswordMutation();
+    //const [forgetPassword] = useForgetPasswordMutation();
 
     const forgetPasswordSendEmail = async() => {
         try {
-            const {data} = await forgetPassword({email, action:"forget_password", userLocation});
+            const data = await forgetPassword({email, action:"forget_password", userLocation});
 
             console.log("------ ForgetPasswordDialog  forgetPasswordSendEmail");
             console.log(data);
+            if (data.success) {
+                setIsForgetPassDialogOpen(false);
+            }
             console.log(email);
-            setIsForgetPassDialogOpen(false);
             console.log("------ ForgetPasswordDialog  forgetPasswordSendEmail");
             
         } catch (error) {

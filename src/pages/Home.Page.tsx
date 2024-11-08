@@ -1,14 +1,11 @@
 import "../styles/pages/home.scss";
 import Products from "../components/Products.tsx";
 import GroupedProducts from "../components/GoupedProducts.tsx";
-import { useFindAllFieldsQuery, useGetAllProductsQuery, useSearchProductsMutation } from "../redux/api/api.ts";
+import { findAllFields, getAllProducts, ResponseType, searchProducts } from "../redux/api/api.ts";
 import { ProductTypes } from "../assets/demoData.ts";
 import { useNavigate } from "react-router-dom";
 import { ChangeEvent, FocusEvent, MouseEvent, useEffect, useState } from "react";
 import Pagination from "../components/Pagination.tsx";
-import Spinner from "../components/Spinner.tsx";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import { SerializedError } from "@reduxjs/toolkit";
 import ItemNotFound from "../components/ItemNotFound.tsx";
 import { BiSearch } from "react-icons/bi";
 import Footer from "../components/Footer.tsx";
@@ -17,17 +14,13 @@ import { UserLocationTypes } from "./Login.Page.tsx";
 
 const Home = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const [skip, setSkip] = useState<number>(0);
-    const allProducts:{
-        isLoading:boolean;
-        data?:{success:boolean; message:ProductTypes[]; totalProducts:number;};
-        error?:FetchBaseQueryError | SerializedError;
-    } = useGetAllProductsQuery(skip);
-    const arrayOfCategories:{data?:{message:string[];}} = useFindAllFieldsQuery({groupedBy:"category"});
-    const arrayOfBrands:{data?:{message:string[];}} = useFindAllFieldsQuery({groupedBy:"brand"});
     const [searchQry, setSearchQry] = useState<string>("");
-    const [searchedProducts] = useSearchProductsMutation();
+    //const [searchedProducts] = useSearchProductsMutation();
     const navigate = useNavigate();
     const [suggession, setSuggession] = useState<{name:string;}[]>();
+    const [allProducts, setAllProducts] = useState<ResponseType<{products:ProductTypes[]; totalProducts:number;}>>({success:false, message:{products:[], totalProducts:0}});
+    const [allCategoriesArray, setAllCategoriesArray] = useState<string[]>([]);
+    const [allBrandsArray, setAllBrandsArray] = useState<string[]>([]);
 
 
     const searchClickHandler = () => {
@@ -76,8 +69,22 @@ const Home = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     
 
     useEffect(() => {
+        const res = getAllProducts({skip});
+
+        res.then((allProductsResolvedData) => {
+            if (allProductsResolvedData.success === true) {
+                //Ye pe theek karna hai
+                //console.log(JSON.stringify(allProductsResolvedData));
+                
+                setAllProducts((allProductsResolvedData as ResponseType<{products:ProductTypes[]; totalProducts:number;}>));
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }, []);
+    useEffect(() => {
         const rr = setTimeout(async() => {
-            const dddd:{data?:{message:ProductTypes[]}} = await searchedProducts({
+            const dddd = await searchProducts({
                 searchQry:searchQry,
                 skip:skip,
                 category:"",
@@ -88,7 +95,7 @@ const Home = ({userLocation}:{userLocation:UserLocationTypes;}) => {
                 action:"search_product",
                 userLocation
             });
-            const croppedData = dddd.data?.message
+            const croppedData = (dddd.message as ProductTypes[]) 
             .map((item) => ({name:item.name.toLowerCase()}))
             .filter((item2) => item2.name.includes(searchQry.toLowerCase())).splice(0,10);
 
@@ -99,71 +106,81 @@ const Home = ({userLocation}:{userLocation:UserLocationTypes;}) => {
         }, 1000);
         return () => clearTimeout(rr);
     }, [searchQry]);
+    useEffect(() => {
+        const arrayOfCategories = findAllFields({groupedBy:"category"});
+        const arrayOfBrands = findAllFields({groupedBy:"brand"});
+
+        arrayOfCategories.then((resolvedData) => {
+            setAllCategoriesArray(resolvedData.message as string[]);
+            console.log("AAAAAAAAAAAAAAAAAAAAAAA");
+            console.log(resolvedData);
+            console.log("AAAAAAAAAAAAAAAAAAAAAAA");
+        }).catch((err) => {
+            console.log("BBBBBBBBBBBBBBBBBBBBBBB");
+            console.log(err);
+            console.log("BBBBBBBBBBBBBBBBBBBBBBB");
+        })
+        arrayOfBrands.then((resolvedData) => {
+            setAllBrandsArray(resolvedData.message as string[]);
+            console.log("AAAAAAAAAAAAAAAAAAAAAAA");
+            console.log(resolvedData);
+            console.log("AAAAAAAAAAAAAAAAAAAAAAA");
+            
+        }).catch((err) => {
+            console.log(err);
+        })
+        
+    }, []);
 
     return(
         <>
             <div id="home_bg" className="home_bg" onClick={(e) => {onClickOverlay(e)}}>
             {
-                allProducts.isLoading ?
-                    //<h1>loading...</h1>
-                    <Spinner type={1} heading="Loading..." width={100} thickness={6} />
+                allProducts.message.products?.length === 0 ?
+                    <ItemNotFound heading={"You have not ordered anything yet!"} statusCode={204} />
                     :
-                    allProducts.error &&
-                    "data" in allProducts.error &&
-                    allProducts.error.data &&
-                    typeof allProducts.error.data === "object" &&
-                    "message" in allProducts.error.data ?
-                        <ItemNotFound heading={allProducts.error?.data.message as string} statusCode={allProducts.error.status as number} />
-                        :
-                        allProducts.data?.message ?
-                            allProducts.data?.message.length === 0 ?
-                                <ItemNotFound heading={"You have not ordered anything yet!"} statusCode={204} />
-                                :
-                                <>
-                                    <div className="home_sub_accessbar">
-                                        <div className="search_inp_cont">
-                                            <input value={searchQry} type="text" id="search_inp" name="search_inp" onFocus={(e) => onFocusSearchInp(e)} onBlur={(e) => onBlurSearchInp(e)} onClick={(e) => {e.stopPropagation()}} className="search_inp" placeholder="Search..." onChange={(e) => searchInpChangeHandler(e)} />
-                                            <button id="search_btn" onClick={searchClickHandler}>Go</button>
-                                            <div id="product_suggession_cont" className="product_suggession_cont">
-                                                {
-                                                    suggession?.map((item, index) => (
-                                                        <div key={index} className="row" onClick={(e) => {onClickSuggessionHandler(e)}}>
-                                                            <div className="col">
-                                                                <BiSearch />
-                                                            </div>
-                                                            <div className="col">
-                                                                <span className="span_left">{item.name.split(searchQry.toLowerCase())[0]}</span>
-                                                                <span className="span_middle">{searchQry.toLowerCase()}</span>
-                                                                <span className="span_right">{item.name.split(searchQry.toLowerCase())[1]}</span>
-                                                            </div>
-                                                        </div>
-                                                    ))
-                                                }
+                    <>
+                        <div className="home_sub_accessbar">
+                            <div className="search_inp_cont">
+                                <input value={searchQry} type="text" id="search_inp" name="search_inp" onFocus={(e) => onFocusSearchInp(e)} onBlur={(e) => onBlurSearchInp(e)} onClick={(e) => {e.stopPropagation()}} className="search_inp" placeholder="Search..." onChange={(e) => searchInpChangeHandler(e)} />
+                                <button id="search_btn" onClick={searchClickHandler}>Go</button>
+                                <div id="product_suggession_cont" className="product_suggession_cont">
+                                    {
+                                        suggession?.map((item, index) => (
+                                            <div key={index} className="row" onClick={(e) => {onClickSuggessionHandler(e)}}>
+                                                <div className="col">
+                                                    <BiSearch />
+                                                </div>
+                                                <div className="col">
+                                                    <span className="span_left">{item.name.split(searchQry.toLowerCase())[0]}</span>
+                                                    <span className="span_middle">{searchQry.toLowerCase()}</span>
+                                                    <span className="span_right">{item.name.split(searchQry.toLowerCase())[1]}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <Products userLocation={userLocation} products={allProducts.data?.message} />     
-                                </>
-                            :
-                            <ItemNotFound heading={"No Internet Connection!"} statusCode={523} />
-
+                                        ))
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <Products userLocation={userLocation} products={allProducts.message.products} />     
+                    </>
             }
                 {
-                    allProducts.data?.message &&
+                    allProducts.message.products &&
                     <>
                         <div className="pagination_number">{
-                            `${skip+1} of ${Math.ceil((allProducts.data?.totalProducts as number)/5)}`
+                            `${skip+1} of ${Math.ceil((allProducts?.message.totalProducts as number)/5)}`
                         }</div>
-                        <Pagination documentCount={Math.ceil((allProducts.data?.totalProducts as number)/5)-1} skip={skip} setSkip={setSkip} />
+                        <Pagination documentCount={Math.ceil((allProducts.message.totalProducts as number)/5)-1} skip={skip} setSkip={setSkip} />
                     </>
                 }
                 {
-                    arrayOfCategories.data?.message &&
+                    allCategoriesArray&&allCategoriesArray?.length !== 0 &&
                         <div className="grouped_products_conts">
                             <div className="heading">All Categories</div>
                             <div className="products">
                                 {
-                                    arrayOfCategories.data?.message.map((category, index) => (
+                                    allCategoriesArray?.map((category, index) => (
                                         <GroupedProducts key={index} query="category" value={category}  />
                                     ))
                                 }
@@ -171,12 +188,12 @@ const Home = ({userLocation}:{userLocation:UserLocationTypes;}) => {
                         </div>
                 }
                 {
-                    arrayOfBrands.data?.message &&
+                    allBrandsArray && allBrandsArray?.length !== 0 &&
                         <div className="grouped_products_conts">
                             <div className="heading">All Brands</div>
                             <div className="products">
                                 {
-                                    arrayOfBrands.data?.message.map((brand, index) => (
+                                    allBrandsArray?.map((brand, index) => (
                                         <GroupedProducts key={index} query="brand" value={brand}  />
                                     ))
                                 }
@@ -184,7 +201,7 @@ const Home = ({userLocation}:{userLocation:UserLocationTypes;}) => {
                         </div>
                 }
                 {
-                    arrayOfBrands.data?.message &&
+                    allBrandsArray && allBrandsArray?.length !== 0 &&
                         <div className="grouped_products_conts">
                             <div className="heading">High Rated</div>
                             <div className="products">
@@ -203,3 +220,50 @@ const Home = ({userLocation}:{userLocation:UserLocationTypes;}) => {
 };
 
 export default Home;
+
+
+//{
+//    allProducts.isLoading ?
+//        //<h1>loading...</h1>
+//        <Spinner type={1} heading="Loading..." width={100} thickness={6} />
+//        :
+//        allProducts.error &&
+//        "data" in allProducts.error &&
+//        allProducts.error.data &&
+//        typeof allProducts.error.data === "object" &&
+//        "message" in allProducts.error.data ?
+//            <ItemNotFound heading={allProducts.error?.data.message as string} statusCode={allProducts.error.status as number} />
+//            :
+//            allProducts.data?.message ?
+//                allProducts.data?.message.length === 0 ?
+//                    <ItemNotFound heading={"You have not ordered anything yet!"} statusCode={204} />
+//                    :
+//                    <>
+//                        <div className="home_sub_accessbar">
+//                            <div className="search_inp_cont">
+//                                <input value={searchQry} type="text" id="search_inp" name="search_inp" onFocus={(e) => onFocusSearchInp(e)} onBlur={(e) => onBlurSearchInp(e)} onClick={(e) => {e.stopPropagation()}} className="search_inp" placeholder="Search..." onChange={(e) => searchInpChangeHandler(e)} />
+//                                <button id="search_btn" onClick={searchClickHandler}>Go</button>
+//                                <div id="product_suggession_cont" className="product_suggession_cont">
+//                                    {
+//                                        suggession?.map((item, index) => (
+//                                            <div key={index} className="row" onClick={(e) => {onClickSuggessionHandler(e)}}>
+//                                                <div className="col">
+//                                                    <BiSearch />
+//                                                </div>
+//                                                <div className="col">
+//                                                    <span className="span_left">{item.name.split(searchQry.toLowerCase())[0]}</span>
+//                                                    <span className="span_middle">{searchQry.toLowerCase()}</span>
+//                                                    <span className="span_right">{item.name.split(searchQry.toLowerCase())[1]}</span>
+//                                                </div>
+//                                            </div>
+//                                        ))
+//                                    }
+//                                </div>
+//                            </div>
+//                        </div>
+//                        <Products userLocation={userLocation} products={allProducts.data?.message} />     
+//                    </>
+//                :
+//                <ItemNotFound heading={"No Internet Connection!"} statusCode={523} />
+
+//}

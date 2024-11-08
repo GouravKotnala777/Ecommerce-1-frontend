@@ -18,8 +18,8 @@ import UpdateProduct from './pages/admin/UpdateProduct'
 import Coupons from './pages/admin/Coupon'
 import StripePayment from './pages/Payment'
 import Address from './pages/Address.Page'
-import { useFetchMyCartQuery, useMyCouponsQuery, useMyProfileQuery, useMyReferralGiftsQuery, useMyWhishlistQuery, useOutStockProductsQuery } from './redux/api/api'
-import { CouponTypes, ProductTypes, UserTypes } from './assets/demoData'
+import { fetchMyCart, myCoupons, myProfile, myReferralGifts, myWhishlist, outStockProducts } from './redux/api/api'
+import { CouponTypes, ProductTypes, ProductTypesPopulated, UserTypes } from './assets/demoData'
 import { setLoggedInUser } from './redux/reducers/loggedInUserReducer'
 import IncompleteProducts from './pages/admin/IncompleteProducts'
 import ProductsOfSame from './pages/ProductsOfSame'
@@ -28,8 +28,6 @@ import { GoReport } from 'react-icons/go'
 import DialogWrapper from './components/DialogWrapper'
 import VerifyEmail from './pages/VerifyEmail'
 import MyOrders from './pages/MyOrders'
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
-import { SerializedError } from '@reduxjs/toolkit'
 import Chatbot from './Chatbot'
 import ChatbotAdmin from './ChatbotAdmin'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -45,31 +43,13 @@ import MyGifts from './pages/MyGifts'
 
 
 const App = () => {
-  const myProfileData:{isLoading:boolean; data?:{message:UserTypes;};} = useMyProfileQuery("");
+  const [myProfileData, setMyProfileData] = useState<UserTypes>();
   const [reportDialogToggle, setReportDialogToggle] = useState<boolean>(false);
-  const cartData:{
-    isLoading:boolean;
-    data?:{success:boolean; message:{products:{productID:ProductTypes; quantity:number;}[]; totalPrice:number;}};
-    error?:FetchBaseQueryError|SerializedError;
-  } = useFetchMyCartQuery("");
-  const  wishlistData:{
-    isLoading:boolean;
-    data?:{success:boolean; message:ProductTypes[]};
-    error?:FetchBaseQueryError | SerializedError;
-  } = useMyWhishlistQuery("");
-  const outStockData:{
-    data?:{success:boolean; message:(ProductTypes&{_id:string; [key:string]:string})[]}
-  } = useOutStockProductsQuery("");
-  const myCoupons:{
-    isLoading:boolean;
-    data?:{success:boolean; message:CouponTypes[]};
-    error?:FetchBaseQueryError | SerializedError;
-  } = useMyCouponsQuery("");
-  const myReferralGifts:{
-    isLoading:boolean;
-    data?:{success:boolean; message:{userID:{name:string; email:string;}; coupon:CouponTypes; status:"pending"|"completed"}[];};
-    error?:FetchBaseQueryError | SerializedError;
-  } = useMyReferralGiftsQuery("");
+  const [cartData, setCartData] = useState<{products:{productID:ProductTypes; quantity:number;}[]; totalPrice:number;}>();
+  const [wishlistData, setWishlistData] = useState<ProductTypesPopulated[]>([]);
+  const [outStock, setOutStock] = useState<(ProductTypes&{_id:string; [key:string]:string})[]>([]);
+  const [myCouponsArray, setMyCouponsArray] = useState<CouponTypes[]>([]);
+  const [myReferralGiftsArray, setMyReferralGiftsArray] = useState<{userID:{name:string; email:string;}; coupon:CouponTypes; status:"pending"|"completed"}[]>([]);
   const [userLocation, setUserLocation] = useState<UserLocationTypes>();
   const dispatch = useDispatch();
 
@@ -98,8 +78,67 @@ const App = () => {
 };
   
   useEffect(() => {
-    dispatch(setLoggedInUser({user:myProfileData.data?.message as UserTypes, isLoading:false, isError:false}));
-  }, [myProfileData.data?.message]);
+    const myProfileRes = myProfile();
+    myProfileRes.then((myProfileDataResolved) => {
+      dispatch(setLoggedInUser({user:myProfileDataResolved.message as UserTypes, isLoading:false, isError:false}));
+      setMyProfileData(myProfileDataResolved.message as UserTypes);
+      console.log("::::::::::::::::::::::::::::");
+      console.log(myProfileDataResolved);
+      console.log("::::::::::::::::::::::::::::");
+      
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, []);
+  useEffect(() => {
+    const myReferralGiftsRes = myReferralGifts();
+    myReferralGiftsRes
+    .then((myReferralGiftsResolvedData) => {
+      setMyReferralGiftsArray(myReferralGiftsResolvedData.message as {userID:{name:string; email:string;}; coupon:CouponTypes; status:"pending"|"completed"}[]);
+    }).catch((err) => {
+      console.log(err);
+    });
+  }, []);
+
+  useEffect(() => {
+    const cartDataRes = fetchMyCart();
+
+    cartDataRes.then((cartResolvedData) => {
+      setCartData(cartResolvedData.message as {products:{productID:ProductTypes; quantity:number;}[]; totalPrice:number;});
+      console.log("???????????????????????????????");
+      console.log(cartResolvedData);
+      console.log("???????????????????????????????");
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, []);
+  useEffect(() => {
+    const wishlistRes = myWhishlist();
+
+    wishlistRes.then((wishlistResolvedData) => {
+      setWishlistData(wishlistResolvedData.message as ProductTypesPopulated[]);
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, []);
+  useEffect(() => {
+    const outStockRes = outStockProducts();
+
+    outStockRes.then((outStockResolvedData) => {
+      setOutStock(outStockResolvedData.message as (ProductTypes&{_id:string; [key:string]:string})[]);
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, []);
+  useEffect(() => {
+    const myCouponsRes = myCoupons();
+
+    myCouponsRes.then((ResolvedData) => {
+      setMyCouponsArray(ResolvedData.message as CouponTypes[]);
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, []);
 
   useEffect(() => {
     getUserLocationData();
@@ -108,55 +147,56 @@ const App = () => {
   return (
         <>
           <BrowserRouter>
-            <DialogWrapper toggler={reportDialogToggle} setToggler={setReportDialogToggle} Element={<Chatbot USERID={myProfileData.data?.message._id} USERNAME={myProfileData.data?.message.name} userLocation={userLocation as UserLocationTypes} />} />
-            <Header userName={myProfileData.data?.message.name} userRole={myProfileData.data?.message.role} wishlistNotification={wishlistData.data?.message.length} cartNotification={cartData.data?.message.products.reduce((acc, iter) => acc+iter.quantity, 0) as number} couponNotification={myCoupons.data?.message.length as number} myReferralGiftsNotification={myReferralGifts.data?.message.length as number} userLocation={userLocation} />
+            <DialogWrapper toggler={reportDialogToggle} setToggler={setReportDialogToggle} Element={<Chatbot USERID={myProfileData?._id} USERNAME={myProfileData?.name} userLocation={userLocation as UserLocationTypes} />} />
+            <Header userName={myProfileData?.name} userRole={myProfileData?.role} wishlistNotification={wishlistData?.length} cartNotification={cartData?.products?.reduce((acc, iter) => acc+iter.quantity, 0) as number} couponNotification={myCoupons?.length as number} myReferralGiftsNotification={myReferralGiftsArray?.length as number} userLocation={userLocation} />
             <Routes>
               <Route path="/" element={<Home userLocation={userLocation as UserLocationTypes} />} />
+              {/*<Route path="/" element={<h1>My name is gourav</h1>} />*/}
               <Route path="/tools/macro_calculator" element={<MacroCalculator />} />
               <Route path="/group/:query/:value" element={<ProductsOfSame userLocation={userLocation as UserLocationTypes} />} />
 
 
               {
-                !myProfileData.data?.message._id &&
+                !myProfileData?._id &&
                   <>
                     <Route path="/user/register" element={<Register />} />
                     <Route path="/user/login" element={<Login userLocation={userLocation as UserLocationTypes} />} />
                   </>
               }
               {
-                myProfileData.data?.message._id &&
+                myProfileData?._id &&
                   <>
-                    <Route path="/user/coupons" element={<ProtectedRoute children={<MyCoupons myCoupons={myCoupons} />} userRole={myProfileData.data?.message.role} />} />
-                    <Route path="/user/gifts" element={<ProtectedRoute children={<MyGifts myReferralGifts={myReferralGifts} />} userRole={myProfileData.data?.message.role} />} />
-                    <Route path="/user/cart" element={<ProtectedRoute children={<Cart userLocation={userLocation as UserLocationTypes} cartData={cartData} />} userRole={myProfileData.data?.message.role} />} />
-                    <Route path="/user/orders" element={<ProtectedRoute children={<MyOrders userLocation={userLocation as UserLocationTypes} />} userRole={myProfileData.data?.message.role} />} />
-                    <Route path="/user/wishlist" element={<ProtectedRoute children={<Wishlist userLocation={userLocation as UserLocationTypes} wishlistData={wishlistData} />} userRole={myProfileData.data?.message.role} />} />
+                    <Route path="/user/coupons" element={<ProtectedRoute children={<MyCoupons myCoupons={myCouponsArray as CouponTypes[]} />} userRole={myProfileData?.role} />} />
+                    <Route path="/user/gifts" element={<ProtectedRoute children={<MyGifts myReferralGifts={myReferralGiftsArray} />} userRole={myProfileData?.role} />} />
+                    <Route path="/user/cart" element={<ProtectedRoute children={<Cart userLocation={userLocation as UserLocationTypes} cartData={cartData} />} userRole={myProfileData?.role} />} />
+                    <Route path="/user/orders" element={<ProtectedRoute children={<MyOrders userLocation={userLocation as UserLocationTypes} />} userRole={myProfileData?.role} />} />
+                    <Route path="/user/wishlist" element={<ProtectedRoute children={<Wishlist loginedUser={myProfileData} userLocation={userLocation as UserLocationTypes} wishlistData={wishlistData} />} userRole={myProfileData?.role} />} />
                     <Route path="/user/logout" element={<Logout userLocation={userLocation as UserLocationTypes} />} />
                   </>
               }
               
-              <Route path="/user/address" element={<ProtectedRoute children={<Address userLocation={userLocation} />} userRole={myProfileData.data?.message.role} />} />
+              <Route path="/user/address" element={<ProtectedRoute children={<Address userLocation={userLocation} />} userRole={myProfileData?.role} />} />
               <Route path="/user/verifyemail" element={<VerifyEmail />} />
 
 
-              <Route path="/product/pay" element={<ProtectedRoute children={<StripePayment userLocation={userLocation as UserLocationTypes} />} userRole={myProfileData.data?.message.role} />} />
+              <Route path="/product/pay" element={<ProtectedRoute children={<StripePayment userLocation={userLocation as UserLocationTypes} />} userRole={myProfileData?.role} />} />
               <Route path="/product/search/:searchQry" element={<SearchedProducts userLocation={userLocation as UserLocationTypes} />} />
-              <Route path="/product/:productID" element={<SingleProduct userLocation={userLocation as UserLocationTypes} />} />
+              <Route path="/product/:productID" element={<SingleProduct loginedUser={myProfileData as UserTypes} userLocation={userLocation as UserLocationTypes} />} />
 
 
               {
-                myProfileData.data?.message.role === "admin" &&
+                myProfileData?.role === "admin" &&
                 <>
-                  <Route path="/chat-admin" element={<ChatbotAdmin USERID={myProfileData.data?.message._id} USERNAME={myProfileData.data?.message.name} />} />
-                  <Route path="/product/new" element={<ProtectedRoute accessibleFor="admin" children={<AddProduct userLocation={userLocation as UserLocationTypes} />} userRole={myProfileData.data?.message.role} />} />
-                  <Route path="/admin/dashboard" element={<ProtectedRoute accessibleFor="admin" children={<Dashboard outStockProductsNotification={outStockData} />} userRole={myProfileData.data?.message.role} />} />
-                  <Route path="/admin/outstock" element={<ProtectedRoute accessibleFor="admin" children={<OutStock outStockProductsNotification={outStockData} />} userRole={myProfileData.data?.message.role} />} />
-                  <Route path="/admin/product/update" element={<ProtectedRoute accessibleFor="admin" children={<UpdateProduct />} userRole={myProfileData.data?.message.role} />} />
-                  <Route path="/admin/product/incomplete" element={<ProtectedRoute accessibleFor="admin" children={<IncompleteProducts />} userRole={myProfileData.data?.message.role} />} />
-                  <Route path="/admin/activities" element={<ProtectedRoute accessibleFor="admin" children={<UserActivities />} userRole={myProfileData.data?.message.role} />} />
-                  <Route path="/admin/coupon" element={<ProtectedRoute accessibleFor="admin" children={<Coupons userLocation={userLocation as UserLocationTypes} />} userRole={myProfileData.data?.message.role} />} />
-                  <Route path="/admin/chart/orders" element={<ProtectedRoute accessibleFor="admin" children={<OrderChart />} userRole={myProfileData.data?.message.role} />} />
-                  <Route path="/admin/order/all" element={<ProtectedRoute accessibleFor="admin" children={<AllOrders userLocation={userLocation as UserLocationTypes} />} userRole={myProfileData.data?.message.role} />} />
+                  <Route path="/chat-admin" element={<ChatbotAdmin USERID={myProfileData?._id} USERNAME={myProfileData?.name} />} />
+                  <Route path="/product/new" element={<ProtectedRoute accessibleFor="admin" children={<AddProduct userLocation={userLocation as UserLocationTypes} />} userRole={myProfileData?.role} />} />
+                  <Route path="/admin/dashboard" element={<ProtectedRoute accessibleFor="admin" children={<Dashboard outStockProductsNotification={outStock} />} userRole={myProfileData?.role} />} />
+                  <Route path="/admin/outstock" element={<ProtectedRoute accessibleFor="admin" children={<OutStock outStockProductsNotification={outStock} />} userRole={myProfileData?.role} />} />
+                  <Route path="/admin/product/update" element={<ProtectedRoute accessibleFor="admin" children={<UpdateProduct />} userRole={myProfileData?.role} />} />
+                  <Route path="/admin/product/incomplete" element={<ProtectedRoute accessibleFor="admin" children={<IncompleteProducts />} userRole={myProfileData?.role} />} />
+                  <Route path="/admin/activities" element={<ProtectedRoute accessibleFor="admin" children={<UserActivities />} userRole={myProfileData?.role} />} />
+                  <Route path="/admin/coupon" element={<ProtectedRoute accessibleFor="admin" children={<Coupons userLocation={userLocation as UserLocationTypes} />} userRole={myProfileData?.role} />} />
+                  <Route path="/admin/chart/orders" element={<ProtectedRoute accessibleFor="admin" children={<OrderChart />} userRole={myProfileData?.role} />} />
+                  <Route path="/admin/order/all" element={<ProtectedRoute accessibleFor="admin" children={<AllOrders userLocation={userLocation as UserLocationTypes} />} userRole={myProfileData?.role} />} />
                 </>
               }
 

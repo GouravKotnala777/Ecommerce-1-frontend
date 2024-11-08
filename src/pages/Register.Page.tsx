@@ -1,8 +1,7 @@
 import "../styles/pages/login.scss";
 import { ChangeEvent, useEffect, useState } from "react";
 import Form from "../components/Form";
-import { useRegisterMutation } from "../redux/api/api";
-import { MutationResTypes } from "../assets/demoData";
+import { register, ResponseType } from "../redux/api/api";
 import HandleMutationRes from "../components/HandleMutationRes";
 import { Link, useSearchParams } from "react-router-dom";
 
@@ -16,8 +15,7 @@ export const registerFormFields = [
 
 const Register = () => {
     const [formData, setFormData] = useState<{name?:string; email?:string; mobile?:string; password?:string; c_password?:string;}>({name:"", email:"", mobile:"", password:"", c_password:""});
-    const [register] = useRegisterMutation();
-    const [registerRes, setResgisterRes] = useState<MutationResTypes>();
+    const [registerRes, setResgisterRes] = useState<ResponseType<string|Error>>();
     const [searchParams] = useSearchParams();
     const [isLoading, setIsLoading] = useState<boolean>(false);
 

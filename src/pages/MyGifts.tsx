@@ -1,18 +1,12 @@
 import "../styles/pages/my_coupon.scss";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { CouponTypes } from "../assets/demoData";
-import { SerializedError } from "@reduxjs/toolkit";
 import { FaGift } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { SelectedGiftReducerInitialState, setGiftReducer } from "../redux/reducers/selectedGiftReducer";
 import toast, {Toaster} from "react-hot-toast";
 
 
-const MyGifts = ({myReferralGifts}:{myReferralGifts:{
-    isLoading:boolean;
-    data?:{success:boolean; message:{userID:{name:string; email:string;}; coupon:CouponTypes; status:"pending"|"completed"}[];};
-    error?:FetchBaseQueryError|SerializedError;
-}}) => {
+const MyGifts = ({myReferralGifts}:{myReferralGifts:{userID:{name:string; email:string;}; coupon:CouponTypes; status:"pending"|"completed"}[]}) => {
     const {gift} = useSelector((state:{selectedGiftReducer:SelectedGiftReducerInitialState}) => state.selectedGiftReducer);
     const dispatch = useDispatch();
 
@@ -32,7 +26,7 @@ const MyGifts = ({myReferralGifts}:{myReferralGifts:{
             <div className="heading" style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>My Gifts</div>
             <Toaster />
             {
-                myReferralGifts.data?.message.map((gift, index) => (
+                myReferralGifts.map((gift, index) => (
                     <div className="gift_cont" key={index}>
                         <div className="upper_part">
                             <div className="image_cont">

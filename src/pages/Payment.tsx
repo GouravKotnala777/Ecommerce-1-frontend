@@ -4,7 +4,7 @@ import { loadStripe, StripeCardElement } from "@stripe/stripe-js";
 import { FormEvent, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AddressBodyTypes } from "./Address.Page";
-import { useApplyMyCouponMutation, useCreatePaymentMutation, useNewOrderMutation, useProductRecommendationMutation } from "../redux/api/api";
+import { applyMyCoupon, createPayment, newOrder, productRecommendation, ResponseType } from "../redux/api/api";
 import Spinner from "../components/Spinner";
 import { ProductTypes } from "../assets/demoData";
 import ProductsRecommendation from "../components/ProductsRecommendation";
@@ -17,15 +17,29 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 
 
-const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPrice, coupon, shippingType, parent, userLocation, newOrder,  recommendationProductsAmount}:{clientSecret:string; userDetailes:{name:string; email:string; phone:string;}; address:AddressBodyTypes; orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; shippingType:string; parent?:string; userLocation:UserLocationTypes; newOrder:ReturnType<typeof useNewOrderMutation>[0];     recommendationProductsAmount:number;}) => {
+const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPrice, coupon, shippingType, parent, userLocation, newOrder,  recommendationProductsAmount}:{clientSecret:string; userDetailes:{name:string; email:string; phone:string;}; address:AddressBodyTypes; orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; shippingType:string; parent?:string; userLocation:UserLocationTypes; newOrder:({ orderItems, totalPrice, coupon, transactionId, paymentStatus, orderStatus, shippingType, message, parent, action, userLocation, recommendationProductsAmount }: {
+    orderItems: {
+        productID: string;
+        quantity: number;
+    }[];
+    totalPrice: number;
+    coupon: string;
+    transactionId: string;
+    paymentStatus: string;
+    orderStatus: "pending" | "confirmed" | "processing" | "shipped" | "dispatched" | "delivered" | "cancelled" | "failed" | "returned" | "refunded";
+    shippingType: string;
+    message: string;
+    parent: string;
+    action: string;
+    userLocation: UserLocationTypes;
+    recommendationProductsAmount?: number;
+}) => Promise<ResponseType<string|Error>>;     recommendationProductsAmount:number;}) => {
     const stripe = useStripe();
     const elements = useElements();
     const [error, setError] = useState<string>();
     const [paymentSuccess, setPaymentSuccess] = useState(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    //const [newOrder] = useNew     OrderMutation();
     const navigate = useNavigate();
-    const [applyMyCoupon] = useApplyMyCouponMutation();
     const {gift} = useSelector((state:{selectedGiftReducer:SelectedGiftReducerInitialState}) => state.selectedGiftReducer);
     const dispatch = useDispatch();
 
@@ -115,15 +129,15 @@ const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPri
                 const applyMyCouponRes = await applyMyCoupon({couponID:gift.coupon._id});
 
                 
-                if (applyMyCouponRes.data) {
+                if (applyMyCouponRes.success === true) {
                     console.log("----- applyMyCoupon");
                     console.log(applyMyCouponRes);
                     console.log("----- applyMyCoupon");
                     dispatch(setGiftReducer({isLoading:true, gift:null, isError:false}));
                 }
-                if (applyMyCouponRes.error) {
+                if (applyMyCouponRes.success === false) {
                     console.log("----- applyMyCoupon error");
-                    console.log(applyMyCouponRes.error);
+                    console.log(applyMyCouponRes.message);
                     console.log("----- applyMyCoupon error");
                 }
                 
@@ -171,12 +185,28 @@ const CheckoutForm = ({clientSecret, userDetailes, address, orderItems, totalPri
     )
 };
 
-const CashOnDelivery = ({orderItems, totalPrice, coupon, shippingType, parent, userLocation, newOrder, recommendationProductsAmount}:{orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; shippingType:string; parent?:string; userLocation:UserLocationTypes; newOrder:ReturnType<typeof useNewOrderMutation>[0];    recommendationProductsAmount:number;}) => {
+const CashOnDelivery = ({orderItems, totalPrice, coupon, shippingType, parent, userLocation, newOrder, recommendationProductsAmount}:{orderItems:{productID:string; quantity:number;}[]; totalPrice:number; coupon:string; shippingType:string; parent?:string; userLocation:UserLocationTypes; newOrder:({ orderItems, totalPrice, coupon, transactionId, paymentStatus, orderStatus, shippingType, message, parent, action, userLocation, recommendationProductsAmount }: {
+    orderItems: {
+        productID: string;
+        quantity: number;
+    }[];
+    totalPrice: number;
+    coupon: string;
+    transactionId: string;
+    paymentStatus: string;
+    orderStatus: "pending" | "confirmed" | "processing" | "shipped" | "dispatched" | "delivered" | "cancelled" | "failed" | "returned" | "refunded";
+    shippingType: string;
+    message: string;
+    parent: string;
+    action: string;
+    userLocation: UserLocationTypes;
+    recommendationProductsAmount?: number;
+}) => Promise<ResponseType<string|Error>>;    recommendationProductsAmount:number;}) => {
     const [error, setError] = useState<string|null>(null);
     const [orderPlaced, setOrderPlaced] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const navigate = useNavigate();
-    const [applyMyCoupon] = useApplyMyCouponMutation();
+    //const [applyMyCoupon] = useApplyMyCouponMutation();
     const {gift} = useSelector((state:{selectedGiftReducer:SelectedGiftReducerInitialState}) => state.selectedGiftReducer);
     const dispatch = useDispatch();
 
@@ -186,7 +216,6 @@ const CashOnDelivery = ({orderItems, totalPrice, coupon, shippingType, parent, u
         console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         
         try {
-            //const [newOrder] = useNewOrderMutation();
             console.log("------- CashOnDelivery Payment");
             const newOrderRes = await newOrder({
                 orderItems,
@@ -212,15 +241,15 @@ const CashOnDelivery = ({orderItems, totalPrice, coupon, shippingType, parent, u
             if (gift && gift.status === "pending") {
                 const applyMyCouponRes = await applyMyCoupon({couponID:gift.coupon._id});
 
-                if (applyMyCouponRes.data) {
+                if (applyMyCouponRes.success === true) {
                     console.log("----- applyMyCoupon");
                     console.log(applyMyCouponRes);
                     console.log("----- applyMyCoupon");
                     dispatch(setGiftReducer({isLoading:true, gift:null, isError:false}));
                 }
-                if (applyMyCouponRes.error) {
+                if (applyMyCouponRes.success === false) {
                     console.log("----- applyMyCoupon error");
-                    console.log(applyMyCouponRes.error);
+                    console.log(applyMyCouponRes.message);
                     console.log("----- applyMyCoupon error");
                 }
                 
@@ -280,30 +309,26 @@ const StripePayment = ({userLocation}:{userLocation:UserLocationTypes;}) => {
 
         recommendationProductsAmount:number;
     }|undefined = useLocation().state;
-    const [productRecommendation] = useProductRecommendationMutation();
-    const [createPayment] = useCreatePaymentMutation();
     const [sameCategoryProduct, setSameCategoryProduct] = useState<Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[]>([]);
     const [sameBrandProduct, setSameBrandProduct] = useState<Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[]>([]);
     const [recommendationProducts, setRecommendationProducts] = useState<{productID:string; name:string; price:number; quantity:number;}[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [hideGetClientSecretAgain, setHideGetClientSecretAgain] = useState<boolean>(false);
-    const [newOrder] = useNewOrderMutation();
     const [clientSecret, setClientSecret] = useState<string>("");
-    //const {gift} = useSelector((state:{selectedGiftReducer:SelectedGiftReducerInitialState}) => state.selectedGiftReducer);
 
 
 
     
     const getProductRecommendation = async() => {
         try {
-            const sameCategoryProductRes:{data?:{message:Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[];}} = await productRecommendation({category:location?.orderItems.map((iter) => (iter.category)), brand:location?.orderItems.map((iter) => (iter.brand))});
-            const sameBrandProductRes:{data?:{message:Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[];}} = await productRecommendation({category:[], brand:location?.orderItems.map((iter) => iter.brand)});
+            const sameCategoryProductRes = await productRecommendation({category:location?.orderItems.map((iter) => (iter.category)), brand:location?.orderItems.map((iter) => (iter.brand))});
+            const sameBrandProductRes = await productRecommendation({category:[], brand:location?.orderItems.map((iter) => iter.brand)});
 
-            if (sameCategoryProductRes.data?.message) {
-                setSameCategoryProduct(sameCategoryProductRes.data.message);
+            if (sameCategoryProductRes.message) {
+                setSameCategoryProduct(sameCategoryProductRes.message as Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[]);
             }
-            if (sameBrandProductRes.data?.message) {
-                setSameBrandProduct(sameBrandProductRes.data?.message);
+            if (sameBrandProductRes.message) {
+                setSameBrandProduct(sameBrandProductRes.message as Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[]);
             }
         } catch (error) {
             console.log(error);
@@ -333,10 +358,10 @@ const StripePayment = ({userLocation}:{userLocation:UserLocationTypes;}) => {
             console.log({amountFormRecomm:recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)});
             console.log("----- Payment.tsx requestForClientSecretAgain");
 
-            if (paymentIntendRes.data.message) {
-                setClientSecret(paymentIntendRes.data.message);
+            if (paymentIntendRes.message) {
+                setClientSecret(paymentIntendRes.message as string);
             }
-            if (paymentIntendRes.error) {
+            if (paymentIntendRes.success === false) {
                 console.log("error aa gaya");
                 setClientSecret("");
             }

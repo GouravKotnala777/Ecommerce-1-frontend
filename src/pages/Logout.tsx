@@ -1,29 +1,27 @@
-import { MutationResTypes } from "../assets/demoData";
 import HandleMutationRes from "../components/HandleMutationRes";
-import { useLogoutMutation } from "../redux/api/api";
 import "../styles/pages/logout.scss";
 import { useState } from "react";
 import { UserLocationTypes } from "./Login.Page";
+import { logout, ResponseType } from "../redux/api/api";
 
 
 const Logout = ({userLocation}:{userLocation:UserLocationTypes}) => {
     const [confirmation, setConfirmation] = useState<boolean>(false);
-    const [logout] = useLogoutMutation();
-    const [logoutRes, setLogoutRes] = useState<MutationResTypes|{error:{data:{message:string}}}>();
+    const [logoutRes, setLogoutRes] = useState<ResponseType<string|Error>>();
 
     const logoutHandler = async() => {
         if (confirmation){
             console.log("Logout successfull");
             const res = await logout({action:"logout", userLocation});
             setLogoutRes(res);
-            if (res.data) {
+            if (res.success === true) {
                 window.location.href = "/";
             }
             console.log(res);
         }
         else{
             console.log("Please confirm first");
-            setLogoutRes({error:{data:{message:"Please confirm first"}}})
+            setLogoutRes({success:false, message:"Please confirm first"})
         }
     };
     return(
@@ -31,7 +29,7 @@ const Logout = ({userLocation}:{userLocation:UserLocationTypes}) => {
             {/*<pre>
                 {JSON.stringify(logoutRes, null, `\t`)}
             </pre>*/}
-            <HandleMutationRes res={logoutRes as {error:{data:{message:string}}}} />
+            <HandleMutationRes res={logoutRes as ResponseType<Error>} />
             <div className="heading">
                 Logout
             </div>

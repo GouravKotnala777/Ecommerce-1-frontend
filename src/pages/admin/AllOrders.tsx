@@ -1,10 +1,7 @@
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import { UpdateProductBodyType, useAllOrdersQuery, useUpdateOrderMutation } from "../../redux/api/api";
+import { allOrders, ResponseType, updateOrder, UpdateProductBodyType } from "../../redux/api/api";
 import { AllOrdersResponseType } from "../MyOrders";
-import { SerializedError } from "@reduxjs/toolkit";
 import { MouseEvent, useCallback, useEffect, useState } from "react";
 import Table from "../../components/Table";
-import { MutationResTypes } from "../../assets/demoData";
 import { UserLocationTypes } from "../Login.Page";
 
 type AllOrdersChartType = "allPendingOrders"|"allConfirmedOrders"|"allProcessingOrders"|"allDispatchedOrders"|"allShippedOrders"|"allDeliveredOrders"|"allCancelledOrders"|"allFailedOrders"|"allReturnedOrders"|"allRefundedOrders";
@@ -18,15 +15,11 @@ const productTableHeadings = [
 ];
 
 const AllOrders = ({userLocation}:{userLocation:UserLocationTypes}) => {
-    const {data}:{
-        isLoading:boolean;
-        data?:AllOrdersResponseType;
-        error?:FetchBaseQueryError | SerializedError;} = useAllOrdersQuery("");
     const [ordersChartType, setOrdersChartType] = useState<AllOrdersChartType>("allConfirmedOrders");
     const [list, setList] = useState<{ [key: string]:UpdateProductBodyType;}>({});
     const [transformedData, setTransformedData] = useState<UpdateProductBodyType[]>([]);
-    const [outStockRes, setOutStockRes] = useState<MutationResTypes>();
-    const [updateOrder] = useUpdateOrderMutation();
+    const [outStockRes, setOutStockRes] = useState<ResponseType<string|Error>>({success:false, message:""});
+    const [allOrdersArray, setAllOrdersArray] = useState<AllOrdersResponseType>();
 
 
     //console.log(data?.message.allConfirmedOrders);
@@ -56,7 +49,7 @@ const AllOrders = ({userLocation}:{userLocation:UserLocationTypes}) => {
     const dataTransformer = useCallback((): UpdateProductBodyType[] | undefined => {
         
         
-        return data?.message[ordersChartType].flatMap((item) => {
+        return allOrdersArray?.[ordersChartType].flatMap((item) => {
             const vv = item?.paymentInfo;
             return item.orderItems.map((item2) => {
                 return {
@@ -70,13 +63,24 @@ const AllOrders = ({userLocation}:{userLocation:UserLocationTypes}) => {
                 };
             });
         });
-    }, [data, ordersChartType]);
+    }, [allOrdersArray, ordersChartType]);
 
     useEffect(() => {
         setTransformedData(dataTransformer() as UpdateProductBodyType[]);
     }, [dataTransformer, ordersChartType]);
 
 
+    useEffect(() => {
+        const res = allOrders();
+        res.then((resolvedData) => {
+            if (resolvedData.success === true) {
+                
+                setAllOrdersArray((resolvedData.message as AllOrdersResponseType))
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }, []);
     return(
         <div className="all_orderd">
             <p style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>All Orders</p>

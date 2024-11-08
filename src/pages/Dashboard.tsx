@@ -9,13 +9,13 @@ import { RiCoupon3Line } from "react-icons/ri";
 import { GoListUnordered } from "react-icons/go";
 
 
-const Dashboard = ({outStockProductsNotification}:{outStockProductsNotification:{data?:{success:boolean; message:(ProductTypes&{_id:string; [key:string]:string})[]}}}) => {
+const Dashboard = ({outStockProductsNotification}:{outStockProductsNotification:(ProductTypes&{_id:string; [key:string]:string})[]}) => {
     return(
         <div className="dashboard_bg">
             <p style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>Dashboard</p>
             <div className="dashboard_links">
                 <Link to="/admin/outstock" className="dashboad_link">
-                    <TbBasketExclamation className="dashboard_icon" />Outstock Products{outStockProductsNotification?.data?.message.length !== 0 && outStockProductsNotification?.data?.message.length !== undefined && <div className="notification">{outStockProductsNotification?.data?.message.length}</div>}
+                    <TbBasketExclamation className="dashboard_icon" />Outstock Products{outStockProductsNotification.length !== 0 && outStockProductsNotification.length !== undefined && <div className="notification">{outStockProductsNotification.length}</div>}
                 </Link>
                 <Link to="/admin/product/incomplete" className="dashboad_link"><MdOutlineAddchart className="dashboard_icon" />Incomplete Products</Link>
                 <Link to="/admin/product/update" className="dashboad_link"><GrUpdate className="dashboard_icon" />Update Products Detailes</Link>

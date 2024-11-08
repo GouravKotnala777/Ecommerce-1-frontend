@@ -1,9 +1,7 @@
 import "../../styles/admin/order_charts.scss";
 import { useEffect, useRef, useState } from "react";
-import { useAllOrdersQuery } from "../../redux/api/api";
 import { AllOrdersResponseType } from "../MyOrders";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import { SerializedError } from "@reduxjs/toolkit";
+import { allOrders } from "../../redux/api/api";
 
 type CategoryColorType = "protein"|"eaas"|"weight-management"|"pre-workout"|"Performance-Enhancers"|"Vitamins-Minerals"|"hydration"|"Health-Wellness";
 
@@ -64,54 +62,59 @@ const aggregateData = (data:OrderTypes[]) => {
 
 
 const OrderChart = () => {
-    const {data}:{
-        isLoading:boolean;
-        data?:AllOrdersResponseType;
-        error?:FetchBaseQueryError | SerializedError;} = useAllOrdersQuery("");
-
-      return(
+    const [allOrdersArray, setAllOrdersArray] = useState<AllOrdersResponseType>();
+    
+    useEffect(() => {
+        const data = allOrders();
+        data.then((resolved) => {
+            setAllOrdersArray(resolved.message as AllOrdersResponseType);
+        }).catch((err) => {
+            console.log(err);
+        })
+    }, []);
+    return(
         <div className="order_chart_bg">
             {/*<pre>{JSON.stringify(arrayOfOrdersCategory, null, `\t`)}</pre>*/}
             {/*<pre>{JSON.stringify(data?.message.allFailedOrders, null, `\t`)}</pre>*/}
             {
-                data?.message.allPendingOrders.length !== 0&&
-                    <BarChart heading="Pending Orders" data={data?.message.allPendingOrders as OrderTypes[]} />
+                allOrdersArray?.allPendingOrders.length !== 0&&
+                    <BarChart heading="Pending Orders" data={allOrdersArray?.allPendingOrders as OrderTypes[]} />
             }
             {
-                data?.message.allFailedOrders.length !== 0&&
-                    <BarChart heading="Failed Orders" data={data?.message.allFailedOrders as OrderTypes[]} />
+                allOrdersArray?.allFailedOrders.length !== 0&&
+                    <BarChart heading="Failed Orders" data={allOrdersArray?.allFailedOrders as OrderTypes[]} />
             }
             {
-            data?.message.allProcessingOrders.length !== 0&&
-                <BarChart heading="Processing Orders" data={data?.message.allProcessingOrders as OrderTypes[]} />
+            allOrdersArray?.allProcessingOrders.length !== 0&&
+                <BarChart heading="Processing Orders" data={allOrdersArray?.allProcessingOrders as OrderTypes[]} />
             }
             {
-            data?.message.allDispatchedOrders.length !== 0&&
-                <BarChart heading="Dispatched Orders" data={data?.message.allDispatchedOrders as OrderTypes[]} />
+            allOrdersArray?.allDispatchedOrders.length !== 0&&
+                <BarChart heading="Dispatched Orders" data={allOrdersArray?.allDispatchedOrders as OrderTypes[]} />
             }
             {
-            data?.message.allShippedOrders.length !== 0&&
-                <BarChart heading="Shipped Orders" data={data?.message.allShippedOrders as OrderTypes[]} />
+            allOrdersArray?.allShippedOrders.length !== 0&&
+                <BarChart heading="Shipped Orders" data={allOrdersArray?.allShippedOrders as OrderTypes[]} />
             }
             {
-            data?.message.allDeliveredOrders.length !== 0&&
-                <BarChart heading="Delivered Orders" data={data?.message.allDeliveredOrders as OrderTypes[]} />
+            allOrdersArray?.allDeliveredOrders.length !== 0&&
+                <BarChart heading="Delivered Orders" data={allOrdersArray?.allDeliveredOrders as OrderTypes[]} />
             }
             {
-            data?.message.allCancelledOrders.length !== 0&&
-                <BarChart heading="Cancelled Orders" data={data?.message.allCancelledOrders as OrderTypes[]} />
+            allOrdersArray?.allCancelledOrders.length !== 0&&
+                <BarChart heading="Cancelled Orders" data={allOrdersArray?.allCancelledOrders as OrderTypes[]} />
             }
             {
-            data?.message.allConfirmedOrders.length !== 0&&
-                <BarChart heading="Confirmed Orders" data={data?.message.allConfirmedOrders as OrderTypes[]} />
+            allOrdersArray?.allConfirmedOrders.length !== 0&&
+                <BarChart heading="Confirmed Orders" data={allOrdersArray?.allConfirmedOrders as OrderTypes[]} />
             }
             {
-            data?.message.allReturnedOrders.length !== 0&&
-                <BarChart heading="Returned Orders" data={data?.message.allReturnedOrders as OrderTypes[]} />
+            allOrdersArray?.allReturnedOrders.length !== 0&&
+                <BarChart heading="Returned Orders" data={allOrdersArray?.allReturnedOrders as OrderTypes[]} />
             }
             {
-            data?.message.allRefundedOrders.length !== 0&&
-                <BarChart heading="Refunded Orders" data={data?.message.allRefundedOrders as OrderTypes[]} />
+            allOrdersArray?.allRefundedOrders.length !== 0&&
+                <BarChart heading="Refunded Orders" data={allOrdersArray?.allRefundedOrders as OrderTypes[]} />
             }
 
         </div>

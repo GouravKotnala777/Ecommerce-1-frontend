@@ -1,17 +1,12 @@
 import "../styles/pages/my_coupon.scss";
 import logo from "../../public/logo1.jpg";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { CouponTypes } from "../assets/demoData";
-import { SerializedError } from "@reduxjs/toolkit";
 import toast, { Toaster } from "react-hot-toast";
 import { FaRegCopy } from "react-icons/fa";
+import { ResponseType } from "../redux/api/api";
 
 
-const MyCoupons = ({myCoupons}:{myCoupons:{
-    isLoading:boolean;
-    data?:{success:boolean; message:CouponTypes[];};
-    error?:FetchBaseQueryError|SerializedError;
-}}) => {
+const MyCoupons = ({myCoupons}:{myCoupons:CouponTypes[];}) => {
 
     const copyToClipboard = (text:string) => {
         try {
@@ -37,7 +32,7 @@ const MyCoupons = ({myCoupons}:{myCoupons:{
             <div className="heading" style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>My Coupons</div>
             <Toaster />
             {
-                myCoupons.data?.message.map((coupon, index) => (
+                myCoupons.map((coupon, index) => (
                     <div className="coupon_cont" key={index}>
                         <div className="upper_part">
                             <div className="image_cont">

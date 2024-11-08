@@ -1,11 +1,9 @@
 import { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
-import { useGetAllUsersActivitiesMutation } from "../redux/api/api";
 import Table from "../components/Table";
 import { UserLocationTypes } from "./Login.Page";
 import Spinner from "../components/Spinner";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import { SerializedError } from "@reduxjs/toolkit";
 import ItemNotFound from "../components/ItemNotFound";
+import { getAllUsersActivities } from "../redux/api/api";
 
 export interface UserActivitiesTypes {
     userID: string;
@@ -47,10 +45,7 @@ const activitiesTableHeadings = [
 
 const UserActivities = () => {
     const [skip, setSkip] = useState<number>(0);
-    const [allActivities] = useGetAllUsersActivitiesMutation();
-    //const outStockData:{data?:{success:boolean; message:(ProductTypes&{_id:string; [key:string]:string})[]}} = useOutStockProductsQuery("");
-    const [list, setList] = useState<{ [key: string]:UpdateActivityBodyType;
-    }>({});
+    const [list, setList] = useState<{ [key: string]:UpdateActivityBodyType; }>({});
     const [orderNumber, setOrderNumber] = useState<number>(0);
     const [isRowInfoDialogOpen, setIsRowInfoDialogOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -66,29 +61,26 @@ const UserActivities = () => {
     const fetchActivities = async() => {
         setIsLoading(true);
         try {
-            const res:{
-                data?:{success:boolean; message:{activity:(UserActivitiesTypes&{_id:string; [key:string]:string})[]; activityCount:number;}};
-                error?:FetchBaseQueryError | SerializedError;
-            } = await allActivities({skip});
+            const res = await getAllUsersActivities({skip});
 
             console.log("-------- fetchActivities UserActivities");
             console.log(res);
 
-            if (res.data?.message.activity) {
+            if (res.success === true) {
                 if (allActivitiesJoint) {
-                    setAllActivitiesJoint((prev) => [...(prev as []), ...res.data?.message.activity as UserActivitiesTypes[]]);
+                    setAllActivitiesJoint((prev) => [...(prev as []), ...(res.message as {activity:(UserActivitiesTypes&{_id:string; [key:string]:string})[]; activityCount:number;}).activity as UserActivitiesTypes[]]);
                     
-                    setSkip(skip+res.data.message.activity.length);
+                    setSkip(skip+(res.message as {activity:(UserActivitiesTypes&{_id:string; [key:string]:string})[]; activityCount:number;}).activity.length);
                 }
                 //else {
                 //    setAllActivitiesJoint([...res.data?.message.activity as UserActivitiesTypes[]]);
                 //    console.log("bbbbbbbbbbbbbbbb");
                 //}
-                setActivityCount(res.data?.message.activityCount as number);
+                setActivityCount((res.message as {activity:(UserActivitiesTypes&{_id:string; [key:string]:string})[]; activityCount:number;}).activityCount as number);
             }
             
-            if (res.error) {
-                setIsError(res.error);
+            if (res.success === false) {
+                setIsError(res.message);
             }
             console.log("-------- fetchActivities UserActivities");
             setIsLoading(false);

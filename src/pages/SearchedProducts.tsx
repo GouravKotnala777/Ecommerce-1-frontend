@@ -1,11 +1,11 @@
 import "../styles/pages/searched_products.scss";
 import { useParams } from "react-router-dom";
-import { useSearchProductsMutation} from "../redux/api/api";
 import { ProductTypes } from "../assets/demoData";
 import SingleProductTemplate from "../components/SingleProductTemplate";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Form, { FormFieldTypes } from "../components/Form";
 import { UserLocationTypes } from "./Login.Page";
+import { searchProducts } from "../redux/api/api";
 //import Spinner from "../components/Spinner";
 
 
@@ -83,7 +83,7 @@ let skip:number = 0;
 
 const SearchedProducts = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const {searchQry} = useParams();
-    const [searchedProducts] = useSearchProductsMutation();
+    //const [searchedProducts] = useSearchProductsMutation();
     const [products, setProducts] = useState<ProductTypes[]>([]);
     const [aa, setAa] = useState<{minPrice:number; maxPrice:number;}>({minPrice:0, maxPrice:10000});
     const [filter, setFilter] = useState<{category:string; sub_category:string; brand:string; price:{minPrice?:number; maxPrice?:number;}}>({category:"", sub_category:"", brand:"", price:{minPrice:0, maxPrice:10000}});
@@ -112,28 +112,28 @@ const SearchedProducts = ({userLocation}:{userLocation:UserLocationTypes;}) => {
             //console.log(filter);
             console.log({searchQry:searchQry as string, skip:skip, limit:5, category:filter?.category, sub_category:filter?.sub_category, brand:filter?.brand, price:{minPrice:aa.minPrice, maxPrice:aa.maxPrice}});
             
-            const searchedProductsRes:{data?:{message:ProductTypes[];}} = await searchedProducts({searchQry:searchQry as string, skip:skip, limit:5, category:filter.category, sub_category:filter.sub_category, brand:filter.brand, price:{minPrice:aa.minPrice, maxPrice:aa.maxPrice,}, action:"search_product", userLocation});
+            const searchedProductsRes = await searchProducts({searchQry:searchQry as string, skip:skip, limit:5, category:filter.category, sub_category:filter.sub_category, brand:filter.brand, price:{minPrice:aa.minPrice, maxPrice:aa.maxPrice,}, action:"search_product", userLocation});
 
 
             if (runByFilter) {
                 fetchAgainRef.current = true;
-                setProducts([...searchedProductsRes.data?.message as ProductTypes[]]);
+                setProducts([...searchedProductsRes.message as ProductTypes[]]);
                 console.log("------- firstTimeFetchingRunByFilter");
                 console.log(searchedProductsRes);
                 console.log("------- firstTimeFetchingRunByFilter");
             }
             else{
-                if (searchedProductsRes.data?.message && searchedProductsRes.data?.message.length > 4) {
-                    setProducts((prev) => [...prev, ...searchedProductsRes.data?.message as ProductTypes[]]);
+                if (searchedProductsRes.message && (searchedProductsRes.message as ProductTypes[]).length > 4) {
+                    setProducts((prev) => [...prev, ...searchedProductsRes.message as ProductTypes[]]);
                     console.log("------- firstTimeFetching1");
                     console.log(searchedProductsRes);
                     console.log("------- firstTimeFetching1");
                     fetchAgainRef.current = true;
                     skip = skip+1;
                 }
-                else if (searchedProductsRes.data?.message && searchedProductsRes.data?.message.length <= 4) {
+                else if (searchedProductsRes.message && (searchedProductsRes.message as ProductTypes[]).length <= 4) {
                     if (fetchAgainRef.current === true) {
-                        setProducts((prev) => [...prev, ...searchedProductsRes.data?.message as ProductTypes[]]);
+                        setProducts((prev) => [...prev, ...searchedProductsRes.message as ProductTypes[]]);
                         console.log("------- firstTimeFetching2");
                         console.log(searchedProductsRes);
                         console.log("------- firstTimeFetching2");

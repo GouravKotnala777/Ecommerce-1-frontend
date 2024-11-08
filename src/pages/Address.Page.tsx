@@ -1,7 +1,7 @@
 import "../styles/pages/address.scss";
 import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import Form from "../components/Form";
-import { useCreatePaymentMutation, useProductRecommendationMutation, useRemoveAddressMutation, useUpdateMeMutation } from "../redux/api/api";
+import { createPayment, productRecommendation, removeAddress, updateMe } from "../redux/api/api";
 import { loggedInUserInitialState } from "../redux/reducers/loggedInUserReducer";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -29,10 +29,6 @@ const formFields = [
 const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) => {
     const [address, setAddress] = useState<AddressBodyTypes>();
     const [shippingType, setShippingType] = useState<string>("regular");
-    const [updateMe] = useUpdateMeMutation();
-    const [removeAddress] = useRemoveAddressMutation();
-    const [createPayment] = useCreatePaymentMutation();
-    const [productRecommendation] = useProductRecommendationMutation();
     const {user} = useSelector((state:{loggedInUserReducer:loggedInUserInitialState}) => state.loggedInUserReducer);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -77,9 +73,9 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
             console.log(res);
             console.log("----- Address.Page.tsx buyHandler");
 
-            if (paymentIntendRes.data.message) {
+            if (paymentIntendRes.message) {
                 navigate("/product/pay", {state:{
-                    clientSecret:paymentIntendRes.data.message,
+                    clientSecret:paymentIntendRes.message,
                     userDetailes:{name:user?.name, email:user?.email, phone:user?.mobile},
                     address:address,
                     amount:location.amount,
@@ -94,7 +90,7 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
                     recommendationProductsAmount:recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
                 }});
             }
-            if (paymentIntendRes.error) {
+            if (paymentIntendRes.success === false) {
                 console.log("error aa gaya");
             }
             
@@ -121,9 +117,9 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
             userLocation:userLocation as UserLocationTypes
         });
 
-        if (paymentIntendRes.data.message) {
+        if (paymentIntendRes.message) {
             navigate("/product/pay", {state:{
-                clientSecret:paymentIntendRes.data.message,
+                clientSecret:paymentIntendRes.message,
                 userDetailes:{name:user?.name, email:user?.email, phone:user?.mobile},
                 address:templateData,
                 amount:location.amount+recommendationProducts.reduce((acc, iter) => acc+iter.price, 0),
@@ -138,7 +134,7 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
                 recommendationProductsAmount:recommendationProducts.reduce((acc, iter) => acc+iter.price, 0)
             }});
         }
-        if (paymentIntendRes.error) {
+        if (paymentIntendRes.success === false) {
             console.log("error aa gaya");
         }
     };
@@ -161,14 +157,14 @@ const Address = ({userLocation}:{ userLocation:UserLocationTypes|undefined;}) =>
 
     const getProductRecommendation = async() => {
         try {
-            const sameCategoryProductRes:{data?:{message:Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[];}} = await productRecommendation({category:location.orderItems.map((iter) => (iter.category)), brand:location.orderItems.map((iter) => (iter.brand))});
-            const sameBrandProductRes:{data?:{message:Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[];}} = await productRecommendation({category:[], brand:location.orderItems.map((iter) => iter.brand)});
+            const sameCategoryProductRes = await productRecommendation({category:location.orderItems.map((iter) => (iter.category)), brand:location.orderItems.map((iter) => (iter.brand))});
+            const sameBrandProductRes = await productRecommendation({category:[], brand:location.orderItems.map((iter) => iter.brand)});
 
-            if (sameCategoryProductRes.data?.message) {
-                setSameCategoryProduct(sameCategoryProductRes.data.message);
+            if (sameCategoryProductRes.message) {
+                setSameCategoryProduct(sameCategoryProductRes.message as Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[]);
             }
-            if (sameBrandProductRes.data?.message) {
-                setSameBrandProduct(sameBrandProductRes.data?.message);
+            if (sameBrandProductRes.message) {
+                setSameBrandProduct(sameBrandProductRes.message as Pick<ProductTypes, "category"|"brand"|"_id"|"name"|"price"|"images">[]);
             }
         } catch (error) {
             console.log(error);

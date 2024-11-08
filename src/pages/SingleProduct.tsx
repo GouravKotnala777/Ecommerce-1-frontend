@@ -1,14 +1,13 @@
 import "../styles/pages/single_product.scss";
 import photo from "/vite.svg";
 import unknownUser from "/unknownUser.png"
-import { MutationResTypes, ProductTypesPopulated, UserTypes } from "../assets/demoData";
+import { ProductTypesPopulated, UserTypes } from "../assets/demoData";
 import SingleProductTemplate from "../components/SingleProductTemplate";
 import RatingSystem from "../components/RatingSystem";
-import { useCreateReviewMutation, useDeleteReviewMutation, useGetSingleProductQuery, useMyProfileQuery, useUpdateVoteMutation } from "../redux/api/api";
 import Skeleton from "../components/Skeleton";
 import { useParams } from "react-router-dom";
 import Form from "../components/Form";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import DialogWrapper from "../components/DialogWrapper";
 import { useDispatch, useSelector } from "react-redux";
 import { MiscReducerTypes, setIsReviewDialogActive } from "../redux/reducers/miscReducers";
@@ -18,6 +17,7 @@ import HandleMutationRes from "../components/HandleMutationRes";
 import { FaArrowAltCircleDown, FaArrowAltCircleUp } from "react-icons/fa";
 import { PRIMARY_LOW } from "../styles/utils";
 import { UserLocationTypes } from "./Login.Page";
+import { createReview, deleteReview, getSingleProduct, ResponseType, updateVote } from "../redux/api/api";
 
 
 const formFields = [
@@ -25,18 +25,14 @@ const formFields = [
     {type:"text", name:"comment", placeHolder:"Comment"},
 ];
 
-const SingleProduct = ({userLocation}:{userLocation:UserLocationTypes;}) => {
+const SingleProduct = ({loginedUser, userLocation}:{loginedUser:UserTypes; userLocation:UserLocationTypes;}) => {
     const {productID} = useParams();
     const [formFieldData,setFormFieldData] = useState<{productID:string; rating:number; comment:string;}>({productID:"", rating:0, comment:""});
-    const singleProduct:{data?:{success:boolean; message:ProductTypesPopulated;}; isLoading?:boolean; isSuccess:boolean;} = useGetSingleProductQuery(productID);
-    const loginedUser:{success:boolean; message:UserTypes} = useMyProfileQuery("").data;
-    const [postReviewRes, setPostReviewRes] = useState<MutationResTypes>();
+    const [postReviewRes, setPostReviewRes] = useState<ResponseType<string|Error>>({success:false, message:""});
     const dispatch = useDispatch();
     const {isReviewDialogActive} = useSelector((state:{miscReducer:MiscReducerTypes}) => state.miscReducer);
-    const [createReview] = useCreateReviewMutation();
-    const [deleteReview] = useDeleteReviewMutation();
-    const [updateVote] = useUpdateVoteMutation();
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [singleProduct, setSingleProduct] = useState<ProductTypesPopulated>();
     
 
     //const getSameProducts:{data?:{success:boolean; message:ProductTypesPopulated[];}} = useGetProductsOfSameQuery({query:"brand", value:"labrada"});
@@ -77,7 +73,16 @@ const SingleProduct = ({userLocation}:{userLocation:UserLocationTypes;}) => {
         }
     };
 
+    
+    useEffect(() => {
+        const singleProductRes = getSingleProduct(productID as string);
 
+        singleProductRes.then((singleProductResolvedData) => {
+            setSingleProduct(singleProductResolvedData.message as ProductTypesPopulated);
+        }).catch((err) => {
+            console.log(err);
+        })
+    }, []);
 
     return(
         <div className="single_product_bg">
@@ -89,30 +94,30 @@ const SingleProduct = ({userLocation}:{userLocation:UserLocationTypes;}) => {
             <DialogWrapper toggler={isReviewDialogActive} setToggler={setIsReviewDialogActive} Element={<Form isLoading={isLoading} heading="Give Review" formFields={formFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={postReviewHandler} />} />
 
 
-            <SingleProductTemplate userLocation={userLocation} productID={productID} userWishlist={loginedUser?.message.wishlist} category={singleProduct.data?.message?.category} name={singleProduct.data?.message?.name} price={singleProduct.data?.message?.price} rating={singleProduct.data?.message?.rating} description={singleProduct.data?.message?.description} photo={singleProduct.data?.message.images[0] as string} parent="singleProduct" />
+            <SingleProductTemplate userLocation={userLocation} productID={productID} userWishlist={loginedUser.wishlist} category={singleProduct?.category} name={singleProduct?.name} price={singleProduct?.price} rating={singleProduct?.rating} description={singleProduct?.description} photo={singleProduct?.images[0] as string} parent="singleProduct" />
 
             
             
             <p>About</p>
             <ul>
-                {singleProduct.data?.message.about.map((item, liIndex) => (
+                {singleProduct?.about.map((item, liIndex) => (
                     <li key={liIndex}>{item}</li>
                 ))}
             </ul>
             {
-                singleProduct.data?.message &&
+                singleProduct &&
                     <>
-                        <ProductSlider query="category" value={singleProduct.data?.message.category as string} />
-                        <ProductSlider query="brand" value={singleProduct.data?.message.brand as string} />
-                        <ProductSlider query="rating" value={5} />
+                        <ProductSlider query="category" value={singleProduct.category as string} />
+                        <ProductSlider query="brand" value={singleProduct.brand as string} />
+                        <ProductSlider query="rating" value={"5"} />
                     </>
             }
 
             {/*<pre>{JSON.stringify(loginedUser.message._id, null, `\t`)}</pre>*/}
             <div className="reviews_cont">
                 {
-                    singleProduct.data?.message &&
-                    singleProduct.data?.message?.reviews.map((review) => review.userID?._id === loginedUser?.message._id && (
+                    singleProduct &&
+                    singleProduct?.reviews.map((review) => review.userID?._id === loginedUser._id && (
                         <div className="review_cont" key={review._id}>
                             <div className="upper_part">
                                 <span className="date_heading">{review.updatedAt === review.createdAt ? "createdAt" : "updatedAt"} : </span>
@@ -144,9 +149,9 @@ const SingleProduct = ({userLocation}:{userLocation:UserLocationTypes;}) => {
                     ))
                 }
                 {
-                    singleProduct.data?.message ?
-                        singleProduct.data?.message?.reviews.length !== 0 ?
-                            singleProduct.data?.message?.reviews.map((review) => (
+                    singleProduct ?
+                        singleProduct?.reviews.length !== 0 ?
+                            singleProduct?.reviews.map((review) => (
                                 <div className="review_cont" key={review._id}>
                                     <div className="upper_part">
                                         <span className="date_heading">{review.updatedAt === review.createdAt ? "createdAt" : "updatedAt"} : </span>
@@ -173,11 +178,11 @@ const SingleProduct = ({userLocation}:{userLocation:UserLocationTypes;}) => {
                                             <div className="comment_value">{review.comment}</div>
                                             <div className="vote_icons">
                                                 <div className="down_vote">
-                                                    <FaArrowAltCircleDown className="FaArrowAltCircleDown" style={{color:review.downVotes.includes(loginedUser.message._id) ? PRIMARY_LOW : "unset"}} onClick={() => updateReviewVoteHandler(review._id, false)}/>
+                                                    <FaArrowAltCircleDown className="FaArrowAltCircleDown" style={{color:review.downVotes.includes(loginedUser._id) ? PRIMARY_LOW : "unset"}} onClick={() => updateReviewVoteHandler(review._id, false)}/>
                                                     <div className="down_vote_value">{review.downVotes.length}</div>
                                                 </div>
                                                 <div className="up_vote">
-                                                    <FaArrowAltCircleUp className="FaArrowAltCircleUp" style={{color:review.upVotes.includes(loginedUser.message._id) ? PRIMARY_LOW : "unset"}} onClick={() => updateReviewVoteHandler(review._id, true)}/>
+                                                    <FaArrowAltCircleUp className="FaArrowAltCircleUp" style={{color:review.upVotes.includes(loginedUser._id) ? PRIMARY_LOW : "unset"}} onClick={() => updateReviewVoteHandler(review._id, true)}/>
                                                     <div className="up_vote_value">{review.upVotes.length}</div>
                                                 </div>
                                             </div>

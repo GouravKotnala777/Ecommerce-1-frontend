@@ -1,5 +1,5 @@
-import { SerializedError } from "@reduxjs/toolkit";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+//import { SerializedError } from "@reduxjs/toolkit";
+//import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 export interface UserTypes{
     _id: string;
@@ -132,11 +132,11 @@ export interface MutationSuccessResponse {
     data: {success:boolean; message:string;};
     error?: undefined;
 }
-export interface MutationErrorResponse {
-    data?: undefined;
-    error: FetchBaseQueryError | SerializedError;
-}
-export type MutationResTypes = (MutationSuccessResponse|MutationErrorResponse);
+//export interface MutationErrorResponse {
+//    data?: undefined;
+//    error: FetchBaseQueryError | SerializedError;
+//}
+//export type MutationResTypes = (MutationSuccessResponse|MutationErrorResponse);
 
 
 

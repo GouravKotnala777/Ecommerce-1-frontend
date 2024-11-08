@@ -9,7 +9,6 @@ import { useSelector } from "react-redux";
 import { loggedInUserInitialState } from "../redux/reducers/loggedInUserReducer";
 import { BiEdit, BiRightArrowAlt } from "react-icons/bi";
 import { CgClose } from "react-icons/cg";
-import { useUpdateMeMutation } from "../redux/api/api";
 import { UserLocationTypes } from "../pages/Login.Page";
 import ShareButton from "./ShareButton";
 import { RxActivityLog } from "react-icons/rx";
@@ -19,9 +18,7 @@ import { FaRegAddressCard } from "react-icons/fa";
 import { IoHomeOutline, IoLogInOutline, IoLogOutOutline, IoScaleOutline } from "react-icons/io5";
 import { BsCalendar2Event } from "react-icons/bs";
 import { TfiGift } from "react-icons/tfi";
-//import { LuLayoutDashboard } from "react-icons/lu";
-//import { IoBagAddOutline } from "react-icons/io5";
-//import { BsBookmarkHeart } from "react-icons/bs";
+import { updateMe } from "../redux/api/api";
 
 
 const Header = ({userName, userRole, wishlistNotification, cartNotification, couponNotification, myReferralGiftsNotification, userLocation}:{userName?:string; userRole:string|undefined; wishlistNotification?:number; cartNotification:number; couponNotification:number; myReferralGiftsNotification:number; userLocation:UserLocationTypes|undefined;}) => {
@@ -127,16 +124,12 @@ const Header = ({userName, userRole, wishlistNotification, cartNotification, cou
 
 const MyProfileDialog = ({setIsMyProfileDialogOpen, userLocation}:{setIsMyProfileDialogOpen:Dispatch<SetStateAction<boolean>>; userLocation:UserLocationTypes;}) => {
     const {isLoading, user} = useSelector((state:{loggedInUserReducer:loggedInUserInitialState}) => state.loggedInUserReducer);
-    const [updateMe] = useUpdateMeMutation();
     const [editFieldList, setEditFieldList] = useState<string[]>([]);
     const [updateFormData, setUpdateFormData] = useState<{oldPassword:string; name?:string; password?:string; mobile?:string;}>({oldPassword:""});
     const [updatedName, setUpdatedName] = useState<string>("");
-    //const [updatedPassword, setUpdatedPassword] = useState<string>("");
     const [updatedMobile, setUpdatedMobile] = useState<string>("");
 
-    //const forgetPasswordSendEmail = () => {
-    //        setIsMyProfileDialogOpen(false);
-    //}
+
     const func = (e:MouseEvent<SVGElement>) => {
         const iconUniqueID = (e.currentTarget.id).split("-")[0];
         console.log(iconUniqueID);
@@ -163,7 +156,7 @@ const MyProfileDialog = ({setIsMyProfileDialogOpen, userLocation}:{setIsMyProfil
 
             console.log("----- MyProfileDialog updateMeHandler");
             console.log(res);
-            if (res.data) {
+            if (res.success === true) {
                 setUpdateFormData({oldPassword:""});
                 setEditFieldList([]);
                 if (updateFormData.name) {

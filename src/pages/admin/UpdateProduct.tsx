@@ -1,7 +1,6 @@
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import Table from "../../components/Table";
-import { UpdateProductBodyType, useOutStockProductsQuery, useUpdateProductMutation } from "../../redux/api/api";
-import { MutationResTypes } from "../../assets/demoData";
+import { outStockProducts, updateProduct, UpdateProductBodyType } from "../../redux/api/api";
 
 const productTableHeadings = [
     {th:"name", isEditable:true},
@@ -12,13 +11,13 @@ const productTableHeadings = [
 
 
 const UpdateProduct = () => {
-    const {data} = useOutStockProductsQuery("");
+    
     const [list, setList] = useState<{ [key: string]:UpdateProductBodyType;
     }>({});
-
-    const [updateProduct] = useUpdateProductMutation();
-    const [outStockRes, setOutStockRes] = useState<MutationResTypes>();
-
+    const [outStock, setOutStock] = useState<{ [key: string]: string | string[]; _id: string; }[]>([]);
+    const [outStockRes, setOutStockRes] = useState<string>("");
+    
+    
 
     const onClickHandler = async(e:MouseEvent<HTMLButtonElement>) => {
         try {            
@@ -28,7 +27,8 @@ const UpdateProduct = () => {
                 console.log("::::::::::::::::::");
                 console.log(list);
                 console.log(res);
-                setOutStockRes(res);
+                setOutStockRes(res.message as string);
+                // (ProductTypes&{_id:string; [key:string]:string})[]
                 console.log("::::::::::::::::::");
             }
             else{
@@ -42,12 +42,22 @@ const UpdateProduct = () => {
         }
     };
 
+    useEffect(() => {
+        const res = outStockProducts();
+        res.then((outStockResolvedData) => {
+            setOutStock(outStockResolvedData.message as {[key: string]: string | string[]; _id: string; }[]);
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+    }, []);
+
     return(
         <>
             <p style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>Update Products</p>
             <Table
                 thead={productTableHeadings}
-                data={data?.message}
+                data={outStock}
                 list={list}
                 setList={setList}
                 onEditClickHandler={onClickHandler}

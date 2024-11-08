@@ -1,12 +1,11 @@
 import { ChangeEvent, useState } from "react";
 import Form, { FormFieldTypes } from "../components/Form";
-import { useAddProductMutation } from "../redux/api/api";
-import { MutationResTypes } from "../assets/demoData";
 import HandleMutationRes from "../components/HandleMutationRes";
 import { UserLocationTypes } from "./Login.Page";
+import { addProduct, ResponseType } from "../redux/api/api";
 
 
-interface AddProductFormType {
+export interface AddProductFormType {
     category?:string;
     brand?:string;
     name?:string;
@@ -26,6 +25,9 @@ interface AddProductFormType {
     weight?:string;
     tags?:string;
     images?:string;
+
+    //action:string;
+    //userLocation:UserLocationTypes;
 }
 const formFields:FormFieldTypes[] = [
     {type:"select", name:"category", placeHolder:"Category", options:["Protein", "Pre-Workout", "Post-Workout", "Performance-Enhancers", "Vitamins-Minerals", "Weight-Management", "Hydration", "Health-Wellness"]},
@@ -110,8 +112,7 @@ const formFields:FormFieldTypes[] = [
 const AddProduct = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const [fieldData, setFieldData] = useState<AddProductFormType>();
     const [photo, setPhoto] = useState<File|undefined>();
-    const [addProduct] = useAddProductMutation();
-    const [addProductRes, setAddProductRes] = useState<MutationResTypes>();
+    const [addProductRes, setAddProductRes] = useState<ResponseType<string|Error>>({success:false, message:""});
     const [isLoading, setIsLoading] = useState<boolean>(false);
     
 
@@ -150,11 +151,12 @@ const AddProduct = ({userLocation}:{userLocation:UserLocationTypes;}) => {
         formData.append("tags", fieldData?.tags as string);
         formData.append("images", photo as File);
         formData.append("description", fieldData?.description as string);
+        formData.append("action", "create_product");
+        formData.append("userLocation", JSON.stringify(userLocation));
         
         try {
             
-            const res = await addProduct({...formData, action:"create_product", userLocation});
-
+            const res = await addProduct({...formData});
 
             console.log("------- AddProduct.tsx onClickHandler");
             console.log(res);
@@ -164,8 +166,6 @@ const AddProduct = ({userLocation}:{userLocation:UserLocationTypes;}) => {
             console.log("------- AddProduct.tsx onClickHandler");
             console.log(error);
             console.log("------- AddProduct.tsx onClickHandler");
-            
-            
         }
 
         setIsLoading(false);

@@ -1,10 +1,9 @@
 import "../styles/components/product_btn_group.scss";
 import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
-import { useAddToCartMutation, useRemoveFromCartMutation } from "../redux/api/api";
+import { addToCart, removeFromCart, ResponseType } from "../redux/api/api";
 import { useDispatch } from "react-redux";
 import { setIsReviewDialogActive } from "../redux/reducers/miscReducers";
 import { useNavigate } from "react-router-dom";
-import { MutationResTypes } from "../assets/demoData";
 import HandleMutationRes from "./HandleMutationRes";
 import Spinner from "./Spinner";
 import { PRIMARY, SECONDARY } from "../styles/utils";
@@ -23,10 +22,8 @@ interface ProductBtnGroupPropTypes{
 }
 
 const ProductBtnGroup = ({userLocation, parent, productID, amount, category, brand, setTotalAmount}:ProductBtnGroupPropTypes) => {
-    const [addToCart] = useAddToCartMutation();
-    const [removeFromCart] = useRemoveFromCartMutation();
     const [quantity, setQuantity] = useState<number>(1);
-    const [addRemoveCartRes, setAddRemoveCartRes] = useState<MutationResTypes>();
+    const [addRemoveCartRes, setAddRemoveCartRes] = useState<ResponseType<string|Error>>({success:false, message:""});
     const [isAddRemoveCartloading, setIsAddRemoveCartLoading] = useState<boolean>(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -54,6 +51,7 @@ const ProductBtnGroup = ({userLocation, parent, productID, amount, category, bra
                 console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaa");
                 
                 const res = await addToCart({productID:productID!, price:amount, quantity, action:"add_to_cart", userLocation});
+
                 setAddRemoveCartRes(res);
                 setIsAddRemoveCartLoading(false);
             }

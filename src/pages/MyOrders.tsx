@@ -1,10 +1,7 @@
 import "../styles/pages/my_orders.scss";
 import { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
 import Table from "../components/Table";
-import { UpdateProductBodyType, useMyOrdersMutation, useRemoveProductFromOrderMutation } from "../redux/api/api";
-import ItemNotFound from "../components/ItemNotFound";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import { SerializedError } from "@reduxjs/toolkit";
+import { fetchMyOrders, removeProductFromOrder, TTTT, UpdateProductBodyType } from "../redux/api/api";
 import Spinner from "../components/Spinner";
 import SingleProductTemplate from "../components/SingleProductTemplate";
 import { UserLocationTypes } from "./Login.Page";
@@ -37,24 +34,25 @@ export interface SingleOrderTypes {
 
 
 export interface AllOrdersResponseType {
-	success: boolean;
-	message:{
-        allPendingOrders:SingleOrderTypes[],
-        allConfirmedOrders:SingleOrderTypes[],
-        allProcessingOrders:SingleOrderTypes[],
-        allDispatchedOrders:SingleOrderTypes[],
-        allShippedOrders:SingleOrderTypes[],
-        allDeliveredOrders:SingleOrderTypes[],
-        allCancelledOrders:SingleOrderTypes[],
-        allFailedOrders:SingleOrderTypes[],
-        allReturnedOrders:SingleOrderTypes[],
-        allRefundedOrders:SingleOrderTypes[]
-    };
+    allPendingOrders:SingleOrderTypes[];
+    allConfirmedOrders:SingleOrderTypes[];
+    allProcessingOrders:SingleOrderTypes[];
+    allDispatchedOrders:SingleOrderTypes[];
+    allShippedOrders:SingleOrderTypes[];
+    allDeliveredOrders:SingleOrderTypes[];
+    allCancelledOrders:SingleOrderTypes[];
+    allFailedOrders:SingleOrderTypes[];
+    allReturnedOrders:SingleOrderTypes[];
+    allRefundedOrders:SingleOrderTypes[];
 }
 export interface MyOrderResponseType {
-	success: boolean;
-	message:{orders:SingleOrderTypes[]; ordersCount:number;};
+	orders:TTTT[];
+    ordersCount:number;
 }
+//export interface MyOrderResponseType {
+//	orders:SingleOrderTypes[];
+//    ordersCount:number;
+//}
 export interface SingleOrderInfoTypes{
     productID?:string;
     category?:string;
@@ -89,9 +87,8 @@ const productTableHeadings = [
 
 const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const [skip, setSkip] = useState<number>(0);
-    const [myOrdersMethod] = useMyOrdersMutation();
     const [list, setList] = useState<{ [key: string]:UpdateProductBodyType;}>({});
-    const [transformedData, setTransformedData] = useState<UpdateProductBodyType[]>([]);
+    //const [transformedData, setTransformedData] = useState<TTTT[]>([]);
     const [orderNumber, setOrderNumber] = useState<number>(0);
     const [orderID, setOrderID] = useState<string>("");
     const [productID, setProductID] = useState<string>("");
@@ -103,11 +100,7 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     const [isOrderInfoDialogOpen, setIsOrderInfoDialogOpen] = useState<boolean>(false);
     const [isDeleteRowDialog, setIsDeleteRowDialog] = useState<boolean>(false);
     const [orderCancelReason, setOrderCancelReason] = useState<string>("");
-    const [myOrdersData, setMyOrdersData] = useState<{
-            data?:MyOrderResponseType;
-            error?:FetchBaseQueryError | SerializedError;
-        }>();
-    const [removeProductFromOrder] = useRemoveProductFromOrderMutation();
+    const [myOrdersData, setMyOrdersData] = useState<MyOrderResponseType>({orders:[], ordersCount:0});
 
 
 
@@ -123,62 +116,47 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
         console.log({e:e.currentTarget.value});
         console.log({eNum:Number(e.currentTarget.value.split("-")[2])*Number(e.currentTarget.value.split("-")[3])});
         console.log({productID:e.currentTarget.value.split("-")[1], orderID:e.currentTarget.value.split("-")[0]});
-        
-        //setTransformedData([
-        //    ...transformedData.filter((item) => {
-        //        if (item._id === e.currentTarget.value.split("-")[1]&&item.orderID === e.currentTarget.value.split("-")[0]) {
-        //            return item;
-        //        }
-        //        else{
-        //            return item;
-        //        }  
-        //    })
-        //]);
     }
 
-    const dataTransformer = (myOrders:{
-        data?:MyOrderResponseType;
-        error?:FetchBaseQueryError | SerializedError;
-    }) => {
-        myOrders?.data?.message.orders.flatMap((item) => {
-            const vv = item?.paymentInfo;
-            item.orderItems?.map((item2) => {
+    //const dataTransformer = (myOrders:SingleOrderTypes[]) => {
+    ////const dataTransformer = (myOrders:MyOrderResponseType) => {
+    //    myOrders.flatMap((item) => {
+    //        const vv = item?.paymentInfo;
+    //        item.orderItems?.map((item2) => {
 
-                setTransformedData((prev) => [...prev, {
-                    _id: item2?.productID?._id as string,
-                    orderID:item._id,
-                    name: item2?.productID?.name as string,
-                    price: item2?.productID?.price,
-                    quantity:item2?.quantity,
-                    images: item2?.productID?.images,
-                    orderStatus:item.orderStatus,
-                    createdAt: item.createdAt,
-                    ...vv,
-                }]);
-            });
-        });
-    };
+    //            setTransformedData((prev) => [...prev, {
+    //                _id: item2?.productID?._id as string,
+    //                orderID:item._id,
+    //                name: item2?.productID?.name as string,
+    //                price: item2?.productID?.price,
+    //                quantity:item2?.quantity,
+    //                images: item2?.productID?.images,
+    //                orderStatus:item.orderStatus,
+    //                ...vv,
+    //            }]);
+    //        });
+    //    });
+    //};
 
     const fetchFirstTime = async() => {
         setIsLoading(true);
         try {
-            const myOrders:{
-                    data?:MyOrderResponseType;
-                    error?:FetchBaseQueryError | SerializedError;
-                } = await myOrdersMethod({skip});
+            const myOrders = await fetchMyOrders({skip});
 
             
             console.log("--------- fetchFirstTime MyOrders");
-            console.log(myOrders.data?.message.orders);
+            console.log(myOrders.message);
             console.log({ordersCount, skip});
 
 
-            setMyOrdersData(myOrders);            
+            if (myOrders.success === true) {
+                setMyOrdersData(myOrders.message as MyOrderResponseType);
+            }
             
-            if (myOrders.data?.message.orders !== undefined) {
-                dataTransformer(myOrders);
-                setOrdersCount(myOrders.data.message.ordersCount);
-                setSkip(skip+(myOrders.data.message.orders.length as number));
+            if (myOrders.success === false) {
+                //dataTransformer((myOrders.message as MyOrderResponseType).orders);
+                setOrdersCount((myOrders.message as MyOrderResponseType).ordersCount);
+                setSkip(skip+((myOrders.message as MyOrderResponseType).ordersCount as number));
             }
             //setJointData(myOrders.data.message.orders);
             //dataTransformer(myOrders.data.message.orders);
@@ -198,25 +176,21 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
             const res = await removeProductFromOrder({orderID, productID, removingProductPrice:(Number(removingProductPrice)), removingProductQuantity:Number(removingProductQuantity), updatedOrderState, action:"remove_product_from_order", userLocation, orderCancelReason});
 
             console.log("---------  removeProductFromOrder MyOrders");
-            console.log(res.data.message);
+            console.log(res.message);
             console.log("---------  removeProductFromOrder MyOrders");
             setIsLoading(false);
             setIsDeleteRowDialog(false);
-            setTransformedData((prev) => [
-                ...prev.map((item) => {
-                    if (item._id === productID&&item.orderID === orderID) {
-                        console.log("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-                        console.log({"item._id":item._id, productID, "item.orderID":item.orderID, orderID});
+            //setTransformedData((prev) => [
+            //    ...prev.map((item) => {
+            //        if (item._id === productID&&item.orderID === orderID) {
                         
-                        console.log("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-                        
-                        return res.data.message;
-                    }
-                    else{
-                        return item;
-                    }  
-                })
-            ]);
+            //            return res.message as TTTT;
+            //        }
+            //        else{
+            //            return item;
+            //        }  
+            //    })
+            //]);
 
             
         } catch (error) {
@@ -243,31 +217,31 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
             {/*<pre>{JSON.stringify(transformedData, null, `\t`)}</pre>*/}
             <div className="heading" style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>My Orders</div>
                 {
-                    myOrdersData === undefined ?
-                        <Spinner type={1} heading="Loading..." width={100} thickness={6} />
-                        :
-                        myOrdersData?.error ?
-                            myOrdersData.error &&
-                            "data" in myOrdersData.error &&
-                            myOrdersData.error.data &&
-                            typeof myOrdersData.error.data === "object" &&
-                            "message" in myOrdersData.error.data ?
-                                <ItemNotFound heading={myOrdersData.error.data.message as string} statusCode={204} />
-                                :
-                                <h1>Hello Guys</h1>
-                            :
-                            !myOrdersData.data?.success ?
-                                <ItemNotFound heading={"You have not ordered anything yet!"} statusCode={204} />
-                                :
+                    //myOrdersData === undefined ?
+                    //    <Spinner type={1} heading="Loading..." width={100} thickness={6} />
+                    //    :
+                    //    myOrdersData?.error ?
+                    //        myOrdersData.error &&
+                    //        "data" in myOrdersData.error &&
+                    //        myOrdersData.error.data &&
+                    //        typeof myOrdersData.error.data === "object" &&
+                    //        "message" in myOrdersData.error.data ?
+                    //            <ItemNotFound heading={myOrdersData.error.data.message as string} statusCode={204} />
+                    //            :
+                    //            <h1>Hello Guys</h1>
+                    //        :
+                    //        !myOrdersData.data?.success ?
+                    //            <ItemNotFound heading={"You have not ordered anything yet!"} statusCode={204} />
+                    //            :
                                 <>
-                                    <Table data={transformedData as { [key: string]: string|string[]; _id: string; }[]}
+                                    <Table data={myOrdersData.orders as { [key: string]: string|string[]; _id: string; }[]}
                                         list={list}
                                         setList={setList}
                                         thead={productTableHeadings}
                                         hideEditBtn={true}
                                         //hideImg={false}
 
-                                        DialogElement={<SingleOrderInfo userLocation={userLocation} parent="orders" orderID={transformedData?.[orderNumber]?._id} name={transformedData?.[orderNumber]?.name as string} price={Number(transformedData?.[orderNumber]?.price)} quantity={1} rating={Number(transformedData?.[orderNumber]?.rating)} description="aaaaaa" photo={transformedData[orderNumber]?.images?.[0] as string} transactionId={transformedData?.[orderNumber]?.transactionId as string} shippingType={transformedData?.[orderNumber]?.shippingType as string} paymentStatus={transformedData?.[orderNumber]?.paymentStatus as string} orderStatus={transformedData?.[orderNumber]?.orderStatus as string} message={transformedData?.[orderNumber]?.message as string} createdAt={transformedData?.[orderNumber]?.createdAt?.toString()} />}
+                                        DialogElement={<SingleOrderInfo userLocation={userLocation} parent="orders" orderID={myOrdersData.orders?.[orderNumber]?._id} name={myOrdersData.orders?.[orderNumber]?.name as string} price={Number(myOrdersData.orders?.[orderNumber]?.price)} quantity={1} rating={Number(2)} description="aaaaaa" photo={myOrdersData.orders[orderNumber]?.images?.[0] as string} transactionId={myOrdersData.orders?.[orderNumber]?.transactionId as string} shippingType={myOrdersData.orders?.[orderNumber]?.shippingType as string} paymentStatus={myOrdersData.orders?.[orderNumber]?.paymentStatus as string} orderStatus={myOrdersData.orders?.[orderNumber]?.orderStatus as string} message={myOrdersData.orders?.[orderNumber]?.message as string} createdAt={myOrdersData.orders?.[orderNumber]?.createdAt?.toString()} />}
                                         dialogShowInfo={(e:MouseEvent<HTMLButtonElement>) => showOrderInfo(e)}
                                         isOrderInfoDialogOpen={isOrderInfoDialogOpen as boolean}
                                         setIsOrderInfoDialogOpen={setIsOrderInfoDialogOpen as Dispatch<SetStateAction<boolean>>}
@@ -284,7 +258,7 @@ const MyOrders = ({userLocation}:{userLocation:UserLocationTypes;}) => {
                                         :
                                         ordersCount > skip &&
                                             <button className="show_more_btn" onClick={() => fetchFirstTime()}>Next : {skip} / {ordersCount}</button>
-                                    }
+                                        }
                                 </>
                 }
         </div>
@@ -323,3 +297,50 @@ export const DeleteRowWarning = ({orderID, productID, removeProductFromOrderHand
 };
 
 export default MyOrders;
+
+
+//{
+//    myOrdersData === undefined ?
+//        <Spinner type={1} heading="Loading..." width={100} thickness={6} />
+//        :
+//        myOrdersData?.error ?
+//            myOrdersData.error &&
+//            "data" in myOrdersData.error &&
+//            myOrdersData.error.data &&
+//            typeof myOrdersData.error.data === "object" &&
+//            "message" in myOrdersData.error.data ?
+//                <ItemNotFound heading={myOrdersData.error.data.message as string} statusCode={204} />
+//                :
+//                <h1>Hello Guys</h1>
+//            :
+//            !myOrdersData.data?.success ?
+//                <ItemNotFound heading={"You have not ordered anything yet!"} statusCode={204} />
+//                :
+//                <>
+//                    <Table data={transformedData as { [key: string]: string|string[]; _id: string; }[]}
+//                        list={list}
+//                        setList={setList}
+//                        thead={productTableHeadings}
+//                        hideEditBtn={true}
+//                        //hideImg={false}
+
+//                        DialogElement={<SingleOrderInfo userLocation={userLocation} parent="orders" orderID={transformedData?.[orderNumber]?._id} name={transformedData?.[orderNumber]?.name as string} price={Number(transformedData?.[orderNumber]?.price)} quantity={1} rating={Number(transformedData?.[orderNumber]?.rating)} description="aaaaaa" photo={transformedData[orderNumber]?.images?.[0] as string} transactionId={transformedData?.[orderNumber]?.transactionId as string} shippingType={transformedData?.[orderNumber]?.shippingType as string} paymentStatus={transformedData?.[orderNumber]?.paymentStatus as string} orderStatus={transformedData?.[orderNumber]?.orderStatus as string} message={transformedData?.[orderNumber]?.message as string} createdAt={transformedData?.[orderNumber]?.createdAt?.toString()} />}
+//                        dialogShowInfo={(e:MouseEvent<HTMLButtonElement>) => showOrderInfo(e)}
+//                        isOrderInfoDialogOpen={isOrderInfoDialogOpen as boolean}
+//                        setIsOrderInfoDialogOpen={setIsOrderInfoDialogOpen as Dispatch<SetStateAction<boolean>>}
+
+//                        DeleteRowDialog={<DeleteRowWarning orderID={orderID} productID={productID} removeProductFromOrderHandler={removeProductFromOrderHandler} setIsDeleteRowDialog={setIsDeleteRowDialog} setOrderCancelReason={setOrderCancelReason} isLoading={isLoading} />}
+//                        isDeleteRowDialogOpen={isDeleteRowDialog}
+//                        setIsDeleteRowDialogOpen={setIsDeleteRowDialog}
+//                    />
+
+//                    <span>Isse Thik Karna hai</span>
+//                    {
+//                        isLoading ?
+//                        <Spinner type={1} heading="Loading..." width={30} thickness={1} />
+//                        :
+//                        ordersCount > skip &&
+//                            <button className="show_more_btn" onClick={() => fetchFirstTime()}>Next : {skip} / {ordersCount}</button>
+//                    }
+//                </>
+//}
