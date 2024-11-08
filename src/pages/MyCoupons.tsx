@@ -5,6 +5,7 @@ import { CouponTypes } from "../assets/demoData";
 import { SerializedError } from "@reduxjs/toolkit";
 import toast, { Toaster } from "react-hot-toast";
 import { FaRegCopy } from "react-icons/fa";
+import ItemNotFound from "../components/ItemNotFound";
 
 
 const MyCoupons = ({myCoupons}:{myCoupons:{
@@ -37,7 +38,7 @@ const MyCoupons = ({myCoupons}:{myCoupons:{
             <div className="heading" style={{margin:"0 auto", textAlign:"center", fontSize:"0.8rem", fontWeight:"bold"}}>My Coupons</div>
             <Toaster />
             {
-                myCoupons.data?.message.map((coupon, index) => (
+                myCoupons.data?.message.length !== 0 ? myCoupons.data?.message.map((coupon, index) => (
                     <div className="coupon_cont" key={index}>
                         <div className="upper_part">
                             <div className="image_cont">
@@ -63,6 +64,8 @@ const MyCoupons = ({myCoupons}:{myCoupons:{
                         </div>
                     </div>
                 ))
+                :
+                <ItemNotFound heading="You don't have any coupon" statusCode={200} />
             }
         </div>
     )
