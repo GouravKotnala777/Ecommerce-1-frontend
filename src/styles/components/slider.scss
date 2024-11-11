@@ -1,0 +1,196 @@
+@import "../utils";
+
+.slider_slot_tooltip_closer{
+    display: block;
+    background-color: rgba(0,0,0,0.7);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+}
+.slider_cont{
+    //border: 2px solid red;
+    height: 40vh;
+    //z-index: 0;
+    .left_arrow{
+        //border: 2px solid greenyellow;
+        position: absolute;
+        background: rgba(255,255,255,0.4);
+        width: 60px;
+        height: 40%;
+        border: none;
+        box-shadow: 10px 0px 4px 2px rgba(0, 0, 0, 0.2);
+        z-index: 2;
+        border-radius: 0 8px 8px 0;
+        &:hover{
+            box-shadow: 10px 0px 4px 2px rgba(0, 0, 0, 0.1);
+        }
+    }
+    .images_cont{
+        //border: 2px solid rgb(38, 255, 0);
+        height: 630px;
+        width: 100%;
+        overflow-x: scroll;
+        z-index: 1;       
+        .image_scrollable{
+            //border: 2px solid blue;
+            height: 440px;
+            display: flex;
+            width: max-content;
+            transform: translate(0%, 0);
+            transition: 0.8s;
+            .image_cont{
+                //border: 2px solid red;
+                width: 97vw;
+                img{
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+        }
+    }
+    .right_arrow{
+        //border: 2px solid greenyellow;
+        width: 60px;
+        position: absolute;
+        right: 5px;
+        background: rgba(255,255,255,0.4);
+        height: 40%;
+        border: none;
+        box-shadow: -10px 0px 4px 2px rgba(0, 0, 0, 0.2);
+        z-index: 2;
+        border-radius: 8px 0 0 8px;
+        &:hover{
+            box-shadow: -10px 0px 4px 2px rgba(0, 0, 0, 0.1);
+        }
+
+    }
+    button{
+        &:hover{
+            background: rgba(255, 255, 255, 0.7);
+        }
+    }
+    .image_count_slots{
+        //border: 2px solid red;
+        position: absolute;
+        top:50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        border-radius: 8px;
+        z-index: 3;
+        .image_slot{
+            //border: 1px solid orange;
+            width: 80px;
+            height: 40px;
+            color: white;
+            display: grid;
+            place-items: center;
+            padding: 6px;
+            margin: 10px;
+            position: relative;
+            border-radius: 4px;
+            &:hover{
+                background-color: rgba(255,255,255,0.5);
+            }
+            .hero_slider_slot_tooltip{
+                border: 2px solid black;
+                position: absolute;
+                width: 85px;
+                height: 80px;
+                top: -110px;
+                border-radius: 6px;
+                transform: scale(1,0);
+                transition: 0.4s;
+                padding: 4px;
+                background-color: white;
+                input{
+                    width: 100%;
+                    font-size: 0.8rem;
+                    box-sizing: border-box;
+                    margin-top: 4px;
+                }
+                button{
+                    width: 100%;
+                    font-size: 0.8rem;
+                    background: linear-gradient(90deg, $primary, $secondary);
+                    color: white;
+                    border: none;
+                    padding: 3px 0;
+                    margin-top: 6px;
+                }
+            }
+        }
+    }
+}
+.slider_form_cont{
+    border: 2px solid rgb(0, 255, 0);
+    background: green;
+    z-index: 100;
+    height: 100px;
+    width: 400px;
+    position: absolute;
+    input{
+
+    }
+    button{
+
+    }
+}
+
+
+@media screen and (width <= 650px) {
+    .slider_cont{
+        .left_arrow{
+        }
+        .images_cont{
+            .image_scrollable{
+                .image_cont{
+                    img{
+                    }
+                }
+            }
+        }
+        .right_arrow{    
+        }
+        .image_count_slots{
+            .image_slot{
+                width: 40px;
+                .hero_slider_slot_tooltip{
+                    input{
+                    }
+                    button{
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (width <= 390px) {
+    .slider_cont{
+        .left_arrow{
+        }
+        .images_cont{
+            .image_scrollable{
+                .image_cont{
+                    img{
+                    }
+                }
+            }
+        }
+        .right_arrow{    
+        }
+        .image_count_slots{
+            .image_slot{
+                width: 20px;
+                .hero_slider_slot_tooltip{
+                    input{
+                    }
+                    button{
+                    }
+                }
+            }
+        }
+    }
+}
