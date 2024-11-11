@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import "../styles/components/slider.scss";
 //import a from "/a.jpg";
 //import b from "/b.jpg";
@@ -107,6 +107,15 @@ const Slider = () => {
         }
     };
 
+    useEffect(() => {
+        if (selectedImageSlot) {
+            document.body.classList.add("freeze");
+        }
+        else{
+            document.body.classList.remove("freeze");
+        }
+    }, [selectedImageSlot]);
+
     return(
         <>
             <div className="slider_slot_tooltip_closer" style={{display:selectedImageSlot?"block":"none"}} onClick={() => {setSelectedImageSlot("")}}>
@@ -131,7 +140,10 @@ const Slider = () => {
                     {
                         data?.message.map((item, index) => (
                             <div key={index} className="image_slot" style={{backgroundImage:`url(${item.imageURL.split("/upload")[0]}/upload/w_80,h_50/${item.imageURL.split("/upload")[1]})`, backgroundPosition:"center", backgroundRepeat:"no-repeat", backgroundSize:"cover"}}
-                                onClick={() => setSelectedImageSlot(item.imageURL)}>
+                                onClick={() => {
+                                    setSelectedImageSlot(item.imageURL);
+                                }
+                            }>
                                 <div className="hero_slider_slot_tooltip" style={{transform:selectedImageSlot === item.imageURL?"scale(1,1.1)":"scale(1,0)"}}>
                                     <input type="text" name="linkURL" placeholder="Link URL" onChange={(e) => onChangeHandler(e)} />
                                     <input type="file" name="image" placeholder="Image URL" onChange={(e) => onChangeHandler(e)} />
