@@ -13,6 +13,7 @@ import ItemNotFound from "../components/ItemNotFound.tsx";
 import { BiSearch } from "react-icons/bi";
 import Footer from "../components/Footer.tsx";
 import { UserLocationTypes } from "./Login.Page.tsx";
+import Slider from "../components/Slider.tsx";
 
 
 const Home = ({userLocation}:{userLocation:UserLocationTypes;}) => {
@@ -103,6 +104,7 @@ const Home = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     return(
         <>
             <div id="home_bg" className="home_bg" onClick={(e) => {onClickOverlay(e)}}>
+                <Slider />
             {
                 allProducts.isLoading ?
                     //<h1>loading...</h1>

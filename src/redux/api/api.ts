@@ -78,7 +78,7 @@ const api = createApi({
     baseQuery:fetchBaseQuery({
         baseUrl:import.meta.env.VITE_SERVER_URL
     }),
-    tagTypes:["MyWishlistedProducts", "MyCartProducts", "SingleProduct", "MyProfile", "NewCoupon", "Orders"],
+    tagTypes:["MyWishlistedProducts", "MyCartProducts", "SingleProduct", "MyProfile", "NewCoupon", "Orders", "HeroSlider"],
     endpoints:(builder) => ({
         register:builder.mutation({
             query:({name, email, mobile, password, c_password, referrerUserID}:{name?:string; email?:string; mobile?:string; password?:string; c_password?:string; referrerUserID?:string|null;}) => ({
@@ -452,6 +452,32 @@ const api = createApi({
                 body:{chatID, isHelpful, action, userLocation}
             })
         }),
+        insertNewHeroSliderImg:builder.mutation({
+            query:(formd:FormData)=> ({
+                url:"/api/v1/misc/hero_slider/insert",
+                method:"POST",
+                credentials:"include",
+                body:formd
+            }),
+            invalidatesTags:["HeroSlider"]
+        }),
+        getHeroSlider:builder.query({
+            query:()=> ({
+                url:"/api/v1/misc/hero_slider/get",
+                method:"GET",
+                credentials:"include"
+            }),
+            providesTags:["HeroSlider"]
+        }),
+        updateHeroSlider:builder.mutation({
+            query:(formData:FormData)=> ({
+                url:"/api/v1/misc/hero_slider/update",
+                method:"PUT",
+                credentials:"include",
+                body:(formData)
+            }),
+            invalidatesTags:["HeroSlider"]
+        })
     })
 })
 
@@ -464,5 +490,6 @@ export const {useRegisterMutation, useLoginMutation, useVerifyEmailMutation, use
     useCreateCouponsMutation, useGetAllCouponsQuery, useMyCouponsQuery, useGetSingleCouponMutation,
     useCreatePaymentMutation,
     useNewOrderMutation, useMyOrdersMutation, useAllOrdersQuery, useRemoveProductFromOrderMutation, useUpdateOrderMutation,
-    useCreateChatMutation, useUpdateChatsHelpfulnessMutation
+    useCreateChatMutation, useUpdateChatsHelpfulnessMutation,
+    useInsertNewHeroSliderImgMutation, useGetHeroSliderQuery, useUpdateHeroSliderMutation
 } = api;
