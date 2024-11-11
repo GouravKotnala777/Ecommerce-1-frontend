@@ -7,6 +7,7 @@ import "../styles/components/slider.scss";
 //import e from "/e.jpg";
 import { Link } from "react-router-dom";
 import { useGetHeroSliderQuery, useInsertNewHeroSliderImgMutation, useUpdateHeroSliderMutation } from "../redux/api/api";
+import { BiInfoCircle } from "react-icons/bi";
 
 //const imageArray = [a, b, c, d, e];
 //const numArray = [0,1,2,3,4];
@@ -113,7 +114,7 @@ const Slider = () => {
         }
         else{
             document.body.classList.remove("freeze");
-        }
+        }        
     }, [selectedImageSlot]);
 
     return(
@@ -157,11 +158,14 @@ const Slider = () => {
             </div>
             
             {
-                data?.success === true && data?.message.length === 0 &&
+                (data === undefined || data?.message.length < 5) &&
                     <div className="slider_form_cont">
                         <input type="text" name="linkURL" placeholder="Link Url" onChange={(e) => onChangeHandler(e)} />
                         <input type="file" name="image" onChange={(e) => onChangeHandler(e)} />
                         <button onClick={insertNewSliderImgHandler}>Upload</button>
+                        <span className="slider_form_cont_warning">
+                            <BiInfoCircle /> <span>this form will be disappear once all image splots are filled. And reappear if any of them become empty.</span>
+                        </span>
                     </div>
             }
         </>

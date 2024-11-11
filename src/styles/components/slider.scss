@@ -81,7 +81,7 @@
         border-radius: 8px;
         z-index: 3;
         .image_slot{
-            border: 1px solid orange;
+            //border: 1px solid orange;
             width: 80px;
             height: 40px;
             color: white;
@@ -125,17 +125,38 @@
     }
 }
 .slider_form_cont{
-    border: 2px solid rgb(0, 255, 0);
-    background: green;
+    border: 2px solid rgb(0, 213, 0);
+    background: rgb(177, 255, 177);
     z-index: 100;
-    height: 100px;
-    width: 400px;
+    height: 230px;
+    max-width: 400px;
     position: absolute;
+    padding: 10px;
+    border-radius: 8px;
+    top: 50%;
+    left:50%;
+    transform: translate(-50%, 20%);
+    //box-sizing: border-box;
     input{
-
+        width: 100%;
+        padding: 10px;
+        margin-top: 6px;
+        box-sizing: border-box;
     }
     button{
-
+        width: 100%;
+        display: block;
+        padding: 10px;
+        margin-top: 6px;
+        box-sizing: border-box;
+        background: linear-gradient(90deg, $primary, $secondary);
+        color: white;
+        border: none;
+    }
+    .slider_form_cont_warning{
+        font-size:0.6rem;
+        display:block;
+        margin:10px;
     }
 }
 
