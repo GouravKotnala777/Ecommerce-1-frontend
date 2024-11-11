@@ -46,6 +46,39 @@ This repository contains the frontend code for an e-commerce application built w
 
 ## Project Structure
 
+```folder structure
+Client/
+├── public
+├── src/
+│   ├── __tests__      # 
+│   ├── assets         # 
+│   ├── components     # Reusable UI components
+│   ├── pages/         # Main pages of the 
+│   │   ├── admin      # 
+│   │   ├── charts     # 
+│   │   ├── static     # 
+│   ├── redux/         # Redux slices and RTK Query hooks
+│   │   ├── api        # API service files
+│   │   ├── constants  # 
+│   │   ├── reducers   # 
+│   ├── styles/        # Global and component-specific styles
+│   │   ├── admin      # 
+│   │   ├── components # 
+│   │   ├── pages      # 
+│   ├── App.tsx        # 
+│   ├── Chatbot.tsx    # 
+│   ├── ChatbotAdmin.tsx # 
+│   ├── main.tsx       # Main application file
+│   ├── Messanger.tsx  # 
+│   ├── vite-end.d.ts  # 
+├── .env               # Environment variables
+├── README.md          # Documentation
+├── tsconfig.json      # 
+├── tsconfig.node.json # 
+├── vercel.json        # 
+└── vite.config.ts     # Vite configuration
+```
+
 ### Primary Technologies
 - **React**: The frontend library.
 - **Redux Toolkit**: State management, including RTK Query for API requests.
@@ -65,7 +98,8 @@ Using Redux Toolkit's `createApi`, the frontend is connected to a RESTful backen
 - **Order & Payment Endpoints**: Create payments, place new orders.
 - **Review Endpoints**: Create, delete, and vote on reviews.
 - **Coupon Endpoints**: Apply, view, and manage coupons.
-- **Chat Support**: Connect users to admins for support.
+- **Chat Support**: Connect users to admins in real-time for support.
+- **User Activity Tracking**: Tracks user actions like sign-ins, sign-outs, purchases, and profile updates etc.
 
 ### Dependencies
 
