@@ -7,6 +7,8 @@ const ShareButton = ({placeHolder, title, text, url}:{placeHolder?:string; title
         if (navigator.share) {
             try {
                 console.log("------ ShareButton");
+                console.log({url});
+                
                 await navigator.share({
                     title, text, url
                 });

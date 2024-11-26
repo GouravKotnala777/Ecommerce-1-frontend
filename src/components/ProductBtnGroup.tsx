@@ -1,7 +1,7 @@
 import "../styles/components/product_btn_group.scss";
 import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
 import { useAddToCartMutation, useRemoveFromCartMutation } from "../redux/api/api";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setIsReviewDialogActive } from "../redux/reducers/miscReducers";
 import { useNavigate } from "react-router-dom";
 import { MutationResTypes } from "../assets/demoData";
@@ -10,6 +10,7 @@ import Spinner from "./Spinner";
 import { PRIMARY, SECONDARY } from "../styles/utils";
 import { UserLocationTypes } from "../pages/Login.Page";
 import ShareButton from "./ShareButton";
+import { loggedInUserInitialState } from "../redux/reducers/loggedInUserReducer";
 
 
 interface ProductBtnGroupPropTypes{
@@ -28,6 +29,7 @@ const ProductBtnGroup = ({userLocation, parent, productID, amount, category, bra
     const [quantity, setQuantity] = useState<number>(1);
     const [addRemoveCartRes, setAddRemoveCartRes] = useState<MutationResTypes>();
     const [isAddRemoveCartloading, setIsAddRemoveCartLoading] = useState<boolean>(false);
+    const {user} = useSelector((state:{loggedInUserReducer:loggedInUserInitialState}) => state.loggedInUserReducer);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -106,7 +108,7 @@ const ProductBtnGroup = ({userLocation, parent, productID, amount, category, bra
             {
                 parent === "singleProduct" &&
                     <div className="lower_btns">
-                        <ShareButton title="this is title" text="this is text" url="https://ecommerce-1-frontend.vercel.app" />
+                        <ShareButton title="this is title" text="this is text" url={`https://ecommerce-1-frontend.vercel.app/user/register?referrerUserID=${user?._id}`} />
                         <button className="review_btn" onClick={(e) => reviewToggleHandler(e)}>Review</button>
                     </div>
             }
