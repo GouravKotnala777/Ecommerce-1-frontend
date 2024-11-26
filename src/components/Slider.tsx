@@ -1,18 +1,19 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import "../styles/components/slider.scss";
-//import a from "/a.jpg";
-//import b from "/b.jpg";
-//import c from "/c.jpg";
-//import d from "/d.jpg";
-//import e from "/e.jpg";
 import { Link } from "react-router-dom";
 import { useGetHeroSliderQuery, useInsertNewHeroSliderImgMutation, useUpdateHeroSliderMutation } from "../redux/api/api";
 import { BiInfoCircle } from "react-icons/bi";
+import { UserTypes } from "../assets/demoData";
 
-//const imageArray = [a, b, c, d, e];
-//const numArray = [0,1,2,3,4];
 
-const Slider = () => {
+const Slider = ({myProfileData}:{
+    myProfileData:{
+        isLoading: boolean;
+        data?: {
+            message: UserTypes;
+        };
+    }
+}) => {
     const {data}:{
         data?:{success:boolean; message:{imageURL:string; linkURL:string;}[];}
     } = useGetHeroSliderQuery("");
@@ -137,24 +138,27 @@ const Slider = () => {
                         }
                     </div>
                 </div>
-                <div className="image_count_slots">
-                    {
-                        data?.message.map((item, index) => (
-                            <div key={index} className="image_slot" style={{backgroundImage:`url(${item.imageURL.split("/upload")[0]}/upload/w_80,h_50/${item.imageURL.split("/upload")[1]})`, backgroundPosition:"center", backgroundRepeat:"no-repeat", backgroundSize:"cover"}}
-                                onClick={() => {
-                                    setSelectedImageSlot(item.imageURL);
-                                }
-                            }>
-                                <div className="hero_slider_slot_tooltip" style={{transform:selectedImageSlot === item.imageURL?"scale(1,1.1)":"scale(1,0)"}}>
-                                    <input type="text" name="linkURL" placeholder="Link URL" onChange={(e) => onChangeHandler(e)} />
-                                    <input type="file" name="image" placeholder="Image URL" onChange={(e) => onChangeHandler(e)} />
-                                    <button onClick={() => updateSliderImgHandler({position:index as 0|1|2|3|4})}>Update</button>
-                                    {/*<button><MdDelete className="MdDelete" /></button>*/}
-                                </div>
-                            </div>
-                        ))
-                    }
-                </div>
+                {
+                    myProfileData.data?.message.role === "admin" &&
+                        <div className="image_count_slots">
+                            {
+                                data?.message.map((item, index) => (
+                                    <div key={index} className="image_slot" style={{backgroundImage:`url(${item.imageURL.split("/upload")[0]}/upload/w_80,h_50/${item.imageURL.split("/upload")[1]})`, backgroundPosition:"center", backgroundRepeat:"no-repeat", backgroundSize:"cover"}}
+                                        onClick={() => {
+                                            setSelectedImageSlot(item.imageURL);
+                                        }
+                                    }>
+                                        <div className="hero_slider_slot_tooltip" style={{transform:selectedImageSlot === item.imageURL?"scale(1,1.1)":"scale(1,0)"}}>
+                                            <input type="text" name="linkURL" placeholder="Link URL" onChange={(e) => onChangeHandler(e)} />
+                                            <input type="file" name="image" placeholder="Image URL" onChange={(e) => onChangeHandler(e)} />
+                                            <button onClick={() => updateSliderImgHandler({position:index as 0|1|2|3|4})}>Update</button>
+                                            {/*<button><MdDelete className="MdDelete" /></button>*/}
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                }
             </div>
             
             {

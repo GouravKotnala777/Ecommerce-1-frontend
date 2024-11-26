@@ -111,7 +111,7 @@ const App = () => {
             <DialogWrapper toggler={reportDialogToggle} setToggler={setReportDialogToggle} Element={<Chatbot USERID={myProfileData.data?.message._id} USERNAME={myProfileData.data?.message.name} userLocation={userLocation as UserLocationTypes} />} />
             <Header userName={myProfileData.data?.message.name} userRole={myProfileData.data?.message.role} wishlistNotification={wishlistData.data?.message.length} cartNotification={cartData.data?.message.products.reduce((acc, iter) => acc+iter.quantity, 0) as number} couponNotification={myCoupons.data?.message.length as number} myReferralGiftsNotification={myReferralGifts.data?.message.length as number} userLocation={userLocation} />
             <Routes>
-              <Route path="/" element={<Home userLocation={userLocation as UserLocationTypes} />} />
+              <Route path="/" element={<Home userLocation={userLocation as UserLocationTypes} myProfileData={myProfileData} />} />
               <Route path="/tools/macro_calculator" element={<MacroCalculator />} />
               <Route path="/group/:query/:value" element={<ProductsOfSame userLocation={userLocation as UserLocationTypes} />} />
 

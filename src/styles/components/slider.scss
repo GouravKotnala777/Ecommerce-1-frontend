@@ -31,7 +31,20 @@
         height: 630px;
         width: 100%;
         overflow-x: scroll;
-        z-index: 1;       
+        z-index: 1;
+        scrollbar-width: thin;
+        scrollbar-color: transparent transparent;
+        &::-webkit-scrollbar{
+            width: 1px;
+            height: 1px;
+        }
+        &::-webkit-scrollbar-thumb{
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+        &::-webkit-scrollbar-track{
+            background-color: transparent;
+        }
         .image_scrollable{
             //border: 2px solid blue;
             height: 440px;
@@ -196,7 +209,12 @@
         .images_cont{
             .image_scrollable{
                 .image_cont{
+                    //border: 2px solid blue;
+                    //height: 60vh;
+                    
                     img{
+                        //border: 2px solid green;
+                        height: 60%;
                     }
                 }
             }

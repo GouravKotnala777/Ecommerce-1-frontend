@@ -2,7 +2,7 @@ import "../styles/pages/home.scss";
 import Products from "../components/Products.tsx";
 import GroupedProducts from "../components/GoupedProducts.tsx";
 import { useFindAllFieldsQuery, useGetAllProductsQuery, useSearchProductsMutation } from "../redux/api/api.ts";
-import { ProductTypes } from "../assets/demoData.ts";
+import { ProductTypes, UserTypes } from "../assets/demoData.ts";
 import { useNavigate } from "react-router-dom";
 import { ChangeEvent, FocusEvent, MouseEvent, useEffect, useState } from "react";
 import Pagination from "../components/Pagination.tsx";
@@ -16,7 +16,14 @@ import { UserLocationTypes } from "./Login.Page.tsx";
 import Slider from "../components/Slider.tsx";
 
 
-const Home = ({userLocation}:{userLocation:UserLocationTypes;}) => {
+const Home = ({userLocation, myProfileData}:{userLocation:UserLocationTypes;
+    myProfileData:{
+        isLoading: boolean;
+        data?: {
+            message: UserTypes;
+        };
+    }
+}) => {
     const [skip, setSkip] = useState<number>(0);
     const allProducts:{
         isLoading:boolean;
@@ -104,7 +111,7 @@ const Home = ({userLocation}:{userLocation:UserLocationTypes;}) => {
     return(
         <>
             <div id="home_bg" className="home_bg" onClick={(e) => {onClickOverlay(e)}}>
-                <Slider />
+                <Slider myProfileData={myProfileData} />
             {
                 allProducts.isLoading ?
                     //<h1>loading...</h1>
