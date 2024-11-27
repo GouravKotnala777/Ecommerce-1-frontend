@@ -3,8 +3,8 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { CouponTypes } from "../assets/demoData";
 import { SerializedError } from "@reduxjs/toolkit";
 import { FaGift } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
-import { SelectedGiftReducerInitialState, setGiftReducer } from "../redux/reducers/selectedGiftReducer";
+import { useDispatch } from "react-redux";
+import { setGiftReducer } from "../redux/reducers/selectedGiftReducer";
 import toast, {Toaster} from "react-hot-toast";
 import ItemNotFound from "../components/ItemNotFound";
 
@@ -14,12 +14,21 @@ const MyGifts = ({myReferralGifts}:{myReferralGifts:{
     data?:{success:boolean; message:{userID:{name:string; email:string;}; coupon:CouponTypes; status:"pending"|"completed"}[];};
     error?:FetchBaseQueryError|SerializedError;
 }}) => {
-    const {gift} = useSelector((state:{selectedGiftReducer:SelectedGiftReducerInitialState}) => state.selectedGiftReducer);
+    //const {gift} = useSelector((state:{selectedGiftReducer:SelectedGiftReducerInitialState}) => state.selectedGiftReducer);
     const dispatch = useDispatch();
 
-    const giftCardHandler = (giftCardAmount:number) => {
+    const giftCardHandler = (gift:{
+        userID: {
+            name: string;
+            email: string;
+        };
+        coupon: CouponTypes;
+        status: "pending" | "completed";
+    } | null) => {
+        console.log(gift);
+        
         dispatch(setGiftReducer({isLoading:false, gift, isError:false}));
-        toast.success(`Gift card has been selected, Now your order will have ${giftCardAmount}₹ off`, {
+        toast.success(`Gift card has been selected, Now your order will have ${gift?.coupon.amount}₹ off`, {
             position:"bottom-center",
             duration:5000
         });
@@ -34,7 +43,7 @@ const MyGifts = ({myReferralGifts}:{myReferralGifts:{
             <Toaster />
             {
                 myReferralGifts.data?.message.length !== 0 ?
-                    myReferralGifts.data?.message.map((gift, index) => (
+                    myReferralGifts.data?.message.map((gift, index) => gift.status === "pending" && (
                         <div className="gift_cont" key={index}>
                             <div className="upper_part">
                                 <div className="image_cont">
@@ -54,7 +63,7 @@ const MyGifts = ({myReferralGifts}:{myReferralGifts:{
                                 </div>
                                 <div className="right_part">
                                     {/*<button onClick={() => navigate(`/?couponID=${gift.coupon._id}`)}>Use Now</button>*/}
-                                    <button onClick={() => giftCardHandler(gift.coupon.amount)}>Use Now</button>
+                                    <button onClick={() => giftCardHandler(gift as {userID: {name: string; email: string;}; coupon: CouponTypes; status: "pending" | "completed"; } | null)}>Use Now</button>
                                 </div>
                             </div>
                         </div>

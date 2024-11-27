@@ -82,6 +82,7 @@ const SingleProductTemplate = ({userLocation, productID, userWishlist, category,
 
     return(
         <>
+            {/*{JSON.stringify(isSelectedGiftInfoDialogActive)}*/}
             <HandleMutationRes res={addRemoveFromWishlistRes} />
             <dialog className="selected_coupon_dialog" open={isSelectedGiftInfoDialogActive}>
                 <Heading heading="You have selected a Gift Card" fontSize="0.9rem" />

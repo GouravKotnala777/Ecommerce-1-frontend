@@ -78,7 +78,7 @@ const api = createApi({
     baseQuery:fetchBaseQuery({
         baseUrl:import.meta.env.VITE_SERVER_URL
     }),
-    tagTypes:["MyWishlistedProducts", "MyCartProducts", "SingleProduct", "MyProfile", "NewCoupon", "Orders", "HeroSlider"],
+    tagTypes:["MyWishlistedProducts", "MyCartProducts", "SingleProduct", "MyProfile", "NewCoupon", "MyGifts", "Orders", "HeroSlider"],
     endpoints:(builder) => ({
         register:builder.mutation({
             query:({name, email, mobile, password, c_password, referrerUserID}:{name?:string; email?:string; mobile?:string; password?:string; c_password?:string; referrerUserID?:string|null;}) => ({
@@ -121,7 +121,8 @@ const api = createApi({
                 url:"/api/v1/user/referee",
                 method:"GET",
                 credentials:"include"
-            })
+            }),
+            providesTags:["MyGifts"]
         }),
         applyMyCoupon:builder.mutation({
             query:({couponID}:{couponID:string;}) => ({
@@ -367,7 +368,7 @@ const api = createApi({
                 method:"GET",
                 credentials:"include"
             }),
-            providesTags:["NewCoupon"]
+            providesTags:["NewCoupon", "MyGifts"]
         }),
         createCoupons:builder.mutation({
             query:(data:CreateCouponBodyType) => ({
@@ -401,7 +402,7 @@ const api = createApi({
                 credentials:"include",
                 body:{orderItems, totalPrice, coupon, transactionId, paymentStatus, orderStatus, shippingType, message, parent, action, userLocation,     recommendationProductsAmount}
             }),
-            invalidatesTags:["MyCartProducts"]
+            invalidatesTags:["MyCartProducts", "MyGifts"]
         }),
         myOrders:builder.mutation({
             query:({skip}:{skip:number}) => ({
