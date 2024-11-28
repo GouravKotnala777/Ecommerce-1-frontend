@@ -1,0 +1,29 @@
+
+.news_bg{
+    //border: 2px solid red;
+    .news_list{
+        //border: 2px solid violet;
+        //margin-top: 10px;
+        //width: 50%;
+        max-width: 320px;
+        margin: 0 auto;
+        padding: 10px;
+        .news_cont{
+            //border: 2px solid indigo;
+            //width: 50%;
+            margin-top: 25px;
+            display: block;
+            text-decoration: none;
+            //padding: 10px;
+            background-color: white;
+            box-shadow: 0 0 4px 0.2px rgba(0,0,0,0.1);
+            img{
+                width: 100%;
+            }
+            span{
+                font-size: 0.7rem;
+                color: #595959;
+            }
+        }
+    }
+}

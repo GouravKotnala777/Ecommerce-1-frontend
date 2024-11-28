@@ -41,6 +41,7 @@ import AllOrders from './pages/admin/AllOrders'
 import Policies from './pages/static/Policies'
 import MyCoupons from './pages/MyCoupons'
 import MyGifts from './pages/MyGifts'
+import News from './pages/News'
 
 
 
@@ -114,7 +115,7 @@ const App = () => {
               <Route path="/" element={<Home userLocation={userLocation as UserLocationTypes} myProfileData={myProfileData} />} />
               <Route path="/tools/macro_calculator" element={<MacroCalculator />} />
               <Route path="/group/:query/:value" element={<ProductsOfSame userLocation={userLocation as UserLocationTypes} />} />
-
+              <Route path="/news" element={<News />} />
 
               {
                 !myProfileData.data?.message._id &&

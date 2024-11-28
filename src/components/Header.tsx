@@ -16,12 +16,9 @@ import { RxActivityLog } from "react-icons/rx";
 import { RiChatSmile3Line, RiCoupon3Line } from "react-icons/ri";
 import { FiShoppingCart } from "react-icons/fi";
 import { FaRegAddressCard } from "react-icons/fa";
-import { IoHomeOutline, IoLogInOutline, IoLogOutOutline, IoScaleOutline } from "react-icons/io5";
+import { IoHomeOutline, IoLogInOutline, IoLogOutOutline, IoNewspaperOutline, IoScaleOutline } from "react-icons/io5";
 import { BsCalendar2Event } from "react-icons/bs";
 import { TfiGift } from "react-icons/tfi";
-//import { LuLayoutDashboard } from "react-icons/lu";
-//import { IoBagAddOutline } from "react-icons/io5";
-//import { BsBookmarkHeart } from "react-icons/bs";
 
 
 const Header = ({userName, userRole, wishlistNotification, cartNotification, couponNotification, myReferralGiftsNotification, userLocation}:{userName?:string; userRole:string|undefined; wishlistNotification?:number; cartNotification:number; couponNotification:number; myReferralGiftsNotification:number; userLocation:UserLocationTypes|undefined;}) => {
@@ -118,7 +115,7 @@ const Header = ({userName, userRole, wishlistNotification, cartNotification, cou
                     <NavLink className="bottom_nav_navlinks" to="/user/gifts">
                         {myReferralGiftsNotification !== 0 && myReferralGiftsNotification !== undefined && <div className="notification">{myReferralGiftsNotification}</div>} <TfiGift className="header_icon" />
                     </NavLink>
-                    <NavLink className="bottom_nav_navlinks" to="/"><RiCoupon3Line className="header_icon" /></NavLink>
+                    <NavLink className="bottom_nav_navlinks" to="/news"><IoNewspaperOutline className="header_icon" /></NavLink>
                 </nav>
             </div>
         </>
