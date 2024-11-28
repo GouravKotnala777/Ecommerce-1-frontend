@@ -1,6 +1,6 @@
 import logo2 from "../../public/logo2.jpg";
 import "../styles/components/header.scss";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { ChangeEvent, Dispatch, MouseEvent, SetStateAction, useEffect, useRef, useState } from "react";
 import Sidebar from "./Sidebar";
@@ -55,9 +55,9 @@ const Header = ({userName, userRole, wishlistNotification, cartNotification, cou
         <>
             <DialogWrapper Element={<MyProfileDialog setIsMyProfileDialogOpen={setIsMyProfileDialogOpen} userLocation={userLocation as UserLocationTypes} />} toggler={isMyProfileDialogOpen} setToggler={setIsMyProfileDialogOpen} />
             <div className="header_bg" style={{top:hideHeader?"-13%":"-1.5%"}}>
-                <div className="left_part">
+                <Link to="/" className="left_part">
                     <img src={logo2} alt={logo2} />
-                </div>
+                </Link>
                 <nav className="right_part">
                     <div className="nav_section">
                         <NavLink className="navlinks" to="/"><IoHomeOutline className="header_icon" /></NavLink>
