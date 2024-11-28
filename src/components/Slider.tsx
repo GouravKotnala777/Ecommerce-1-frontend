@@ -27,22 +27,19 @@ const Slider = ({myProfileData}:{
     const scrollLeftHandler = () => {
         if (imagePosition > 0) {
             setImagePosition((prev) => prev-1);
-            console.log(imagePosition);
         }
         else{
             setImagePosition(4);
-            console.log(imagePosition);
         }
     };
     const scrollRightHandler = () => {
         if (imagePosition < 4) {
             setImagePosition((prev) => prev+1);
-            console.log(imagePosition);
+            console.log(data);
             
         }
         else{
             setImagePosition(0);
-            console.log(imagePosition);
         }
     };
 
@@ -162,7 +159,7 @@ const Slider = ({myProfileData}:{
             </div>
             
             {
-                (data === undefined || data?.message.length < 5) &&
+                data?.message && data?.message.length < 5 && myProfileData.data?.message.role === "admin" &&
                     <div className="slider_form_cont">
                         <input type="text" name="linkURL" placeholder="Link Url" onChange={(e) => onChangeHandler(e)} />
                         <input type="file" name="image" onChange={(e) => onChangeHandler(e)} />
