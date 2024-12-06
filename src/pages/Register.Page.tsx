@@ -64,6 +64,9 @@ const Register = () => {
                 <button></button>
                 <div className="dont_have_acc"> already have account <Link to="/user/login"> Login</Link></div>
             </div>
+            <div className="lower_part">
+                <span>login by &nbsp; <Link to="/user/login"> pre-defined credentials</Link></span>
+            </div>
         </div>
     )
 };

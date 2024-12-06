@@ -38,12 +38,19 @@ const Login = ({userLocation}:{userLocation:UserLocationTypes}) => {
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) => {
         setFormData({...formData, [e.target.name]:e.target.value});
     };
-    const onClickHandler = async() => {
+    const onClickHandler = async({isForUserGuest, isForAdminGuest}:{isForUserGuest?:boolean; isForAdminGuest?:boolean;}) => {
         setIsLoading(true);
+        let loginRes;
         try {
-            const loginRes = await login({...formData, action:"signin", userLocation
-                //ipAddress:"1210002", userAgent:"chrome", userLocation:"faridabad", platform:"web", device:"windows", referrer:"google", success:false
-            });
+            if (isForUserGuest) {
+                loginRes = await login({email:"usersharma@gmail.com", password:"user123" , action:"signin", userLocation});
+            }
+            else if (isForAdminGuest){
+                loginRes = await login({email:"adminverma@gmail.com", password:"admin123", action:"signin", userLocation});
+            }
+            else{
+                loginRes = await login({...formData, action:"signin", userLocation});
+            }
             
             console.log("----- Login.Page.tsx onClickHandler");
             console.log(loginRes);
@@ -68,10 +75,14 @@ const Login = ({userLocation}:{userLocation:UserLocationTypes}) => {
             <DialogWrapper Element={<ForgetPasswordDialog email={email} setEmail={setEmail} setIsForgetPassDialogOpen={setIsForgetPassDialogOpen} userLocation={userLocation} />} toggler={isForgetPassDialogOpen} setToggler={setIsForgetPassDialogOpen} />
             <HandleMutationRes duration={6000} res={loginRes} />
             {/*<pre>{JSON.stringify(userLocation, null, `\t`)}</pre>*/}
-            <Form isLoading={isLoading} heading="Login" formFields={loginFormFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={onClickHandler}  />
+            <Form isLoading={isLoading} heading="Login" formFields={loginFormFields} onChangeHandler={(e) => onChangeHandler(e)} onClickHandler={() => onClickHandler({})}  />
             <div className="lower_part">
                 <button onClick={() => setIsForgetPassDialogOpen(true)}>Forget Password</button>
                 <div className="dont_have_acc"> don't have account <Link to="/user/register"> Register</Link></div>
+            </div>
+            <div className="lower_part">
+                <button onClick={() => onClickHandler({isForUserGuest:true})}>login by user credentials</button>
+                <button onClick={() => onClickHandler({isForAdminGuest:true})}>login by admin credentials</button>
             </div>
         </div>
     )
