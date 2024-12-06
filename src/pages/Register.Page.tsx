@@ -2,7 +2,7 @@ import "../styles/pages/login.scss";
 import { ChangeEvent, useEffect, useState } from "react";
 import Form from "../components/Form";
 import { useRegisterMutation } from "../redux/api/api";
-import { MutationResTypes } from "../assets/demoData";
+import { MutationErrorResponse, MutationResTypes } from "../assets/demoData";
 import HandleMutationRes from "../components/HandleMutationRes";
 import { Link, useSearchParams } from "react-router-dom";
 
@@ -29,21 +29,26 @@ const Register = () => {
         setFormData({...formData, [e.target.name]:e.target.value});
     };
     const onClickHandler = async() => {
-        setIsLoading(true);
-        console.log({...formData, referrerUserID:searchParams.get("referrerUserID")});
-        
-        try {
-            const res = await register({...formData, referrerUserID:searchParams.get("referrerUserID")});
-            console.log("----- Register.Page.tsx onClickHandler");
-            console.log(res);
-            setResgisterRes(res);
-            console.log("----- Register.Page.tsx onClickHandler");
-        } catch (error) {
-            console.log("----- Register.Page.tsx onClickHandler");
-            console.log(error);
-            console.log("----- Register.Page.tsx onClickHandler");
-        }        
-        setIsLoading(false);
+        if (formData.password === formData.c_password) {
+            setIsLoading(true);
+            console.log({...formData, referrerUserID:searchParams.get("referrerUserID")});
+            
+            try {
+                const res = await register({...formData, referrerUserID:searchParams.get("referrerUserID")});
+                console.log("----- Register.Page.tsx onClickHandler");
+                console.log(res);
+                setResgisterRes(res);
+                console.log("----- Register.Page.tsx onClickHandler");
+            } catch (error) {
+                console.log("----- Register.Page.tsx onClickHandler");
+                console.log(error);
+                console.log("----- Register.Page.tsx onClickHandler");
+            }        
+            setIsLoading(false);
+        }
+        else{
+            setResgisterRes({error:{data:{message:"Password and Confirm Password are not same"}}} as MutationErrorResponse)
+        }
     };
 
     useEffect(() => {
