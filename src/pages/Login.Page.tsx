@@ -43,10 +43,10 @@ const Login = ({userLocation}:{userLocation:UserLocationTypes}) => {
         let loginRes;
         try {
             if (isForUserGuest) {
-                loginRes = await login({email:"usersharma@gmail.com", password:"user123" , action:"signin", userLocation});
+                loginRes = await login({email:"ankit@gmail.com", password:"Ankit123", action:"signin", userLocation});
             }
             else if (isForAdminGuest){
-                loginRes = await login({email:"adminverma@gmail.com", password:"admin123", action:"signin", userLocation});
+                loginRes = await login({email:"gouravkotnala777@gmail.com", password:"Gourav123" , action:"signin", userLocation});
             }
             else{
                 loginRes = await login({...formData, action:"signin", userLocation});
